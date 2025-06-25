@@ -1,0 +1,72 @@
+<!-- Button -->
+<button mat-icon-button [matMenuTriggerFor]="languages" *transloco="let t">
+    <ng-container
+        *ngTemplateOutlet="flagImage; context: { $implicit: activeLang }"
+    ></ng-container>
+</button>
+
+<!-- Language menu -->
+<mat-menu [xPosition]="'before'" #languages="matMenu">
+    @for (lang of availableLangs; track trackByFn($index, lang)) {
+        <button class="flag"
+            mat-menu-item
+            (click)="setActiveLang(lang.id, $event)">
+            <mat-checkbox class="example-margin"
+                color="primary"
+                [checked]="lang.id === activeLang"
+                (change)="setActiveLang(lang.id, $events)">
+            </mat-checkbox>
+            <span class="flex items-center flagmargin">
+                <ng-container
+                    *ngTemplateOutlet="flagImage; context: { $implicit: lang.id }"
+                ></ng-container>
+                <span class="ml-3">
+                    {{ lang.label }}
+                </span>
+            </span>
+        </button>
+    }
+    <span *transloco="let t">
+        <button class="w-[100px] h-10 ml-3 mr-3 mt-3 text-md" (click)="savelang()" mat-flat-button color="primary" aria-label="example icon" mattooltip="Save">
+            <mat-icon class="mb-2 " svgIcon="mat_outline:save"></mat-icon><p class="ml-2">{{t('Save')}}</p>
+        </button>
+    </span>
+</mat-menu>
+
+
+<!-- Flag image template -->
+<ng-template let-lang #flagImage>
+    <span class="relative w-6 overflow-hidden rounded-sm shadow">
+        <span
+            class="absolute inset-0 ring-1 ring-inset ring-black ring-opacity-10"
+        ></span>
+        <img
+            class="w-full"
+            [src]="'images/flags/' + flagCodes[lang].toUpperCase() + '.svg'"
+            [alt]="'Flag image for ' + lang"
+        />
+    </span>
+
+</ng-template>
+
+
+<style>
+    .flag, .mat-mdc-menu-panel .mat-mdc-menu-content .mat-mdc-menu-item .mat-mdc-menu-item-text {
+        display: flex !important;
+        align-items: center !important;
+        padding-right: 1px !important;
+        height: 6px !important;
+    }
+
+    .example-margin{
+        position: relative !important;
+        right: 10px;
+    }
+
+    .flagmargin{
+        position: relative !important;
+        right: 20px !important;
+        margin-left: 10px;
+        top: 1px;
+    }
+</style>

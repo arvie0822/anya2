@@ -1,0 +1,208 @@
+<!-- Main -->
+<div class="flex-auto p-6 sm:p-6 overflow-y-auto" *transloco="let t">
+  <!-- Main -->
+  <div class="flex-auto sm:p-2  w-full min-w-0 sm:absolute sm:inset-0  sm:overflow-auto text-lg">
+    <table #CSTable mat-table [dataSource]="datasource" class="mat-elevation-z0 border">
+
+      <ng-container matColumnDef="actioncs">
+        <th mat-header-cell *matHeaderCellDef class="no-wrap"></th>
+        <td mat-cell *matCellDef="let element; let i = index">
+          <button class="mt-3 ml-2" [disabled]="disabledbutton" mat-icon-button [matMenuTriggerFor]="menu"
+            aria-label="Example icon-button with a menu">
+            <mat-icon class="icon-size-6">more_vert</mat-icon>
+          </button>
+          <mat-menu #menu="matMenu">
+            <button mat-menu-item (click)="handleDeleteBreak(i)">
+              <mat-icon class="icon-size-6" color="warn">delete</mat-icon>
+              <span>{{t('delete')}}</span>
+            </button>
+            <!-- <button mat-menu-item (click)="getshiftId(element.shiftId) ; element.disable = false "
+            *ngIf="element.status =='First Level Approval'">
+            <mat-icon class="mb-2" color="primary">edit</mat-icon>
+            <span>Edit</span>
+          </button> -->
+          <!-- <button mat-menu-item (click)="cancel(element.encryptedId)" *ngIf="element.status !==''">
+          <mat-icon class="icon-size-6" color="primary">cancel</mat-icon>
+          <span>Cancel</span>
+        </button> -->
+      </mat-menu>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="datecs">
+    <th mat-header-cell *matHeaderCellDef class="no-wrap">{{t('Date')}}</th>
+    <td mat-cell *matCellDef="let element">
+      <mat-form-field class="w-50 text-lg h-13 mt-3" appearance="outline">
+        <mat-icon class="mb-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+        <input [disabled]="true" class="input" [(ngModel)]="element.datedisplay" matInput type="text"
+          [placeholder]="" readonly>
+        </mat-form-field>
+      </td>
+    </ng-container>
+
+    <!-- <ng-container matColumnDef="shiftcs">
+    <th mat-header-cell *matHeaderCellDef class="no-wrap">Current Shift </th>
+    <td mat-cell class="pl-5" *matCellDef="let element ; let i =index">
+      <mat-form-field class="w-50 text-lg h-13 date" appearance="outline">
+        <mat-label class="label-font-size"></mat-label>
+        <mat-icon class="mb-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+        <input [disabled]="true" class="input" [(ngModel)]="element.currentshift.id" matInput type="text"
+          [placeholder]="">
+        </mat-form-field>
+
+        <div *ngFor="let child of element.currentshift.child; let x = index">
+          <mat-form-field class="w-50 text-lg h-13 date" appearance="outline">
+            <mat-label class="label-font-size"></mat-label>
+            <mat-icon class="mb-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+            <input [disabled]="true" class="input" [(ngModel)]="element.currentshift.child[x].id" matInput type="text"
+              [placeholder]="">
+            </mat-form-field>
+          </div>
+        </td>
+      </ng-container> -->
+
+
+      <ng-container matColumnDef="shiftcs">
+        <th mat-header-cell *matHeaderCellDef class="no-wrap">{{t('Current Shift')}}</th>
+        <td mat-cell *matCellDef="let element ; let i =index">
+          <mat-form-field class="w-50 text-xl h-13 mt-3" appearance="outline">
+            <mat-icon class="mb-2" matPrefix [svgIcon]="'mat_outline:info'"></mat-icon>
+            <mat-select [all]="false" [multiple]="false" [disabled]="true"
+              (selectionChange)="modal($event,i,'shiftId' , element)"
+              (selectionChange)="change(i, 'shiftId')" [(ngModel)]="element.currentshift.id"
+              [placeholder]="'Current Shift '" (infiniteScroll)="getNextBatchParent()" msInfiniteScroll
+              [complete]="complete" [threshold]="'20%'">
+              <mat-option>
+                <ngx-mat-select-search [formControl]="inputChangeParent"
+                  [placeholderLabel]="'Find ' + placeholder + ' ..'"
+                [noEntriesFoundLabel]="'No ' + placeholder + ' found'"></ngx-mat-select-search>
+              </mat-option>
+              @for (option of displaydataparent | async; track option) {
+                <mat-option [value]="option.dropdownID">
+                  {{option.description}}
+                </mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
+          @for (child of element.currentshift.child; track child; let x = $index) {
+            <div>
+              <mat-form-field class="w-50 text-lg h-13" appearance="outline">
+                <mat-icon class="mb-2" matPrefix [svgIcon]="'mat_outline:info'"></mat-icon>
+                <mat-select [disabled]="true" [(ngModel)]="element.currentshift.child[x].id"
+                  [placeholder]="" (infiniteScroll)="getNextBatchchild()" msInfiniteScroll
+                  [complete]="complete" [threshold]="'20%'">
+                  <mat-option>
+                    <ngx-mat-select-search [formControl]="inputChangeChild"
+                      [placeholderLabel]="'Find ' + placeholder + ' ..'"
+                    [noEntriesFoundLabel]="'No ' + placeholder + ' found'"></ngx-mat-select-search>
+                  </mat-option>
+                  @for (option of displaydataChild | async; track option) {
+                    <mat-option [value]="option.dropdownID">
+                      {{option.description}}
+                    </mat-option>
+                  }
+                </mat-select>
+              </mat-form-field>
+            </div>
+          }
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="new_shiftcs">
+        <th mat-header-cell *matHeaderCellDef class="no-wrap">{{t('New Shift')}}</th>
+        <td mat-cell *matCellDef="let element ; let i =index">
+          <mat-form-field class="w-50 text-lg h-13 mt-3" appearance="outline">
+            <mat-icon class="mb-2" matPrefix [svgIcon]="'mat_outline:info'"></mat-icon>
+            <mat-select [all]="false" [multiple]="false" [disabled]="element.disable || disabledbutton"
+              (selectionChange)="modal($event,i,'shiftId' , element)"
+              (selectionChange)="change(i, 'shiftId')" [(ngModel)]="element.shiftId.id"
+              [placeholder]="'New Shift'" (infiniteScroll)="getNextBatchParent()" msInfiniteScroll
+              [complete]="complete" [threshold]="'20%'">
+              <mat-option class="test">
+                <ngx-mat-select-search [formControl]="inputChangeParent"
+                  [placeholderLabel]="'Find ' + placeholder + ' ..'"
+                [noEntriesFoundLabel]="'No ' + placeholder + ' found'"></ngx-mat-select-search>
+              </mat-option>
+              @for (option of dataparent | async; track option) {
+                <mat-option [value]="option.dropdownID">
+                  {{option.description}}
+                </mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
+          @for (child of element.shiftId.child; track child; let x = $index) {
+            <div>
+              <mat-form-field class="w-50 text-lg h-13" appearance="outline">
+                <mat-icon class="mb-2" matPrefix [svgIcon]="'mat_outline:info'"></mat-icon>
+                <mat-select [disabled]="element.disable || disabledbutton"
+                  [(ngModel)]="element.shiftId.child[x].id" [placeholder]=""
+                  (infiniteScroll)="getNextBatchchild()" msInfiniteScroll [complete]="complete"
+                  [threshold]="'20%'">
+                  <mat-option>
+                    <ngx-mat-select-search [formControl]="inputChangeChild"
+                      [placeholderLabel]="'Find ' + placeholder + ' ..'"
+                    [noEntriesFoundLabel]="'No ' + placeholder + ' found'"></ngx-mat-select-search>
+                  </mat-option>
+                  @for (option of dataChild | async; track option) {
+                    <mat-option [value]="option.dropdownID">
+                      {{option.description}}
+                    </mat-option>
+                  }
+                </mat-select>
+              </mat-form-field>
+            </div>
+          }
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="reasoncs">
+        <th mat-header-cell *matHeaderCellDef>{{t('Reason')}}</th>
+        <td mat-cell class="w-full pl-5" *matCellDef="let element ; let i = index">
+          <div class="dark:hidden flex w-full"
+            style=" border-style: solid; border-color: rgb(189, 187, 187); border-width: 1px; margin-top: 9px; border-radius: 3px; height: 29px;">
+            <textarea [disabled]="element.disable || disabledbutton" (blur)="reasonmodal($event,i)"
+            class="area pl-5 w-full mt-2" matInput [(ngModel)]="element.reason"></textarea>
+          </div>
+          <div class="hidden dark:flex w-full"
+            style=" border-style: solid; border-color: rgb(231, 231, 231); border-width: 1px; margin-top: 9px; border-radius: 3px; height: 29px;">
+            <textarea [disabled]="element.disable || disabledbutton" (blur)="reasonmodal($event,i)"
+            class="area pl-5 w-full mt-2" matInput [(ngModel)]="element.reason"></textarea>
+          </div>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="upload_filecs">
+        <th mat-header-cell *matHeaderCellDef>{{t('Upload')}}</th>
+        <td mat-cell class="pt-[10px] pl-2" *matCellDef="let element ; let i =index">
+          <mat-form-field class="w-[35px] text-lg h-13 mt-3" appearance="outline">
+            <input type="file" [(ngModel)]="element.uploadPath" #fileInput2
+              (change)="uploadFile($event, 'displayCS',i,element)"
+              class="absolute top-1 z-0 h-full w-full cursor-pointer opacity-0"
+              accept=".jpeg,.jpg,.png,.doc,.docx,.pdf,.xls,.xlsx" />
+              <input class="sample" readonly matInput id="displayCS" cdkFocusInitial />
+              <mat-icon class="mb-2 ml-1" matPrefix svgIcon="mat_outline:upload"
+              (click)="fileInput2.click($event)" matTooltip={{element.uploadPath}}></mat-icon>
+              <button (click)="incrementClickCount(i)" [disabled]="disabledbutton" class="upb hidden"
+                (click)="fileInput2.click($event)" matSuffix mat-button color="primary">
+              </button>
+            </mat-form-field>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="clstatus">
+          <th mat-header-cell *matHeaderCellDef>{{t('Status')}}</th>
+          <td class="pl-2" mat-cell *matCellDef="let element">
+            <mat-form-field class="w-full text-lg h-13 mt-3" appearance="outline">
+              <mat-icon class="mb-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+              <input [disabled]="true" class="input" [(ngModel)]="element.status" matInput type="text"
+                [placeholder]="" readonly>
+              </mat-form-field>
+            </td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="csColumns ; sticky : true"></tr>
+          <tr mat-row *matRowDef="let row; columns: csColumns;"></tr>
+        </table>
+      </div>
+    </div>

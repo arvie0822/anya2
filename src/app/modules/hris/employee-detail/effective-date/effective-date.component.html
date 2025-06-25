@@ -1,0 +1,13 @@
+
+<mat-card class="p-2 mat-elevation-z0">
+    <mat-card-title>Effective Date</mat-card-title>
+    <mat-form-field class="w-full text-md" appearance="outline">
+        <mat-label class="label-font-size">Effective Date</mat-label>
+        <input [(ngModel)]="effectiveDate" matInput [matDatepicker]="df" readonly [placeholder]="'MM/DD/YYYY'" (click)="df.open()">
+        <mat-datepicker-toggle matSuffix [for]="df"></mat-datepicker-toggle>
+        <mat-datepicker #df></mat-datepicker>
+    </mat-form-field>
+    <mat-card-actions align="right" class="space-x-4">
+        <button mat-flat-button color="primary" (click)="confirmed()">Confirm</button>
+    </mat-card-actions>
+</mat-card>

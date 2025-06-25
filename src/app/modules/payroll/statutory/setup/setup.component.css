@@ -1,0 +1,136 @@
+/* .label-font-size{
+    font-size: 15px;
+}
+
+.mat-icon{
+    position: relative;
+    bottom: 8px;
+}
+
+.mat-select{
+    position: relative;
+    bottom: 10px;
+    font-size: medium;
+}
+
+.input{
+    position: relative;
+    bottom: 10px;
+    font-size: medium;
+}
+
+.uploadbutton{
+    position: relative;
+    bottom: 11px;
+    border-radius: 3px !important;
+}
+
+.button-margin-top{
+    padding-top: 1%;
+}
+
+table {
+    width: 100%;
+}
+
+.label-font-size{
+    font-size: 15px;
+}
+
+.mat-icon{
+    position: relative;
+    bottom: 8px;
+}
+
+input{
+    position: relative;
+    bottom: 10px;
+    font-size: medium;
+}
+
+::ng-deep .tab-hide .mat-tab-list .mat-tab-labels {
+    display: none;
+}
+
+.mat-datepicker-toggle{
+    position: relative;
+    bottom: 7px;
+    font-size: medium;
+}
+
+table{
+    width: 100%;
+}
+.cutoff-header{
+   width: 30px;
+   height: 5px;
+}
+.header{
+    border-width: 2px 2px 2px 2px;
+    padding: 15px;
+    margin: 5px;
+}
+.bod{
+    border-width: 2px 2px 2px 2px;
+    padding: 5px;
+    margin: 5px;
+}
+.sssheader{
+    text-align: center;
+}
+
+.mat-cell{
+    padding: 5px;
+    justify-content: center;
+    width: 20px;
+}
+.scroll-container {
+    display: flex;
+    align-items: center;
+    overflow: auto;
+}
+.example-container {
+    min-height: 150px;
+    width: 100%;
+    max-width: 100%;
+    overflow: auto;
+}
+.mat-column-cutoff{
+    max-width: 60px !important;
+    min-width: 60px !important;
+}
+.mat-column-maxAmount{
+    max-width: 60px !important;
+    min-width: 60px !important;
+}.mat-column-basis{
+    max-width: 60px !important;
+    min-width: 60px !important;
+}.mat-column-attendance{
+    max-width: 60px !important;
+    min-width: 60px !important;
+}.mat-column-leaves{
+    max-width: 60px !important;
+    min-width: 60px !important;
+}.mat-column-earnings{
+    max-width: 60px !important;
+    min-width: 60px !important;
+}.mat-column-sssValue{
+    max-width: 60px !important;
+    min-width: 60px !important;
+}.mat-column-taxRateMonth{
+    max-width: 60px !important;
+    min-width: 60px !important;
+}.mat-column-taxRateSemi{
+    max-width: 60px !important;
+    min-width: 60px !important;
+}.mat-column-taxRateWeek{
+    max-width: 60px !important;
+    min-width: 60px !important;
+}.mat-column-calculated{
+    max-width: 60px !important;
+    min-width: 60px !important;
+}
+
+
+
+ */

@@ -1,0 +1,38 @@
+<div class="flex justify-between" *transloco="let t">
+  <div class="flex shrink-0 items-center">
+    <div class="text-[13px] font-bold">{{title}}</div>
+    @if (switch) {
+      <button class="px-2 ml-3" mat-button color="primary" (click)="changeOrient()">
+        <mat-icon class="" [svgIcon]="'heroicons_outline:switch-vertical'"></mat-icon>
+      </button>
+    }
+  </div>
+  <div class="flex shrink-0 items-center sm:mt-0 sm:ml-4">
+    @if (back) {
+      <a class="fuse-mat-button-midium text-sm w-[10px]" mat-stroked-button (click)="backClicked()" [color]="'primary'" matTooltip="{{ 'Back' | transloco }}">
+        <mat-icon class="mb-2" [svgIcon]="'heroicons_outline:arrow-left'"></mat-icon>
+      </a>
+    }
+    @if (return) {
+      <a mat-stroked-button (click)="returnClicked()" [color]="'primary'" matTooltip="{{ 'Back' | transloco }}">
+        <mat-icon class="mb-2" [svgIcon]="'heroicons_outline:arrow-left'"></mat-icon>
+      </a>
+    }
+    @if (prev) {
+      <a class="ml-4" mat-stroked-button (click)="prevClicked()" [color]="'primary'" matTooltip="Previous">
+        <mat-icon class="mb-2" [svgIcon]="'heroicons_outline:chevron-left'"></mat-icon>
+      </a>
+    }
+    @if (next) {
+      <a class="ml-4" mat-stroked-button (click)="nextClicked()" [color]="'primary'" matTooltip="Next">
+        <mat-icon class="mb-2" [svgIcon]="'heroicons_outline:chevron-right'"></mat-icon>
+      </a>
+    }
+    @if (sub) {
+      <button class="px-6 ml-3 fuse-mat-button-midium text-sm w-[10px]" mat-flat-button color="primary" (click)="submit()"
+        matTooltip="{{ 'Save Changes' | transloco }}">
+        <mat-icon class="mb-2" svgIcon="mat_outline:save"></mat-icon>
+      </button>
+    }
+  </div>
+</div>

@@ -1,0 +1,94 @@
+<div class="flex-auto p-6 sm:p-6">
+    <div class="flex-auto sm:p-2 h-full w-full min-w-0 sm:absolute sm:inset-0 text-md">
+        <mat-card class="h-full">
+            <mat-card-title class="mt-[10px]">
+                <app-card-title
+                  title="Assign Requirements "  [sub]="showsubmit" [back]="true" [switch]="false" (submitTap)="submit()">
+                </app-card-title>
+            </mat-card-title><br>
+            <form [formGroup]="assignrequirform">
+                <div class="grid grid-cols-7 gap-2 h-13">
+                    <mat-form-field class="w-full h-10 text-lg" appearance="outline">
+                        <mat-label class="label-font-size">Requirements Group Name</mat-label>
+                        <input formControlName="name" matInput type="text">
+                    </mat-form-field>
+
+                    <mat-form-field class="w-full h-10  text-lg" appearance="outline">
+                        <mat-label class="label-font-size">Description</mat-label>
+                        <input formControlName="description" matInput type="text">
+                    </mat-form-field>
+
+                    <mat-form-field class="w-full text-lg h-10" appearance="outline">
+                        <mat-label class="label-font-size">Status</mat-label>
+                        <mat-select class="text-lg" formControlName="isActive"  [placeholder]="">
+                            <mat-option [value]="true">Active</mat-option>
+                            <mat-option [value]="false">Inactive</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </form>
+            <form [formGroup]="additionalform">
+                <div class="grid grid-cols-7 gap-2">
+
+                    <!-- <mat-form-field class="w-full text-md h-10" appearance="outline">
+                        <mat-label class="label-font-size">Requirments</mat-label>
+                        <mat-select formControlName="requirement" [placeholder]="">
+                            <mat-option *ngFor="let option of requirments" [value]="option.id"> {{ option.description }}</mat-option>
+                        </mat-select>
+                    </mat-form-field> -->
+
+                    <app-dropdown [control]="additionalform.get('requirement')" [disabled]="editdisable" [options]="dropdownOptions.requirmentdef" [disableOptions]="disableOptions" [icon]="'mat_outline:info'" [type]="150" label="Requirements"> </app-dropdown>
+
+                    <mat-form-field class="w-full h-10 text-lg" appearance="outline" >
+                        <mat-label class="label-font-size">Day(s) To Submit</mat-label>
+                        <input formControlName="days" matInput type="number">
+                    </mat-form-field>
+
+                    <button (click)="addtable()" [disabled]="disablebutton" class="w-15 text-md" mat-flat-button color="primary" aria-label="example icon" matTooltip="Add">
+                        <mat-icon class="mb-1" svgIcon="mat_outline:post_add"></mat-icon>
+                    </button>
+
+                </div>
+            </form><br>
+            <section class="example-container mat-elevation-z0" tabindex="0">
+                <table mat-table #assigntable [dataSource]="dataSource" class="headerissue mat-elevation-z0" tabindex="0">
+                    <ng-container matColumnDef="action">
+                        <th mat-header-cell *matHeaderCellDef>Action</th>
+                        <td mat-cell  *matCellDef="let element; let i = index">
+                        <button class="" [disabled]="disablebutton || editdisable" mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+                            <mat-icon class="icon-size-6">more_vert</mat-icon>
+                            </button>
+                            <mat-menu #menu="matMenu">
+                            <button (click)="deledit('edit',i,element)" mat-menu-item>
+                                <mat-icon class="icon-size-6" color="primary">edit</mat-icon>
+                                <span>Edit</span>
+                            </button>
+                            <button (click)="deledit('delete',i,element)" mat-menu-item>
+                                <mat-icon class="icon-size-6" color="warn">delete</mat-icon>
+                                <span>Delete</span>
+                            </button>
+                            </mat-menu>
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="requirement">
+                        <th mat-header-cell *matHeaderCellDef> Requirements </th>
+                        <td mat-cell *matCellDef="let element"> {{element.requirements}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="dueDate">
+                        <th mat-header-cell *matHeaderCellDef> Day(s) To Submit</th>
+                        <td mat-cell *matCellDef="let element"> {{element.dueDate}}</td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns ; sticky : true"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                </table>
+                <!-- <div class="grid grid-cols-2 gap-2">
+                    <mat-paginator [length]="20" #paginator0 [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons
+                        aria-label="Select page of periodic elements"> </mat-paginator>
+                </div> -->
+            </section>
+        </mat-card>
+    </div>
+</div>

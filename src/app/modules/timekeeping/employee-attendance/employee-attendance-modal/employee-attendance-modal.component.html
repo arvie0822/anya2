@@ -1,0 +1,76 @@
+<h1 mat-dialog-title class="label-font-size ">Time Logs</h1>
+<!-- <div class="flex-auto min-w-0 sm:absolute sm:inset-0 sm:overflow-auto text-md"> -->
+    <div class="overflow-auto max-h-100">
+        <table mat-table [dataSource]="dataSource" class="mat-elevation-z0 " >
+            <!--- Note that these columns can be defined in any order.
+                  The actual rendered columns are set as a property on the row definition" -->
+
+            <!-- Name Column {{element.time}}  -->
+            <ng-container matColumnDef="day">
+              <th class="pl-10" mat-header-cell *matHeaderCellDef> Day </th>
+              <td class="w-30" mat-cell *matCellDef="let element"> {{element.day}} </td>
+            </ng-container>
+
+            <!-- Weight Column -->
+            <ng-container matColumnDef="date">
+              <th class="pl-4" mat-header-cell *matHeaderCellDef> Date </th>
+              <td class="w-30" mat-cell *matCellDef="let element"> {{element.dateDisplay}} </td>
+            </ng-container>
+
+            <!-- Symbol Column -->
+            <ng-container matColumnDef="inout">
+              <th class="pl-[95px]" mat-header-cell *matHeaderCellDef> In/Out </th>
+              <td class="w-50" mat-cell *matCellDef="let element">
+                <mat-form-field class="w-60 h-13 mt-1 mr-10 text-sml" appearance="outline">
+                    <mat-select class="select" [(ngModel)]="element.logType" [placeholder]="">
+                        <mat-option [value]="0">In</mat-option>
+                        <mat-option [value]="1">Out</mat-option>
+                    </mat-select>
+                </mat-form-field> </td>
+            </ng-container>
+
+            <ng-container matColumnDef="time">
+            <th class="pl-10" mat-header-cell *matHeaderCellDef> Time </th>
+            <td class="w-40" mat-cell *matCellDef="let element">
+                <mat-form-field class="w-70 xxl:w-100 text-md h-15 mt-[14.2px]" appearance="outline">
+                    <input matInput [ngxMatDatetimePicker]="picker" [(ngModel)]="element.date" (click)="picker.open()"
+                                    placeholder="Choose a date"
+                                    [disabled]="false">
+                    <mat-datepicker-toggle matSuffix [for]="picker">
+                    </mat-datepicker-toggle>
+                    <ngx-mat-datetime-picker #picker
+                      [showSpinners]="showSpinners"
+                      [showSeconds]="showSeconds"
+                      [touchUi]="touchUi"
+                      [color]="color"
+                      [defaultTime]="element.date"
+                      [enableMeridian]="true">
+                    </ngx-mat-datetime-picker>
+                  </mat-form-field>
+            </td>
+            </ng-container>
+
+            <ng-container matColumnDef="source">
+            <th mat-header-cell *matHeaderCellDef> Source </th>
+            <td class="w-30" mat-cell *matCellDef="let element"> {{element.bundyTypeDisplay}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="use">
+            <th mat-header-cell *matHeaderCellDef> Use </th>
+            <td class="w-20" mat-cell *matCellDef="let element; let i = index">
+              <mat-checkbox [(ngModel)]="element.active"  class="example-margin" (change)="onCheckboxChange(i)" color="primary"></mat-checkbox></td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns ; sticky: true" ></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table><br>
+
+    </div>
+
+    <div class="grid grid-cols-9 gap-2 mt-5" >
+        <div class="col-span-7"></div>
+        <button mat-flat-button mat-dialog-close color="warn">Close</button>
+        <button mat-flat-button color="primary" (click)="Submit()">Save Changes</button>
+    </div>
+<!-- </div> -->
+

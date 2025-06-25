@@ -1,0 +1,71 @@
+/* table {
+    width: 100%;
+}
+html, body {
+    width: 80%;
+    height: 80%;
+}
+.mat-column-cutoff {
+    width: 20%;
+}
+
+.put-border {
+    border: 1px solid rgb(217, 223, 208);
+    padding: 8px;
+    width: 70%;
+    margin-top: 25px;
+    margin-bottom: 10px;
+}
+.mat-column-edit {
+width: 10%;
+}
+.label-font-size{
+font-size: 15px;
+}
+.mat-icon{
+    position: relative;
+    bottom: 10px;
+}
+.edit-icon{
+    position: relative;
+    bottom: 1px;
+}
+.mat-datepicker-toggle{
+position: relative;
+bottom: 7px;
+font-size: medium;
+}
+input{
+    position: relative;
+    bottom: 10px;
+    font-size: medium;
+}
+.mat-select{
+position: relative;
+bottom: 11px;
+font-size: medium;
+}
+
+.mat-header-cell {
+    height: 10px !important;
+}
+.scroll-container {
+    display:block;
+    align-items: center;
+    overflow-x: auto;
+    overflow-y:hidden;
+    white-space: nowrap;
+} */
+.icons {
+    height: 15px !important;
+    min-height: 40px;
+    padding: 3px !important;
+}
+.scroll-container {
+    display: block;
+    align-items: center;
+    overflow-x: auto;
+    overflow-y: auto;
+    white-space: nowrap;
+    height: 20%;
+}

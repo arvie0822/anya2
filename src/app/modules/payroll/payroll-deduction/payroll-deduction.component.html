@@ -1,0 +1,131 @@
+<div class="flex flex-col flex-auto min-w-0" *transloco="let t">
+  <!-- Main -->
+  <div class="flex-auto  sm:p-2  w-full min-w-0 sm:absolute sm:inset-0 sm:overflow-auto text-lg  {{view?'':''}}">
+    <!-- Content -->
+    <mat-card class=h-full>
+      @if (!hidebuttons) {
+        <mat-card-title>
+          <app-card-title title="Deduction" [sub]="true" [back]="!view" [switch]="false"
+          (submitTap)="submit()"></app-card-title>
+        </mat-card-title>
+        }<br>
+        @if (hidebuttons) {
+          <mat-card-title>
+            <div class="grid place-items-end">
+              @if (hidebuttons) {
+                <button (click)="confirm()" class="text-md mb-2" mat-flat-button color="primary" aria-label="example icon">
+                  Confirm
+                </button>
+              }
+            </div>
+          </mat-card-title>
+        }
+        <form [formGroup]="deductionsform">
+          <div class="grid grid-cols-5 gap-2 h-13">
+
+            <app-dropdown-custom [control]="deductionsform.get('employeeId')" dropdownLabel="description"
+              [icon]="'mat_outline:info'" [type]="1005" [value]="this.deductionsform.value.employeeId" [disabled]="!enable"
+              [options]="dropdownOptions.employeedef" [useControl]="true" (selected)="employeeCode()"
+              (objects)="empcode($event)">
+            </app-dropdown-custom>
+
+            <mat-form-field class="w-full h-13 text-lg" appearance="outline">
+              <mat-label class="label-font-size">{{t('employeeCode')}}</mat-label>
+              <mat-icon class="mb-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+              <input class="input" formControlName="employeecode" type="text" matInput [placeholder]="''"
+                readonly>
+              </mat-form-field>
+
+              <app-dropdown-custom [control]="deductionsform.get('deductionsTypeID')" [icon]="'mat_outline:info'"
+                [type]="1021" [value]="this.deductionsform.value.deductionsTypeID"
+              [options]="dropdownOptions.deductiontypedef" [useControl]="true"></app-dropdown-custom>
+
+              <mat-form-field class="w-full text-lg" appearance="outline">
+                <mat-label class="label-font-size">{{t('recurringStart')}}</mat-label>
+                <input matInput formControlName="recurStartDate" [matDatepicker]="df5" readonly
+                  [placeholder]="'MM/DD/YYYY'" (click)="df5.open()">
+                  <mat-datepicker-toggle matSuffix [for]="df5"></mat-datepicker-toggle>
+                  <mat-datepicker #df5></mat-datepicker>
+                </mat-form-field>
+                <mat-form-field class="w-full text-lg" appearance="outline">
+                  <mat-label class="label-font-size">{{t('recurringEnd')}}</mat-label>
+                  <input matInput formControlName="recurEndDate" [matDatepicker]="df4" readonly
+                    [placeholder]="'MM/DD/YYYY'" (click)="df4.open()">
+                    <mat-datepicker-toggle matSuffix [for]="df4"></mat-datepicker-toggle>
+                    <mat-datepicker #df4></mat-datepicker>
+                  </mat-form-field>
+                </div>
+                <div class="grid grid-cols-5 gap-2 mt-2">
+                  <div class="col-span-4">
+                    <div class="grid grid-cols-4 gap-2">
+                      <!-- <mat-form-field class="w-full h-13 text-lg" appearance="outline">
+                      <mat-icon class="mb-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                      <input class="input" formControlName="deductionsAmount" (blur)="curformat('deductionsAmount')"
+                        (input)="clearPHP('deductionsAmount',$event)" type="text" matInput [placeholder]="">
+                      </mat-form-field> -->
+
+                      <mat-form-field class="w-full text-lg" appearance="outline">
+                        <mat-label class="label-font-size">{{t('amount')}}</mat-label>
+                        <mat-icon class="mb-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                        <input [formControl]="deductionsform.get('deductionsAmount')"matInput  [OnlyNumber]="true" [max]="99999999999999999" [min]="0" [maxLength]="17" [placeholder]="'Amount'">
+                      </mat-form-field>
+
+                      <div class="h-13">
+                        <app-dropdown  [isFix]="true"[useControl]="true" [control]="deductionsform.get('payrollTypeId')" [options]="dropdownOptions.payoutTypeDef" [label]="'Payroll Type'" [icon]="'mat_outline:info'" [type]="74"> </app-dropdown>
+                      </div>
+
+                      <div class="h-13">
+                        <app-dropdown  [isFix]="true"[multiple]="false" [useControl]="true" [control]="deductionsform.get('cutoffId')"
+                          [options]="dropdownOptions.cutoffdef" [icon]="'mat_outline:info'" label="Frequency"
+                        [type]="53"> </app-dropdown>
+                      </div>
+                      <mat-form-field class="w-full h-13 text-lg" appearance="outline">
+                        <mat-label class="label-font-size">{{t('status')}}</mat-label>
+                        <mat-select formControlName="status" [placeholder]="''">
+                          <mat-option [value]="1">Open</mat-option>
+                          <mat-option [value]="3">Pause</mat-option>
+                          <mat-option [value]="2">Close</mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  <div class="col-span-1">
+                    @if (deductionsform.value.status==3) {
+                      <div class="grid grid-cols-2 gap-2">
+                        <mat-form-field class="w-full text-lg" appearance="outline">
+                          <mat-label class="label-font-size">{{t('dateFrom')}}</mat-label>
+                          <input matInput formControlName="isHoldFrom" [matDatepicker]="df3" readonly
+                            [placeholder]="'MM/DD/YYYY'" (click)="df3.open()">
+                            <mat-datepicker-toggle matSuffix [for]="df3"></mat-datepicker-toggle>
+                            <mat-datepicker #df3></mat-datepicker>
+                          </mat-form-field>
+                          <mat-form-field class="w-full text-lg" appearance="outline">
+                            <mat-label class="label-font-size">{{t('dateTo')}}</mat-label>
+                            <input matInput formControlName="isHoldTo" [matDatepicker]="df4" readonly
+                              [min]="deductionsform.value.isHoldFrom"
+                              [placeholder]="'MM/DD/YYYY'" (click)="df4.open()">
+                              <mat-datepicker-toggle matSuffix [for]="df4"></mat-datepicker-toggle>
+                              <mat-datepicker #df4></mat-datepicker>
+                            </mat-form-field>
+                          </div>
+                        }
+                        @if (deductionsform.value.status==2) {
+                          <mat-form-field class="w-full text-lg" appearance="outline">
+                            <mat-label class="label-font-size">{{t('closeOnDate')}}</mat-label>
+                            <input matInput formControlName="dateClosed" [matDatepicker]="df2" readonly
+                              [placeholder]="'MM/DD/YYYY'" (click)="df2.open()">
+                              <mat-datepicker-toggle matSuffix [for]="df2"></mat-datepicker-toggle>
+                              <mat-datepicker #df2></mat-datepicker>
+                            </mat-form-field>
+                          }
+                          <mat-form-field class="w-full text-lg" appearance="outline">
+                            <mat-label class="label-font-size">{{t('remarks')}}</mat-label>
+                            <mat-icon class="mb-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                            <input class="input" formControlName="remarks" type="text" matInput [placeholder]="''">
+                          </mat-form-field>
+                        </div>
+                      </div>
+                    </form>
+                  </mat-card>
+                </div>
+              </div>

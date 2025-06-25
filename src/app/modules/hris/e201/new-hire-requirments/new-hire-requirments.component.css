@@ -1,0 +1,76 @@
+/* table {
+    width: 100%;
+}
+
+.mat-datepicker-toggle {
+    position: relative;
+    bottom: 5px;
+    font-size: medium;
+}
+
+input {
+    position: relative;
+    bottom: 10px;
+    font-size: medium;
+}
+
+.mat-icon {
+    position: relative;
+    bottom: 8px;
+}
+
+.mat-select {
+    position: relative;
+    bottom: 9px;
+    font-size: medium;
+}
+
+.upb {
+    position: relative;
+    bottom: 15px;
+    right: -5px;
+    border-radius: 3px !important;
+}
+
+.sticky-header {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+
+.mat-card-content {
+    height: 300px;
+    overflow-y: auto;
+}
+
+.example-container {
+    max-height: 500%;
+    overflow: auto;
+    position: relative;
+}
+
+.mat-header-cell,
+.mat-cell {
+    z-index: 2 !important;
+} */
+.mat-datepicker-toggle {
+    /* position: relative; */
+    /* top: 2px !important; */
+    /* font-size: medium; */
+}
+/* .inputs {
+    position: relative;
+    margin-top: 11px !important;
+    font-size: medium;
+}
+.upb {
+    position: relative;
+    right: -5px;
+    border-radius: 3px !important;
+} */
+.mdc-data-table__cell, .mdc-data-table__header-cell {
+    padding: 0 5px 0 10px !important;
+}
+.example-container {
+    overflow: auto !important;
+}

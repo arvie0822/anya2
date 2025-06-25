@@ -1,0 +1,15 @@
+/* .mat-icon{
+    position: relative;
+    bottom: 10px;
+}
+.mat-select{
+    position: relative;
+    bottom: 11px;
+    font-size: medium;
+    }
+.mat-card{
+    height: 100%;
+} */
+.mat-mdc-card , .card {
+    box-shadow: none !important;
+}

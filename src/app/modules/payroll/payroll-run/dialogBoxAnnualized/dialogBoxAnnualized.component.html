@@ -1,0 +1,37 @@
+<mat-card class="mat-elevation-z0">
+  <mat-card-title>
+    <app-card-title title="Adjust Tax/Contribution Settings"></app-card-title>
+  </mat-card-title>
+  <mat-card-content>
+
+    <form [formGroup]="annualizedForm">
+      <div class="grid grid-cols-2 gap-2 mt-5">
+        <div class="col-span-2">
+          <div class="grid grid-cols-2 gap-2">
+            <mat-form-field class="field" appearance="outline">
+              <mat-label class="label-font-size">Divide Tax Pay</mat-label>
+              <input class="input" min="0" max="99" matInput type="number" step="0.01" placeholder="Divide Tax Pay" formControlName="divideTaxPay">
+            </mat-form-field>
+
+            <mat-form-field class="field" appearance="outline">
+              <mat-label class="label-font-size">Projected GovCon</mat-label>
+              <mat-select formControlName="projectedGovCon">
+                @for (item of govcon; track item) {
+                  <mat-option [value]="item.id">
+                    {{item.description}}
+                  </mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+    </form>
+  </mat-card-content>
+
+  <mat-card-actions align="end">
+    <button mat-stroked-button (click)="closeModal()">Close</button>
+    <button mat-flat-button (click)="submit()" color="primary">Save</button>
+  </mat-card-actions>
+
+</mat-card>

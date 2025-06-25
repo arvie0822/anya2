@@ -1,0 +1,110 @@
+
+<section class="example-container" tabindex="0">
+  <table #dynamicTable mat-table [dataSource]="dataSource" class="mat-elevation-z0 border">
+    @for (column of form; track column; let rowIndex = $index) {
+      <ng-container [matColumnDef]="column.key">
+        <th mat-header-cell *matHeaderCellDef class="pl-2 w-[205px]  text-md">{{column.label}}</th>
+        <td mat-cell *matCellDef="let element;let ii = index" class="pl-2 mt-4 text-md">
+          @if (column.type=='text') {
+            <div [hidden]="!column.visible" class="h-13 mt-3">
+              <mat-form-field class=" w-full text-lg " appearance="outline">
+                <mat-label class="label-font-size"> {{column.label}}</mat-label>
+                <mat-icon class="" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                <input class="" matInput type="text" [disabled]="!column.editable" [(ngModel)]="element[column.key]"
+                  placeholder="{{column.label}}">
+                </mat-form-field>
+              </div>
+            }
+            @if (column.type=='number') {
+              <div [hidden]="!column.visible" class="h-13 mt-3">
+                <mat-form-field class=" w-full text-md " appearance="outline">
+                  <mat-label class="label-font-size"> {{column.label}}</mat-label>
+                  <mat-icon class="" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                  <input class="input" matInput type="number" [disabled]="!column.editable" [(ngModel)]="element[column.key]"
+                    placeholder="{{column.label}}">
+                  </mat-form-field>
+                </div>
+              }
+              @if (column.type=='datepicker') {
+                <div [hidden]="!column.visible" class="h-13 mt-3">
+                  <mat-form-field class="w-full text-md" appearance="outline">
+                    <mat-label class="label-font-size"> {{column.label}}</mat-label>
+                    <input matInput [(ngModel)]="element[column.key]" [matDatepicker]="picker" readonly
+                      [placeholder]="'MM/DD/YYYY'" (click)="picker.open()">
+                      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                      <mat-datepicker #picker></mat-datepicker>
+                    </mat-form-field>
+                  </div>
+                }
+                @if (column.type=='datepicker-mmdd') {
+                  <div [hidden]="!column.visible">
+                    <app-month-date label="{{column.label}}"></app-month-date>
+                  </div>
+                }
+                @if (column.type=='time') {
+                  <div [hidden]="!column.visible" class="h-13 mt-3">
+                    <mat-form-field class="w-full text-md" appearance="outline">
+                      <mat-label class="label-font-size">{{column.label}}</mat-label>
+                      <mat-icon class="" matPrefix svgIcon="mat_outline:access_time"></mat-icon>
+                      <input [(ngModel)]="element[column.key]" (ngModelChange)="handleTimeEvent($event, column ,i)" readonly
+                        [strict]="false" mode="12h" type="text" matTimepicker #t="matTimepicker" [placeholder]="'12:00 am'">
+                      </mat-form-field>
+                    </div>
+                  }
+                  <!-- Select Dropdown -->
+                  @if (column.type=='select') {
+                    <div [hidden]="!column.visible" class="h-13 w-full mt-3">
+                      <app-dropdown [isFix]="true" [useControl]="false" (selected)="element[column.key]=$event" [value]="element[column.key]"
+                        [multiple]="column.multiselect" [options]="column.options" [icon]="'mat_outline:info'"
+                      [type]="column.dropdown"> </app-dropdown>
+                    </div>
+                  }
+                  <!-- Custom Dropdown -->
+                  @if (column.type=='custom') {
+                    <div [hidden]="!column.visible" class="h-13 w-full mt-3">
+                      <app-dropdown-custom [useControl]="false" (selected)="element[column.key]=$event"
+                        [value]="element[column.key]" [multiple]="column.multiselect" (manual)="manual=$event"
+                      [type]="column.dropdownType.uri"></app-dropdown-custom>
+                    </div>
+                  }
+                  <!-- Employee Hierarchy -->
+                  @if (column.type=='e-hierarchy') {
+                    <div [hidden]="!column.visible" class="h-13 w-full mt-3">
+                      <app-employee-hierarchy class="col-span-{{field_count+1}}" (selected)="field_count = $event"
+                        [resultHierarchy]="resultHierarchy" [showTag]="false" [defaultTag]="column.defaultTag"
+                      [multiple]="column.multiselect"></app-employee-hierarchy>
+                    </div>
+                  }
+                  <!-- Dropdown Hierarchy -->
+                  @if (column.type=='d-hierarchy') {
+                    <div [hidden]="!column.visible" class="h-13 w-full mt-3">
+                      <app-dropdown-hierarchy [useControl]="false" [all]="column.all" (selected)="element[column.key]=$event"
+                        [value]="element[column.key]" [multiple]="column.multiselect" [manual]="manual"
+                        [type]="column.dropdownType.uri" [type_id]="column.dropdownType.type_id" [id]="isNumber(element,column.dropdownType.id)">
+                      </app-dropdown-hierarchy>
+                    </div>
+                  }
+                  @if (column.type=='switch') {
+                    <div [hidden]="!column.visible">
+                      <mat-slide-toggle color="primary" [(ngModel)]="element[column.key]">{{column.label}}</mat-slide-toggle>
+                    </div>
+                  }
+                </td>
+              </ng-container>
+            }
+            <ng-container matColumnDef="action" [stickyEnd]="true">
+              <th mat-header-cell *matHeaderCellDef class="pl-2 text-md">
+                <button mat-flat-button class="w-20" color="primary" (click)="add_datasource()">
+                  <mat-icon class="mb-2" [svgIcon]="'heroicons_solid:plus-circle'"></mat-icon>
+                </button>
+              </th>
+              <td mat-cell *matCellDef="let element;let i = index" class="pl-2 mt-2">
+                <button class="mt-1" (click)="delete_datasource(i,element.encryptId)" mat-icon-button>
+                  <mat-icon class="icons" svgIcon="mat_outline:delete" color="warn"></mat-icon>
+                </button>
+              </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="columndefs ; sticky:true"></tr>
+            <tr mat-row *matRowDef="let row; columns: columndefs;"></tr>
+          </table>
+        </section>

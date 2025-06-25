@@ -1,0 +1,202 @@
+<div class="flex flex-col flex-auto min-w-0" *transloco="let t">
+  <!-- Main -->
+  <div class="flex-auto  sm:p-2  w-full min-w-0 sm:absolute sm:inset-0 sm:overflow-auto text-lg">
+    <!-- Content -->
+    <mat-card class="h-full">
+      <mat-card-title>
+        <app-card-title title="Approval Process" [sub]="!isView" [back]="true"
+        (submitTap)="submit()"></app-card-title>
+      </mat-card-title>
+      <mat-card-content class="relative h-[80%]">
+        <form [formGroup]="approvalForm">
+
+          <div class="grid grid-cols-8 gap-2 h-14 mt-4">
+
+            <mat-form-field class="w-full text-lg" appearance="outline">
+              <mat-label class="label-font-size">{{ t('name') }}</mat-label>
+              <mat-icon class="" matPrefix svgIcon="mat_outline:info"></mat-icon>
+              <input [readonly]="disable" class="input" formControlName="name" matInput
+                [placeholder]="'Name'" />
+
+              </mat-form-field>
+              <mat-form-field class="w-full text-lg" appearance="outline">
+                <mat-label class="label-font-size">{{ t('description') }}</mat-label>
+                <mat-icon class="" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                <input class="input" [readonly]="disable" formControlName="description" matInput
+                  [placeholder]="'Description'" />
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="w-full text-lg">
+                  <mat-label class="label-font-size">{{ t('levelOfApproval') }}</mat-label>
+                  <mat-icon class="" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                  <input [readonly]="disable" class="input" type="number"
+                    (ngModelChange)="handlerSequenceAdd($event)" formControlName="approvalLevel" matInput
+                    [placeholder]="'Approval Count'" />
+                  </mat-form-field>
+
+                  <mat-form-field appearance="outline" class="w-full text-lg">
+                    <mat-label class="label-font-size">{{ t('status') }}</mat-label>
+                    <mat-icon class="uploadbutton " matPrefix svgIcon="mat_outline:info"></mat-icon>
+                    <mat-select [disabled]="disablective" formControlName="active">
+                      <mat-option [value]="true">Active</mat-option>
+                      <mat-option [value]="false">Inactive</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+
+                </div>
+
+              </form>
+
+              <mat-divider class=""></mat-divider>
+
+              <div class="absolute top-20 right-0 left-0  bottom-0 h-full overflow-auto">
+                @for (element of approvalSources; track element; let i = $index) {
+                  <div [ngStyle]="{'height': topdiv()}">
+                    <div class="relative grid grid-cols-2 gap-5">
+                      <div name="approval" class="mt-5 mb-15">
+                        <div class="flex">
+                          <div class="mr-3 mb-2">
+                            <app-employee-hierarchy
+                              [multiple]="true"
+                              [all]="true"
+                              (selected)="field_count = $event"
+                              [resultHierarchy]="element.approval.resultHierarchy">
+                            </app-employee-hierarchy>
+                          </div>
+                        </div>
+                        <div class="flex">
+                          <mat-form-field class="w-50 text-lg mr-3" appearance="outline">
+                            <mat-label class="label-font-size">{{ t('receiveNotification') }}</mat-label>
+                            <mat-icon class="uploadbutton" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                            <mat-select multiple [(ngModel)]="element.approval.notification">
+                              @for (item of notificationDropdown; track item) {
+                                <mat-option class="text-lg" [value]="item.dropdownID">
+                                  {{item.description}}
+                                </mat-option>
+                              }
+                            </mat-select>
+                          </mat-form-field>
+                          <div>
+                            <button (click)="handlerAddApproval(i, 'approval')" class="text-lg w-[10px]"
+                              [matTooltip]="'Add'" mat-flat-button color="primary" aria-label="example icon">
+                              <mat-icon class="mb-2 mr-2" svgIcon="mat_outline:post_add"></mat-icon>
+                            </button>
+                          </div>
+                        </div>
+                        <section style="height:150px; width: 95%; overflow: auto;">
+                          <table class="table1 border">
+                            <thead class="custom-thead" style="position: sticky; top: 0; z-index: 2;">
+                              <th style="position: sticky; top: 0;" class="pt-3 pb-3">Approver Name</th>
+                              <th style="position: sticky; top: 0;" class="pt-3 pb-3">Notification</th>
+                              <th style="position: sticky; top: 0;" class="pt-3 pb-3">Action</th>
+                            </thead>
+                            <tbody class="border" style="text-align: center;">
+                              @for (source of element.approval.source; track source; let x = $index) {
+                                <tr class="border">
+                                  <td class="sample">
+                                    <p>{{source.displayName}}</p>
+                                  </td>
+                                  <td class="sample">
+                                    <p>{{source.notificationDescription}}</p>
+                                  </td>
+                                  <td class="sample">
+                                    <button type="button" (click)="handlerDelete(i, x, 'approvalSource')"
+                                      mat-icon-button color="warn">
+                                      <mat-icon class="mb-2 icons z-2" svgIcon="mat_outline:delete"></mat-icon>
+                                    </button>
+                                  </td>
+                                </tr>
+                              }
+                            </tbody>
+                          </table>
+                        </section><br>
+                      </div>
+                      <div name="escalate" class="mb-5">
+                        <div class="flex flex-wrap space-x-3 mt-5">
+                          <mat-form-field appearance="outline" class="w-40 h-13 text-lg">
+                            <mat-label class="label-font-size">{{ t('escalate') }}</mat-label>
+                            <mat-icon class="" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                            <mat-select [(ngModel)]="element.escalate.hasEscalate">
+                              <mat-option [value]="true">Yes</mat-option>
+                              <mat-option [value]="false">No</mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                          @if (element.escalate.hasEscalate) {
+                            <mat-form-field class="w-30 h-13 text-lg" appearance="outline">
+                              <mat-label class="label-font-size">{{ t('days') }}</mat-label>
+                              <mat-icon class="" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                              <input class="input" matInput [(ngModel)]="element.escalate.days" [placeholder]="'Escalate Days'" />
+                            </mat-form-field>
+                          }
+                          @if (element.escalate.hasEscalate) {
+                            <mat-form-field class="w-40 h-13 text-lg" appearance="outline">
+                              <mat-label class="label-font-size">{{ t('receiveNotification') }}</mat-label>
+                              <mat-icon class="uploadbutton" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                              <mat-select multiple [(ngModel)]="element.escalate.notification">
+                                @for (item of notificationDropdown; track item) {
+                                  <mat-option [value]="item.dropdownID">
+                                    {{item.description}}
+                                  </mat-option>
+                                }
+                              </mat-select>
+                            </mat-form-field>
+                          }
+                          @if (element.escalate.hasEscalate) {
+                            <div class="mb-2">
+                              <app-employee-hierarchy
+                                [multiple]="true"
+                                [all]="true"
+                                (selected)="field_count = $event"
+                                [resultHierarchy]="element.escalate.resultHierarchy">
+                              </app-employee-hierarchy>
+                            </div>
+                          }
+                          @if (element.escalate.hasEscalate) {
+                            <div class="mb-2">
+                              <button (click)="handlerAddApproval(i, 'escalate')" class="text-lg w-[10px]" mat-flat-button
+                                [matTooltip]="'Add'" mat-flat-button color="primary" aria-label="example icon">
+                                <mat-icon class="mb-2" svgIcon="mat_outline:post_add"></mat-icon>
+                              </button>
+                            </div>
+                          }
+                        </div>
+                        <div style="height:200px; max-height: 300px; width:95%; overflow: auto;">
+                          <table class="table1 mat-elevation-z0 mb-10 border">
+                            <thead class="custom-thead">
+                              <th style="position: sticky; top: 0;" class="pt-3 pb-3">Escalate Days</th>
+                              <th style="position: sticky; top: 0;" class="pt-3 pb-3">Approver Name</th>
+                              <th style="position: sticky; top: 0;" class="pt-3 pb-3">Notification</th>
+                              <th style="position: sticky; top: 0;" class="pt-3 pb-3">Action</th>
+                            </thead>
+                            <tbody class="border" style="text-align: center;">
+                              @for (source of element.escalate.source; track source; let x = $index) {
+                                <tr>
+                                  <td>
+                                    <p>{{source.days}}</p>
+                                  </td>
+                                  <td>
+                                    <p>{{source.displayName}}</p>
+                                  </td>
+                                  <td>
+                                    <p>{{source.notificationDescription}}</p>
+                                  </td>
+                                  <td>
+                                    <button type="button" (click)="handlerDelete(i, x, 'esclateSource')"
+                                      mat-icon-button color="warn">
+                                      <mat-icon class="mt-3" svgIcon="mat_outline:delete"></mat-icon>
+                                    </button>
+                                  </td>
+                                </tr>
+                              }
+                            </tbody>
+                          </table>
+                        </div><br>
+                      </div>
+                    </div>
+                  </div>
+                }
+              </div>
+            </mat-card-content>
+          </mat-card>
+        </div>
+      </div>

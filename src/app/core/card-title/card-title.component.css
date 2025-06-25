@@ -1,0 +1,14 @@
+/*
+:ng-deep .mdc-button{
+    min-width: 25px !important;
+}
+
+::ng-deep .fuse-mat-button-large {
+        height: 30px;
+        min-height: 30px;
+        max-height: 30px;
+    } */
+
+/* ::ng-deep .mat-icon {
+    min-width: 5px;
+} */

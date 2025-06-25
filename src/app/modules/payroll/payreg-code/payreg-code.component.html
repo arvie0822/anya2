@@ -1,0 +1,63 @@
+<div class="flex flex-col flex-auto min-w-0">
+    <!-- Main -->
+    <div class="flex-auto  sm:p-2  w-full min-w-0 sm:absolute sm:inset-0 sm:overflow-auto text-lg">
+       <!-- Content -->
+       <mat-card>
+            <mat-card-title>
+                    <app-card-title title="Payreg Codes" [sub]="true" [back]="true" [switch]="false" (submitTap)="submit()"></app-card-title>
+            </mat-card-title><br>
+
+            <form [formGroup]="payregForm">
+                <div class="grid grid-cols-9 gap-2">
+
+                    <mat-form-field class="w-full text-lg h-13" appearance="outline">
+                        <mat-label class="label-font-size">Payreg Codes</mat-label>
+                        <mat-icon class="mb-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                        <input formControlName="code" class="input" matInput [placeholder]="''" readonly>
+                    </mat-form-field>
+
+                    <mat-form-field class="w-full text-lg h-13" appearance="outline">
+                        <mat-label class="label-font-size">Description</mat-label>
+                        <mat-icon class="mb-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                        <input formControlName="description" class="input" type="text" matInput [placeholder]="''" readonly>
+                    </mat-form-field>
+
+                    <app-dropdown  [isFix]="false" [control]="payregForm.get('jeAccountCode')" [options]="dropdownOptions.accountCodeDef" [icon]="'mat_outline:info'" [type]="133"> </app-dropdown>
+
+                    <app-dropdown  [isFix]="false" [control]="payregForm.get('jeAccountId')"  [options]="dropdownOptions.accountNameDef" [icon]="'mat_outline:info'" [type]="134"> </app-dropdown>
+
+                    <app-dropdown  [isFix]="false" [control]="payregForm.get('jeAccountCode1')" [options]="dropdownOptions.accountCodeDef" [icon]="'mat_outline:info'"  label="Account Code Secondary" [type]="133"> </app-dropdown>
+
+                    <app-dropdown  [isFix]="false" [control]="payregForm.get('jeAccountName1')"  [options]="dropdownOptions.accountNameDef" [icon]="'mat_outline:info'" label="Account Name Secondary" [type]="134"> </app-dropdown>
+
+                    <mat-form-field class="w-full text-lg h-13" appearance="outline">
+                        <mat-label class="label-font-size">Debit/Credit</mat-label>
+                        <mat-select formControlName="debitOrCredit" [placeholder]="''">
+                            <mat-option [value]="1">Debit</mat-option>
+                            <mat-option [value]="0">Credit</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                    <mat-form-field class="w-full text-lg h-13" appearance="outline">
+                        <mat-label class="label-font-size">Cost or HR</mat-label>
+                        <mat-select formControlName="costOrHr" [placeholder]="''">
+                            <mat-option [value]="0">Cost</mat-option>
+                            <mat-option [value]="1">HR</mat-option>
+                            <mat-option [value]="2">Custom</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                    <mat-form-field class="w-full text-lg h-13" appearance="outline">
+                        <mat-label class="label-font-size">Status</mat-label>
+                        <mat-select formControlName="active" [placeholder]="''">
+                            <mat-option [value]="true">Active</mat-option>
+                            <mat-option [value]="false">Inactive</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                </div>
+            </form>
+
+        </mat-card>
+    </div>
+</div>

@@ -1,0 +1,111 @@
+<div class="flex flex-col flex-auto min-w-0">
+    <!-- Main -->
+    <div class="flex-auto  sm:p-2  w-full min-w-0 sm:absolute sm:inset-0 sm:overflow-auto text-md">
+
+        <mat-card class="body-card h-full">
+            <mat-card-title>
+                <mat-card-title class="text-[12px] font-bold " style="text-transform: capitalize; ">Statutory List</mat-card-title>
+            </mat-card-title>
+            <form [formGroup]="sssForm">
+                <div class="flex space-x-4 mt-4">
+                    <app-dropdown [isFix]="true" [control]="sssForm.get('statutory')" [options]="dropdownOptions.statutoryDef" [icon]="'mat_outline:info'" [type]="125" [useControl]="true"> </app-dropdown>
+
+                    <div class="flex space-x-4 w-[10px]">
+                        <button mat-flat-button class="text-md btn-Search" color="primary" matTooltip="Search" (click)="search()">
+                            <mat-icon class="mb-2" matSuffix svgIcon="mat_outline:search"></mat-icon>
+                        </button>
+                        <button mat-flat-button class="text-md btn-Create" color="primary" (click)="handleCreateEvent()" matTooltip="Create">
+                            <mat-icon class="mb-2" matSuffix svgIcon="mat_outline:playlist_add"></mat-icon>
+                        </button>
+                        <button mat-flat-button class="text-md btn-Export" color="primary" matTooltip="Export">
+                            <mat-icon class="mb-2" matSuffix svgIcon="mat_outline:download"></mat-icon>
+                        </button>
+                    </div><br>
+                </div>
+            </form>
+            <section class="example-container mat-elevation-z0 z-10" tabindex="0">
+                <table mat-table #paginator0 [dataSource]="dataSource" (matSortChange)="handleSortEvent($event)" class="mat-elevation-z0 border">
+
+                    <!-- First Level Approval -->
+
+                    <ng-container matColumnDef="action">
+                        <th class="pl-10" mat-header-cell *matHeaderCellDef> </th>
+                        <td class="pl-5" mat-cell *matCellDef="let element ; let i = index">
+                            <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+                                <mat-icon class="icon-size-6">more_vert</mat-icon>
+                              </button>
+                              <mat-menu #menu="matMenu">
+                                <button mat-menu-item  (click)="handleClickEvent('edit' ,element)">
+                                  <mat-icon class="icon-size-6" color="primary">edit</mat-icon>
+                                  <span color="primary">Edit</span>
+                                </button>
+                                <button mat-menu-item (click)="handleClickEvent('view' ,element)">
+                                    <mat-icon class="icon-size-6" color="primary">open_in_new</mat-icon>
+                                    <span color="primary">View</span>
+                                </button>
+                                <!-- <button mat-menu-item>
+                                    <mat-icon color="primary">download</mat-icon>
+                                    <span color="primary">Download</span>
+                                </button>
+                                <button mat-menu-item >
+                                    <mat-icon color="primary">cancel</mat-icon>
+                                    <span color="primary">Cancel</span>
+                                </button> -->
+
+                              </mat-menu>
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="type">
+                        <th mat-header-cell class="no-wrap" *matHeaderCellDef> Category </th>
+                        <td mat-cell  class="hover-effect" *matCellDef="let element">
+                            <div class="truncate-cell">{{element.type}} </div>
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="name">
+                        <th mat-header-cell class="no-wrap" *matHeaderCellDef> Name </th>
+                        <td class="text-md" mat-cell *matCellDef="let element">
+                            <div class="truncate-cell">{{element.name}} </div>
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="description">
+                        <th mat-header-cell class="no-wrap" *matHeaderCellDef> Description </th>
+                        <td mat-cell  class="hover-effect" *matCellDef="let element">
+                            <div class="truncate-cell">{{element.description}} </div>
+                        </td>
+                    </ng-container>
+
+                      <ng-container matColumnDef="createdBy">
+                        <th mat-header-cell class="no-wrap" *matHeaderCellDef> Created By </th>
+                        <td class="text-md" mat-cell *matCellDef="let element">
+                            <div class="truncate-cell">{{element.createdBy}} </div>
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="dateCreated">
+                        <th mat-header-cell class="no-wrap" *matHeaderCellDef> Created Date </th>
+                        <td class="text-md" mat-cell *matCellDef="let element">
+                            <div class="truncate-cell">{{element.dateCreated}} </div>
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="status">
+                        <th class="" mat-header-cell class="no-wrap" *matHeaderCellDef> Status </th>
+                        <td mat-cell  class="hover-effect" class="" *matCellDef="let element">
+                            <div class="truncate-cell">{{element.status}} </div>
+                        </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                </table>
+            </section>
+
+            <mat-paginator class="paganation" (page)="handlePageEvent($event)"
+            [length]="totalRows" [pageSize]="request.Length" [pageIndex]="request.Start"
+            [pageSizeOptions]="[20, 50, 100]" showFirstLastButtons></mat-paginator>
+        </mat-card>
+    </div>
+</div>

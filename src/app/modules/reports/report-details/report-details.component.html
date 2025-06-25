@@ -1,0 +1,91 @@
+<mat-card class="body-card">
+  <mat-card-title>
+    <app-card-title title="Reports" [sub]="table?.isPublish" [back]="true" [switch]="false" (submitTap)="publish()"></app-card-title>
+  </mat-card-title>
+
+  @if (table?.fields) {
+    <div class="flex flex-wrap space-x-3">
+      @for (filter of table.fields ; track filter; let i = $index) {
+        @if (filter.type=='input') {
+          <mat-form-field class="w-50 text-md h-13 mr-1" appearance="outline">
+            <mat-label class="label-font-size">{{filter.label}}</mat-label>
+            <mat-icon class="uploadbutton icon-size-5" matSuffix svgIcon="{{filter.icon}}"></mat-icon>
+            <input class="input" [id]="filter.id" matInput [(ngModel)]="filter.value" (change)="handleInputEvent($event)">
+          </mat-form-field>
+        }
+        @if (filter.type=='select') {
+          <mat-form-field class="w-50 text-md h-13 mr-1" appearance="outline">
+            <mat-label class="label-font-size">{{filter.label}}</mat-label>
+            <mat-select [id]="filter.id" [(ngModel)]="filter.value" [multiple]="filter.multiselect">
+              @if (filter.all) {
+                <mat-option [value]="0">All</mat-option>
+              }
+              @for (item of filter.options; track item) {
+                <mat-option [value]="item.dropdownID">{{item.description}}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        }
+        @if (filter.type=='date') {
+          <mat-form-field class="w-50 text-md h-13 mr-1" appearance="outline" let i = index>
+            <mat-label class="label-font-size">{{filter.label}}</mat-label>
+            <input matInput [(ngModel)]="filter.value" [matDatepicker]="picker" readonly (dateChange)="sample(filter.label,i)" [min]="_min(filter)"
+              [placeholder]="'MM/DD/YYYY'" (click)="picker.open()" >
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+          }
+          <!-- dropdownfix -->
+          @if (filter.type=='select-fix') {
+            <div class="h-13 mr-1">
+              <app-dropdown [isFix]="true" [label]="filter.label" [all]="filter.all" (selected)="filter.value=$event" [reset]="resetFix" [multiple]="filter.multiselect" [value]="filter.value"  [options]="filter.options" [useControl]="false" [icon]="'mat_outline:info'" [type]="filter.dropdown"> </app-dropdown>
+            </div>
+          }
+          <!-- Custom dropdown -->
+          @if (filter.type=='custom') {
+            <div class="h-13 mr-1">
+              <app-dropdown-custom [all]="filter.all" (selected)="filter.value=$event;" [reset]="resetCustom" [multiple]="filter.multiselect" [type]="filter.dropdown" [useControl]="false"></app-dropdown-custom>
+            </div>
+          }
+          <!-- Employee Hierarchy -->
+          @if (filter.type=='e-hierarchy') {
+            <div class="h-13">
+              <app-employee-hierarchy [showTag]="false" [defaultTag]="filter.tagType" [multiple]="filter.multiselect" [includeInactive]="table.includeInactive" [all]="filter.all" [reset]="resetHierarchy" [resultHierarchy]="resultHierarchy"></app-employee-hierarchy>
+            </div>
+          }
+          <!-- Dropdown Hierarchy -->
+          @if (filter.type=='d-hierarchy') {
+            <div class="w-50 h-13 mr-3">
+              <app-dropdown-hierarchy [useControl]="false" [manual]="true" [multiple]="filter.multiselect" [isReports]="true"  [all]="filter.all" [customRequest]="customRequest(filter.id)" [objectValue]="false" (selected)="filter.value = $event" [type]="filter.tagType.type"  [type_id]="filter.tagType.type_id" [id]="getIds(filter.tagType.id)"></app-dropdown-hierarchy>
+            </div>
+          }
+        }
+        @if (table.isSearch) {
+          <button mat-flat-button color="primary" [disabled]="saving" (click)="search()" class="text-sm w-[10px] mr-3 mt-0.5" matTooltip="Search">
+            <mat-icon matSuffix svgIcon="mat_outline:search"></mat-icon>
+          </button>
+        }
+        <button mat-flat-button color="primary" [disabled]="downloading" (click)="exportNow()" class="text-sm w-[10px] mr-3 mt-0.5" matTooltip="Export">
+          @if (!downloading) {
+            <mat-icon matSuffix svgIcon="mat_outline:download"></mat-icon>
+          }
+          @if (downloading) {
+            <mat-icon matSuffix  svgIcon="mat_outline:downloading"></mat-icon>
+          }
+        </button>
+        <!-- <button mat-flat-button color="primary" *ngIf="table.isPublish" [disabled]="saving" (click)="publish()" class="text-sm w-[10px] mr-3 mt-0.5" matTooltip="Publish">
+        <mat-icon matSuffix svgIcon="mat_outline:save"></mat-icon>
+      </button> -->
+    </div>
+  }
+
+  @if (table?.isSearch) {
+    <div class="table-card pr-5 pl-5">
+      <app-_tables [pageSize]="[50,100]" [columns]="columns" [source]="dataSource" [request]="request" [totalRows]="totalRows" (pageEvent)="pageEvent($event)" [loading]="loading"></app-_tables>
+    </div>
+  }
+
+</mat-card>
+
+<div>{{loadYears}}</div>
+

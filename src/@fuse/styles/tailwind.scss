@@ -1,0 +1,215 @@
+/* This injects Tailwind's base styles and any base styles registered by plugins. */
+@tailwind base;
+
+/* This injects additional styles into Tailwind's base styles layer. */
+@layer base {
+    * {
+        /* Text rendering */
+        text-rendering: optimizeLegibility;
+        -o-text-rendering: optimizeLegibility;
+        -ms-text-rendering: optimizeLegibility;
+        -moz-text-rendering: optimizeLegibility;
+        -webkit-text-rendering: optimizeLegibility;
+        -webkit-tap-highlight-color: transparent;
+
+        /* Remove the focus ring */
+        &:focus {
+            outline: none !important;
+        }
+    }
+
+    /* HTML and Body default styles */
+    html,
+    body {
+        display: flex;
+        flex-direction: column;
+        flex: 1 1 auto;
+        width: 100%;
+        min-height: 100%;
+        -webkit-font-smoothing: auto;
+        -moz-osx-font-smoothing: auto;
+    }
+
+    /* Font size */
+    html {
+        font-size: 12px;
+    }
+
+    // ========================= additional ================================
+
+    :root {
+        --mat-form-field-container-vertical-padding: 6px !important;
+        --mat-mdc-form-field-label-transform: translateY(-50%) translateX(calc(1 * (13px + var(--mat-mdc-form-field-label-offset-x, 0px))));
+        --mat-form-field-container-height : 35px !important;
+    }
+
+
+
+    .fuse-horizontal-navigation-menu-item .fuse-horizontal-navigation-item-wrapper .fuse-horizontal-navigation-item {
+        font-size: 10px !important;
+    }
+
+    .mat-mdc-text-field-wrapper {
+        height: 30px !important;
+    }
+
+    .mat-mdc-select-arrow svg {
+        bottom: -15px !important;
+        top : 35% !important;
+    }
+
+    .mat-mdc-select-arrow-wrapper {
+        height: 1px !important;
+        margin-bottom: 8px !important;
+    }
+
+    .mat-mdc-select-arrow {
+        height: 30px !important;
+    }
+
+    fuse-horizontal-navigation .fuse-horizontal-navigation-wrapper fuse-horizontal-navigation-basic-item .fuse-horizontal-navigation-item-wrapper .fuse-horizontal-navigation-item .fuse-horizontal-navigation-item-icon, fuse-horizontal-navigation .fuse-horizontal-navigation-wrapper fuse-horizontal-navigation-branch-item .fuse-horizontal-navigation-item-wrapper .fuse-horizontal-navigation-item .fuse-horizontal-navigation-item-icon {
+        margin-right: 5px !important;
+    }
+
+    .fuse-horizontal-navigation-menu-item .fuse-horizontal-navigation-item-wrapper .fuse-horizontal-navigation-item {
+        min-height: 10px !important;
+    }
+
+    svg {
+        height: 60% !important;
+        margin-top: 8px !important;
+    }
+
+    // .mdc-text-field--outlined .mdc-floating-label {
+    //     left: 7px !important;
+    // }
+
+    // ========================= additional ================================
+
+
+    body {
+        font-size: 0.875rem;
+    }
+
+    /* Stylistic alternates for Inter */
+    body {
+        font-feature-settings: 'salt';
+    }
+
+    /* Better spacing and border for horizontal rule */
+    hr {
+        margin: 32px 0;
+        border-bottom-width: 1px;
+    }
+
+    /* Make images and videos to take up all the available space */
+    img {
+        width: 100%;
+        vertical-align: top;
+    }
+
+    /* Fix: Disabled placeholder color is too faded on Safari */
+    input[disabled] {
+        opacity: 1;
+        -webkit-text-fill-color: currentColor;
+    }
+
+    /* Set the background and foreground colors */
+    body,
+    .dark,
+    .light {
+        @apply text-default bg-default #{'!important'};
+    }
+
+    /* Set the border color */
+    *,
+    ::before,
+    ::after {
+        --tw-border-opacity: 1 !important;
+        border-color: rgba(var(--fuse-border-rgb), var(--tw-border-opacity));
+
+        .dark & {
+            --tw-border-opacity: 0.12 !important;
+        }
+    }
+
+    /* Style scrollbars on platforms other than MacOS and iOS */
+    @media only screen and (min-width: 960px) {
+        body:not(.os-mac) {
+            ::-webkit-scrollbar {
+                width: 8px;
+                height: 8px;
+                background-color: rgba(0, 0, 0, 0);
+            }
+
+            ::-webkit-scrollbar:hover {
+                width: 8px;
+                height: 8px;
+                background-color: rgba(0, 0, 0, 0.06);
+            }
+
+            ::-webkit-scrollbar-thumb {
+                border: 2px solid transparent;
+                border-radius: 20px;
+                box-shadow: inset 0 0 0 20px rgba(0, 0, 0, 0.24);
+            }
+
+            ::-webkit-scrollbar-thumb:active {
+                border-radius: 20px;
+                box-shadow: inset 0 0 0 20px rgba(0, 0, 0, 0.37);
+            }
+
+            &.dark {
+                ::-webkit-scrollbar-thumb {
+                    box-shadow: inset 0 0 0 20px rgba(255, 255, 255, 0.24);
+                }
+
+                ::-webkit-scrollbar-thumb:active {
+                    box-shadow: inset 0 0 0 20px rgba(255, 255, 255, 0.37);
+                }
+            }
+        }
+    }
+
+    /* Set the foreground color for disabled elements */
+    [disabled] {
+        @apply text-disabled #{'!important'};
+    }
+
+    /* Print styles */
+    @media print {
+        /* Make the base font size smaller for print so everything is scaled nicely */
+        html {
+            font-size: 12px !important;
+        }
+
+        body,
+        .dark,
+        .light {
+            background: none !important;
+        }
+    }
+}
+
+/* This injects Tailwind's component classes and any component classes registered by plugins. */
+@tailwind components;
+
+
+
+.mat-mdc-row {
+    height:1px !important;
+    color: var(--mat-table-row-item-label-text-color, rgba(0, 0, 0, 0.87));
+}
+
+.mat-mdc-header-row {
+    height: 40px !important;
+    font-size: 10px !important;
+}
+
+.mat-mdc-text-field-wrapper .mat-mdc-form-field-flex .mat-mdc-floating-label {
+    top: 15px !important;
+}
+
+.mat-mdc-text-field-wrapper.mdc-text-field--outlined .mdc-notched-outline--upgraded .mdc-floating-label--float-above {
+    --mat-mdc-form-field-label-transform: translateY(calc(calc(3px + var(--mat-form-field-container-height) / 2)* -1)) scale(var(--mat-mdc-form-field-floating-label-scale, 0.75)) !important;
+}

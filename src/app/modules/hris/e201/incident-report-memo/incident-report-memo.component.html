@@ -1,0 +1,242 @@
+<mat-horizontal-stepper [linear]="false" #stepper class="">
+    <mat-step [stepControl]="">
+        <form [formGroup]="incedentdemoform">
+            <ng-template matStepLabel>Incident Report</ng-template>
+            <div class="grid grid-cols-6 gap-2 h-10 mt-5">
+                <mat-form-field class="w-full text-md h-10" appearance="outline">
+                    <mat-label class="label-font-size">Date</mat-label>
+                    <input formControlName="incidentDate" matInput [matDatepicker]="df1" readonly
+                        [placeholder]="'MM/DD/YYYY'" (click)="df1.open()">
+                    <mat-datepicker-toggle matSuffix [for]="df1"></mat-datepicker-toggle>
+                    <mat-datepicker #df1></mat-datepicker>
+                </mat-form-field>
+
+                <!-- <mat-form-field class="w-full text-md h-10" appearance="outline">
+                                <mat-label class="label-font-size">Incident Type</mat-label>
+                                <mat-select formControlName="incidentTypeId" [placeholder]="">
+                                    <mat-option [value]="true">Yes</mat-option>
+                                    <mat-option [value]="false">No</mat-option>
+                                </mat-select>
+                            </mat-form-field> -->
+
+                <app-dropdown [value]="incedentdemoform.get('incidentTypeId').value"
+                    [control]="incedentdemoform.get('incidentTypeId')" (objects)="incidentTypeIds = $event"
+                    [options]="dropdownOptions.incidentdef" [icon]="'mat_outline:info'" [type]="166"
+                    label="Incident Type"> </app-dropdown>
+
+                <!-- <mat-form-field class="w-full text-md h-10" appearance="outline">
+                                <mat-label class="label-font-size">Incident/Violation Category</mat-label>
+                                <mat-select formControlName="incidentCateogryId" [placeholder]="">
+                                    <mat-option [value]="true">Yes</mat-option>
+                                    <mat-option [value]="false">No</mat-option>
+                                </mat-select>
+                            </mat-form-field> -->
+
+                <app-dropdown [value]="incedentdemoform.get('incidentCateogryId').value"
+                    [control]="incedentdemoform.get('incidentCateogryId')" (objects)="incidentCateogryIds = $event"
+                    [options]="dropdownOptions.violationdef" [icon]="'mat_outline:info'" [type]="167"
+                    label="Incident/Violation Category"> </app-dropdown>
+
+                <mat-form-field class="w-full h-10" appearance="outline">
+                    <mat-label class="label-font-size">Description</mat-label>
+                    <input formControlName="description" matInput type="text">
+                </mat-form-field>
+
+                <button class="w-10 text-md" (click)="addidemo('incedentdemoform','demo')" mat-flat-button
+                    color="primary" matTooltip="Add" aria-label="example icon">
+                    <mat-icon class="mb-2" svgIcon="mat_outline:post_add"></mat-icon>
+                </button>
+
+            </div><br>
+            <section class="example-container overflow-auto h-[400px] mat-elevation-z0" tabindex="0">
+                <table mat-table #demotable [dataSource]="dataSourcereturn('demo')" class="mat-elevation-z0 border">
+
+                    <ng-container matColumnDef="action">
+                        <th mat-header-cell *matHeaderCellDef>Actions</th>
+                        <td mat-cell *matCellDef="let element ; let i = index">
+                            <button class="" mat-icon-button [matMenuTriggerFor]="menu" [disabled]="editing"
+                                aria-label="">
+                                <mat-icon class="icon-size-6">{{editing?"edit":"more_vert"}}</mat-icon>
+                            </button>
+                            <mat-menu #menu="matMenu">
+                                <button mat-menu-item (click)="deledit('editdemo',element,i)">
+                                    <mat-icon class=" icon-size-6" color="primary">edit</mat-icon>
+                                    <span>Edit</span>
+                                </button>
+                                <button mat-menu-item (click)="deledit('deletedemo',element,i)">
+                                    <mat-icon class="  icon-size-6" color="warn">delete</mat-icon>
+                                    <span>Delete</span>
+                                </button>
+                            </mat-menu>
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="incidentDate">
+                        <th mat-header-cell *matHeaderCellDef> Date </th>
+                        <td mat-cell *matCellDef="let element"> {{element.incidentDate | date:'MM/dd/yyyy'}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="incidentTypeId">
+                        <th mat-header-cell *matHeaderCellDef> Incident type </th>
+                        <td mat-cell *matCellDef="let element"> {{element.incidentTypeDescription}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="incidentCateogryId">
+                        <th mat-header-cell *matHeaderCellDef> Violation </th>
+                        <td mat-cell *matCellDef="let element"> {{element.incidentCateogryDescription}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="description">
+                        <th mat-header-cell *matHeaderCellDef> Description </th>
+                        <td mat-cell *matCellDef="let element"> {{element.description}} </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns ; sticky : true"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                </table>
+                <!-- <div class="grid grid-cols-2 gap-2">
+                                <mat-paginator [length]="20" #paginator0 [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons
+                                    aria-label="Select page of periodic elements"> </mat-paginator>
+                            </div> -->
+            </section>
+            <!-- <div class="mt-5">
+                            <button mat-button matStepperNext color="primary">Next</button>
+                        </div> -->
+        </form>
+    </mat-step>
+    <mat-step [stepControl]="">
+        <form [formGroup]="memoform">
+            <ng-template matStepLabel>Memo</ng-template>
+            <div class="grid grid-cols-7 gap-2 h-10 mt-5">
+
+                <!-- <mat-form-field class="w-full text-md h-10" appearance="outline">
+                                <mat-label class="label-font-size">Offense Level</mat-label>
+                                <mat-select formControlName="offenseLevelId" [placeholder]="">
+                                    <mat-option [value]="true">Yes</mat-option>
+                                    <mat-option [value]="false">No</mat-option>
+                                </mat-select>
+                            </mat-form-field> -->
+
+                <app-dropdown [value]="memoform.get('offenseLevelId').value" [control]="memoform.get('offenseLevelId')"
+                    (objects)="offenseLevelIds = $event" [options]="dropdownOptions.offencedef"
+                    [icon]="'mat_outline:info'" [type]="168" label="Offense Level"> </app-dropdown>
+
+                <!-- <mat-form-field class="w-full text-md h-10" appearance="outline">
+                                <mat-label class="label-font-size">Section</mat-label>
+                                <mat-select formControlName="sectionId" [placeholder]="">
+                                    <mat-option [value]="true">Yes</mat-option>
+                                    <mat-option [value]="false">No</mat-option>
+                                </mat-select>
+                            </mat-form-field> -->
+
+                <app-dropdown [value]="memoform.get('sectionId').value" [control]="memoform.get('sectionId')"
+                    (objects)="sectionIds = $event" [options]="dropdownOptions.sectiondef" [icon]="'mat_outline:info'"
+                    [type]="169" label="Section"> </app-dropdown>
+
+                <mat-form-field class="w-full h-10" appearance="outline">
+                    <mat-label class="label-font-size">Description</mat-label>
+                    <input formControlName="description" matInput type="text">
+                </mat-form-field>
+
+                <!-- <mat-form-field class="w-full text-md h-10" appearance="outline">
+                                <mat-label class="label-font-size">Disciplinary Action</mat-label>
+                                <mat-select formControlName="disciplinaryActionId" [placeholder]="">
+                                    <mat-option [value]="true">Yes</mat-option>
+                                    <mat-option [value]="false">No</mat-option>
+                                </mat-select>
+                            </mat-form-field> -->
+
+                <app-dropdown [value]="memoform.get('disciplinaryActionId').value"
+                    [control]="memoform.get('disciplinaryActionId')" (objects)="disciplinaryActionIds = $event"
+                    [options]="dropdownOptions.disciplinary" [icon]="'mat_outline:info'" [type]="170"
+                    label="Disciplinary Action"> </app-dropdown>
+
+                <mat-form-field class="w-full text-md h-10" appearance="outline">
+                    <mat-label class="label-font-size">Date</mat-label>
+                    <input formControlName="receivedDate" matInput [matDatepicker]="df2" readonly
+                        [placeholder]="'MM/DD/YYYY'" (click)="df2.open()" [max]="memoform.controls['slideDate'].value">
+                    <mat-datepicker-toggle matSuffix [for]="df2"></mat-datepicker-toggle>
+                    <mat-datepicker #df2></mat-datepicker>
+                </mat-form-field>
+
+                <mat-form-field class="w-full text-md h-10" appearance="outline">
+                    <mat-label class="label-font-size">Date</mat-label>
+                    <input formControlName="slideDate" matInput [matDatepicker]="df3" readonly
+                        [placeholder]="'MM/DD/YYYY'" (click)="df3.open()"
+                        [min]="memoform.controls['receivedDate'].value">
+                    <mat-datepicker-toggle matSuffix [for]="df3"></mat-datepicker-toggle>
+                    <mat-datepicker #df3></mat-datepicker>
+                </mat-form-field>
+
+                <button class="w-10 text-md" (click)="addidemo('memoform','memo')" mat-flat-button color="primary"
+                    matTooltip="Add" aria-label="example icon">
+                    <mat-icon class="mb-2" svgIcon="mat_outline:post_add"></mat-icon>
+                </button>
+            </div><br>
+            <section class="example-container overflow-auto h-[400px] mat-elevation-z0" tabindex="0">
+                <table mat-table #memotable [dataSource]="dataSourcereturn('memo')" class="mat-elevation-z0 border">
+
+                    <ng-container matColumnDef="action">
+                        <th mat-header-cell *matHeaderCellDef>Actions</th>
+                        <td mat-cell *matCellDef="let element ; let i = index">
+                            <button class="" mat-icon-button [matMenuTriggerFor]="menu" [disabled]="editing"
+                                aria-label="">
+                                <mat-icon class="icon-size-6">{{editing?"edit":"more_vert"}}</mat-icon>
+                            </button>
+                            <mat-menu #menu="matMenu">
+                                <button mat-menu-item (click)="deledit('editmemo',element,i)">
+                                    <mat-icon class="icon-size-6" color="primary">edit</mat-icon>
+                                    <span>Edit</span>
+                                </button>
+                                <button mat-menu-item (click)="deledit('deletememo',element,i)">
+                                    <mat-icon class="icon-size-6" color="warn">delete</mat-icon>
+                                    <span>Delete</span>
+                                </button>
+                            </mat-menu>
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="offenseLevelId">
+                        <th mat-header-cell *matHeaderCellDef> Offense level </th>
+                        <td mat-cell *matCellDef="let element"> {{element.offenseLevelDescription}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="sectionId">
+                        <th mat-header-cell *matHeaderCellDef> Section </th>
+                        <td mat-cell *matCellDef="let element"> {{element.sectionDescription}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="description">
+                        <th mat-header-cell *matHeaderCellDef> Description </th>
+                        <td mat-cell *matCellDef="let element"> {{element.description}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="disciplinaryActionId">
+                        <th mat-header-cell *matHeaderCellDef> Desciplinary action </th>
+                        <td mat-cell *matCellDef="let element"> {{element.disciplinaryActionDescription}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="receivedDate">
+                        <th mat-header-cell *matHeaderCellDef> Date serve </th>
+                        <td mat-cell *matCellDef="let element"> {{element.receivedDate | date:'MM/dd/yyyy'}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="slideDate">
+                        <th mat-header-cell *matHeaderCellDef> Slide date </th>
+                        <td mat-cell *matCellDef="let element"> {{element.slideDate | date:'MM/dd/yyyy'}} </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns1 ; sticky : true"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns1;"></tr>
+                </table>
+                <!-- <div class="grid grid-cols-2 gap-2">
+                                <mat-paginator [length]="20" #paginator1 [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons
+                                    aria-label="Select page of periodic elements"> </mat-paginator>
+                            </div> -->
+            </section>
+            <!-- <div class="mt-5">
+                            <button mat-button matStepperPrevious color="primary">Back</button>
+                        </div> -->
+        </form>
+    </mat-step>
+</mat-horizontal-stepper>

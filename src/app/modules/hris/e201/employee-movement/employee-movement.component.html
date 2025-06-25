@@ -1,0 +1,136 @@
+<form [formGroup]="movementform">
+    <span class="text-lg bold">Employee Record</span>
+    <div class="grid grid-cols-6 gap-2 mt-5">
+        <!-- <mat-form-field class="w-full text-md h-10" appearance="outline">
+                            <mat-label class="label-font-size">Module</mat-label>
+                            <mat-select [placeholder]="">
+                                <mat-option [value]="true">Yes</mat-option>
+                                <mat-option [value]="false">No</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+
+                        <mat-form-field class="w-full text-md h-10" appearance="outline">
+                            <mat-label class="label-font-size">Sub-Module</mat-label>
+                            <mat-select [placeholder]="">
+                                <mat-option [value]="true">Yes</mat-option>
+                                <mat-option [value]="false">No</mat-option>
+                            </mat-select>
+                        </mat-form-field> -->
+
+        <app-dropdown-custom [useControl]="true" [all]="false" [value]="movementform.get('module').value"
+            [multiple]="false" [control]="movementform.get('module')" [options]="dropdownOptions.movementdef"
+            [type]="1055" label="Movement Type"></app-dropdown-custom>
+
+        <app-dropdown-custom [useControl]="true" [all]="false" (objects)="submodules = $event"
+            [value]="movementform.get('submodule').value" [disabled]="movementform.value.module == 0" [multiple]="false"
+            [customRequest]="submodule()" [control]="movementform.get('submodule')"
+            [options]="dropdownOptions.fieldnamedef" [type]="1055" label="Field Name"></app-dropdown-custom>
+
+        <button class="w-10 text-md" mat-flat-button color="primary" (click)="search()" aria-label="example icon"
+            mattooltip="Search">
+            <mat-icon class="mb-2" svgIcon="mat_outline:search"></mat-icon>
+        </button>
+
+    </div>
+
+    <section class="overflow-auto h-full mat-elevation-z0">
+        <table mat-table [dataSource]="dataSource" class="mat-elevation-z0 border">
+
+            <ng-container matColumnDef="module">
+                <th mat-header-cell *matHeaderCellDef> Module </th>
+                <td mat-cell *matCellDef="let element"> {{element.module}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="submodule">
+                <th mat-header-cell *matHeaderCellDef> Submodule </th>
+                <td mat-cell *matCellDef="let element"> {{element.subModule}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="activity">
+                <th mat-header-cell *matHeaderCellDef> Activity </th>
+                <td mat-cell *matCellDef="let element"> {{element.activity}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="oldvalue">
+                <th mat-header-cell *matHeaderCellDef> Old value </th>
+                <td mat-cell *matCellDef="let element"> {{element.oldValue}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="newvalue">
+                <th mat-header-cell *matHeaderCellDef> New value </th>
+                <td mat-cell *matCellDef="let element"> {{element.newValue}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="datetime">
+                <th mat-header-cell *matHeaderCellDef> Date Time </th>
+                <td mat-cell *matCellDef="let element"> {{element.dateCreated}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="changeby">
+                <th mat-header-cell *matHeaderCellDef> Change By </th>
+                <td mat-cell *matCellDef="let element"> {{element.changedBy}} </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky : true"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+    </section>
+
+    <!-- <div class="grid grid-cols-2 gap-2">
+                        <mat-paginator [length]="20" #paginator0 [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons
+                            aria-label="Select page of periodic elements"> </mat-paginator>
+                    </div> -->
+
+    <!-- <div>
+                        <button mat-button matStepperNext>Next</button>
+                    </div> -->
+</form>
+<!-- <mat-step [stepControl]="">
+                <form [formGroup]="">
+                    <ng-template matStepLabel>Payroll Information History</ng-template>
+
+                    <table mat-table [dataSource]="dataSource1" class="mat-elevation-z0 border">
+
+                        <ng-container matColumnDef="module">
+                            <th mat-header-cell *matHeaderCellDef> Module </th>
+                            <td mat-cell *matCellDef="let element"> {{element.module}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="activity">
+                            <th mat-header-cell *matHeaderCellDef> Activity </th>
+                            <td mat-cell *matCellDef="let element"> {{element.activity}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="oldvalue">
+                            <th mat-header-cell *matHeaderCellDef> Old value </th>
+                            <td mat-cell *matCellDef="let element"> {{element.oldvalue}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="newvalue">
+                            <th mat-header-cell *matHeaderCellDef> New value </th>
+                            <td mat-cell *matCellDef="let element"> {{element.newvalue}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="datetime">
+                            <th mat-header-cell *matHeaderCellDef> Date time </th>
+                            <td mat-cell *matCellDef="let element"> {{element.datetime}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="changeby">
+                            <th mat-header-cell *matHeaderCellDef> Change By </th>
+                            <td mat-cell *matCellDef="let element"> {{element.changeby}} </td>
+                        </ng-container>
+
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns1"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns1;"></tr>
+                    </table>
+
+                    <div class="grid grid-cols-2 gap-2">
+                        <mat-paginator [length]="20" #paginator0 [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons
+                            aria-label="Select page of periodic elements"> </mat-paginator>
+                    </div>
+                    <div>
+                        <button mat-button matStepperPrevious>Back</button>
+                    </div>
+                </form>
+            </mat-step> -->

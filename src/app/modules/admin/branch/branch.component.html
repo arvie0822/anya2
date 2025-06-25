@@ -1,0 +1,478 @@
+<div class="flex flex-col flex-auto min-w-0" *transloco="let t">
+  <!-- Main -->
+  <div class="flex-auto  sm:p-2  w-full min-w-0 sm:absolute sm:inset-0 sm:overflow-auto text-lg">
+    <!-- Content -->
+    <mat-card class="h-full">
+      <div>
+        <mat-card-title class="h-13">
+          <app-card-title title="" [sub]="true" [back]="true" (submitTap)="submit()"></app-card-title>
+        </mat-card-title>
+      </div>
+      <mat-tab-group mat-align-tabs="start" mat-stretch-tabs="false" class="scrollable-tabs">
+        <mat-tab label="{{t('Branch Details')}}" class="pt-5 mat-elevation-z1">
+          <form [formGroup]="subCompanyForm">
+            <div class="grid grid-cols-6 gap-2">
+              <div class="mat-elevation-z0 col-span-5">
+                <div class=" grid grid-cols-6 gap-2 h-15">
+                  <mat-form-field class="w-full text-lg"  appearance="outline">
+                    <mat-label class="label-font-size">{{ t('branchName') }}</mat-label>
+                    <mat-icon class="iconsize  : mr-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                    <input class="input" slec formControlName="branchName" matInput [placeholder]="'Branch Name'" >
+                  </mat-form-field>
+                  <!-- <app-dropdown [isFix]="true" [control]="subCompanyForm.get('subsidiaryId')"  [options]="dropdownOptions.companynameDef" [icon]="'mat_outline:info'" [type]="304"> </app-dropdown> -->
+                  <app-dropdown-custom  [control]="subCompanyForm.get('subCompanyId')" [type]="1001" [value]="this.sc.subCompanyId" [options]="dropdownOptions.companynameDef" [useControl]="true" (selected)="copyinfo($event)"></app-dropdown-custom>
+
+                  <app-dropdown [isFix]="true" [control]="subCompanyForm.get('industry')"  [options]="dropdownOptions.industryDef" (selected)="sample($event)" [icon]="'mat_outline:info'" [type]="1"> </app-dropdown>
+
+                  <app-dropdown [isFix]="true" [control]="subCompanyForm.get('bankId')"  [options]="dropdownOptions.bankDef" [icon]="'mat_outline:info'" [type]="2"> </app-dropdown>
+
+                  <mat-form-field class="w-full text-lg" appearance="outline">
+                    <mat-label class="label-font-size">{{ t('bankBranchCode') }}</mat-label>
+                    <mat-icon class=" : mr-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                    <input class="input" type="text" formControlName="bankBranchCode" matInput [placeholder]="''">
+                  </mat-form-field>
+
+                  <mat-form-field class="w-full text-lg" appearance="outline">
+                    <mat-label class="label-font-size">{{ t('bankAccountNumber') }}</mat-label>
+                    <mat-icon class=" : mr-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                    <input class="input" [OnlyNumber]="true" [max]="99999999999999999" [min]="0" [maxLength]="17" mask="" formControlName="bankAccount" matInput [placeholder]="'Bank Account'">
+                  </mat-form-field>
+
+                </div>
+
+                <mat-divider class="mb-3"></mat-divider><br>
+                <mat-card-title>
+                  <app-card-title title=" Address"></app-card-title>
+                </mat-card-title>
+                <div class="grid grid-cols-4 gap-2 h-15 mt-4">
+                  <app-dropdown [isFix]="true" [control]="subCompanyForm.get('country')"  [options]="dropdownOptions.countryDef"  [icon]="'mat_outline:info'" [type]="3"> </app-dropdown>
+                  <!-- <app-dropdown [isFix]="true" [control]="subCompanyForm.get('region')"   [options]="dropdownOptions.regionDef"   [icon]="'mat_outline:info'" [type]="10"> </app-dropdown> -->
+                  <app-dropdown-entitlement useControl="true" [control]="subCompanyForm.get('region')"   [id]="this.sc.country"  [id_to]="0"                [options]="dropdownOptions.regionDef"   [icon]="'mat_outline:info'" [type]="10" [triggerByParent]="this.sc.country  > 0"></app-dropdown-entitlement>
+                  <app-dropdown-entitlement useControl="true" [control]="subCompanyForm.get('province')" [id]="this.sc.country"  [id_to]="this.sc.region"   [options]="dropdownOptions.provinceDef" [icon]="'mat_outline:info'" [type]="61" [triggerByParent]="this.sc.region   > 0"></app-dropdown-entitlement>
+                  <app-dropdown-entitlement useControl="true" [control]="subCompanyForm.get('city')"     [id]="this.sc.region"   [id_to]="this.sc.province" [options]="[]"                          [icon]="'mat_outline:info'" [type]="9"  [triggerByParent]="this.sc.province > 0"></app-dropdown-entitlement>
+                  <!-- <app-dropdown [isFix]="true" [control]="subCompanyForm.get('province')" [options]="dropdownOptions.provinceDef" [icon]="'mat_outline:info'" [type]="61"> </app-dropdown> -->
+                  <!-- <app-dropdown [isFix]="true" [control]="subCompanyForm.get('city')"     [options]="dropdownOptions.cityDef"     [icon]="'mat_outline:info'" [type]="9"> </app-dropdown> -->
+                </div>
+                <div class=" grid grid-cols-5 gap-2 h-13">
+                  <mat-form-field class="w-full text-lg" appearance="outline">
+                    <mat-label class="label-font-size">{{ t('zipCode') }}</mat-label>
+                    <mat-icon class=" : mr-2" matPrefix [svgIcon]="'mat_outline:add_location_alt'"></mat-icon>
+                    <input class="input" formControlName="zipCode" matInput [placeholder]="'Zip Code'">
+                  </mat-form-field>
+                  <mat-form-field class="w-full text-lg " appearance="outline">
+                    <mat-label class="label-font-size">{{ t('unitFloorNumber') }}</mat-label>
+                    <mat-icon class=" : mr-2" matPrefix [svgIcon]="'mat_outline:add_location_alt'"></mat-icon>
+                    <input class="input" formControlName="unitFloor"  matInput [placeholder]="'Unit/Floor #'">
+                  </mat-form-field>
+                  <mat-form-field class="w-full text-lg" appearance="outline">
+                    <mat-label class="label-font-size">{{ t('building') }}</mat-label>
+                    <mat-icon class=" : mr-2" matPrefix [svgIcon]="'mat_outline:add_location_alt'"></mat-icon>
+                    <input class="input" formControlName="building"  matInput [placeholder]="'Building'">
+                  </mat-form-field>
+                  <mat-form-field class="w-full text-lg" appearance="outline">
+                    <mat-label class="label-font-size">{{ t('street') }}</mat-label>
+                    <mat-icon class=" : mr-2" matPrefix [svgIcon]="'mat_outline:add_location_alt'"></mat-icon>
+                    <input class="input" formControlName="street"  matInput [placeholder]="'Street'">
+                  </mat-form-field>
+                  <mat-form-field class="w-full text-lg" appearance="outline">
+                    <mat-label class="label-font-size">{{ t('barangay') }}</mat-label>
+                    <mat-icon class=" : mr-2" matPrefix [svgIcon]="'mat_outline:add_location_alt'"></mat-icon>
+                    <input class="input" formControlName="barangay"  matInput [placeholder]="'Barangay'">
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="h-[100%] mat-elevation-z0">
+                <img [src]="imageUrl" style="width: 100%; height: 158px;">
+                <mat-form-field class="w-[100%] mt-[3%] h-15 " appearance="outline">
+                  <mat-label class="label-font-size">{{ t('companyLogo') }}</mat-label>
+                  <input type="file" id="imageUpload" #fileInput4 (change)="uploadFile($event ,'displayMe4', 'companyLogo1','companyLogo')" class="absolute top-1 z-10 h-full w-full cursor-pointer opacity-0" accept=".jpeg,.jpg,.png"/>
+                  <input class="sample" formControlName="companyLogo" readonly matInput id="displayMe4"  cdkFocusInitial />
+                  <mat-icon class=" : mr-2" matPrefix svgIcon="mat_outline:upload"></mat-icon>
+                  <button  class="uploadbutton" (click)="fileInput4.click()" matSuffix mat-button color="primary">Upload</button>
+                </mat-form-field>
+              </div>
+            </div>
+            <mat-divider class="mb-3"></mat-divider>
+            <mat-card-title>
+              <app-card-title title="Government Information"></app-card-title>
+            </mat-card-title>
+            <div class="grid grid-cols-4 gap-2 h-13 mt-4">
+              <mat-form-field class="w-full text-lg" appearance="outline">
+                <mat-label class="label-font-size">{{ t('pagibigNumber') }}</mat-label>
+                <mat-icon class=" : mr-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                <input class="input" formControlName="pagibig"  matInput mask="0000-0000-0000" [placeholder]="'0000-0000-0000'">
+              </mat-form-field>
+              <app-dropdown [isFix]="true" [control]="subCompanyForm.get('pagibigBranch')"  [options]="dropdownOptions.pBranchWithCodeDef" [icon]="'mat_outline:info'" [type]="7"> </app-dropdown>
+              <!-- <app-dropdown [isFix]="true" [control]="subCompanyForm.get('pagibigSubCompany' )"  [options]="dropdownOptions.cityDef" [icon]="'mat_outline:info'" [type]="9"> </app-dropdown> -->
+              <!-- <app-dropdown-entitlement [control]="subCompanyForm.get('pagibigBranch')" [id]="this.sc.pagibigRegion" [id_to]="0" [options]="[]" [icon]="'mat_outline:info'" [type]="6" [triggerByParent]="this.sc.pagibigRegion  > 0"></app-dropdown-entitlement>
+              <mat-form-field class="w-full text-lg" appearance="outline">
+                <mat-label class="label-font-size">{{ t('pagIbigCode') }}</mat-label>
+                <mat-icon class=" : mr-2" matPrefix [svgIcon]="'mat_outline:add_location_alt'"></mat-icon>
+                <input class="input" formControlName="pagibigCode"  matInput [placeholder]="'Code'">
+              </mat-form-field> -->
+              <mat-form-field class="w-full text-lg" appearance="outline">
+                <mat-label class="label-font-size">{{ t('sssNumber') }}</mat-label>
+                <mat-icon class=" : mr-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                <input class="input" formControlName="sss"  matInput mask="00-0000000-0" placeholder="00-0000000-0">
+              </mat-form-field>
+              <mat-form-field class="w-full text-lg" appearance="outline">
+                <mat-label class="label-font-size">{{ t('philhealthNumber') }}</mat-label>
+                <mat-icon class=" : mr-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                <input class="input" formControlName="philhealth"  matInput mask="00-000000000-0" [placeholder]="'00-000000000-0'">
+              </mat-form-field>
+            </div>
+            <div class="grid grid-cols-3 gap-2 h-15">
+
+              <mat-form-field class="w-full text-lg" appearance="outline">
+                <mat-label class="label-font-size">{{ t('tinNumber') }}</mat-label>
+                <mat-icon class=" : mr-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                <input class="input" formControlName="tin"  matInput mask="000-000-000-000" [placeholder]="'000-000-000-000'">
+              </mat-form-field>
+              <app-dropdown [isFix]="true" useControl="true" [control]="subCompanyForm.get('rdo')"  [options]="dropdownOptions.rdoOfficeDef" [icon]="'mat_outline:info'" [type]="4"> </app-dropdown>
+              <!-- <app-dropdown [isFix]="true" [control]="subCompanyForm.get('rdoSubCompany')"  [options]="dropdownOptions.rdoBranchDef" [icon]="'mat_outline:info'" [type]="5"> </app-dropdown> -->
+              <app-dropdown-entitlement useControl="true" [control]="subCompanyForm.get('rdoBranch')" [id]="this.sc.rdo" [id_to]="0" [options]="[]" [icon]="'mat_outline:info'" [type]="8" [triggerByParent]="this.sc.rdo > 0"></app-dropdown-entitlement>
+            </div>
+          </form>
+          <mat-divider class="mb-3"></mat-divider>
+          <mat-card-title>
+            <div class="grid grid-cols-2">
+              <app-card-title  title=" Contact Information"></app-card-title>
+            </div>
+          </mat-card-title>
+          <div class="grid grid-cols-2 gap-2 h-13 mt-4">
+            <form [formGroup]="contactForm">
+              <div class="grid grid-cols-12 gap-2">
+                <div class="col-span-6 ...">
+                  <app-dropdown [isFix]="true"  [control]="contactForm.get('dropdownId')"  [options]="dropdownOptions.contactDef" [icon]="'mat_outline:info'" [type]="11"> </app-dropdown>
+                </div>
+                <div class="col-span-6 ">
+                  <mat-form-field class="w-full text-lg" appearance="outline">
+                    <!-- <mat-label class="label-font-size ml-10">{{ t('number') }}</mat-label> -->
+                    <mat-icon class="bottom-[1px]" matPrefix svgIcon="mat_outline:phone"></mat-icon>
+                    <span style="position: relative; bottom: 6px;" matPrefix>+63 &nbsp;</span>
+                    <input class="input" matInput mask="000 000 0000" formControlName="number" [dropSpecialCharacters]="false" [placeholder]="'Number'">
+                    <button class="bottom-[1px]" matSuffix mat-button color="primary" (click)="handleAddNumber()">Add</button>
+                  </mat-form-field>
+                </div>
+              </div>
+            </form>
+            <form [formGroup]="emailForm">
+              <div class="grid grid-cols-2 gap-2">
+                <div class="col-span-2 ...">
+                  <mat-form-field class="w-full text-lg h-13" appearance="outline">
+                    <mat-label class="label-font-size">{{ t('emailAddress') }}</mat-label>
+                    <mat-icon class=" : mr-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                    <input class="input"  type="email" matInput formControlName="address" [placeholder]="'@illimitado.com'">
+                    <button class="bottom-[1px]" matSuffix mat-button color="primary" (click)="handleAddEmail()">Add</button>
+                    @if (emailForm.controls.address.hasError('email')) {
+                      <mat-error>
+                        Please enter a valid email address
+                      </mat-error>
+                    }
+                  </mat-form-field>
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="grid grid-cols-2 gap-2">
+            <!-- <form [formGroup]="contactForm"> -->
+            <table #TablePhone mat-table [dataSource]="phoneDataSource">
+              <ng-container matColumnDef="Type">
+                <th mat-header-cell *matHeaderCellDef> Type</th>
+                <td mat-cell *matCellDef="let element"> {{element.type}} </td>
+              </ng-container>
+              <ng-container matColumnDef="Number">
+                <th mat-header-cell *matHeaderCellDef> Number</th>
+                <td mat-cell *matCellDef="let element"> {{element.number}} </td>
+              </ng-container>
+              <ng-container matColumnDef="Action">
+                <th mat-header-cell *matHeaderCellDef> Action</th>
+                <td mat-cell *matCellDef="let element; let i = index">
+                  <button type="button "  mat-icon-button color="warn" (click)="handleDeleteNumber(i)">
+                    <mat-icon class="mb-2" svgIcon="mat_outline:delete"></mat-icon>
+                  </button>
+                </td>
+              </ng-container>
+              <tr mat-header-row *matHeaderRowDef="phoneColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: phoneColumns;"></tr>
+            </table>
+          <!-- </form> -->
+          <!-- <form [formGroup]="emailForm"> -->
+          <table class="emailtab" #TableEmail mat-table [dataSource]="emailDataSource">
+            <ng-container matColumnDef="Type">
+              <th mat-header-cell *matHeaderCellDef> Type</th>
+              <td mat-cell *matCellDef="let element"> {{element.type}} </td>
+            </ng-container>
+            <ng-container matColumnDef="Address">
+              <th mat-header-cell *matHeaderCellDef> Address</th>
+              <td mat-cell *matCellDef="let element"> {{element.address}} </td>
+            </ng-container>
+            <ng-container matColumnDef="Action">
+              <th mat-header-cell *matHeaderCellDef> Action</th>
+              <td mat-cell *matCellDef="let element; let i = index">
+                <button type="button"  mat-icon-button color="warn" (click)="handleDeleteEmail(i)">
+                  <mat-icon class="mb-2" svgIcon="mat_outline:delete"></mat-icon>
+                </button>
+              </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="emailColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: emailColumns;"></tr>
+          </table>
+        <!-- </form> -->
+      </div><br>
+    </mat-tab>
+    <mat-tab label="{{t('Branch Settings')}}">
+      <mat-card-title>
+        <div class="grid grid-cols-2 gap-10 mb-2">
+          <app-card-title class="mr-5" title="Upload Signatory"></app-card-title>
+          <app-card-title class="mr-10" title="Assign Signatory"></app-card-title>
+        </div>
+      </mat-card-title>
+      <div class="grid grid-cols-2 gap-10">
+        <div class="mat-elevation-z0 ">
+          <form [formGroup]="subCompanyForm">
+            <div class="grid grid-cols-3 gap-2 h-13 ">
+              <mat-form-field class="w-full text-lg " appearance="outline">
+                <mat-label class="label-font-size">{{ t('signatory1') }}</mat-label>
+                <mat-icon class=" : mr-2" matPrefix [svgIcon]="'mat_outline:add_location_alt'"></mat-icon>
+                <input class="input" formControlName="signatory1"  matInput [placeholder]="'Signatory 1'" (blur)="addPrimarySigList()">
+              </mat-form-field>
+              <mat-form-field class="w-full text-lg" appearance="outline">
+                <mat-label class="label-font-size">{{ t('position') }}</mat-label>
+                <mat-icon class=" : mr-2" matPrefix [svgIcon]="'mat_outline:add_location_alt'"></mat-icon>
+                <input class="input" formControlName="signatory1Title"  matInput [placeholder]="'Position'">
+              </mat-form-field>
+              <mat-form-field class="w-full" appearance="outline">
+                <input type="file" #fileInput1 (change)="uploadFile($event, 'displayMe1', 'signatory1','signatory1Path')"   class=" absolute top-1 z-0 h-full w-full cursor-pointer opacity-0" accept=".jpeg,.jpg,.png"/>
+                <input class="sample" formControlName="signatory1Path" readonly matInput id="displayMe1" cdkFocusInitial />
+                <mat-icon class=" : mr-2" matPrefix svgIcon="mat_outline:upload"></mat-icon>
+                <button  class="uploadbutton" (click)="fileInput1.click()" matSuffix mat-button color="primary">Upload</button>
+              </mat-form-field>
+            </div>
+            <div class="grid grid-cols-3 gap-2 h-13">
+              <mat-form-field class="w-full text-lg " appearance="outline">
+                <mat-label class="label-font-size">{{ t('signatory2') }}</mat-label>
+                <mat-icon class=" : mr-2" matPrefix [svgIcon]="'mat_outline:add_location_alt'"></mat-icon>
+                <input class="input" formControlName="signatory2"  matInput [placeholder]="'Signatory 1'" (blur)="addPrimarySigList()">
+              </mat-form-field>
+              <mat-form-field class="w-ful text-lg" appearance="outline">
+                <mat-label class="label-font-size">{{ t('position') }}</mat-label>
+                <mat-icon class=" : mr-2" matPrefix [svgIcon]="'mat_outline:add_location_alt'"></mat-icon>
+                <input class="input" formControlName="signatory2Title"  matInput [placeholder]="'Position'">
+              </mat-form-field>
+              <mat-form-field class="w-full" appearance="outline">
+                <input type="file" #fileInput2 (change)="uploadFile($event, 'displayMe2', 'signatory2','signatory2Path')"  class=" absolute top-1 z-0 h-full w-full cursor-pointer opacity-0" accept=".jpeg,.jpg,.png"/>
+                <input class="sample" formControlName="signatory2Path" readonly matInput id="displayMe2" cdkFocusInitial />
+                <mat-icon class=" : mr-2" matPrefix svgIcon="mat_outline:upload"></mat-icon>
+                <button  class="uploadbutton" (click)="fileInput2.click()" matSuffix mat-button color="primary">Upload</button>
+              </mat-form-field>
+            </div>
+            <div class="grid grid-cols-3 gap-2">
+              <mat-form-field class="w-full text-lg " appearance="outline">
+                <mat-label class="label-font-size">{{ t('signatory3') }}</mat-label>
+                <mat-icon class=" : mr-2" matPrefix [svgIcon]="'mat_outline:add_location_alt'"></mat-icon>
+                <input class="input" formControlName="signatory3"  matInput [placeholder]="'Signatory 1'" (blur)="addPrimarySigList()">
+              </mat-form-field>
+              <mat-form-field class="w-ful text-lg" appearance="outline">
+                <mat-label class="label-font-size">{{ t('position') }}</mat-label>
+                <mat-icon class=" : mr-2" matPrefix [svgIcon]="'mat_outline:add_location_alt'"></mat-icon>
+                <input class="input" formControlName="signatory3Title"  matInput [placeholder]="'Position'">
+              </mat-form-field>
+              <mat-form-field class="w-full" appearance="outline">
+                <input type="file" #fileInput3 (change)="uploadFile($event, 'displayMe3', 'signatory3','signatory3Path')"  class=" absolute top-1 z-0 h-full w-full cursor-pointer opacity-0" accept=".jpeg,.jpg,.png"/>
+                <input class="sample" formControlName="signatory3Path" readonly matInput id="displayMe3" cdkFocusInitial />
+                <mat-icon class=" : mr-2" matPrefix svgIcon="mat_outline:upload"></mat-icon>
+                <button  class="uploadbutton" (click)="fileInput3.click()" matSuffix mat-button color="primary">Upload</button>
+              </mat-form-field>
+            </div>
+          </form>
+          <mat-card-title>
+            <div class="grid grid-cols-2 gap-10">
+              <app-card-title class="mr-5 text-sm" title="Login Restriction"></app-card-title>
+            </div>
+          </mat-card-title><br>
+          <div>
+            <label>Allowed IP Address</label>
+          </div>
+          <form [formGroup]="ipForm">
+            <div class="grid grid-cols-2 gap-2  mt-5">
+              <mat-form-field class="w-full text-lg" appearance="outline">
+                <mat-label class="label-font-size">{{ t('from') }}</mat-label>
+                <mat-icon class=" : mr-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                <input class="input" matInput mask="IP" [showMaskTyped]="false" [dropSpecialCharacters]="false" formControlName="address" (keyup)="KeyUpFrom()">
+                @if (ipForm.invalid) {
+                  <mat-error  class="text-red-600">Invalid IP Address</mat-error >
+                }
+                @if (errIPFromBetween) {
+                  <mat-error  class="text-red-600">IP "From: xxx.xxx.xxx.{{errIPtext}}" Address should not between existing IP!</mat-error >
+                }
+              </mat-form-field>
+              <mat-form-field class="w-full text-lg" appearance="outline">
+                <mat-label class="label-font-size">{{ t('to') }}</mat-label>
+                <mat-icon class=" : mr-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                <input class="input bg-colors" matInput mask="000" formControlName="to" (keyup)="KeyUpTo()">
+                <button class="uploadbutton" matSuffix mat-button color="primary" (click)="handleAddIP()">Add</button>
+                @if (errIP) {
+                  <mat-error class="text-red-600">IP Address "To" should not less than From!</mat-error>
+                }
+                @if (errIPBetween) {
+                  <mat-error class="text-red-600">IP "To": {{this.ipForm.value.to}} Address should not between existing IP!</mat-error>
+                }
+              </mat-form-field>
+
+            </div>
+            <div >
+              <table class="w-full" #TableIP mat-table [dataSource]="ipDataSource">
+                <ng-container matColumnDef="IP">
+                  <th mat-header-cell *matHeaderCellDef> From</th>
+                  <td mat-cell *matCellDef="let element"> {{element.address}} </td>
+                </ng-container>
+                <ng-container matColumnDef="To">
+                  <th mat-header-cell *matHeaderCellDef> To</th>
+                  <td mat-cell *matCellDef="let element"> {{element.to}} </td>
+                </ng-container>
+                <ng-container matColumnDef="Action">
+                  <th mat-header-cell *matHeaderCellDef> Action</th>
+                  <td mat-cell *matCellDef="let element; let i = index">
+                    <button type="button"  mat-icon-button color="warn" (click)="handleDeleteIP(i)">
+                      <mat-icon class="mb-2" svgIcon="mat_outline:delete"></mat-icon>
+                    </button>
+                  </td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="ipColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: ipColumns;"></tr>
+              </table>
+            </div>
+          </form>
+        </div>
+        <div class="mat-elevation-z0">
+          <form [formGroup]="subCompanyForm">
+            <div class="grid grid-cols-3 gap-2 h-13 " >
+              <!-- <app-dropdown [isFix]="true" [control]="subCompanyForm.get('document1')"  [options]="dropdownOptions.emailDef" [icon]="'mat_outline:info'" [type]="301"> </app-dropdown> -->
+              <mat-form-field class="w-full text-lg" appearance="outline">
+                <mat-label class="label-font-size">{{ t('documents') }}</mat-label>
+                <mat-icon class=" : mr-2" matPrefix [svgIcon]="'mat_outline:info'"></mat-icon>
+                <mat-select formControlName="document1">
+                  <mat-option>None</mat-option>
+                  @for (item of removeSelectedDoc('document2','document3'); track item) {
+                    <mat-option [value]="item.dropdownID">{{item.description}}</mat-option>
+                  }
+                </mat-select>
+              </mat-form-field>
+
+              <mat-form-field class="w-full text-lg" appearance="outline">
+                <mat-label class="label-font-size">{{ t('primarySignatory') }}</mat-label>
+                <mat-icon class=" : mr-2" matPrefix [svgIcon]="'mat_outline:info'"></mat-icon>
+                <mat-select formControlName="primarySig1">
+                  @for (item of primarySigList; track item) {
+                    <mat-option [value]="item">{{item}}</mat-option>
+                  }
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field class="w-full text-lg" appearance="outline">
+                <mat-label class="label-font-size">{{ t('backup') }}</mat-label>
+                <mat-icon class=" : mr-2" matPrefix [svgIcon]="'mat_outline:info'"></mat-icon>
+                <mat-select formControlName="backupSig1">
+                  @for (item of removeSelectedSigList('primarySig1'); track item) {
+                    <mat-option [value]="item">{{item}}</mat-option>
+                  }
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div class="grid grid-cols-3 gap-2 h-13 " >
+              <!-- <app-dropdown [isFix]="true" [control]="subCompanyForm.get('document2')"  [options]="dropdownOptions.emailDef" [icon]="'mat_outline:info'" [type]="301"> </app-dropdown> -->
+              <mat-form-field class="w-full text-lg" appearance="outline">
+                <mat-label class="label-font-size">{{ t('documents') }}</mat-label>
+                <mat-icon class=" : mr-2" matPrefix [svgIcon]="'mat_outline:info'"></mat-icon>
+                <mat-select formControlName="document2">
+                  <mat-option>None</mat-option>
+                  @for (item of removeSelectedDoc('document1','document3'); track item) {
+                    <mat-option [value]="item.dropdownID">{{item.description}}</mat-option>
+                  }
+                </mat-select>
+              </mat-form-field>
+
+              <mat-form-field class="w-full text-lg" appearance="outline">
+                <mat-label class="label-font-size">{{ t('primarySignatory') }}</mat-label>
+                <mat-icon class=" : mr-2" matPrefix [svgIcon]="'mat_outline:info'"></mat-icon>
+                <mat-select formControlName="primarySig2">
+                  @for (item of primarySigList; track item) {
+                    <mat-option [value]="item">{{item}}</mat-option>
+                  }
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field class="w-full text-lg" appearance="outline">
+                <mat-label class="label-font-size">{{ t('backup') }}</mat-label>
+                <mat-icon class=" : mr-2" matPrefix [svgIcon]="'mat_outline:info'"></mat-icon>
+                <mat-select formControlName="backupSig2">
+                  @for (item of removeSelectedSigList('primarySig2'); track item) {
+                    <mat-option [value]="item">{{item}}</mat-option>
+                  }
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div class="grid grid-cols-3 gap-2" >
+              <!-- <app-dropdown [isFix]="true" [control]="subCompanyForm.get('document3')"  [options]="dropdownOptions.emailDef" [icon]="'mat_outline:info'" [type]="301"> </app-dropdown> -->
+              <mat-form-field class="w-full text-lg" appearance="outline">
+                <mat-label class="label-font-size">{{ t('documents') }}</mat-label>
+                <mat-icon class=" : mr-2" matPrefix [svgIcon]="'mat_outline:info'"></mat-icon>
+                <mat-select formControlName="document3">
+                  <mat-option>None</mat-option>
+                  @for (item of removeSelectedDoc('document1','document2'); track item) {
+                    <mat-option [value]="item.dropdownID">{{item.description}}</mat-option>
+                  }
+                </mat-select>
+              </mat-form-field>
+
+              <mat-form-field class="w-full text-lg" appearance="outline">
+                <mat-label class="label-font-size">{{ t('primarySignatory') }}</mat-label>
+                <mat-icon class=" : mr-2" matPrefix [svgIcon]="'mat_outline:info'"></mat-icon>
+                <mat-select formControlName="primarySig3">
+                  @for (item of primarySigList; track item) {
+                    <mat-option [value]="item">{{item}}</mat-option>
+                  }
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field class="w-full text-lg" appearance="outline">
+                <mat-label class="label-font-size">{{ t('backup') }}</mat-label>
+                <mat-icon class=" : mr-2" matPrefix [svgIcon]="'mat_outline:info'"></mat-icon>
+                <mat-select formControlName="backupSig3">
+                  @for (item of removeSelectedSigList('primarySig3'); track item) {
+                    <mat-option [value]="item">{{item}}</mat-option>
+                  }
+                </mat-select>
+              </mat-form-field>
+            </div><br>
+            <mat-card-title>
+              <div class="grid grid-cols-2 gap-10">
+                <app-card-title class="mr-5 text-sm" title=""></app-card-title>
+              </div>
+            </mat-card-title><br>
+            <div >
+              <label>Geofencing</label>
+            </div>
+            <div class="grid grid-cols-3 gap-2 mt-[14px]">
+              <mat-form-field class="w-full text-lg" appearance="outline">
+                <mat-label class="label-font-size">{{ t('longitude') }}</mat-label>
+                <mat-icon class=" : mr-2" matPrefix [svgIcon]="'mat_outline:add_location_alt'"></mat-icon>
+                <input class="input" formControlName="longitude"  matInput [placeholder]="'Longitude'" type="number">
+              </mat-form-field>
+              <mat-form-field class="w-full text-lg" appearance="outline">
+                <mat-label class="label-font-size">{{ t('latitude') }}</mat-label>
+                <mat-icon class=" : mr-2" matPrefix [svgIcon]="'mat_outline:add_location_alt'"></mat-icon>
+                <input class="input" formControlName="latitude"  matInput [placeholder]="'Latitude'" type="number">
+              </mat-form-field>
+              <mat-form-field class="w-full text-lg" appearance="outline">
+                <mat-label class="label-font-size">{{ t('range') }}</mat-label>
+                <mat-icon class=" : mr-2" matPrefix [svgIcon]="'mat_outline:add_location_alt'"></mat-icon>
+                <input class="input" formControlName="range"  matInput [placeholder]="'Range'" type="number">
+              </mat-form-field>
+            </div>
+          </form>
+        </div>
+      </div>
+    </mat-tab>
+  </mat-tab-group>
+</mat-card>
+</div>
+</div>

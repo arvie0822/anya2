@@ -1,0 +1,52 @@
+<div class="flex flex-col overflow-hidden flex-auto min-w-0">
+  <!-- Main -->
+  <div class="flex-auto relative overflow-hidden sm:p-2 w-full min-w-0 sm:absolute sm:inset-0  text-md">
+    <mat-card class="abosulte w-full h-full hidescroll">
+      <mat-card-title>
+        <app-card-title
+          [title]="'E201 Employee - ' + DisplayName" [sub]="true" [back]="true" [switch]="false" (submitTap)="submit()">
+        </app-card-title>
+      </mat-card-title>
+      <mat-tab-group class="my-tab-group mt-5 overflow-auto" mat-align-tabs="start">
+
+        <mat-tab label="New Hire" class="overflow-y-auto">
+          <app-new-hire-requirments (datasource)="newhiredata = $event" (isactive)="isactive = $event" (newhireimage)="newhireimagefile = $event" (empname)="DisplayName =$event"  (ids)="newid = $event "></app-new-hire-requirments>
+        </mat-tab>
+
+        <mat-tab class="work" label="Work & Educational History">
+          <app-work-educational-history [alltable]="allworktable" [imagesource]="globalImage" ></app-work-educational-history>
+        </mat-tab>
+
+        <mat-tab label="Employee Records">
+          <app-employee-records [empalltable]="allemployeetable"></app-employee-records>
+        </mat-tab>
+
+        <mat-tab label="Learnings">
+          <app-learnings [learningtable]="allLearningtable"></app-learnings>
+        </mat-tab>
+
+        <mat-tab label="Company Assets">
+          <app-company-assets [assettable]="companyassettable"></app-company-assets>
+        </mat-tab>
+
+        <mat-tab label="2316 Previous Employer" class="">
+          @if (!hide) {
+            <app-previous-list [_2316Id]="_2316Id" (detail)="show($event)"></app-previous-list>
+          }
+          @if (hide) {
+            <app-previous-employer [_2316Id]="_2316Id"  [previousform]="previousform" (detail)="show($event)"></app-previous-employer>
+          }
+        </mat-tab>
+
+        <mat-tab label="Incident Report &  Memo">
+          <app-incident-report-memo [incidenttable]="demomemotable" ></app-incident-report-memo>
+        </mat-tab>
+
+        <mat-tab class="relative" label="Employee Movement">
+          <app-employee-movement></app-employee-movement>
+        </mat-tab>
+
+      </mat-tab-group>
+    </mat-card>
+  </div>
+</div>

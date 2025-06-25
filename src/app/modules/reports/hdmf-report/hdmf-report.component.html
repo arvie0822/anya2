@@ -1,0 +1,51 @@
+<div class="flex flex-col flex-auto min-w-0">
+  <!-- Main -->
+  <div class="flex-auto  sm:p-2  w-full min-w-0 sm:absolute sm:inset-0 sm:overflow-auto text-md">
+    <!-- Content -->
+    <mat-card class="h-full">
+      <mat-card-title>
+        <app-card-title title="Monthly Payroll Report" [sub]="false" [back]="true" [switch]="false"></app-card-title>
+        <!-- (submitTap)="" -->
+      </mat-card-title><br>
+      <form [formGroup]="hdmfForm">
+        <div class="flex gap-2">
+
+          <div class="w-60"><app-dropdown [isFix]="true" [control]="hdmfForm.get('month')"  [options]="dropdownOptions.monthlydef" [icon]="'mat_outline:info'" [type]="54"></app-dropdown></div>
+
+          <mat-form-field class="field w-60 " appearance="outline">
+            <mat-label class="label-font-size">Year</mat-label>
+            <mat-icon class="uploadbutton" matPrefix
+            svgIcon="mat_outline:info"></mat-icon>
+            <mat-select formControlName="year">
+              @for (item of year; track item) {
+                <mat-option [value]="item.description">
+                  {{item.description}}
+                </mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field class="field w-60" appearance="outline">
+            <mat-label class="label-font-size">Report Type</mat-label>
+            <mat-icon class="uploadbutton" matPrefix
+            svgIcon="mat_outline:info"></mat-icon>
+            <mat-select formControlName="reportType">
+              @for (item of report; track item) {
+                <mat-option [value]="item.id">
+                  {{item.description}}
+                </mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
+          <div class="h-13 mr-3 w-60"><app-dropdown-custom [control]="hdmfForm.get('company')" [type]="1001" [value]="this.hdmf.company" [options]="dropdownOptions.subCompanyDef" [useControl]="true" ></app-dropdown-custom></div>
+
+          <button class="ml-5 mb-4 w-15" (click)="exportHDMF()" mat-flat-button [color]="'primary'" matTooltip="Export">
+            <mat-icon class="w-5 h-5 mb-1" [svgIcon]="'mat_outline:download'"></mat-icon>
+          </button>
+
+        </div>
+      </form>
+    </mat-card>
+  </div>
+</div>

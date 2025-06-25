@@ -1,0 +1,56 @@
+
+@if (images && images.length > 0) {
+  <div class="div-main grid grid-cols-{{display}} gap-2">
+    @for (ii of _display; track ii; let i = $index) {
+      <div class="div-body">
+        <img class="img-bg" [src]="images[selectedIndex+ii].src" [alt]="images[selectedIndex+ii].alt"
+          (click)="openLink(images[selectedIndex+ii].link)">
+          <!-- <div class="titles grid grid-rows-2 gap-0">
+          <span align="center">{{images[selectedIndex+ii].title}}</span>
+          <span align="center">{{images[selectedIndex+ii].description}}</span>
+        </div> -->
+        <!-- <div class="titles">
+        <div class="grid grid-rows-2 gap-0">
+          <span class="tit">{{images[selectedIndex+ii].title}}</span>
+          <span class="desc">{{images[selectedIndex+ii].description}}</span>
+        </div>
+      </div> -->
+    </div>
+  }
+</div>
+}
+
+@if (images && images.length > 0) {
+  <div class="carousel-container">
+    <!-- <div class="carousel-context-container" (click)="openLink(images[selectedIndex].link)">
+    <div class="grid grid-rows-2">
+      <span class="title">{{images[selectedIndex].title}}</span>
+      <span class="desc">{{images[selectedIndex].description}}</span>
+    </div>
+  </div> -->
+  @if (indicators) {
+    <div class="carousel-dot-container">
+      @for (dot of _dot; track dot; let i = $index) {
+        <span
+          class="dot"
+          [ngClass]="{'active' : selectedIndex === i}"
+          (click)="selectImage(i)"
+          >
+        </span>
+      }
+    </div>
+  }
+  @if (controls) {
+    <button class="btn-carousel btn-prev"
+      (click)="onPrevClick()">
+      <i class="fas fa-arrow-circle-left icon-carousel icon-prev"></i>
+    </button>
+  }
+  @if (controls) {
+    <button class="btn-carousel btn-next"
+      (click)="onNextClick()">
+      <i class="fas fa-arrow-circle-right icon-carousel icon-next"></i>
+    </button>
+  }
+</div>
+}

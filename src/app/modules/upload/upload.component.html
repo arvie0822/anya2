@@ -1,0 +1,106 @@
+<div class="flex flex-col flex-auto min-w-0">
+  <!-- Main -->
+  <div class="flex-auto  sm:p-2  w-full min-w-0 sm:absolute sm:inset-0 sm:overflow-auto text-md">
+    <!-- Content -->
+    <mat-card class="body-card">
+      <app-card-title title="Data Upload" [sub]="!isUploading" [back]="true" (submitTap)="submit()"></app-card-title>
+      <mat-card-content>
+        <div class="flex justify-start">
+          <!-- <div class="col-span-1" *ngIf="!isUploadV2">
+          <mat-form-field class="w-full text-md" appearance="outline">
+            <mat-label class="label-font-size">Documents</mat-label>
+            <mat-icon class=" mb-2" matPrefix [svgIcon]="'mat_outline:info'"></mat-icon>
+            <mat-select [(ngModel)]="documentId" [disabled]="isUploading" (selectionChange)="changeDocuments()">
+              <mat-option *ngFor="let item of documents" [value]="item.dropdownID">{{item.description}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div> -->
+
+        <div class="mr-2">
+          <mat-form-field class="w-60 text-md" appearance="outline">
+            <mat-label class="label-font-size">Documents</mat-label>
+            <mat-icon class="mb-2" matPrefix [svgIcon]="'mat_outline:info'"></mat-icon>
+            <mat-select [(ngModel)]="documentId" [disabled]="isUploading" (selectionChange)="changeDocuments()">
+              @for (item of documents; track item) {
+                <mat-option [value]="item.encryptID">{{item.description}}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <div class="mr-2">
+          @if (!isUploading) {
+            <mat-form-field class="w-60 text-md" appearance="outline">
+              <mat-icon class="mb-2 mr-2" matSuffix svgIcon="upload" (click)="file.click($event)"></mat-icon>
+              <input type="file" #file (change)="uploadFile($event)" accept=".xls,.xlsx" hidden/>
+              <input class="input" readonly matInput id="fielUpload" placeholder="Upload File" (click)="file.click($event)"/>
+            </mat-form-field>
+          }
+
+          @if (isUploading) {
+            <mat-form-field class="w-full text-md" appearance="outline">
+              <mat-icon class="uploadbutton  maticon rotate" matSuffix svgIcon="feather:loader"></mat-icon>
+              <input type="file" #file accept=".xls,.xlsx" hidden/>
+              <input class="input" readonly matInput id="fielUpload" placeholder="Uploading..."/>
+            </mat-form-field>
+          }
+        </div>
+
+        @if (showMe([30002, 22862, 22863, 23, 13])) {
+          <mat-form-field class="w-100 text-md mr-2" appearance="outline">
+            <mat-label class="label-font-size">Saved Files</mat-label>
+            <mat-icon class=" mb-2" matPrefix [svgIcon]="'mat_outline:info'"></mat-icon>
+            <mat-select panelClass="custom-select-panel" [(ngModel)]="saveId" [multiple]="false" msInfiniteScroll (selectionChange)="savedFileDropdown(true)">
+              @for (item of saved; track item) {
+                <mat-option [value]="item.uploadID">
+                  {{item.filename}}
+                </mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        }
+
+        <div class="col-span-1">
+          @if (showMe([30002, 22862, 22863, 23, 13])) {
+            <button class="mr-2" matSuffix mat-flat-button [color]="'warn'" matTooltip="Delete" (click)="delete()">
+              <mat-icon class="mb-2" [svgIcon]="'heroicons_outline:trash'"></mat-icon>
+            </button>
+          }
+          <button matSuffix mat-flat-button [disabled]="!isUploadMode" (click)="export()" color="primary"
+            matTooltip="Download Template">
+            <mat-icon class="mb-2" matPrefix [svgIcon]="'mat_outline:download'"></mat-icon>
+          </button>
+        </div>
+      </div>
+      @if (isUploadMode) {
+        <div>
+          @if (isViewUpload) {
+            <section class="example-container mat-elevation-z0 z-10" tabindex="0">
+              <table mat-table [dataSource]="dataSource" class="mat-elevation-z0 border-2">
+                @for (column of displayedColumns; track column) {
+                  <ng-container [matColumnDef]="column.col">
+                    <th mat-header-cell *matHeaderCellDef class="no-wrap"> {{column.colName}} </th>
+                    <td mat-cell *matCellDef="let element"  class="padding hover-effect" [ngClass]="{'witherror': element.withError}">
+                      <div [ngClass]="{'txterror': element.withError}" class="truncate-cell" [matTooltip]="element[column.col]">{{element[column.col]}}</div>
+                    </td>
+                  </ng-container>
+                }
+                <tr mat-header-row *matHeaderRowDef="columnsToDisplay; sticky: true"></tr>
+                <tr mat-row *matRowDef="let row; columns: columnsToDisplay;" [ngClass]="{'row-error': row.withError, 'row-normal': !row.withError}"></tr>
+              </table>
+            </section>
+          }
+          <mat-paginator class="paganation" [length]="totalRows" [pageSize]="request.Length" [pageIndex]="request.Start"
+            (page)="handlePageEvent($event)"
+          [pageSizeOptions]="[50,100]" aria-label="Select page of users"></mat-paginator>
+        </div>
+      }
+      @if (!isUploadMode) {
+        <div>
+          <app-report-view [parentDetails]="parentDetails"></app-report-view>
+        </div>
+      }
+    </mat-card-content>
+  </mat-card>
+</div>
+</div>

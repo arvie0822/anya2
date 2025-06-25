@@ -1,0 +1,469 @@
+<!-- <div class="grid grid-cols-6 gap-2">
+
+            <mat-form-field class="w-full h-10" appearance="outline">
+                <mat-label class="label-font-size">Previous Company Name</mat-label>
+                <input matInput type="text">
+            </mat-form-field>
+
+            <mat-form-field class="w-full h-10" appearance="outline">
+                <mat-label class="label-font-size">Employer's TIN</mat-label>
+                <input matInput type="number">
+            </mat-form-field>
+
+            <mat-form-field class="w-full h-10" appearance="outline">
+                <mat-label class="label-font-size">Registered Address</mat-label>
+                <input matInput type="text">
+            </mat-form-field>
+
+            <mat-form-field class="w-full h-10" appearance="outline">
+                <mat-label class="label-font-size">Zip Code</mat-label>
+                <input matInput type="number">
+            </mat-form-field>
+
+            <mat-form-field class="w-full text-md h-10" appearance="outline">
+                <mat-label class="label-font-size">Year</mat-label>
+                <mat-select [placeholder]="">
+                    <mat-option [value]="true">Yes</mat-option>
+                    <mat-option [value]="false">No</mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <button class="w-40 text-md mt-[4px] " mat-flat-button color="primary" aria-label="example icon">
+                <mat-icon class="mr-1 mt-5" svgIcon="mat_outline:post_add"></mat-icon>Add
+            </button>
+        </div><br>
+
+        <table mat-table [dataSource]="dataSource" class="mat-elevation-z0 border">
+
+            <ng-container matColumnDef="prevcompany">
+                <th mat-header-cell *matHeaderCellDef> Previous Company </th>
+                <td mat-cell *matCellDef="let element"> {{element.prevcompany}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="tin">
+                <th mat-header-cell *matHeaderCellDef> Employers TIN </th>
+                <td mat-cell *matCellDef="let element"> {{element.tin}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="address">
+                <th mat-header-cell *matHeaderCellDef>Registered Address </th>
+                <td mat-cell *matCellDef="let element"> {{element.address}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="zip">
+                <th mat-header-cell *matHeaderCellDef> Zip Code</th>
+                <td mat-cell *matCellDef="let element"> {{element.zip}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="year">
+                <th mat-header-cell *matHeaderCellDef> Year </th>
+                <td mat-cell *matCellDef="let element"> {{element.year}} </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+        <div class="grid grid-cols-2 gap-2">
+            <mat-paginator [length]="20" #paginator0 [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons
+                aria-label="Select page of periodic elements"> </mat-paginator>
+        </div> -->
+
+<div>
+    <mat-divider></mat-divider><br>
+</div>
+
+<button (click)="hidedetail()" class="w-10 text-md" mat-flat-button color="primary" aria-label="example icon">
+    <mat-icon class="mb-2" svgIcon="mat_outline:arrow_back"></mat-icon>
+</button>
+<form [formGroup]="previousform" class="h-full">
+    <mat-vertical-stepper #stepper>
+        <mat-step [stepControl]="" [editable]="">
+            <ng-template matStepLabel>Employee Information</ng-template>
+            <!-- employee information =============== -->
+
+            <div class="grid grid-cols-9 gap-2 h-13 mt-5">
+                <!-- <mat-form-field class="w-full text-md h-10" appearance="outline">
+                            <mat-label class="label-font-size">For The Year</mat-label>
+                            <input formControlName="year" matInput type="number">
+                        </mat-form-field>
+
+                        <mat-form-field class="w-full text-md" appearance="outline">
+                            <mat-label class="label-font-size">From Period month</mat-label>
+                            <input formControlName="from" matInput type="number">
+                        </mat-form-field>
+
+                        <mat-form-field class="w-full text-md" appearance="outline">
+                            <mat-label class="label-font-size">From Period Day</mat-label>
+                            <input formControlName="to" matInput type="number">
+                        </mat-form-field>
+
+                        <mat-form-field class="w-full text-md" appearance="outline">
+                            <mat-label class="label-font-size">To Period Month</mat-label>
+                            <input formControlName="toMonth" matInput type="number">
+                        </mat-form-field>
+
+                        <mat-form-field class="w-full text-md" appearance="outline">
+                            <mat-label class="label-font-size">To Period Day</mat-label>
+                            <input formControlName="toDay" matInput type="number">
+                        </mat-form-field> -->
+
+                <mat-form-field class="w-full min-w-40 text-md h-13" appearance="outline">
+                    <mat-label class="label-font-size">From period</mat-label>
+                    <input formControlName="fromDate" (dateChange)="overlapyear()" matInput [matDatepicker]="df3"
+                        readonly placeholder="" (click)="df3.open()">
+                    <mat-datepicker-toggle matSuffix [for]="df3"></mat-datepicker-toggle>
+                    <mat-datepicker #df3></mat-datepicker>
+                </mat-form-field>
+
+                <mat-form-field class="w-full min-w-40 text-md h-13" appearance="outline">
+                    <mat-label class="label-font-size">To period</mat-label>
+                    <input formControlName="toDate" matInput [matDatepicker]="df4" [max]="maxdate" [min]="mindate"
+                        readonly placeholder="" (click)="df4.open()">
+                    <mat-datepicker-toggle matSuffix [for]="df4"></mat-datepicker-toggle>
+                    <mat-datepicker #df4></mat-datepicker>
+                </mat-form-field>
+
+                <mat-form-field class="w-full h-10" appearance="outline">
+                    <mat-label class="label-font-size">Employee's TIN</mat-label>
+                    <input formControlName="tin" matInput type="text">
+                </mat-form-field>
+
+                <mat-form-field class="w-full h-10" appearance="outline">
+                    <mat-label class="label-font-size">Statutory Wage Per day</mat-label>
+                    <input formControlName="mWEday" matInput type="number">
+                </mat-form-field>
+
+                <mat-form-field class="w-full h-10" appearance="outline">
+                    <mat-label class="label-font-size">Statutory Minimum Wage Per Month</mat-label>
+                    <input formControlName="mWEMonth" matInput type="number">
+                </mat-form-field>
+
+                <!-- <mat-form-field class="w-full h-10" appearance="outline">
+                            <mat-label class="label-font-size">Minimum Wage Earner </mat-label>
+                            <input formControlName="mWE" matInput type="number">
+                        </mat-form-field> -->
+
+                <mat-form-field class="w-full text-md h-10" appearance="outline">
+                    <mat-label class="label-font-size">Minimum Wage Earner</mat-label>
+                    <mat-select formControlName="mWE" [placeholder]="">
+                        <mat-option [value]="true">Yes</mat-option>
+                        <mat-option [value]="false">No</mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+            </div>
+
+            <Span>Employer Information (Present)</Span>
+
+            <div class="grid grid-cols-5 gap-2 h-13 mt-3">
+
+                <mat-form-field class="w-full h-10" appearance="outline">
+                    <mat-label class="label-font-size">Employer's TIN</mat-label>
+                    <input formControlName="ertin" matInput type="text">
+                </mat-form-field>
+
+                <mat-form-field class="w-full h-10" appearance="outline">
+                    <mat-label class="label-font-size">Employer's Name</mat-label>
+                    <input formControlName="erName" matInput type="text">
+                </mat-form-field>
+
+                <mat-form-field class="w-full h-10" appearance="outline">
+                    <mat-label class="label-font-size">Registered Address</mat-label>
+                    <input formControlName="erAddress" matInput type="text">
+                </mat-form-field>
+
+                <mat-form-field class="w-full h-10" appearance="outline">
+                    <mat-label class="label-font-size">Zip Code</mat-label>
+                    <input formControlName="erZipCode" matInput type="text">
+                </mat-form-field>
+
+                <mat-form-field class="w-full h-10" appearance="outline">
+                    <mat-label class="label-font-size">Employer Type</mat-label>
+                    <input formControlName="erType" matInput type="text">
+                </mat-form-field>
+
+                <!-- <mat-form-field class="w-full text-md h-10" appearance="outline">
+                            <mat-label class="label-font-size">Employer Type</mat-label>
+                            <mat-select formControlName="erType" [placeholder]="">
+                                <mat-option [value]="1">test 1</mat-option>
+                                <mat-option [value]="2">test 2</mat-option>
+                            </mat-select>
+                        </mat-form-field> -->
+            </div>
+
+            <Span>Employer Information (Previous)</Span>
+
+            <div class="grid grid-cols-5 gap-2 h-13 mt-3">
+
+                <mat-form-field class="w-full h-10" appearance="outline">
+                    <mat-label class="label-font-size">Employer's TIN</mat-label>
+                    <input formControlName="erPrevTIN" matInput type="text">
+                </mat-form-field>
+
+                <mat-form-field class="w-full h-10" appearance="outline">
+                    <mat-label class="label-font-size">Employer's Name</mat-label>
+                    <input formControlName="erPrevName" matInput type="text">
+                </mat-form-field>
+
+                <mat-form-field class="w-full h-10" appearance="outline">
+                    <mat-label class="label-font-size">Registered Address</mat-label>
+                    <input formControlName="erPrevAddress" matInput type="text">
+                </mat-form-field>
+
+                <mat-form-field class="w-full h-10" appearance="outline">
+                    <mat-label class="label-font-size">Zip Code</mat-label>
+                    <input formControlName="erPrevZipCode" matInput type="text">
+                </mat-form-field>
+
+                <!-- <mat-form-field class="w-full text-md h-10" appearance="outline">
+                                <mat-label class="label-font-size">Employer Type</mat-label>
+                                <mat-select [placeholder]="">
+                                    <mat-option [value]="true">Yes</mat-option>
+                                    <mat-option [value]="false">No</mat-option>
+                                </mat-select>
+                        </mat-form-field> -->
+
+            </div>
+
+            <div>
+                <button mat-flat-button color="primary" matStepperNext>Next</button>
+            </div>
+        </mat-step>
+        <mat-step [stepControl]="" [editable]="">
+            <ng-template matStepLabel>Summary</ng-template>
+            <div class="grid grid-cols-5 gap-2 h-13 mt-3">
+
+                <mat-form-field class="w-full h-10" appearance="outline">
+                    <mat-label class="label-font-size">Gross Compensation Income</mat-label>
+                    <input formControlName="grossComp" matInput type="number">
+                </mat-form-field>
+
+                <mat-form-field class="w-full h-10" appearance="outline">
+                    <mat-label class="label-font-size">Total Non-Taxable</mat-label>
+                    <input formControlName="ntxComp" matInput type="number">
+                </mat-form-field>
+
+                <mat-form-field class="w-full h-10" appearance="outline">
+                    <mat-label class="label-font-size">Taxable Compensation Income (Present)</mat-label>
+                    <input formControlName="txComp" matInput type="number">
+                </mat-form-field>
+
+                <mat-form-field class="w-full h-10" appearance="outline">
+                    <mat-label class="label-font-size">Taxable Compensation Income (Previous)</mat-label>
+                    <input formControlName="txCompPrev" matInput type="number">
+                </mat-form-field>
+
+                <mat-form-field class="w-full h-10" appearance="outline">
+                    <mat-label class="label-font-size">Gross Taxable Compensation Income</mat-label>
+                    <input formControlName="grossTaxable" matInput type="number">
+                </mat-form-field>
+            </div>
+
+            <div class="grid grid-cols-6 gap-2 h-13 mt-2">
+                <mat-form-field class="w-full h-10" appearance="outline">
+                    <mat-label class="label-font-size">Tax Due</mat-label>
+                    <input formControlName="taxDue" matInput type="number">
+                </mat-form-field>
+
+                <mat-form-field class="w-full h-10" appearance="outline">
+                    <mat-label class="label-font-size">Amount of Taxes (Present)</mat-label>
+                    <input formControlName="taxPresent" matInput type="number">
+                </mat-form-field>
+
+                <mat-form-field class="w-full h-10" appearance="outline">
+                    <mat-label class="label-font-size">Amount of Taxes (Previous)</mat-label>
+                    <input formControlName="taxPrevious" matInput type="number">
+                </mat-form-field>
+
+                <mat-form-field class="w-full h-10" appearance="outline">
+                    <mat-label class="label-font-size">Total Amount of Taxes</mat-label>
+                    <input formControlName="taxSubTotal" matInput type="number">
+                </mat-form-field>
+
+                <mat-form-field class="w-full h-10" appearance="outline">
+                    <mat-label class="label-font-size">5% Tax Credit</mat-label>
+                    <input formControlName="taxPERA" matInput type="number">
+                </mat-form-field>
+
+                <mat-form-field class="w-full h-10" appearance="outline">
+                    <mat-label class="label-font-size">Total Taxes</mat-label>
+                    <input formControlName="taxTotal" matInput type="number">
+                </mat-form-field>
+            </div>
+            <div>
+                <button mat-flat-button color="primary" matStepperPrevious>Back</button>&nbsp;
+                <button mat-flat-button color="primary" matStepperNext>Next</button>
+            </div>
+        </mat-step>
+        <mat-step>
+            <ng-template matStepLabel>Non-Taxable/Exempt Compensation Income</ng-template>
+            <div class="grid grid-cols-5 gap-2 h-13 mt-3">
+                <mat-form-field class="w-full h-10" appearance="outline">
+                    <mat-label class="label-font-size">Basic Salary</mat-label>
+                    <input formControlName="ntxbasic" matInput type="number">
+                </mat-form-field>
+
+                <mat-form-field class="w-full h-10" appearance="outline">
+                    <mat-label class="label-font-size">Holiday Pay</mat-label>
+                    <input formControlName="ntxhol" matInput type="number">
+                </mat-form-field>
+
+                <mat-form-field class="w-full h-10" appearance="outline">
+                    <mat-label class="label-font-size">Overtime Pay</mat-label>
+                    <input formControlName="ntxot" matInput type="number">
+                </mat-form-field>
+
+                <mat-form-field class="w-full h-10" appearance="outline">
+                    <mat-label class="label-font-size">Night Shift Differential Pay</mat-label>
+                    <input formControlName="ntxnd" matInput type="number">
+                </mat-form-field>
+
+                <mat-form-field class="w-full h-10" appearance="outline">
+                    <mat-label class="label-font-size">Hazard Pay</mat-label>
+                    <input formControlName="ntxhz" matInput type="number">
+                </mat-form-field>
+            </div>
+
+            <div class="grid grid-cols-5 gap-2 h-13 mt-2">
+                <mat-form-field class="w-full h-10" appearance="outline">
+                    <mat-label class="label-font-size">13th Month Pay</mat-label>
+                    <input formControlName="ntX13M" matInput type="number">
+                </mat-form-field>
+
+                <mat-form-field class="w-full h-10" appearance="outline">
+                    <mat-label class="label-font-size">De Minimis Benefits</mat-label>
+                    <input formControlName="nTXDM" matInput type="number">
+                </mat-form-field>
+
+                <mat-form-field class="w-full h-10" appearance="outline">
+                    <mat-label class="label-font-size"> SSS, GSIS, PHIC & PAG-IBIG Contributions</mat-label>
+                    <input formControlName="ntxGovStat" matInput type="number">
+                </mat-form-field>
+
+                <mat-form-field class="w-full h-10" appearance="outline">
+                    <mat-label class="label-font-size">Salaries and Other Forms of Compensation</mat-label>
+                    <input formControlName="ntxSal" matInput type="number">
+                </mat-form-field>
+
+                <mat-form-field class="w-full h-10" appearance="outline">
+                    <mat-label class="label-font-size">Total Non-Taxable/Exempt Compensation Income</mat-label>
+                    <input formControlName="ntxTotal" matInput type="number">
+                </mat-form-field>
+            </div>
+            <div>
+                <button mat-flat-button color="primary" matStepperPrevious>Back</button>&nbsp;
+                <button mat-flat-button color="primary" matStepperNext>Next</button>
+            </div>
+        </mat-step>
+        <mat-step>
+            <ng-template matStepLabel>Taxable Compensation Income Regular</ng-template>
+            <div class="grid grid-cols-5 gap-2 h-13 mt-3">
+                <mat-form-field class="w-full h-10" appearance="outline">
+                    <mat-label class="label-font-size">Basic Salary</mat-label>
+                    <input formControlName="txBasic" matInput type="number">
+                </mat-form-field>
+
+                <mat-form-field class="w-full h-10" appearance="outline">
+                    <mat-label class="label-font-size">Representation</mat-label>
+                    <input formControlName="txrep" matInput type="number">
+                </mat-form-field>
+
+                <mat-form-field class="w-full h-10" appearance="outline">
+                    <mat-label class="label-font-size">Transportation</mat-label>
+                    <input formControlName="txtrans" matInput type="number">
+                </mat-form-field>
+
+                <mat-form-field class="w-full h-10" appearance="outline">
+                    <mat-label class="label-font-size"> Cost of Living Allowance (COLA)</mat-label>
+                    <input formControlName="txcola" matInput type="number">
+                </mat-form-field>
+
+                <mat-form-field class="w-full h-10" appearance="outline">
+                    <mat-label class="label-font-size">Fixed Housing Allowance</mat-label>
+                    <input formControlName="txfh" matInput type="number">
+                </mat-form-field>
+            </div>
+
+            <div class="grid grid-cols-5 gap-2 h-13 mt-2">
+                <mat-form-field class="w-full h-10" appearance="outline">
+                    <mat-label class="label-font-size"> Others: (Name)</mat-label>
+                    <input formControlName="txothersaName" matInput type="text">
+                </mat-form-field>
+
+                <mat-form-field class="w-full h-10" appearance="outline">
+                    <mat-label class="label-font-size">Others: (Amount)</mat-label>
+                    <input formControlName="txothersa" matInput type="number">
+                </mat-form-field>
+
+                <mat-form-field class="w-full h-10" appearance="outline">
+                    <mat-label class="label-font-size">Others: (Name)</mat-label>
+                    <input formControlName="txothersbName" matInput type="text">
+                </mat-form-field>
+
+                <mat-form-field class="w-full h-10" appearance="outline">
+                    <mat-label class="label-font-size">Others: (Amount)</mat-label>
+                    <input formControlName="txothersb" matInput type="number">
+                </mat-form-field>
+
+                <mat-form-field class="w-full h-10" appearance="outline">
+                    <mat-label class="label-font-size">Commission</mat-label>
+                    <input formControlName="txComm" matInput type="number">
+                </mat-form-field>
+            </div>
+
+            <div class="grid grid-cols-5 gap-2 h-13 mt-2">
+                <mat-form-field class="w-full h-10" appearance="outline">
+                    <mat-label class="label-font-size">Profit Sharing</mat-label>
+                    <input formControlName="txProfit" matInput type="number">
+                </mat-form-field>
+
+                <mat-form-field class="w-full h-10" appearance="outline">
+                    <mat-label class="label-font-size"> Fees Including Director's Fees</mat-label>
+                    <input formControlName="txDir" matInput type="number">
+                </mat-form-field>
+
+                <mat-form-field class="w-full h-10" appearance="outline">
+                    <mat-label class="label-font-size">Taxable 13th Month Benefits</mat-label>
+                    <input formControlName="tX13M" matInput type="number">
+                </mat-form-field>
+
+                <mat-form-field class="w-full h-10" appearance="outline">
+                    <mat-label class="label-font-size">Hazard Pay</mat-label>
+                    <input formControlName="txhz" matInput type="number">
+                </mat-form-field>
+
+                <mat-form-field class="w-full h-10" appearance="outline">
+                    <mat-label class="label-font-size">Overtime Pay</mat-label>
+                    <input formControlName="txot" matInput type="number">
+                </mat-form-field>
+            </div>
+
+            <div class="grid grid-cols-5 gap-2 h-13 mt-2">
+                <mat-form-field class="w-full h-10" appearance="outline">
+                    <mat-label class="label-font-size"> Others: (Name)</mat-label>
+                    <input formControlName="txotheraName" matInput type="text">
+                </mat-form-field>
+
+                <mat-form-field class="w-full h-10" appearance="outline">
+                    <mat-label class="label-font-size">Others: (Amount)</mat-label>
+                    <input formControlName="txothera" matInput type="number">
+                </mat-form-field>
+
+                <mat-form-field class="w-full h-10" appearance="outline">
+                    <mat-label class="label-font-size">Others: (Name)</mat-label>
+                    <input formControlName="txotherbName" matInput type="text">
+                </mat-form-field>
+
+                <mat-form-field class="w-full h-10" appearance="outline">
+                    <mat-label class="label-font-size">Others: (Amount)</mat-label>
+                    <input formControlName="txotherb" matInput type="number">
+                </mat-form-field>
+
+                <mat-form-field class="w-full h-10" appearance="outline">
+                    <mat-label class="label-font-size"> Total Taxable Compensation Income </mat-label>
+                    <input formControlName="txTotal" matInput type="number">
+                </mat-form-field>
+            </div>
+        </mat-step>
+    </mat-vertical-stepper>
+</form>

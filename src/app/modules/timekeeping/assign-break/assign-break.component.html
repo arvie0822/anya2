@@ -1,0 +1,299 @@
+<div class="flex flex-col flex-auto min-w-0" *transloco="let t">
+    <div class="flex-auto sm:p-2 w-full min-w-0 sm:absolute sm:inset-0 sm:overflow-auto text-md">
+        <mat-card>
+            <mat-card-title>
+                <app-card-title title="Assign Shift With Break" [sub]="(hidesubmits || hideSave) && dataDate.length > 0" [back]="true" (submitTap)="submit()"></app-card-title>
+            </mat-card-title><br>
+            <form [formGroup]="scheduleDayForm">
+                <div class="flex flex-wrap space-x-3">
+
+
+                    <mat-form-field class="w-50 text-md h-10" appearance="outline">
+                        <mat-label class="label-font-size">{{t('dateFrom')}}</mat-label>
+                        <input formControlName="dateFrom" matInput [matDatepicker]="df" readonly [placeholder]="'MM/DD/YYYY'"
+                            (dateChange)="setdate1year()" [max]="scheduleDayForm.controls['dateTo'].value" (click)="df.open()">
+                        <mat-datepicker-toggle matSuffix [for]="df"></mat-datepicker-toggle>
+                        <mat-datepicker #df></mat-datepicker>
+                    </mat-form-field>
+
+
+                    <mat-form-field class="w-50 text-md min-h-10 " appearance="outline">
+                        <mat-label class="label-font-size">{{t('dateTo')}}</mat-label>
+                        <input formControlName="dateTo" matInput [matDatepicker]="df2" readonly [placeholder]="'MM/DD/YYYY'" [min]="minDate"
+                            [max]="maxDate" (click)="df2.open()">
+                        <mat-datepicker-toggle matSuffix [for]="df2"></mat-datepicker-toggle>
+                        <mat-datepicker #df2></mat-datepicker>
+                    </mat-form-field>
+
+                    <mat-form-field class="w-50 text-md h-10" appearance="outline">
+                        <mat-label class="label-font-size">{{t('Alternate Week')}}</mat-label>
+                        <mat-icon class="" matPrefix [svgIcon]="'mat_outline:info'"></mat-icon>
+                        <mat-select class="select" formControlName="weekCount" [placeholder]="'Alternate Week'"
+                            (ngModelChange)="handlerWeekChange()">
+                            @for (option of weekOptions; track option) {
+                            <mat-option [value]="option.dropdownID">
+                                {{option.description}}
+                            </mat-option>
+                            }
+                        </mat-select>
+                    </mat-form-field>
+
+
+                    <div class="h-10">
+                      <app-employee-hierarchy [showTag]="!currentModule" [defaultTag]="defaultTag" [all]="true" [multiple]="true" (selected)="field_count = $event " [notincludetag]="[132]" [resultHierarchy]="resultHierarchy"></app-employee-hierarchy>
+                    </div>
+
+                    <div>
+                        @if (!hideSubmit) {
+                        <button matTooltip="Add" matTooltipPosition="right" [disabled]="enableAdd" type="button" class="w-[10px]"
+                            mat-flat-button color="primary" (click)="handleAddSearch('add')" aria-label="example icon">
+                            <mat-icon class="mb-2" svgIcon="mat_outline:post_add"></mat-icon>
+                        </button>
+                        }
+                    </div>
+
+                </div>
+            </form>
+
+            @if (hidesubmits) {
+                <mat-card class="scroll-container mb-1 mat-elevation-z0">
+                <table *ngIf="assigndata" #shiftTable mat-table [dataSource]="assignSource" class="sample mat-elevation-z0">
+                    <ng-container *ngFor="let datas of assigndata" [matColumnDef]="datas.column">
+                        <th class="text-md" mat-header-cell *matHeaderCellDef> {{datas.title}} </th>
+                        <td mat-cell  class="cells" *matCellDef="let row, let i = index">
+                            <!-- // parent -->
+                            <mat-form-field class="w-full text-md mt-2 mb-1 hover:text-base" appearance="outline">
+                                <mat-select (selectionChange)="handleAddSearch('delete'); change(i, datas.column)" (ngModelChange)=" handleApply($event, i,datas.column, 'parent') ; validatechild()"
+                                    [(ngModel)]="row[datas.column].id"
+                                    (infiniteScroll)="getNextBatchParent()" msInfiniteScroll [complete]="complete"
+                                    threshold="{{systemSettings.infinitScrollThreshold}}">
+                                    <mat-option>
+                                        <ngx-mat-select-search [formControl]="inputChangeParent"
+                                            [placeholderLabel]="'Find ' + ' ..'"
+                                            [noEntriesFoundLabel]="'No ' + placeholder + ' found'"></ngx-mat-select-search>
+                                    </mat-option>
+                                    <mat-option *ngFor="let option of row[datas.column].option" [value]="option.dropdownID">
+                                        {{option.description}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                            <!-- parent child -->
+                             @if(hidebreak(row[datas.column].id) && row[datas.column].id !==null){
+                                <mat-form-field class="w-full h-10 text-md mb-1 hover:text-base" appearance="outline">
+                                    <mat-label class="label-font-size text-lg">Shift Break</mat-label>
+                                    <mat-select class="bottom-3" placeholder="Break Types" (selectionChange)="handleAddSearch('delete')" (ngModelChange)=" handleApply($event, i ,datas.column,'break')"
+                                        [(ngModel)]="row[datas.column].breakId"
+                                        (infiniteScroll)="getNextBatchParent()" msInfiniteScroll [complete]="complete"
+                                        threshold="{{systemSettings.infinitScrollThreshold}}">
+                                        <mat-option>
+                                            <ngx-mat-select-search [formControl]="inputChangeParent"
+                                                [placeholderLabel]="'Find ' + ' ..'"
+                                                [noEntriesFoundLabel]="'No ' + placeholder + ' found'"></ngx-mat-select-search>
+                                        </mat-option>
+                                        <mat-option *ngFor="let option of row[datas.column].breaksoption" [value]="option.dropdownID">
+                                            {{option.description}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                             }
+
+                             @if(hidebreak(row[datas.column].id) && row[datas.column].id !==null){
+                                <mat-form-field class="w-full h-10 text-md mt-1 mb-1 hover:text-base" appearance="outline">
+                                    <mat-label class="label-font-size text-lg">OT Break</mat-label>
+                                    <mat-select class="bottom-3" placeholder="OT Break" (selectionChange)="handleAddSearch('delete')" (ngModelChange)=" handleApply($event, i ,datas.column,'otBreakId')"
+                                        [(ngModel)]="row[datas.column].otBreakId"
+                                        (infiniteScroll)="getNextBatchParent()" msInfiniteScroll [complete]="complete"
+                                        threshold="{{systemSettings.infinitScrollThreshold}}">
+                                        <mat-option>
+                                            <ngx-mat-select-search [formControl]="inputChangeParent"
+                                                [placeholderLabel]="'Find ' + ' ..'"
+                                                [noEntriesFoundLabel]="'No ' + placeholder + ' found'"></ngx-mat-select-search>
+                                        </mat-option>
+                                        <mat-option *ngFor="let option of row[datas.column].breaksoptionot" [value]="option.dropdownID">
+                                            {{option.description}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                             }
+
+                            <!-- child  -->
+                            <div *ngFor="let child of row[datas.column].child; let x = index">
+                                @if(row[datas.column].id !==null){
+                                    <mat-form-field class="w-full h-10 mb-1 text-md hover:text-base" appearance="outline">
+                                        <mat-label class="label-font-size text-lg">Schedule</mat-label>
+                                        <mat-select [(ngModel)]="row[datas.column].child[x].id" class="bottom-2"
+                                            (selectionChange)=" getdropdownperday(row,i,x,datas.column,'','') ; handleAddSearch('delete') ; validatechild()"
+                                            (ngModelChange)="handleApplychild($event, x, i,datas.column, 'child') ;handleAddSearch('delete')"
+                                            (infiniteScroll)="getNextBatchChild()" msInfiniteScroll [complete]="complete"
+                                            threshold="{{systemSettings.infinitScrollThreshold}}">
+                                            <mat-option>
+                                                <ngx-mat-select-search [formControl]="inputChangeChild" [placeholderLabel]="'Find ' + ' ..'"
+                                                    [noEntriesFoundLabel]="'No ' + placeholder + ' found'"></ngx-mat-select-search>
+                                            </mat-option>
+                                            <mat-option *ngFor="let option of row[datas.column].child[x].option" [value]="option.dropdownID">
+                                                {{option.description}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                }
+                                <!-- grand child -->
+                                 @if(row[datas.column].id !==null){
+                                    <mat-form-field class="w-full h-10 mt-2 mb-1 text-md hover:text-base" appearance="outline">
+                                        <mat-label class="label-font-size text-lg">Shift Break</mat-label>
+                                        <mat-select class="bottom-2" [(ngModel)]="row[datas.column].child[x].breakId" placeholder="Break Type" (selectionChange)="handleAddSearch('delete')" (ngModelChange)="handleApplychild($event, x, i,datas.column, 'break')"
+                                            (infiniteScroll)="getNextBatchChild()" msInfiniteScroll [complete]="complete"
+                                            threshold="{{systemSettings.infinitScrollThreshold}}">
+                                            <mat-option>
+                                                <ngx-mat-select-search [formControl]="inputChangeChild"
+                                                    placeholderLabel="Find Break Type"
+                                                    [noEntriesFoundLabel]="'No Break Type found'"></ngx-mat-select-search>
+                                            </mat-option>
+                                            <mat-option *ngFor="let option of row[datas.column].child[x].breaksoption"
+                                                [value]="option.dropdownID">
+                                                {{option.description}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                 }
+
+                                <!-- grand child -->
+                                 @if(row[datas.column].id !==null){
+                                    <mat-form-field class="w-full h-10 mt-2 mb-2 text-md hover:text-base" appearance="outline">
+                                        <mat-label class="label-font-size text-lg">OT Break</mat-label>
+                                        <mat-select class="bottom-2" [(ngModel)]="row[datas.column].child[x].otBreakId" placeholder="OT Break" (ngModelChange)="handleApplychild($event, x, i,datas.column, 'otbreak')" (selectionChange)="handleAddSearch('delete')"
+                                            (infiniteScroll)="getNextBatchChild()" msInfiniteScroll [complete]="complete"
+                                            threshold="{{systemSettings.infinitScrollThreshold}}">
+                                            <mat-option>
+                                                <ngx-mat-select-search [formControl]="inputChangeChild"
+                                                    placeholderLabel="Find Break Type"
+                                                    [noEntriesFoundLabel]="'No Break Type found'"></ngx-mat-select-search>
+                                            </mat-option>
+                                            <mat-option *ngFor="let option of row[datas.column].child[x].breaksoptionot"
+                                                [value]="option.dropdownID">
+                                                {{option.description}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                 }
+                            </div>
+                        </td>
+                    </ng-container>
+                    <tr mat-header-row *matHeaderRowDef="columns; sticky: true"></tr>
+                    <tr mat-row *matRowDef="let row; columns: columns"></tr>
+                </table>
+            </mat-card>
+            }
+
+            <mat-tab-group>
+                <mat-tab label="Employee">
+                    <table #TableEmployee mat-table [dataSource]="dataEmployee" style="width: 100%;"
+                        class="mat-elevation-z0">
+                        <ng-container matColumnDef="employeeCode">
+                            <th mat-header-cell *matHeaderCellDef> Employee Code </th>
+                            <td mat-cell *matCellDef="let element"> {{element.employeeCode}}
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="displayName">
+                            <th mat-header-cell *matHeaderCellDef> Employee Name</th>
+                            <td mat-cell *matCellDef="let element"> {{element.displayName}}
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="action">
+                            <th class="" mat-header-cell *matHeaderCellDef> Action </th>
+                            <td mat-cell class="" *matCellDef="let element; let i = index">
+                                    <mat-icon (click)="handleEmployeeRemove(element.employeeId,i)" color="warn" svgIcon="heroicons_outline:trash"></mat-icon>
+                            </td>
+                        </ng-container>
+                        <tr mat-header-row *matHeaderRowDef="emplopyeeColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: emplopyeeColumns;"></tr>
+                    </table>
+                    <mat-paginator (page)="handlePageEvent($event)" [pageSizeOptions]="[10, 20, 50]"
+                        showFirstLastButtons [length]="totalRows" [pageSize]="request.Length"
+                        [pageIndex]="request.Start">
+                    </mat-paginator>
+                </mat-tab>
+                <mat-tab label="Date">
+                    <div class="grid grid-cols-7 gap-2 no-wrap h-full">
+                        <div *ngFor="let source of dataDate ; let i = index" class="gap-2 h-full">
+                            <div class="flex gap-2">
+                                <mat-form-field class="w-full h-10 mb-2 text-md" appearance="outline">
+                                    <mat-label class="label-font-size">{{source.date | date}} ({{source.day }})</mat-label>
+                                    <mat-icon (click)="handleDayRemove(i)" id="icons" class="icon mr-3 ml-1" color="warn" matPrefix
+                                        [svgIcon]="'heroicons_outline:trash'"></mat-icon>
+                                    <mat-select id="icons" [disabled]="hideSubmit" (selectionChange)="datechange(i,'shiftId')"
+                                        [(ngModel)]="source.shiftId.id" [placeholder]="'Apply To All'"
+                                        (infiniteScroll)="getNextBatchParent()" msInfiniteScroll [complete]="complete"
+                                        threshold="{{systemSettings.infinitScrollThreshold}}">
+                                        <mat-option>
+                                            <ngx-mat-select-search [formControl]="inputChangeParent_date" [placeholderLabel]="'Find ' + ' ..'"
+                                                [noEntriesFoundLabel]="'No ' + placeholder + ' found'"></ngx-mat-select-search>
+                                        </mat-option>
+                                        <mat-option *ngFor="let option of datelist" [value]="option.dropdownID">
+                                            {{option.description}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+
+                            <div *ngFor="let child of source.shiftId.child; let x = index">
+                                <mat-form-field class="w-full h-10 mb-2 hover:text-base" appearance="outline" *ngIf="hidebreaks(source.shiftId.id)">
+                                <mat-label class="label-font-size text-lg">Schedule</mat-label>
+                                    <mat-label class="label-font-size"></mat-label>
+                                    <!-- <mat-icon id="child" class="mr-2" matPrefix [svgIcon]="'mat_outline:info'"></mat-icon> -->
+                                    <mat-select (openedChange)="clearSearch()" id="icons" [disabled]="hideSubmit"
+                                        (openedChange)="childdata(i,x)" [(ngModel)]="child.id" [placeholder]=""
+                                        (infiniteScroll)="getNextBatchChild()" msInfiniteScroll [complete]="complete"
+                                        threshold="{{systemSettings.infinitScrollThreshold}}">
+                                        <mat-option id="options" class="border-2 first-option">
+                                            <input id="fieldchild" type="input" class="w-[1000px] search-field"
+                                                (click)="$event.stopPropagation()" [placeholder]="'Find ' + ' ..'"
+                                                [formControl]="inputChangeChild_date">
+                                        </mat-option>
+                                        <mat-option *ngFor="let option of dataDate[i].shiftId.child[x].options" [value]="option.dropdownID">
+                                            {{option.description}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+
+                                <mat-form-field class="w-full h-10 mb-2 hover:text-base" appearance="outline">
+                                    <mat-label class="label-font-size text-lg">Shift Break</mat-label>
+                                    <!-- <mat-icon id="child" class="mr-2 icon-size-5" matPrefix [svgIcon]="'mat_outline:info'"></mat-icon> -->
+                                    <mat-select id="icons" placeholder="Break Type" msInfiniteScroll [complete]="complete" [(ngModel)]="child.breakId"
+                                        threshold="{{systemSettings.infinitScrollThreshold}}">
+                                        <mat-option id="options" class="border-2 first-option">
+                                            <input id="fieldchild" type="input" class="w-[1000px] search-field"
+                                                (click)="$event.stopPropagation()" [placeholder]="'Find ' + ' ..'"
+                                                [formControl]="inputChangeChild_date">
+                                        </mat-option>
+                                        <mat-option class="text-lg" *ngFor="let option of dataDate[i].shiftId.child[x].breaksoption"
+                                            [value]="option.dropdownID">
+                                            {{option.description}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+
+
+                                <mat-form-field class="w-full h-10 mb-2 hover:text-base" appearance="outline">
+                                    <mat-label class="label-font-size text-lg">OT Break</mat-label>
+                                    <!-- <mat-icon id="child" class="mr-2 icon-size-5" matPrefix [svgIcon]="'mat_outline:info'"></mat-icon> -->
+                                    <mat-select id="icons" placeholder="OT Break" msInfiniteScroll [complete]="complete" [(ngModel)]="child.otBreakId"
+                                        threshold="{{systemSettings.infinitScrollThreshold}}">
+                                        <mat-option id="options" class="border-2 first-option">
+                                            <input id="fieldchild" type="input" class="w-[1000px] search-field"
+                                                (click)="$event.stopPropagation()" [placeholder]="'Find ' + ' ..'"
+                                                [formControl]="inputChangeChild_date">
+                                        </mat-option>
+                                        <mat-option class="text-lg" *ngFor="let option of dataDate[i].shiftId.child[x].breaksoptionot"
+                                            [value]="option.dropdownID">
+                                            {{option.description}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </div>
+                </mat-tab>
+            </mat-tab-group>
+        </mat-card>
+    </div>
+</div>

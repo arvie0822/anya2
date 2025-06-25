@@ -1,0 +1,256 @@
+/* .label-font-size{
+    font-size: 15px;
+}
+.mat-icon{
+    position: relative;
+    bottom: 8px;
+}
+.mat-select{
+    position: relative;
+    bottom: 11px;
+    font-size: medium;
+}
+.input{
+    position: relative;
+    bottom: 10px;
+    font-size: medium;
+}
+.uploadbutton{
+    position: relative;
+    bottom: 7px;
+    border-radius: 3px !important;
+}
+.button-margin-top{
+    padding-top: 1%;
+}
+
+::ng-deep .tab-hide .mat-tab-list .mat-tab-labels {
+  display: none;
+}
+.mat-datepicker-toggle{
+    position: relative;
+    bottom: 7px;
+    font-size: medium;
+}
+
+.scroll-container {
+    display: flex;
+    align-items: center;
+    overflow: auto;
+}
+
+
+.body{
+   text-align: center;
+}
+
+.area {
+    height: 20px;
+    width: 100%;
+    resize: none;
+    font-size: 16px;
+    overflow-y: scroll;
+    border-width: 2px;
+    border-radius: 3px;
+    margin-left: 4%;
+}
+
+table {
+    width: 100%;
+}
+.button-margin-top{
+    padding-top: 1%;
+  }
+
+
+.label-font-size{
+  font-size: 15px;
+ }
+ .mat-icon{
+     position: relative;
+     bottom: 11px;
+ }
+ input{
+   position: relative;
+   bottom: 10px;
+   font-size: medium;
+ }
+
+
+ input#hours{
+   position: relative;
+   bottom: 12px;
+   font-size: medium;
+ }
+
+ .mat-datepicker-toggle{
+  position: relative;
+  bottom: 7px;
+  font-size: medium;
+ }
+
+ .mat-datepicker-toggle#aftedate{
+  position: relative;
+  bottom: 11px;
+  font-size: medium;
+ }
+
+.text{
+    border-style: solid;
+    border-width: 2px;
+    margin-bottom: 33px;
+    border-radius: 3px;
+    height: 33px;
+    min-width: 100px;
+    max-width: 150px;
+}
+.reasoncss{
+    margin-bottom: 30px;
+}
+textarea:valid{
+    border-color: #C9C0C0;
+}
+textarea:invalid{
+    border-color: #DC2626;
+}
+.upload:valid{
+    border-color: aliceblue;
+}
+.upload:invalid{
+    border-color: #DC2626;
+}
+.sample
+{
+    position: relative;
+    bottom: 10px;
+    font-size: medium;
+}
+.upb{
+    position: relative;
+    bottom: 15px;
+    right: -5px;
+    border-radius: 3px !important;
+}
+.upbo{
+    position: relative;
+    bottom: 15px;
+    right: -2px;
+    border-radius: 3px !important;
+}
+.mat-divider
+{
+    border-top-color: rgb(172, 172, 172) !important;
+}
+
+.mat-column-otdate {
+    flex: 0 0 10%;
+  }
+
+  .mat-column-otshift {
+    flex: 0 0 10%;
+  }
+
+  .mat-column-overtime_type {
+    flex: 0 0 10%;
+  }
+  .mat-column-ottiming {
+    flex: 0 0 10%;
+  }
+  .mat-column-ot_start {
+    flex: 0 0 10%;
+  }
+  .mat-column-ot_end {
+    flex: 0 0 10%;
+  }
+  .mat-column-otreason {
+    flex: 0 0 30%;
+  }
+  .mat-column-uploadFileot {
+    flex: 0 0 10%;
+  }
+  .mat-header-row {
+    position: sticky;
+    top: 0;
+    background-color: white;
+    z-index: 10;
+}
+
+
+
+.mat-cell{
+    align-items: center;
+    vertical-align: top;
+    padding-top: 10px;
+}
+
+.no-wrap {
+    white-space: nowrap;
+    padding: 10px;
+    padding-left: 20px;
+}
+
+.mat-header-cell {
+    font-size: 15px;
+}
+ */
+ .mdc-data-table__cell, .mdc-data-table__header-cell {
+    padding: 0 12px 0 0px !important;
+}
+
+
+.mat-datepicker-content {
+    display: block;
+    border-radius: 4px;
+    background-color: rgb(255, 244, 255);
+}
+
+.mat-mdc-form-field.mat-form-field-appearance-fill .mat-mdc-text-field-wrapper .mat-mdc-form-field-flex {
+    padding: 0 0px 0 1px !important;
+}
+
+.ngx-mat-timepicker form .ngx-mat-timepicker-table .ngx-mat-timepicker-tbody tr td.ngx-mat-timepicker-meridian .mdc-button {
+    min-width: 64px;
+    line-height: 36px;
+    min-width: 0;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    flex-shrink: 0;
+    bottom: 9px;
+}
+
+.ngx-mat-timepicker form .ngx-mat-timepicker-table .ngx-mat-timepicker-tbody tr td .mat-mdc-icon-button {
+    height: 10px;
+    width: 24px;
+    line-height: 24px;
+    padding: 0;
+    bottom: 6px;
+}
+
+.ngx-mat-timepicker form .ngx-mat-timepicker-table .ngx-mat-timepicker-tbody tr td .mat-mdc-form-field .mdc-text-field--filled .mat-mdc-form-field-infix input {
+    text-align: center;
+    font-size: 11px !important;
+}
+
+.mat-datepicker-content .mat-datepicker-close-button {
+    position: absolute;
+    top: 365px;
+    left: 180px;
+    margin-top: 8px;
+}
+
+.mat-datepicker-content .mat-datepicker-close-button {
+    /* position: absolute; */
+    bottom: 15px !important;
+    left: 120px !important;
+    /* margin-top: 8px; */
+    width: 100px !important;
+    top: 0%;
+    position: relative !important;
+}
+
+.mat-mdc-cell{
+    align-items: center;
+    vertical-align: top;
+}

@@ -1,0 +1,5 @@
+.csvbox-btn button {
+    background: var(--fuse-primary);
+    border-radius: 5px;
+    color: white;
+}

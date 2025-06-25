@@ -1,0 +1,15 @@
+.tables {
+    width: 100%;
+  }
+.example-container{
+    max-height: 200px;
+    overflow: auto;
+}
+.mdc-data-table__cell {
+    padding: 0 0 0 5px !important;
+    align-items: center;
+}
+.mdc-data-table__cell, .mdc-data-table__header-cell {
+    padding: 5px 0px 5px 5px !important;
+    align-items: center;
+}

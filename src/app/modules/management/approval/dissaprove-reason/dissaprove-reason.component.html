@@ -1,0 +1,10 @@
+<mat-label class="label-font-size text-lg" >Are you sure you want to disapprove?</mat-label><br><br>
+
+<div style=" border-style: solid; border-color: aliceblue; border-width: 1px; margin-top: 2px; border-radius: 3px;" class="mb-5">
+    <textarea class="area" [(ngModel)]="reason" matInput placeholder="Remarks" ></textarea>
+</div>
+
+<div class="grid grid-cols-2 gap-2 h-5 mb-5">
+    <button mat-flat-button (click)="confirm(true)" color="primary">Confirm</button>
+    <button mat-flat-button (click)="confirm(false)"  color="warn">Cancel</button>
+</div>

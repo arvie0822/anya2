@@ -1,0 +1,72 @@
+/* table {
+width: 100%;
+}
+.label-font-size{
+font-size: 15px;
+}
+input{
+    position: relative;
+    bottom: 9px;
+    font-size: medium;
+}
+
+::ng-deep .tab-hide .mat-tab-list .mat-tab-labels {
+display: none;
+}
+.mat-datepicker-toggle{
+position: relative;
+bottom: 7px;
+font-size: medium;
+}
+.button-margin-top{
+padding-top: 1%;
+}
+table{
+width: 86%;
+}
+.uploadbutton{
+position: relative;
+bottom: 4px;
+border-radius: 3px !important;
+}
+.mat-icon{
+position: relative;
+bottom: 9px;
+}
+.mat-select{
+position: relative;
+bottom: 10px;
+font-size: medium;
+}
+.mat-header-cell{
+text-align: center;
+}
+.mat-cell{
+text-align: center;
+}
+
+.mat-cell-edl {
+    text-align: left;
+} */
+.borderradiustop{  /* PROFILE MAT CARD */
+    border-radius: 4px 4px 0 0 !important;
+}
+
+.borderradius{ /* PERSONAL INFO MAT CARD */
+    border-radius: 0 0 4px 4px !important;
+    box-shadow: none !important;
+}
+
+.selected-tab {
+    background-color: #ffffff !important; /* Adjust color as needed */
+    border-color: #92b6bf !important;    /* Highlight border color */
+    border-bottom: 0px  #ffffff !important;
+    border-bottom-width: 0px !important;
+    /* font-weight: 500 !important; */
+}
+
+.unselected-tab {
+    border-width: 1px !important;
+    /* font-weight: 500 !important; */
+}
+

@@ -1,0 +1,28 @@
+<div class="overflow-hidden test h-full">
+  <div class="flex justify-between">
+    <p class="font-bold text-base">TimeKeeping Detailed</p>
+
+    <div>
+      <button mat-flat-button color="primary" (click)="export()" class="text-sm w-[10px] mr-3 mt-0.5" matTooltip="Export">
+        <mat-icon matSuffix class="mb-2" svgIcon="mat_outline:download"></mat-icon>
+      </button>
+
+      <!-- <button mat-flat-button color="primary" class="text-sm w-[10px] mr-3 mt-0.5" matTooltip="Export Summary">
+        <mat-icon matSuffix svgIcon="mat_outline:download"></mat-icon>
+      </button> -->
+
+      <button mat-flat-button color="warn" (click)="close()" class="text-sm w-[10px] mr-3 mt-0.5" matTooltip="Close">
+        <mat-icon matSuffix class="mb-2" svgIcon="mat_outline:close"></mat-icon>
+      </button>
+    </div>
+  </div><br>
+
+  <app-_tables
+      [pageShow]="pageShow"
+      [columns]="columns"
+      [source]="source"
+      [loading]="loading"
+      [request]="request"
+      [totalRows]="totalRows">
+  </app-_tables>
+</div>

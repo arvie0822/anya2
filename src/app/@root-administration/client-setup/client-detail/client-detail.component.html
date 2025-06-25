@@ -1,0 +1,41 @@
+<form [formGroup]="companyForm">
+    <div class="grid grid-cols-3 gap-2">
+        <div class="col-span-3">
+            <p class="text-lg font-medium">Company information</p>
+        </div>
+        <div>
+            <mat-form-field class="w-full h-13 text-lg" appearance="outline" >
+                <input class="mt-[2px]" matInput [placeholder]="'Company Name'" formControlName="companyName" />
+                <mat-icon class="mb-2" matPrefix [svgIcon]="'heroicons_solid:identification'"></mat-icon>
+            </mat-form-field>
+            @if(companyForm.get('companyName').hasError('required')){
+                <mat-error>
+                    Company Name is required
+                </mat-error>
+            }
+
+        </div>
+        <div>
+            <mat-form-field class="w-full h-13 text-lg" appearance="outline" >
+                <input matInput class="mt-[2px]" [placeholder]="'Company Code'" formControlName="companyCode" />
+                <mat-icon class="mb-2" matPrefix [svgIcon]="'heroicons_solid:code-bracket'"></mat-icon>
+            </mat-form-field>
+            @if(companyForm.get('companyCode').hasError('required')){
+                <mat-error>
+                    Company Code is required
+                </mat-error>
+            }
+        </div>
+        <div>
+            <mat-form-field class="w-full h-13 text-lg" appearance="outline" >
+                <input matInput class="mt-[2px]" [placeholder]="'Series Code'" formControlName="seriesCode" />
+                <mat-icon class="mb-2" matPrefix [svgIcon]="'heroicons_solid:circle-stack'"></mat-icon>
+            </mat-form-field>
+            @if(companyForm.get('seriesCode').hasError('required')){
+                <mat-error>
+                    Series Code is required
+                </mat-error>
+            }
+        </div>
+    </div>
+</form>

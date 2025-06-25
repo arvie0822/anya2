@@ -1,0 +1,73 @@
+/* .label-font-size{
+    font-size: 15px;
+}
+.mat-icon{
+    position: relative;
+    bottom: 8px;
+}
+input{
+    position: relative;
+    bottom: 10px;
+    font-size: medium;
+}
+.mat-select{
+    position: relative;
+    bottom: 11px;
+    font-size: medium;
+}
+table {
+    width: 100%;
+}
+.try{
+    border-width: 0.1mm;
+    border-style: solid;
+    border-color: black;
+}
+.mat-cell{
+    padding-left: 1%;
+    height: 1px !important;
+}
+.button-margin-top{
+  margin-top: 3.6px;
+  margin-left: 40%;
+}
+.button-margin-top1{
+    margin-top: 3.5px;
+}
+.mat-row{
+    height: 50% !;
+}
+.mat-header-row{
+    padding-left: 5%;
+}
+.Bborder
+{
+    border-radius: 5px;
+}
+.mat-divider {
+    border-top: 3px solid rgb(0, 0, 0);
+}
+
+.mat-column-delete {
+    width: 50px;
+}
+.schedulecss{
+text-align: center;
+font-size: 15px;
+padding-top:13px;
+padding-bottom:13px;
+} */
+
+
+.schedulecss {
+    text-align: center;
+    font-size: 12px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.icons {
+    height: 15px !important;
+    min-height: 40px;
+}
+

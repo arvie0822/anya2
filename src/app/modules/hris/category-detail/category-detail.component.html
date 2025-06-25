@@ -1,0 +1,853 @@
+<div class="flex flex-col flex-auto min-w-0" *transloco="let t">
+    <!-- Main -->
+    <div class="flex-auto  sm:p-2  w-full min-w-0 sm:absolute sm:inset-0 text-lg">
+        <mat-card class="h-full sm:overflow-auto">
+            <mat-card-title>
+                <app-card-title title=" Employee Category" [sub]="savebutton" [back]="true" [switch]="false"
+                    (switchTap)="changeOrient()" (submitTap)="submit()">
+                </app-card-title>
+            </mat-card-title><br>
+            <mat-tab-group #tabGroup mat-align-tabs="start" mat-stretch-tabs="false" class="overflow-y-hidden">
+                <mat-tab label="Category">
+                    <form [formGroup]="categoryForm">
+                        <div class="grid grid-cols-4 gap-2 h-14">
+                            <mat-form-field class=" w-full text-lg" appearance="outline">
+                                <mat-label class="label-font-size" color="primary">{{t('name')}}</mat-label>
+                                <mat-icon class="" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                                <input formControlName="categoryName" matInput type="text" [placeholder]="''">
+                            </mat-form-field>
+                            <mat-form-field class=" w-full text-lg" appearance="outline">
+                                <mat-label class="label-font-size">{{t('description')}}</mat-label>
+                                <mat-icon class=" " matPrefix svgIcon="mat_outline:info"></mat-icon>
+                                <input formControlName="categoryDescription" matInput type="text" [placeholder]="''">
+                            </mat-form-field>
+                            <mat-form-field class="w-full text-lg" appearance="outline">
+                                <mat-label class="label-font-size">{{t('status')}}</mat-label>
+                                <mat-icon class=" " matPrefix svgIcon="mat_outline:info"></mat-icon>
+                                <mat-select class="text-lg" formControlName="active" [placeholder]="">
+                                    <mat-option [value]="true">Active</mat-option>
+                                    <mat-option [value]="false">Inactive</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                        <mat-divider class="mb-2 "></mat-divider>
+                        <app-card-title title="Category Settings"></app-card-title>
+                        <div class="grid grid-cols-7 gap-2 h-14 mt-4">
+
+                            <app-dropdown-custom [useControl]="true" [all]="false" [multiple]="false"
+                                [control]="categoryForm.get('timeKeepingId')" [options]="dropdownOptions.payrollTypeDef"
+                                [type]="1012"></app-dropdown-custom>
+                            <app-dropdown-custom [useControl]="true" [all]="false" [multiple]="false"
+                                [control]="categoryForm.get('payrollId')" [options]="dropdownOptions.empcatpayrolldef"
+                                [type]="1009"></app-dropdown-custom>
+                            <app-dropdown-custom [useControl]="true" [all]="false" [multiple]="false"
+                                [control]="categoryForm.get('accessLevelId')"
+                                [options]="dropdownOptions.AccessControldef" [type]="1008"></app-dropdown-custom>
+
+                            <mat-form-field class=" w-full text-md" appearance="outline">
+                                <mat-label class="label-font-size"
+                                    color="primary">{{t('regularizationApproval')}}</mat-label>
+                                <mat-icon class="" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                                <input formControlName="regularization" matInput type="text" [OnlyNumber]="true"
+                                    [max]="999" [min]="0" [maxLength]="3">
+                            </mat-form-field>
+
+                            <mat-form-field class="w-full text-lg" appearance="outline">
+                                <mat-label class="label-font-size">{{t('holiday')}}</mat-label>
+                                <mat-icon class=" " matPrefix svgIcon="mat_outline:info"></mat-icon>
+                                <mat-select class="text-lg" formControlName="holidayBasedId" [placeholder]="">
+                                    <mat-option [value]="0">All</mat-option>
+                                    <mat-option [value]="3">PH</mat-option>
+                                    <mat-option [value]="360">US</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+
+                            <app-dropdown [isFix]="true" [control]="categoryForm.get('categoryBundyType')" [all]="true"
+                                [multiple]="true" [useControl]="true" [options]="dropdownOptions.bundydef"
+                                [icon]="'mat_outline:info'" [type]="68"> </app-dropdown>
+
+                            <app-dropdown [isFix]="true" [control]="categoryForm.get('usetiful')" [all]="false"
+                                [multiple]="false" [useControl]="true" [options]="dropdownOptions.usetiful"
+                                [icon]="'mat_outline:info'" label="Tour" [type]="118"> </app-dropdown>
+
+                        </div>
+                    </form>
+                    <mat-divider class="mb-2 "></mat-divider>
+                    <app-card-title title="Mobile Settings"></app-card-title>
+                    <form [formGroup]="categoryForm">
+                        <div class="grid grid-cols-7 gap-2 mt-4">
+                            <mat-form-field class="w-full text-lg" appearance="outline">
+                                <mat-label class="label-font-size">{{t('mobile')}}</mat-label>
+                                <mat-icon class=" " matPrefix svgIcon="mat_outline:info"></mat-icon>
+                                <mat-select class="text-lg" formControlName="enableMobile" [placeholder]="">
+                                    <mat-option [value]="true">Yes</mat-option>
+                                    <mat-option [value]="false">No</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                            @if (categoryForm.value.enableMobile==null || categoryForm.value.enableMobile) {
+                            <mat-form-field class="w-full text-lg" appearance="outline">
+                                <mat-label class="label-font-size">{{t('geofencing')}}</mat-label>
+                                <mat-icon class=" " matPrefix svgIcon="mat_outline:info"></mat-icon>
+                                <mat-select class="text-lg" formControlName="enableGeofence" [placeholder]="">
+                                    <mat-option [value]="true">Yes</mat-option>
+                                    <mat-option [value]="false">No</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                            }
+                            @if (categoryForm.value.enableMobile==null || categoryForm.value.enableMobile) {
+                            <mat-form-field class="w-full text-lg" appearance="outline">
+                                <mat-label class="label-font-size">{{t('offlineLogs')}}</mat-label>
+                                <mat-icon class=" " matPrefix svgIcon="mat_outline:info"></mat-icon>
+                                <mat-select class="text-lg" formControlName="enableOfflineLog" [placeholder]="">
+                                    <mat-option [value]="true">Yes</mat-option>
+                                    <mat-option [value]="false">No</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                            }
+                            @if (categoryForm.value.enableMobile==null || categoryForm.value.enableMobile) {
+                            <mat-form-field class="w-full text-lg" appearance="outline">
+                                <mat-label class="label-font-size">{{t('dashboard')}}</mat-label>
+                                <mat-icon class=" " matPrefix svgIcon="mat_outline:info"></mat-icon>
+                                <mat-select class="text-lg" formControlName="enableDashboard" [placeholder]="">
+                                    <mat-option [value]="true">Yes</mat-option>
+                                    <mat-option [value]="false">No</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                            }
+                            @if (categoryForm.value.enableMobile==null || categoryForm.value.enableMobile) {
+                            <mat-form-field class="w-full text-lg" appearance="outline">
+                                <mat-label class="label-font-size">{{t('filing')}}</mat-label>
+                                <mat-icon class=" " matPrefix svgIcon="mat_outline:info"></mat-icon>
+                                <mat-select class="text-lg" formControlName="enableFiling" [placeholder]="">
+                                    <mat-option [value]="true">Yes</mat-option>
+                                    <mat-option [value]="false">No</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                            }
+                            @if (categoryForm.value.enableMobile==null || categoryForm.value.enableMobile) {
+                            <mat-form-field class="w-full text-lg" appearance="outline">
+                                <mat-label class="label-font-size">{{t('payslip')}}</mat-label>
+                                <mat-icon class=" " matPrefix svgIcon="mat_outline:info"></mat-icon>
+                                <mat-select class="text-lg" formControlName="enablePayslip" [placeholder]="">
+                                    <mat-option [value]="true">Yes</mat-option>
+                                    <mat-option [value]="false">No</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                            }
+                            @if (categoryForm.value.enableMobile==null || categoryForm.value.enableMobile) {
+                            <mat-form-field class="w-full text-lg" appearance="outline">
+                                <mat-label class="label-font-size">{{t('approval')}}</mat-label>
+                                <mat-icon class=" " matPrefix svgIcon="mat_outline:info"></mat-icon>
+                                <mat-select class="text-lg" formControlName="enableApproval" [placeholder]="">
+                                    <mat-option [value]="true">Yes</mat-option>
+                                    <mat-option [value]="false">No</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                            }
+                            <app-dropdown-custom [useControl]="true" [all]="false" [multiple]="false"
+                                [control]="categoryForm.get('requirementId')" [options]="dropdownOptions.requirmentsdef"
+                                [type]="1054" label="Requirements"></app-dropdown-custom>
+                        </div>
+                    </form>
+                </mat-tab>
+                <mat-tab label="Filing" class="overflow-y-hidden">
+                    <!-- ================================filing================================== -->
+                    <app-card-title title="Restriction(Filing)"></app-card-title><br>
+                    <form [formGroup]="categoryForm">
+
+                        <div class="grid grid-cols-12 gap-2 h-13">
+                            <div class="col-span-2">
+                                <mat-form-field class="w-full text-lg" appearance="outline">
+                                    <mat-label class="label-font-size">{{t('enableChangeSchedule')}}</mat-label>
+                                    <mat-icon class="" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                                    <mat-select class="text-lg" formControlName="enableChangeSchedule" [placeholder]=""
+                                        (selectionChange)="Disablerd(['changeScheduleBefore','changeScheduleAfter','changeScheduleLateFilling','changeScheduleLateCancellation','enableChangeSchedule','changeScheduleRequired'],$event)">
+                                        <mat-option [value]="true">Yes</mat-option>
+                                        <mat-option [value]="false">No</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-span-2">
+                                <mat-form-field class=" w-full text-lg" appearance="outline">
+                                    <mat-label
+                                        class="label-font-size">{{t('canFileDaysBeforeChangeSchedule')}}</mat-label>
+                                    <mat-icon class="" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                                    <input matInput type="number" formControlName="changeScheduleBefore"
+                                        [placeholder]="''"
+                                        (ngModelChange)="filing_restrict('changeScheduleBefore','changeScheduleAfter','enableChangeSchedule')">
+                                </mat-form-field>
+                            </div>
+                            <div class="col-span-2">
+                                <mat-form-field class=" w-full text-lg" appearance="outline">
+                                    <mat-label
+                                        class="label-font-size">{{t('canFileDaysAfterChangeSchedule')}}</mat-label>
+                                    <mat-icon class="" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                                    <input matInput type="number" formControlName="changeScheduleAfter"
+                                        [placeholder]="''"
+                                        (ngModelChange)="filing_restrict('changeScheduleAfter','changeScheduleBefore','enableChangeSchedule')">
+                                </mat-form-field>
+                            </div>
+                            <div class="col-span-2">
+                                <app-dropdown [isFix]="true" [control]="categoryForm.get('changeScheduleRequired')"
+                                    [all]="false" [options]="dropdownOptions.emprequirdef" [icon]="'mat_outline:info'"
+                                    label="Required" [type]="171"> </app-dropdown>
+                            </div>
+                            <div class="col-span-2">
+                                <app-dropdown [isFix]="true" [control]="categoryForm.get('changeScheduleLateFilling')"
+                                    [all]="false" [options]="dropdownOptions.allowedfilingdef"
+                                    [icon]="'mat_outline:info'" label="Allow Late Filing" [type]="131"> </app-dropdown>
+                            </div>
+                            <div class="col-span-2">
+                                <app-dropdown [isFix]="true"
+                                    [control]="categoryForm.get('changeScheduleLateCancellation')" [all]="false"
+                                    [options]="dropdownOptions.allowedfilingdef" [icon]="'mat_outline:info'"
+                                    label="Allow Late Cancellation" [type]="131"> </app-dropdown>
+                            </div>
+
+                        </div>
+
+                        <div class="grid grid-cols-12 gap-2 h-13 mt-1">
+                            <div class="col-span-2">
+                                <mat-form-field class="w-full text-lg" appearance="outline">
+                                    <mat-label class="label-font-size">{{t('changeLog')}}</mat-label>
+                                    <mat-icon class="" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                                    <mat-select class="text-lg" formControlName="enableChangeLog" [placeholder]=""
+                                        (selectionChange)="Disablerd(['changeLogBefore','changeLogAfter','changeLogLateFilling','changeLogLateCancellation','enableChangeLog','changeLogRequired'],$event)">
+                                        <mat-option [value]="true">Yes</mat-option>
+                                        <mat-option [value]="false">No</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-span-2">
+                                <mat-form-field class=" w-full text-lg" appearance="outline">
+                                    <mat-label class="label-font-size">{{t('canFileDaysBeforeChangeLog')}}</mat-label>
+                                    <mat-icon class="" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                                    <input matInput type="number" formControlName="changeLogBefore" [placeholder]="''"
+                                        (ngModelChange)="filing_restrict('changeLogBefore','changeLogAfter','enableChangeLog')">
+                                </mat-form-field>
+                            </div>
+                            <div class="col-span-2">
+                                <mat-form-field class=" w-full text-lg" appearance="outline">
+                                    <mat-label class="label-font-size">{{t('canFileDaysAfterChangeLog')}}</mat-label>
+                                    <mat-icon class="" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                                    <input matInput type="number" formControlName="changeLogAfter" [placeholder]="''"
+                                        (ngModelChange)="filing_restrict('changeLogAfter','changeLogBefore','enableChangeLog')">
+                                </mat-form-field>
+                            </div>
+                            <div class="col-span-2">
+                                <app-dropdown [isFix]="true" [control]="categoryForm.get('changeLogRequired')"
+                                    [all]="false" [options]="dropdownOptions.emprequirdef" [icon]="'mat_outline:info'"
+                                    label="Required" [type]="171"> </app-dropdown>
+                            </div>
+                            <div class="col-span-2">
+                                <app-dropdown [isFix]="true" [control]="categoryForm.get('changeLogLateFilling')"
+                                    [all]="false" [options]="dropdownOptions.allowedfilingdef"
+                                    [icon]="'mat_outline:info'" label="Allow Late Filing" [type]="131"> </app-dropdown>
+                            </div>
+                            <div class="col-span-2">
+                                <app-dropdown [isFix]="true" [control]="categoryForm.get('changeLogLateCancellation')"
+                                    [all]="false" [options]="dropdownOptions.allowedfilingdef"
+                                    [icon]="'mat_outline:info'" label="Allow Late Cancellation" [type]="131">
+                                </app-dropdown>
+                            </div>
+
+                        </div>
+
+                        <div class="grid grid-cols-12 gap-2 h-13 mt-1">
+                            <div class="col-span-2">
+                                <mat-form-field class="w-full text-lg" appearance="outline">
+                                    <mat-label class="label-font-size">{{t('officialBusiness')}}</mat-label>
+                                    <mat-icon class="" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                                    <mat-select class="text-lg" formControlName="enableOfficialBusiness"
+                                        [placeholder]=""
+                                        (selectionChange)="Disablerd(['officialBusinessBefore','officialBusinessAfter','officialBusinessLateFilling','officialBusinessLateCancellation','enableOfficialBusiness','officialBusinessRequired'],$event)">
+                                        <mat-option [value]="true">Yes</mat-option>
+                                        <mat-option [value]="false">No</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-span-2">
+                                <mat-form-field class=" w-full text-lg" appearance="outline">
+                                    <mat-label
+                                        class="label-font-size">{{t('canFileDaysBeforeOfficialBusiness')}}</mat-label>
+                                    <mat-icon class="" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                                    <input matInput type="number" formControlName="officialBusinessBefore"
+                                        [placeholder]="''"
+                                        (ngModelChange)="filing_restrict('officialBusinessBefore','officialBusinessAfter','enableOfficialBusiness')">
+                                </mat-form-field>
+                            </div>
+                            <div class="col-span-2">
+                                <mat-form-field class=" w-full text-lg" appearance="outline">
+                                    <mat-label
+                                        class="label-font-size">{{t('canFileDaysAfterOfficialBusiness')}}</mat-label>
+                                    <mat-icon class="" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                                    <input matInput type="number" formControlName="officialBusinessAfter"
+                                        [placeholder]="''"
+                                        (ngModelChange)="filing_restrict('officialBusinessAfter','officialBusinessBefore','enableOfficialBusiness')">
+                                </mat-form-field>
+                            </div>
+                            <div class="col-span-2">
+                                <app-dropdown [isFix]="true" [control]="categoryForm.get('officialBusinessRequired')"
+                                    [all]="false" [options]="dropdownOptions.emprequirdef" [icon]="'mat_outline:info'"
+                                    label="Required" [type]="171"> </app-dropdown>
+                            </div>
+                            <div class="col-span-2">
+                                <app-dropdown [isFix]="true" [control]="categoryForm.get('officialBusinessLateFilling')"
+                                    [all]="false" [options]="dropdownOptions.allowedfilingdef"
+                                    [icon]="'mat_outline:info'" label="Allow Late Filing" [type]="131"> </app-dropdown>
+                            </div>
+                            <div class="col-span-2">
+                                <app-dropdown [isFix]="true"
+                                    [control]="categoryForm.get('officialBusinessLateCancellation')" [all]="false"
+                                    [options]="dropdownOptions.allowedfilingdef" [icon]="'mat_outline:info'"
+                                    label="Allow Late Cancellation" [type]="131"> </app-dropdown>
+                            </div>
+
+                        </div>
+
+                        <div class="grid grid-cols-12 gap-2 h-13 mt-1">
+                            <div class="col-span-2">
+                                <mat-form-field class="w-full text-lg" appearance="outline">
+                                    <mat-label class="label-font-size">{{t('overtime')}}</mat-label>
+                                    <mat-icon class="" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                                    <mat-select class="text-lg" formControlName="enableOvertime" [placeholder]=""
+                                        (selectionChange)="Disablerd(['overtimeBefore','overtimeAfter','overtimeLateFilling','overtimeLateCancellation','enableOvertime','overtimeRequired'],$event)">
+                                        <mat-option [value]="true">Yes</mat-option>
+                                        <mat-option [value]="false">No</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-span-2">
+                                <mat-form-field class=" w-full text-lg" appearance="outline">
+                                    <mat-label class="label-font-size">{{t('canFileDaysBeforeOvertime')}}</mat-label>
+                                    <mat-icon class="" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                                    <input matInput type="number" formControlName="overtimeBefore" [placeholder]="''"
+                                        (ngModelChange)="filing_restrict('overtimeBefore','overtimeAfter','enableOvertime')">
+                                </mat-form-field>
+                            </div>
+                            <div class="col-span-2">
+                                <mat-form-field class=" w-full text-lg" appearance="outline">
+                                    <mat-label class="label-font-size">{{t('canFileDaysAfterOvertime')}}</mat-label>
+                                    <mat-icon class="" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                                    <input matInput type="number" formControlName="overtimeAfter" [placeholder]="''"
+                                        (ngModelChange)="filing_restrict('overtimeAfter','overtimeBefore','enableOvertime')">
+                                </mat-form-field>
+                            </div>
+                            <div class="col-span-2">
+                                <app-dropdown [isFix]="true" [control]="categoryForm.get('overtimeRequired')"
+                                    [all]="false" [options]="dropdownOptions.emprequirdef" [icon]="'mat_outline:info'"
+                                    label="Required" [type]="171"> </app-dropdown>
+                            </div>
+                            <div class="col-span-2">
+                                <app-dropdown [isFix]="true" [control]="categoryForm.get('overtimeLateFilling')"
+                                    [all]="false" [options]="dropdownOptions.allowedfilingdef"
+                                    [icon]="'mat_outline:info'" label="Allow Late Filing" [type]="131"> </app-dropdown>
+                            </div>
+                            <div class="col-span-2">
+                                <app-dropdown [isFix]="true" [control]="categoryForm.get('overtimeLateCancellation')"
+                                    [all]="false" [options]="dropdownOptions.allowedfilingdef"
+                                    [icon]="'mat_outline:info'" label="Allow Late Cancellation" [type]="131">
+                                </app-dropdown>
+                            </div>
+
+                        </div>
+
+                        <div class="grid grid-cols-12 gap-2 h-13 mt-1">
+                            <div class="col-span-2">
+                                <mat-form-field class="w-full text-lg" appearance="outline">
+                                    <mat-label class="label-font-size">{{t('offset')}}</mat-label>
+                                    <mat-icon class="" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                                    <mat-select class="text-lg" formControlName="enableOffset" [placeholder]=""
+                                        (selectionChange)="Disablerd(['offsetBefore','offsetAfter','offsetLateFilling','offsetLateCancellation','enableOffset','offsetRequired'],$event)">
+                                        <mat-option [value]="true">Yes</mat-option>
+                                        <mat-option [value]="false">No</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-span-2">
+                                <mat-form-field class=" w-full text-lg" appearance="outline">
+                                    <mat-label class="label-font-size">{{t('canFileDaysBeforeOffset')}}</mat-label>
+                                    <mat-icon class="" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                                    <input matInput type="number" formControlName="offsetBefore" [placeholder]="''"
+                                        (ngModelChange)="filing_restrict('offsetBefore','offsetAfter','enableOffset')">
+                                </mat-form-field>
+                            </div>
+                            <div class="col-span-2">
+                                <mat-form-field class=" w-full text-lg" appearance="outline">
+                                    <mat-label class="label-font-size">{{t('canFileDaysAfterOffset')}}</mat-label>
+                                    <mat-icon class="" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                                    <input matInput type="number" formControlName="offsetAfter" [placeholder]="''"
+                                        (ngModelChange)="filing_restrict('offsetAfter','offsetBefore','enableOffset')">
+                                </mat-form-field>
+                            </div>
+                            <div class="col-span-2">
+                                <app-dropdown [isFix]="true" [control]="categoryForm.get('offsetRequired')"
+                                    [all]="false" [options]="dropdownOptions.emprequirdef" [icon]="'mat_outline:info'"
+                                    label="Required" [type]="171"> </app-dropdown>
+                            </div>
+                            <div class="col-span-2">
+                                <app-dropdown [isFix]="true" [control]="categoryForm.get('offsetLateFilling')"
+                                    [all]="false" [options]="dropdownOptions.allowedfilingdef"
+                                    [icon]="'mat_outline:info'" label="Allow Late Filing" [type]="131"> </app-dropdown>
+                            </div>
+                            <div class="col-span-2">
+                                <app-dropdown [isFix]="true" [control]="categoryForm.get('offsetLateCancellation')"
+                                    [all]="false" [options]="dropdownOptions.allowedfilingdef"
+                                    [icon]="'mat_outline:info'" label="Allow Late Cancellation" [type]="131">
+                                </app-dropdown>
+                            </div>
+
+                        </div>
+
+                        <div class="grid grid-cols-12 gap-2 h-14 mt-1">
+                            <div class="col-span-2">
+                                <mat-form-field class="w-full text-lg" appearance="outline">
+                                    <mat-label class="label-font-size">{{t('coe')}}</mat-label>
+                                    <mat-icon class="" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                                    <mat-select class="text-lg" formControlName="enableCOE" [placeholder]=""
+                                        (selectionChange)="Disablerd(['coeBefore','coeAfter','coeLateFilling','coeLateCancellation','enableCOE','coeRequired'],$event)">
+                                        <mat-option [value]="true">Yes</mat-option>
+                                        <mat-option [value]="false">No</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-span-2">
+                                <mat-form-field class=" w-full text-lg" appearance="outline">
+                                    <mat-label class="label-font-size">{{t('canFileDaysBeforeCOE')}}</mat-label>
+                                    <mat-icon class="" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                                    <input matInput type="number" formControlName="coeBefore" [placeholder]="''"
+                                        (ngModelChange)="filing_restrict('coeBefore','coeAfter','enableCOE')">
+                                </mat-form-field>
+                            </div>
+                            <div class="col-span-2">
+                                <mat-form-field class=" w-full text-lg" appearance="outline">
+                                    <mat-label class="label-font-size">{{t('canFileDaysAfterCOE')}}</mat-label>
+                                    <mat-icon class="" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                                    <input matInput type="number" formControlName="coeAfter" [placeholder]="''"
+                                        (ngModelChange)="filing_restrict('coeAfter','coeBefore','enableCOE')">
+                                </mat-form-field>
+                            </div>
+                            <div class="col-span-2">
+                                <app-dropdown [isFix]="true" [control]="categoryForm.get('coeRequired')" [all]="false"
+                                    [options]="dropdownOptions.emprequirdef" [icon]="'mat_outline:info'"
+                                    label="Required" [type]="171"> </app-dropdown>
+                            </div>
+                            <div class="col-span-2">
+                                <app-dropdown [isFix]="true" [control]="categoryForm.get('coeLateFilling')"
+                                    [all]="false" [options]="dropdownOptions.allowedfilingdef"
+                                    [icon]="'mat_outline:info'" label="Allow Late Filing" [type]="131"> </app-dropdown>
+                            </div>
+                            <div class="col-span-2">
+                                <app-dropdown [isFix]="true" [control]="categoryForm.get('coeLateCancellation')"
+                                    [all]="false" [options]="dropdownOptions.allowedfilingdef"
+                                    [icon]="'mat_outline:info'" label="Allow Late Cancellation" [type]="131">
+                                </app-dropdown>
+                            </div>
+
+                        </div>
+
+                        <div class="grid grid-cols-12 gap-2 h-14 mt-1">
+                            <div class="col-span-2">
+                                <mat-form-field class="w-full text-lg" appearance="outline">
+                                    <mat-label class="label-font-size">{{t('changeLocation')}}</mat-label>
+                                    <mat-icon class="" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                                    <mat-select class="text-lg" formControlName="enableLocation" [placeholder]=""
+                                        (selectionChange)="Disablerd(['locationBefore','locationAfter','locationLateFilling','locationLateCancellation','enableLocation','locationRequired'],$event)">
+                                        <mat-option [value]="true">Yes</mat-option>
+                                        <mat-option [value]="false">No</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-span-2">
+                                <mat-form-field class=" w-full text-lg" appearance="outline">
+                                    <mat-label
+                                        class="label-font-size">{{t('canFileDaysBeforeChangeLocation')}}</mat-label>
+                                    <mat-icon class="" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                                    <input matInput type="number" formControlName="locationBefore" [placeholder]="''"
+                                        (ngModelChange)="filing_restrict('locationBefore','locationAfter','enableLocation')">
+                                </mat-form-field>
+                            </div>
+                            <div class="col-span-2">
+                                <mat-form-field class=" w-full text-lg" appearance="outline">
+                                    <mat-label
+                                        class="label-font-size">{{t('canFileDaysAfterChangeLocation')}}</mat-label>
+                                    <mat-icon class="" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                                    <input matInput type="number" formControlName="locationAfter" [placeholder]="''"
+                                        (ngModelChange)="filing_restrict('locationAfter','locationBefore','enableLocation')">
+                                </mat-form-field>
+                            </div>
+                            <div class="col-span-2">
+                                <app-dropdown [isFix]="true" [control]="categoryForm.get('locationRequired')"
+                                    [all]="false" [options]="dropdownOptions.emprequirdef" [icon]="'mat_outline:info'"
+                                    label="Required" [type]="171"> </app-dropdown>
+                            </div>
+                            <div class="col-span-2">
+                                <app-dropdown [isFix]="true" [control]="categoryForm.get('locationLateFilling')"
+                                    [all]="false" [options]="dropdownOptions.allowedfilingdef"
+                                    [icon]="'mat_outline:info'" label="Allow Late Filing" [type]="131"> </app-dropdown>
+                            </div>
+                            <div class="col-span-2">
+                                <app-dropdown [isFix]="true" [control]="categoryForm.get('locationLateCancellation')"
+                                    [all]="false" [options]="dropdownOptions.allowedfilingdef"
+                                    [icon]="'mat_outline:info'" label="Allow Late Cancellation" [type]="131">
+                                </app-dropdown>
+                            </div>
+                        </div>
+
+                    </form>
+                    <!-- ===============================overtime policy ======================================= -->
+                    <mat-divider class="mb-2 "></mat-divider>
+                    <form [formGroup]="categoryForm">
+                        <div class="grid grid-cols-4 gap-2 h-14 mt-4">
+                            <app-dropdown [isFix]="true" [control]="categoryForm.get('overtimeTypeId')" [all]="true"
+                                [multiple]="false" [options]="dropdownOptions.overtimeTypeDef"
+                                [icon]="'mat_outline:info'" [type]="52"> </app-dropdown>
+                        </div>
+
+                        <div class="grid grid-cols-10 gap-2 h-13 mt-1"
+                            [hidden]="showhide(categoryForm.value.overtimeTypeId)">
+                            <mat-form-field class="w-full text-lg" appearance="outline">
+                                <mat-label class="label-font-size">{{t('enablePreShift')}}</mat-label>
+                                <mat-icon class="" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                                <mat-select class="text-lg" formControlName="enablePreShift"
+                                    [placeholder]="'allow multiple filing'"
+                                    (selectionChange)="Disablerd(['multiplePreShift','preShiftSpecificStartMinutes','preShiftMinimumDays','preShiftDelayStartMinutes','preShiftMaximumDays','preShiftStepDays','preShiftNumberOfDaysExpiration','preShiftExpirationBasis','preOtSetup','enablePreShift'],$event)">
+                                    <mat-option [value]="true">Yes</mat-option>
+                                    <mat-option [value]="false">No</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                            <mat-form-field class="w-full text-lg" appearance="outline">
+                                <mat-label class="label-font-size">{{t('multipleFilingPreShift')}}</mat-label>
+                                <mat-icon class="" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                                <mat-select class="text-lg" formControlName="multiplePreShift"
+                                    [placeholder]="'allow multiple filing'">
+                                    <mat-option [value]="true">Yes</mat-option>
+                                    <mat-option [value]="false">No</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                            <!-- <mat-form-field class="w-full text-lg" appearance="outline">
+              <mat-icon class="" matPrefix svgIcon="mat_outline:info"></mat-icon>
+              <mat-select class="text-lg" formControlName="preOtSetup" [placeholder]="'allow multiple filing'" >
+                <mat-option [value]="true">Yes</mat-option>
+                <mat-option [value]="false">No</mat-option>
+              </mat-select>
+            </mat-form-field> -->
+                            <app-dropdown [isFix]="true" [all]="false" [multiple]="false"
+                                [control]="categoryForm.get('preOtSetup')" [options]="dropdownOptions.beyondLogs"
+                                [icon]="'mat_outline:info'" label="Allow Filing" [type]="149"> </app-dropdown>
+
+
+                            <!-- minutes  -->
+                            <app-dropdown-custom [useControl]="true" [all]="true" [multiple]="true"
+                                (objects)="specimins = $event"
+                                [control]="categoryForm.get('preShiftSpecificStartMinutes')"
+                                [options]="dropdownOptions.durationdef" [type]="1057"></app-dropdown-custom>
+
+                            <mat-form-field class=" w-full text-lg h-13" appearance="outline">
+                                <mat-label class="label-font-size">{{t('otEndBeforeShiftStartMin')}}</mat-label>
+                                <mat-icon class="" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                                <input matInput formControlName="preShiftDelayStartMinutes"
+                                    (blur)="specifc('preShiftDelayStartMinutes','preShiftSpecificStartMinutes','pre')"
+                                    type="number" [placeholder]="''">
+                            </mat-form-field>
+                            <!-- <mat-form-field class=" w-full text-lg h-13" appearance="outline">
+            <mat-icon class="" matPrefix svgIcon="mat_outline:info"></mat-icon>
+            <input matInput type="number" [placeholder]="''">
+          </mat-form-field> -->
+
+                            <div>
+                                <mat-form-field class=" w-full text-lg h-13" appearance="outline">
+                                    <mat-label class="label-font-size">{{t('minimum')}}</mat-label>
+                                    <mat-icon class="" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                                    <input formControlName="preShiftMinimumDays" matInput type="number"
+                                        [placeholder]="''"
+                                        (change)="otminmax('preShiftMinimumDays','preShiftMaximumDays', 1)">
+                                </mat-form-field>
+                                @if (isPreErr) {
+                                <div class="text-red-400 " required>minimum field should not be greaterthan maximum
+                                    field
+                                </div>
+                                }
+                            </div>
+                            <mat-form-field class=" w-full text-lg" appearance="outline">
+                                <mat-label class="label-font-size">{{t('maximum')}}</mat-label>
+                                <mat-icon class="" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                                <input formControlName="preShiftMaximumDays" matInput type="number" [placeholder]="''"
+                                    (change)="otminmax('preShiftMinimumDays','preShiftMaximumDays', 1)">
+                            </mat-form-field>
+                            <mat-form-field class=" w-full text-lg" appearance="outline">
+                                <mat-label class="label-font-size">{{t('step')}}</mat-label>
+                                <mat-icon class="" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                                <input formControlName="preShiftStepDays" matInput type="number" [placeholder]="''">
+                            </mat-form-field>
+                            @if (categoryForm.value.overtimeTypeId==0 || categoryForm.value.overtimeTypeId==105 ||
+                            categoryForm.value.overtimeTypeId!==104) {
+                            <mat-form-field class=" w-full text-lg" appearance="outline">
+                                <mat-label class="label-font-size">{{t('expirationInDaysPreShift')}}</mat-label>
+                                <mat-icon class="" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                                <input formControlName="preShiftNumberOfDaysExpiration" matInput type="number"
+                                    [placeholder]="''">
+                            </mat-form-field>
+                            }
+                            <app-dropdown [isFix]="true" [hidden]="showhide(categoryForm.value.overtimeTypeId)"
+                                [control]="categoryForm.get('preShiftExpirationBasis')" [all]="false"
+                                [options]="dropdownOptions.offsetTypepDef" [icon]="'mat_outline:info'" [type]="78">
+                            </app-dropdown>
+
+
+                        </div>
+
+                        <div class="grid grid-cols-10 gap-2 h-13 mt-1"
+                            [hidden]="showhide(categoryForm.value.overtimeTypeId)">
+                            <mat-form-field class="w-full text-lg" appearance="outline">
+                                <mat-label class="label-font-size">{{t('enablePostShift')}}</mat-label>
+                                <mat-icon class="" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                                <mat-select class="text-lg" formControlName="enablePostShift" [placeholder]=""
+                                    (selectionChange)="Disablerd(['multiplePostShift','postShiftSpecificStartMinutes','postShiftMinimumDays','postShiftDelayStartMinutes','postShiftMaximumDays','postShiftStepDays','postShiftNumberOfDaysExpiration','postShiftExpirationBasis','postOtSetup','enablePostShift'],$event)">
+                                    <mat-option [value]="true">Yes</mat-option>
+                                    <mat-option [value]="false">No</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                            <mat-form-field class="w-full text-lg" appearance="outline">
+                                <mat-label class="label-font-size">{{t('multipleFilingPostShift')}}</mat-label>
+                                <mat-icon class="" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                                <mat-select class="text-lg" formControlName="multiplePostShift" [placeholder]="">
+                                    <mat-option [value]="true">Yes</mat-option>
+                                    <mat-option [value]="false">No</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                            <!-- <mat-form-field class="w-full text-lg" appearance="outline">
+          <mat-icon class="" matPrefix svgIcon="mat_outline:info"></mat-icon>
+          <mat-select class="text-lg" formControlName="postOtSetup" [placeholder]="'allow multiple filing'" >
+            <mat-option [value]="true">Yes</mat-option>
+            <mat-option [value]="false">No</mat-option>
+          </mat-select>
+        </mat-form-field> -->
+                            <app-dropdown [isFix]="true" [all]="false" [multiple]="false"
+                                [control]="categoryForm.get('postOtSetup')" [options]="dropdownOptions.beyondLogs"
+                                label="Allow Filing" [icon]="'mat_outline:info'" [type]="149"> </app-dropdown>
+
+                            <!-- minutes  -->
+                            <app-dropdown-custom [useControl]="true" [all]="true" [multiple]="true"
+                                [control]="categoryForm.get('postShiftSpecificStartMinutes')"
+                                [options]="dropdownOptions.durationdef" [type]="1057"></app-dropdown-custom>
+
+                            <mat-form-field class=" w-full text-lg h-13" appearance="outline">
+                                <mat-label class="label-font-size">{{t('otStartAfterShiftEndMin')}}</mat-label>
+                                <mat-icon class="" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                                <input matInput formControlName="postShiftDelayStartMinutes" type="number"
+                                    (blur)="specifc('postShiftDelayStartMinutes','postShiftSpecificStartMinutes','post')"
+                                    [placeholder]="''">
+                            </mat-form-field>
+
+                            <!-- <mat-form-field class=" w-full text-lg h-13" appearance="outline">
+        <mat-icon class="" matPrefix svgIcon="mat_outline:info"></mat-icon>
+        <input matInput type="number" [placeholder]="''">
+      </mat-form-field> -->
+
+                            <div>
+                                <mat-form-field class=" w-full text-lg h-13" appearance="outline">
+                                    <mat-label class="label-font-size">{{t('minimum')}}</mat-label>
+                                    <mat-icon class="" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                                    <input formControlName="postShiftMinimumDays" matInput type="number"
+                                        [placeholder]="''"
+                                        (change)="otminmax('postShiftMinimumDays','postShiftMaximumDays', 2)">
+                                </mat-form-field>
+                                @if (isPostErr) {
+                                <div class="text-red-400 " required>minimum field should not be greaterthan maximum
+                                    field
+                                </div>
+                                }
+                            </div>
+                            <mat-form-field class=" w-full text-lg" appearance="outline">
+                                <mat-label class="label-font-size">{{t('maximum')}}</mat-label>
+                                <mat-icon class="" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                                <input formControlName="postShiftMaximumDays" matInput type="number" [placeholder]="''"
+                                    (change)="otminmax('postShiftMinimumDays','postShiftMaximumDays', 2)">
+                            </mat-form-field>
+                            <mat-form-field class=" w-full text-lg" appearance="outline">
+                                <mat-label class="label-font-size">{{t('step')}}</mat-label>
+                                <mat-icon class="" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                                <input formControlName="postShiftStepDays" matInput type="number" [placeholder]="''">
+                            </mat-form-field>
+                            @if (categoryForm.value.overtimeTypeId==0 || categoryForm.value.overtimeTypeId==105 ||
+                            categoryForm.value.overtimeTypeId!==104) {
+                            <mat-form-field class=" w-full text-lg" appearance="outline">
+                                <mat-label class="label-font-size">{{t('expirationInDaysPostShift')}}</mat-label>
+                                <mat-icon class="" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                                <input formControlName="postShiftNumberOfDaysExpiration" matInput type="number"
+                                    [placeholder]="''">
+                            </mat-form-field>
+                            }
+
+                            <app-dropdown [isFix]="true" [hidden]="showhide(categoryForm.value.overtimeTypeId)"
+                                [control]="categoryForm.get('postShiftExpirationBasis')"
+                                [options]="dropdownOptions.offsetTypepDef" [icon]="'mat_outline:info'" [type]="78">
+                            </app-dropdown>
+
+                        </div>
+
+                        <div class="grid grid-cols-8 gap-2 h-16 mt-1"
+                            [hidden]="showhide(categoryForm. value.overtimeTypeId)">
+                            <mat-form-field class="w-full text-lg" appearance="outline">
+                                <mat-label class="label-font-size">{{t('enableRDHoliday')}}</mat-label>
+                                <mat-icon class="" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                                <mat-select class="text-lg" formControlName="enableRDHoliday" [placeholder]=""
+                                    (selectionChange)="Disablerd(['multipleRDHoliday','rdHolidaySpecificStartMinutes','rdHolidayMinimumDays','rdHolidayDelayStartMinutes','rdHolidayMaximumDays','rdHolidayStepDays','rdHolidayNumberOfDaysExpiration','rdHolidayRDHolidayExpirationBasis','rdOtSetup','enableRDHoliday'],$event)">
+                                    <mat-option [value]="true">Yes</mat-option>
+                                    <mat-option [value]="false">No</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                            <mat-form-field class="w-full text-lg" appearance="outline">
+                                <mat-label class="label-font-size">{{t('multipleFilingRdHoliday')}}</mat-label>
+                                <mat-icon class="" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                                <mat-select class="text-lg" formControlName="multipleRDHoliday" [placeholder]="">
+                                    <mat-option [value]="true">Yes</mat-option>
+                                    <mat-option [value]="false">No</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+
+                            <app-dropdown [isFix]="true" [all]="false" [multiple]="false"
+                                [control]="categoryForm.get('rdOtSetup')" [options]="dropdownOptions.beyondLogs"
+                                [icon]="'mat_outline:info'" label="Allow Filing" [type]="149"> </app-dropdown>
+
+                            <!-- <mat-form-field class=" w-full text-lg h-13" appearance="outline">
+      <mat-icon class="" matPrefix svgIcon="mat_outline:info"></mat-icon>
+      <input matInput formControlName="rdHolidayDelayStartMinutes" type="number" [placeholder]="''">
+    </mat-form-field> -->
+
+                            <!-- minutes  -->
+                            <!-- <app-dropdown-custom [useControl]="true" [all]="true" [multiple]="true"  [control]="categoryForm.get('rdHolidaySpecificStartMinutes')" [options]="dropdownOptions.durationdef" [type]="1057"></app-dropdown-custom> -->
+
+                            <!-- <mat-form-field class=" w-full text-lg h-13" appearance="outline">
+    <mat-icon class="" matPrefix svgIcon="mat_outline:info"></mat-icon>
+    <input matInput type="number" [placeholder]="''">
+  </mat-form-field> -->
+
+                            <div>
+                                <mat-form-field class=" w-full text-lg h-13" appearance="outline">
+                                    <mat-label class="label-font-size">{{t('minimum')}}</mat-label>
+                                    <mat-icon class="" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                                    <input formControlName="rdHolidayMinimumDays" matInput type="number"
+                                        [placeholder]="''"
+                                        (change)="otminmax('rdHolidayMinimumDays','rdHolidayMaximumDays', 3)">
+                                </mat-form-field>
+                                @if (isRDErr) {
+                                <div class="text-red-400 " required>minimum field should not be greaterthan maximum
+                                    field
+                                </div>
+                                }
+                            </div>
+
+                            <mat-form-field class=" w-full text-lg" appearance="outline">
+                                <mat-label class="label-font-size">{{t('maximum')}}</mat-label>
+                                <mat-icon class="" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                                <input formControlName="rdHolidayMaximumDays" matInput type="number" [placeholder]="''"
+                                    (change)="otminmax('rdHolidayMinimumDays','rdHolidayMaximumDays', 3)">
+                            </mat-form-field>
+
+                            <mat-form-field class=" w-full text-lg" appearance="outline">
+                                <mat-label class="label-font-size">{{t('step')}}</mat-label>
+                                <mat-icon class="" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                                <input formControlName="rdHolidayStepDays" matInput type="number" [placeholder]="''">
+                            </mat-form-field>
+
+                            @if (categoryForm.value.overtimeTypeId==0 || categoryForm.value.overtimeTypeId==105 ||
+                            categoryForm.value.overtimeTypeId !==104) {
+                            <mat-form-field class=" w-full text-lg" appearance="outline">
+                                <mat-label class="label-font-size">{{t('expirationInDaysRdHoliday')}}</mat-label>
+                                <mat-icon class="" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                                <input formControlName="rdHolidayNumberOfDaysExpiration" matInput type="number"
+                                    [placeholder]="''">
+                            </mat-form-field>
+                            }
+
+                            <app-dropdown [isFix]="true" [hidden]="showhide(categoryForm. value.overtimeTypeId)"
+                                [control]="categoryForm.get('rdHolidayRDHolidayExpirationBasis')"
+                                [options]="dropdownOptions.offsetTypepDef" [icon]="'mat_outline:info'" [type]="78">
+                            </app-dropdown>
+                        </div>
+                    </form>
+                </mat-tab>
+                <mat-tab label="Leave">
+                    <app-card-title title="Approval and Restriction(Leave)"></app-card-title><br>
+                    @for (item of LeaveList; track item; let i = $index) {
+                    <div class="grid grid-cols-7 gap-2 h-15 ">
+                        <mat-form-field class="w-full text-lg" appearance="outline">
+                            <!-- <mat-label class="label-font-size">{{ t('enableLeaveItemName', { item: { leaveName: item.leaveName } }) }}</mat-label> -->
+                            <mat-label class="label-font-size">Enable {{item.leaveName}}</mat-label>
+                            <mat-select class="text-lg" [placeholder]="" [(ngModel)]="item.enableLeave">
+                                <mat-option [value]="true">Yes</mat-option>
+                                <mat-option [value]="false">No</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                        <mat-form-field class=" w-full text-lg" appearance="outline">
+                            <mat-label class="label-font-size">{{t('description')}}</mat-label>
+                            <mat-icon class="" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                            <input [(ngModel)]="item.leaveDescription" matInput type="text" [placeholder]="''"
+                                [disabled]="true">
+                        </mat-form-field>
+                        <mat-form-field class=" w-full text-lg" appearance="outline">
+                            <mat-label class="label-font-size">{{t('canFileDaysBeforeLeave')}}</mat-label>
+                            <mat-icon class="" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                            <input [(ngModel)]="item.categoryLeaveBefore" matInput type="number" [placeholder]="''"
+                                [disabled]="!item.enableLeave || item.categoryLeaveAfter">
+                        </mat-form-field>
+                        <mat-form-field class=" w-full text-lg" appearance="outline">
+                            <mat-label class="label-font-size">{{t('canFileDaysAfterLeave')}}</mat-label>
+                            <mat-icon class="" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                            <input [(ngModel)]="item.categoryLeaveAfter" matInput type="number" [placeholder]="''"
+                                [disabled]="!item.enableLeave || item.categoryLeaveBefore">
+                        </mat-form-field>
+                        <app-dropdown [isFix]="true" [useControl]="false" [disabled]="!item.enableLeave"
+                            (selected)="item.categoryLeaveRequired = $event" [value]="item.categoryLeaveRequired"
+                            [all]="false" [options]="dropdownOptions.emprequirdef" [icon]="'mat_outline:info'"
+                            label="Required" [type]="131"> </app-dropdown>
+                        <app-dropdown [isFix]="true" [useControl]="false" [disabled]="!item.enableLeave"
+                            (selected)="item.leaveLateFilling = $event" [value]="item.leaveLateFilling" [all]="false"
+                            [options]="dropdownOptions.allowedfilingdef" [icon]="'mat_outline:info'"
+                            label="Allow Late Filing" [type]="131"> </app-dropdown>
+                        <app-dropdown [isFix]="true" [useControl]="false" [disabled]="!item.enableLeave"
+                            (selected)="item.leaveLateCancellation = $event" [value]="item.leaveLateCancellation"
+                            [all]="false" [options]="dropdownOptions.allowedfilingdef" [icon]="'mat_outline:info'"
+                            label="Allow Late Cancellation" [type]="131"> </app-dropdown>
+                    </div>
+                    }
+
+                </mat-tab>
+                <mat-tab label="Approval">
+                    <section class="example-container mat-elevation-z0" tabindex="0">
+                        <table mat-table [dataSource]="dataSource" class="mat-elevation-z0">
+
+                            <ng-container matColumnDef="module">
+                                <th mat-header-cell class="text-lg" *matHeaderCellDef> Module </th>
+                                <td mat-cell class=" " *matCellDef="let element"> {{element.moduleDescription}} </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="sub_module">
+                                <th mat-header-cell class="text-lg" *matHeaderCellDef> Sub Module </th>
+                                <td mat-cell class=" " *matCellDef="let element"> {{element.subModuleDescription}} </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="approval_process">
+                                <th mat-header-cell class="text-lg pl-[85px]" *matHeaderCellDef> Approval Process </th>
+                                <td mat-cell class="pt-2" *matCellDef="let element">
+                                    <div class="h-13">
+                                        <app-dropdown-custom
+                                            [class.error-border]="approvalRegInvalid && element.moduleId === 185"
+                                            [objectValue]="false" [value]="element.approvalId" [useControl]="false"
+                                            [all]="false" [multiple]="false" (selected)="element.approvalId=$event"
+                                            [options]="dropdownOptions.approvalDef" [type]="1045"></app-dropdown-custom>
+                                    </div>
+                                </td>
+                            </ng-container>
+
+                            <tr mat-header-row class="pr-1" *matHeaderRowDef="displayedColumns ; sticky : true"></tr>
+                            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                        </table>
+                    </section>
+                </mat-tab>
+            </mat-tab-group>
+        </mat-card>
+    </div>
+</div>

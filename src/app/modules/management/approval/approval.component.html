@@ -1,0 +1,338 @@
+<div class="flex flex-col flex-auto min-w-0" *transloco="let t">
+    <!-- Main -->
+    <div class="flex-auto sm:p-2 w-full min-w-0 sm:absolute sm:inset-0 sm:overflow-auto text-lg">
+        <mat-card class="body-card">
+            <app-card-title title="Approval"></app-card-title>
+                <mat-tab-group class="child-mat-tab-group" mat-stretch-tabs="false">
+                    <mat-tab class="child-mat-tab">
+                        <ng-template mat-tab-label>
+                            <mat-icon class="mb-2" matPrefix svgIcon="mat_outline:thumb_up"></mat-icon>
+                            <span class="ml-1">Approval</span>
+                        </ng-template>
+
+                        @if (radiobuttons) {
+                        <mat-radio-group aria-label="Select an option"
+                            class="flex flex-row gap-11 h-10 justify-items-center" [(ngModel)]="moduleIdSelected" (change)="ChangeModule(item)">
+                            @for (item of radiobuttons; track item) {
+                            <div class="radio" (change)="ChangeModule(item)">
+                                <mat-radio-button class="w-full" color="primary" matBadgeSize="medium"
+                                    [matBadge]="item.count" (change)="ChangeModule(item)" [value]="item.moduleId"  [ngClass]="getBadgeClass(item.count)"
+                                    matBadgeColor="primary" matBadgeOverlap="false">
+                                    {{item.moduleName}} </mat-radio-button>
+                            </div>
+                            }
+                        </mat-radio-group>
+                        }
+
+                        <form [formGroup]="approvalForm">
+
+                            <div class="grid grid-cols-7 gap-2 pt-2">
+
+                                <mat-form-field class="w-full text-lg" appearance="outline">
+                                    <mat-label class="label-font-size">{{t('dateFrom')}}</mat-label>
+                                    <input formControlName="dateFrom" [max]="approvalForm.controls['dateTo'].value"
+                                        matInput [matDatepicker]="df" readonly [placeholder]="'MM/DD/YYYY'"
+                                        (click)="df.open()">
+                                    <mat-datepicker-toggle matSuffix [for]="df"></mat-datepicker-toggle>
+                                    <mat-datepicker #df></mat-datepicker>
+                                </mat-form-field>
+
+                                <mat-form-field class="w-full text-lg" appearance="outline">
+                                    <mat-label class="label-font-size">{{t('dateTo')}}</mat-label>
+                                    <input formControlName="dateTo" [min]="approvalForm.controls['dateFrom'].value"
+                                        matInput [matDatepicker]="dt" readonly [placeholder]="'MM/DD/YYYY'"
+                                        (click)="dt.open()">
+                                    <mat-datepicker-toggle matSuffix [for]="dt"></mat-datepicker-toggle>
+                                    <mat-datepicker #dt></mat-datepicker>
+                                </mat-form-field>
+
+                                <app-dropdown-custom (selected)="selectEmployee($event)" [options]="employee"
+                                    [control]="approvalForm.get('employee')" [all]="true" [multiple]="true"
+                                    [value]="HisMid" [customRequest]="dropdownRequestEmployee" [type]="1051"
+                                    [useControl]="true"></app-dropdown-custom>
+
+                                @if(codefiling){
+                                    <app-dropdown-custom [options]="filingcodeOption"
+                                    [control]="approvalForm.get('code')" [all]="true" [multiple]="true" [label]="t('filingCode')"
+                                    [type]="1059" [useControl]="true"></app-dropdown-custom>
+                                }
+
+                                <!-- <mat-form-field appearance="outline">
+                                    <mat-label class="label-font-size">{{t('filingCode')}}</mat-label>
+                                    <mat-icon class="mb-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                                    <mat-select multiple formControlName="code">
+                                        @for (item of codes; track item) {
+                                        <mat-option [value]="item.dropdownID">{{item.description}}</mat-option>
+                                        }
+                                    </mat-select>
+                                </mat-form-field> -->
+
+
+                                <div class="grid grid-cols-3 gap-2 w-90">
+                                    @if(moduleId?.moduleId !== 185){
+                                        <button class="text-md" mat-flat-button color="primary" aria-label="example icon"
+                                        (click)="search()">
+                                        <mat-icon class="mb-2" svgIcon="mat_outline:search"></mat-icon><span
+                                            class="ml-2">Search</span>
+                                    </button>
+                                    <button (click)="openModalApprove()" class="text-md" mat-flat-button color="primary"
+                                        aria-label="example icon">
+                                        <mat-icon class="mb-2"
+                                            svgIcon="heroicons_outline:hand-thumb-up"></mat-icon><span
+                                            class="ml-2">Approve</span>
+                                    </button>
+                                    <button (click)="openModalDissapprove()" class="text-md" mat-flat-button
+                                        color="warn" aria-label="example icon">
+                                        <mat-icon class="ml-1 mb-2"
+                                            svgIcon="heroicons_outline:hand-thumb-down"></mat-icon>
+                                            <span class="ml-2">Disapprove</span>
+                                    </button>
+                                    }@else{
+                                        <!-- Regularization -->
+
+                                        <button (click)="openRegularization(1)" class="text-md" mat-flat-button class="color-regularize">
+                                            <mat-icon class="mb-2"  svgIcon="feather:user-check"></mat-icon><span
+                                            class="ml-2">Regularize</span>
+                                        </button>
+
+                                        <button (click)="openRegularization(2)" class="text-md" mat-flat-button color="warn">
+                                            <mat-icon class="mb-2" svgIcon="feather:user-x"></mat-icon>
+                                            <span class="ml-2">Terminate</span>
+                                        </button>
+
+                                        <button (click)="openRegularization(3)" class="text-md" mat-flat-button class="color-extend">
+                                            <mat-icon class="mb-2" svgIcon="feather:user-plus"></mat-icon>
+                                            <span class="ml-2">Extend</span>
+                                        </button>
+                                    }
+                                </div>
+
+                            </div>
+                        </form>
+
+                        <section class="mat-elevation-z0 z-10">
+                            <table mat-table [dataSource]="data" class="mat-elevation-z0 border">
+
+                                <!-- <ng-container matColumnDef="checkbox">
+                                    <th mat-header-cell *matHeaderCellDef><mat-checkbox color="primary"
+                                            (change)="selectAll($event,0)" [checked]="itemChecked(true,0)"
+                                            class="example-margin"></mat-checkbox></th>
+                                    <td mat-cell *matCellDef="let element;let i=index"><mat-checkbox
+                                            [checked]="itemChecked(false,i)" (change)="selectOne($event,i)"
+                                            color="primary" class="example-margin"></mat-checkbox></td>
+                                </ng-container> -->
+
+                                <ng-container matColumnDef="checkbox">
+                                    <th mat-header-cell *matHeaderCellDef><mat-checkbox color="primary"
+                                            (change)="selectAll($event,0)" [checked]="itemChecked(true,0)" class="example-margin"></mat-checkbox></th>
+                                    <td mat-cell *matCellDef="let element;let i=index">
+                                        @if(!element?.child){
+                                            <mat-checkbox
+                                            [checked]="itemChecked(false,i)" (change)="selectOne($event,i)" color="primary"
+                                            class="example-margin">
+                                        </mat-checkbox>
+                                        }
+                                    </td>
+                                </ng-container>
+
+                                <!-- <ng-container matColumnDef="action">
+                                    <th class="text-center" mat-header-cell *matHeaderCellDef></th>
+                                    <td mat-cell *matCellDef="let element; let i = index"> -->
+                                        <!-- <button type="button" class="open_" (click)="handleDeleteBreak(i)"
+                            mat-icon-button color="primary">
+                            <mat-icon class="" matSuffix svgIcon="open_in_new"></mat-icon>
+                          </button> -->
+                                    <!-- </td>
+                                </ng-container> -->
+
+
+                                <ng-container matColumnDef="action">
+                                    <th class="text-center" mat-header-cell *matHeaderCellDef></th>
+                                    <td mat-cell *matCellDef="let element; let i = index">
+                                        <button mat-icon-button [matMenuTriggerFor]="menu">
+                                            <mat-icon class="mt-4 icon-size-6">more_vert</mat-icon>
+                                        </button>
+                                        <mat-menu #menu="matMenu">
+                                            <button mat-menu-item (click)="regularization(1, element)">
+                                                <mat-icon class="mt-4 icon-size-5" svgIcon="feather:user-check" color="primary"></mat-icon>
+                                                <span color="primary">Regularize</span></button>
+                                            <button mat-menu-item (click)="regularization(2, element)">
+                                                <mat-icon class="mt-4 icon-size-5" svgIcon="feather:user-plus" color="accent"></mat-icon>
+                                                <span color="primary">Extend</span></button>
+                                            <button mat-menu-item (click)="regularization(3, element)">
+                                                <mat-icon class="mt-4 icon-size-5" svgIcon="feather:user-x" color="warn"></mat-icon>
+                                                <span color="primary">Terminate</span></button>
+                                        </mat-menu>
+                                    </td>
+                                </ng-container>
+
+                                @for (column of displayedColumns; track column) {
+                                <ng-container [matColumnDef]="column.columnDef">
+                                    <th mat-header-cell *matHeaderCellDef="let i = index"> {{column.column}} </th>
+                                    <td mat-cell *matCellDef="let element"> {{element[column.columnDef]}} </td>
+                                </ng-container>
+                                }
+
+                                <ng-container matColumnDef="attachment">
+                                    <th mat-header-cell *matHeaderCellDef></th>
+                                    <td mat-cell *matCellDef="let element; let i = index">
+                                        @if (!element.uploadPath && moduleId?.moduleId != 52) {
+                                        <!-- <button mat-icon-button disabled color="primary" class="mt-2">
+                                            <mat-icon class="icon-size-6 : mb-2">download</mat-icon>
+                                        </button> -->
+                                            @if(!element?.child){
+                                                <div class="relative w-10">
+                                                    <mat-icon matTooltip="Download Attachment" class="icon-size-5 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">download</mat-icon>
+                                                </div>
+                                            }
+                                            @if(element?.child){
+                                                <div class="relative w-10 pt-6 pb-6">
+                                                    <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"></div>
+                                                </div>
+                                            }
+                                        }
+                                        @if (element.uploadPath || moduleId?.moduleId == 52) {
+                                        <!-- <button mat-icon-button color="primary" class="mt-2" (click)="download(element,moduleId?.moduleId)"
+                                            matTooltip="Download Attachment">
+                                            <mat-icon class="icon-size-6 : mb-2">download</mat-icon>
+                                        </button> -->
+
+                                            @if(!element?.child){
+                                                <div class="relative w-10">
+                                                    <mat-icon color="primary"  (click)="download(element,moduleId?.moduleId)" matTooltip="Download Attachment" class="icon-size-5 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 cursor-pointer">download</mat-icon>
+                                                </div>
+                                            }
+                                            @if(element?.child){
+                                                <div class="relative w-10 mt-3 mb-3">
+                                                    <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"></div>
+                                                </div>
+                                            }
+                                        }
+                                    </td>
+                                </ng-container>
+
+                                <tr mat-header-row *matHeaderRowDef="columnsToDisplay; sticky: true"></tr>
+                                <tr mat-row *matRowDef="let row; columns: columnsToDisplay;"></tr>
+                            </table>
+                        </section>
+
+                        <mat-paginator [pageSize]="request.Length" [pageIndex]="request.Start" [length]="AtotalRows"
+                            [pageSizeOptions]="[20, 50, 100]" showFirstLastButtons
+                            (page)="handlePageEvent($event)"></mat-paginator>
+
+                    </mat-tab>
+
+                    <mat-tab class="child-mat-tab">
+                        <ng-template mat-tab-label>
+                            <mat-icon class="mb-2" matPrefix svgIcon="mat_solid:history"></mat-icon>
+                            <span class="ml-1">History</span>
+                        </ng-template>
+                        <form [formGroup]="historyForm">
+
+                            <div class="grid grid-cols-7 gap-2">
+
+                                <mat-form-field appearance="outline">
+                                    <mat-label class="label-font-size">{{t('filingType')}}</mat-label>
+                                    <mat-icon class="mb-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                                    <mat-select formControlName="code" (selectionChange)="loadEmployees()">
+                                        @for (item of filing; track item) {
+                                        <mat-option [value]="item.dropdownID">{{item.description}}</mat-option>
+                                        }
+                                    </mat-select>
+                                </mat-form-field>
+
+                                @if (isHistoryLoaded) {
+                                <div>
+                                    <app-dropdown-custom [options]="employeeHistory"
+                                        [control]="historyForm.get('employee')" [all]="true" [multiple]="true"
+                                        [value]="ApMid" [type]="1052" [useControl]="true"
+                                        [customRequest]="customRequest"></app-dropdown-custom>
+                                </div>
+                                }
+
+                                <!-- <app-dropdown-custom [options]="employeeHistory" [control]="historyForm.get('employee')" [all]="true" [multiple]="true" [value]="ApMid" [type]="1052" [useControl]="true"></app-dropdown-custom> -->
+
+                                <mat-form-field class="w-full text-lg" appearance="outline">
+                                    <mat-label class="label-font-size">{{t('dateFrom')}}</mat-label>
+                                    <input formControlName="dateFrom" [max]="approvalForm.controls['dateTo'].value"
+                                        matInput [matDatepicker]="hdf" readonly [placeholder]="'MM/DD/YYYY'"
+                                        (click)="hdf.open()">
+                                    <mat-datepicker-toggle matSuffix [for]="hdf"></mat-datepicker-toggle>
+                                    <mat-datepicker #hdf></mat-datepicker>
+                                </mat-form-field>
+
+                                <mat-form-field class="w-full text-lg" appearance="outline">
+                                    <mat-label class="label-font-size">{{t('dateTo')}}</mat-label>
+                                    <input formControlName="dateTo" [min]="approvalForm.controls['dateFrom'].value"
+                                        matInput [matDatepicker]="hdt" readonly [placeholder]="'MM/DD/YYYY'"
+                                        (click)="hdt.open()">
+                                    <mat-datepicker-toggle matSuffix [for]="hdt"></mat-datepicker-toggle>
+                                    <mat-datepicker #hdt></mat-datepicker>
+                                </mat-form-field>
+
+                                <div class="grid grid-cols-3 gap-2 w-90 button-margin-top">
+                                    <button class="text-md" mat-flat-button color="primary" aria-label="example icon"
+                                        (click)="searchHistory()">
+                                        <mat-icon class="mb-2" svgIcon="mat_outline:search"></mat-icon><span
+                                            class="ml-2">Search</span>
+                                    </button>
+                                </div>
+
+                            </div>
+
+
+
+                        </form>
+
+                        <section class="mat-elevation-z0 z-10">
+                            <table mat-table [dataSource]="dataHistory" class="border">
+
+                                <!-- <ng-container matColumnDef="action">
+                          <th class="text-center" mat-header-cell *matHeaderCellDef></th>
+                          <td mat-cell *matCellDef="let element; let i = index">
+                            <button type="button" class="open_" (click)="handleDeleteBreak(i)"
+                              mat-icon-button color="primary">
+                              <mat-icon class="" matSuffix svgIcon="open_in_new"></mat-icon>
+                            </button>
+                          </td>
+                        </ng-container> -->
+
+                                <ng-container matColumnDef="attachment">
+                                    <th mat-header-cell *matHeaderCellDef></th>
+                                    <td mat-cell *matCellDef="let element; let i = index">
+                                        @if (!element.uploadPath && historyForm.value.code != 52) {
+                                        <button mat-icon-button disabled color="primary" class="mt-2">
+                                            <mat-icon class="mb-2">download</mat-icon>
+                                        </button>
+                                        }
+
+                                        @if (element.uploadPath || historyForm.value.code == 52) {
+                                        <button mat-icon-button color="primary" class="mt-2"
+                                            (click)="download(element,historyForm.value.code)"
+                                            matTooltip="Download Attachment">
+                                            <mat-icon class="mb-2">download</mat-icon>
+                                        </button>
+                                        }
+                                    </td>
+                                </ng-container>
+
+                                @for (column of displayedColumnsH; track column) {
+                                <ng-container [matColumnDef]="column.columnDef">
+                                    <th mat-header-cell *matHeaderCellDef="let i = index"> {{column.column}} </th>
+                                    <td mat-cell *matCellDef="let element"> {{element[column.columnDef]}} </td>
+                                </ng-container>
+                                }
+
+                                <tr mat-header-row *matHeaderRowDef="columnsToDisplayH; sticky: true"></tr>
+                                <tr mat-row *matRowDef="let row; columns: columnsToDisplayH;"></tr>
+                            </table>
+                        </section>
+                        <mat-paginator [pageSize]="requestHistory.Length" [pageIndex]="requestHistory.Start"
+                            [length]="HtotalRows" [pageSizeOptions]="[20, 50, 100]" showFirstLastButtons
+                            (page)="handlePageHistoryEvent($event)"></mat-paginator>
+                    </mat-tab>
+                </mat-tab-group>
+
+        </mat-card>
+    </div>
+</div>

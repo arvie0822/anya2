@@ -1,0 +1,434 @@
+<div class="flex-auto p-6 sm:p-6 overflow-y-auto">
+  <!-- Main -->
+  <div class="flex-auto sm:p-2  w-full min-w-0 sm:absolute sm:inset-0 sm:overflow-auto text-md">
+
+    <table #tableId mat-table [dataSource]="dt" class="mat-elevation-z0 border">
+
+      @if (error) {
+        <ng-container matColumnDef="errorLogs">
+          <th class="pl-2 pr-2" mat-header-cell *matHeaderCellDef> Error Logs </th>
+          <td class="pl-2 pr-2 pb-2" mat-cell *matCellDef="let element"
+            [ngClass]="{'txt':highligthError(element)}">{{element.errorLogs}}
+          </td>
+        </ng-container>
+      }
+
+      <ng-container matColumnDef="employeeCode">
+        <th mat-header-cell *matHeaderCellDef> Emp ID </th>
+        <td mat-cell *matCellDef="let element" [ngClass]="{'txt':highligthError(element)}">
+          {{element.employeeCode}}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="employeeName">
+        <th mat-header-cell *matHeaderCellDef> Employee Name </th>
+        <td mat-cell *matCellDef="let element" [ngClass]="{'txt':highligthError(element)}">
+          {{element.employeeName}}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="date">
+        <th mat-header-cell *matHeaderCellDef> Date </th>
+        <td mat-cell *matCellDef="let element" [ngClass]="{'txt':highligthError(element)}">{{element.date}}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="restDay">
+        <th mat-header-cell *matHeaderCellDef> RD </th>
+        <td mat-cell *matCellDef="let element" [ngClass]="{'txt':highligthError(element)}">
+          {{element.restDay}}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="scheduleIn">
+        <th mat-header-cell *matHeaderCellDef> Schedule In </th>
+        <td mat-cell *matCellDef="let element" [ngClass]="{'txt':highligthError(element)}">
+          {{element.scheduleIn}}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="scheduleOut">
+        <th mat-header-cell *matHeaderCellDef> Schedule Out </th>
+        <td mat-cell *matCellDef="let element" [ngClass]="{'txt':highligthError(element)}">
+          {{element.scheduleOut}}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="timeIn">
+        <th mat-header-cell *matHeaderCellDef> Time In </th>
+        <td mat-cell *matCellDef="let element" [ngClass]="{'txt':highligthError(element)}">
+          {{element.timeIn}}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="timeOut">
+        <th mat-header-cell *matHeaderCellDef> Time Out </th>
+        <td mat-cell *matCellDef="let element" [ngClass]="{'txt':highligthError(element)}">
+          {{element.timeOut}}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="reg">
+        <th mat-header-cell *matHeaderCellDef> Reg Days </th>
+        <td mat-cell *matCellDef="let element" [ngClass]="{'txt':highligthError(element)}">
+          {{element.reg}}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="tardy">
+        <th mat-header-cell *matHeaderCellDef> Tardy </th>
+        <td mat-cell *matCellDef="let element" [ngClass]="{'txt':highligthError(element)}">
+          {{element.tardy}}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="undertime">
+        <th mat-header-cell *matHeaderCellDef> UT </th>
+        <td mat-cell *matCellDef="let element" [ngClass]="{'txt':highligthError(element)}">
+          {{element.undertime}}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="absent">
+        <th mat-header-cell *matHeaderCellDef> Absent </th>
+        <td mat-cell *matCellDef="let element" [ngClass]="{'txt':highligthError(element)}">
+          {{element.absent}}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="lwop">
+        <th class="pl-10" mat-header-cell *matHeaderCellDef> LWOP </th>
+        <td class="pl-10" mat-cell *matCellDef="let element" [ngClass]="{'txt':highligthError(element)}">
+          {{element.lwop}}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="vl">
+        <th class="pl-10" mat-header-cell *matHeaderCellDef> VL </th>
+        <td class="pl-10" mat-cell *matCellDef="let element" [ngClass]="{'txt':highligthError(element)}">
+          {{element.vl}}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="sl">
+        <th class="pl-10" mat-header-cell *matHeaderCellDef> SL </th>
+        <td class="pl-10" mat-cell *matCellDef="let element" [ngClass]="{'txt':highligthError(element)}">
+          {{element.sl}}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="pto">
+        <th class="pl-10" mat-header-cell *matHeaderCellDef> PTO </th>
+        <td class="pl-10" mat-cell *matCellDef="let element" [ngClass]="{'txt':highligthError(element)}">
+          {{element.pto}}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="ol">
+        <th class="pl-10" mat-header-cell *matHeaderCellDef> OTLV </th>
+        <td class="pl-10" mat-cell *matCellDef="let element" [ngClass]="{'txt':highligthError(element)}">
+          {{element.ol}}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="nd">
+        <th class="pl-10" mat-header-cell *matHeaderCellDef> ND </th>
+        <td class="pl-10" mat-cell *matCellDef="let element" [ngClass]="{'txt':highligthError(element)}">
+          {{element.nd}}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="ot">
+        <th class="pl-10" mat-header-cell *matHeaderCellDef> RGOT </th>
+        <td class="pl-10" mat-cell *matCellDef="let element" [ngClass]="{'txt':highligthError(element)}">
+          {{element.ot}}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="otnd">
+        <th class="pl-10" mat-header-cell *matHeaderCellDef> RGOTND </th>
+        <td class="pl-10" mat-cell *matCellDef="let element" [ngClass]="{'txt':highligthError(element)}">
+          {{element.otnd}}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="lh">
+        <th class="pl-10" mat-header-cell *matHeaderCellDef> LHOT </th>
+        <td class="pl-10" mat-cell *matCellDef="let element" [ngClass]="{'txt':highligthError(element)}">
+          {{element.lh}}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="lhnd">
+        <th class="pl-10" mat-header-cell *matHeaderCellDef> LHOTND </th>
+        <td class="pl-10" mat-cell *matCellDef="let element" [ngClass]="{'txt':highligthError(element)}">
+          {{element.lhnd}}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="lhot">
+        <th class="pl-10" mat-header-cell *matHeaderCellDef> LHOT > 8 </th>
+        <td class="pl-10" mat-cell *matCellDef="let element" [ngClass]="{'txt':highligthError(element)}">
+          {{element.lhot}}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="lhndot">
+        <th class="pl-10" mat-header-cell *matHeaderCellDef> LHOTND > 8 </th>
+        <td class="pl-10" mat-cell *matCellDef="let element" [ngClass]="{'txt':highligthError(element)}">
+          {{element.lhndot}}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="lhrd">
+        <th class="pl-10" mat-header-cell *matHeaderCellDef> LHRD </th>
+        <td class="pl-10" mat-cell *matCellDef="let element" [ngClass]="{'txt':highligthError(element)}">
+          {{element.lhrd}}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="lhrdnd">
+        <th class="pl-10" mat-header-cell *matHeaderCellDef> LHRDND </th>
+        <td class="pl-10" mat-cell *matCellDef="let element" [ngClass]="{'txt':highligthError(element)}">
+          {{element.lhrdnd}}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="lhrdot">
+        <th class="pl-10" mat-header-cell *matHeaderCellDef> LHRD > 8 </th>
+        <td class="pl-10" mat-cell *matCellDef="let element" [ngClass]="{'txt':highligthError(element)}">
+          {{element.lhrdot}}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="lhrdndot">
+        <th class="pl-10" mat-header-cell *matHeaderCellDef> LHRDND > 8 </th>
+        <td class="pl-10" mat-cell *matCellDef="let element" [ngClass]="{'txt':highligthError(element)}">
+          {{element.lhrdndot}}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="sh">
+        <th class="pl-10" mat-header-cell *matHeaderCellDef> SHOT </th>
+        <td class="pl-10" mat-cell *matCellDef="let element" [ngClass]="{'txt':highligthError(element)}">
+          {{element.sh}}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="shnd">
+        <th class="pl-10" mat-header-cell *matHeaderCellDef> SHOTND </th>
+        <td class="pl-10" mat-cell *matCellDef="let element" [ngClass]="{'txt':highligthError(element)}">
+          {{element.shnd}}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="shot">
+        <th class="pl-10" mat-header-cell *matHeaderCellDef> SHOT > 8 </th>
+        <td class="pl-10" mat-cell *matCellDef="let element" [ngClass]="{'txt':highligthError(element)}">
+          {{element.shot}}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="shndot">
+        <th class="pl-10" mat-header-cell *matHeaderCellDef> SHOTND > 8 </th>
+        <td class="pl-10" mat-cell *matCellDef="let element" [ngClass]="{'txt':highligthError(element)}">
+          {{element.shndot}}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="shrd">
+        <th class="pl-10" mat-header-cell *matHeaderCellDef> SHRD </th>
+        <td class="pl-10" mat-cell *matCellDef="let element" [ngClass]="{'txt':highligthError(element)}">
+          {{element.shrd}}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="shrdnd">
+        <th class="pl-10" mat-header-cell *matHeaderCellDef> SHRDND </th>
+        <td class="pl-10" mat-cell *matCellDef="let element" [ngClass]="{'txt':highligthError(element)}">
+          {{element.shrdnd}}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="shrdot">
+        <th class="pl-10" mat-header-cell *matHeaderCellDef> SHRD > 8 </th>
+        <td class="pl-10" mat-cell *matCellDef="let element" [ngClass]="{'txt':highligthError(element)}">
+          {{element.shrdot}}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="shrdndot">
+        <th class="pl-10" mat-header-cell *matHeaderCellDef> SHRDND > 8 </th>
+        <td class="pl-10" mat-cell *matCellDef="let element" [ngClass]="{'txt':highligthError(element)}">
+          {{element.shrdndot}}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="rd">
+        <th class="pl-10" mat-header-cell *matHeaderCellDef> RDOT </th>
+        <td class="pl-10" mat-cell *matCellDef="let element" [ngClass]="{'txt':highligthError(element)}">
+          {{element.rd}}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="rdnd">
+        <th class="pl-10" mat-header-cell *matHeaderCellDef> RDOTND </th>
+        <td class="pl-10" mat-cell *matCellDef="let element" [ngClass]="{'txt':highligthError(element)}">
+          {{element.rdnd}}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="rdot">
+        <th class="pl-10" mat-header-cell *matHeaderCellDef> RDOT > 8 </th>
+        <td class="pl-10" mat-cell *matCellDef="let element" [ngClass]="{'txt':highligthError(element)}">
+          {{element.rdot}}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="rdndot">
+        <th class="pl-10" mat-header-cell *matHeaderCellDef> RDOTND > 8 </th>
+        <td class="pl-10" mat-cell *matCellDef="let element" [ngClass]="{'txt':highligthError(element)}">
+          {{element.rdndot}}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="dh">
+        <th class="pl-10" mat-header-cell *matHeaderCellDef> DHOT </th>
+        <td class="pl-10" mat-cell *matCellDef="let element" [ngClass]="{'txt':highligthError(element)}">
+          {{element.dh}}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="dhnd">
+        <th class="pl-10" mat-header-cell *matHeaderCellDef> DHOTND </th>
+        <td class="pl-10" mat-cell *matCellDef="let element" [ngClass]="{'txt':highligthError(element)}">
+          {{element.dhnd}}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="dhot">
+        <th class="pl-10" mat-header-cell *matHeaderCellDef> DHOT > 8 </th>
+        <td class="pl-10" mat-cell *matCellDef="let element" [ngClass]="{'txt':highligthError(element)}">
+          {{element.dhot}}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="dhndot">
+        <th class="pl-10" mat-header-cell *matHeaderCellDef> DHOTND > 8 </th>
+        <td class="pl-10" mat-cell *matCellDef="let element" [ngClass]="{'txt':highligthError(element)}">
+          {{element.dhndot}}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="dhrd">
+        <th class="pl-10" mat-header-cell *matHeaderCellDef> DHRD </th>
+        <td class="pl-10" mat-cell *matCellDef="let element" [ngClass]="{'txt':highligthError(element)}">
+          {{element.dhrd}}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="dhrdnd">
+        <th class="pl-10" mat-header-cell *matHeaderCellDef> DHRDND </th>
+        <td class="pl-10" mat-cell *matCellDef="let element" [ngClass]="{'txt':highligthError(element)}">
+          {{element.dhrdnd}}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="dhrdot">
+        <th class="pl-10" mat-header-cell *matHeaderCellDef> DHRD > 8 </th>
+        <td class="pl-10" mat-cell *matCellDef="let element" [ngClass]="{'txt':highligthError(element)}">
+          {{element.dhrdot}}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="dhrdndot">
+        <th class="pl-10" mat-header-cell *matHeaderCellDef> DHRDND > 8 </th>
+        <td class="pl-10" mat-cell *matCellDef="let element" [ngClass]="{'txt':highligthError(element)}">
+          {{element.dhrdndot}}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="ch">
+        <th class="pl-10" mat-header-cell *matHeaderCellDef> CHOT </th>
+        <td class="pl-10" mat-cell *matCellDef="let element" [ngClass]="{'txt':highligthError(element)}">
+          {{element.ch}}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="chnd">
+        <th class="pl-10" mat-header-cell *matHeaderCellDef> CHOTND </th>
+        <td class="pl-10" mat-cell *matCellDef="let element" [ngClass]="{'txt':highligthError(element)}">
+          {{element.chnd}}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="chot">
+        <th class="pl-10" mat-header-cell *matHeaderCellDef> CHOT > 8 </th>
+        <td class="pl-10" mat-cell *matCellDef="let element" [ngClass]="{'txt':highligthError(element)}">
+          {{element.chot}}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="chndot">
+        <th class="pl-10" mat-header-cell *matHeaderCellDef> CHOTND > 8 </th>
+        <td class="pl-10" mat-cell *matCellDef="let element" [ngClass]="{'txt':highligthError(element)}">
+          {{element.chndot}}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="chrd">
+        <th class="pl-10" mat-header-cell *matHeaderCellDef> CHRD </th>
+        <td class="pl-10" mat-cell *matCellDef="let element" [ngClass]="{'txt':highligthError(element)}">
+          {{element.chrd}}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="chrdnd">
+        <th class="pl-10" mat-header-cell *matHeaderCellDef> CHRDND </th>
+        <td class="pl-10" mat-cell *matCellDef="let element" [ngClass]="{'txt':highligthError(element)}">
+          {{element.chrdnd}}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="chrdot">
+        <th class="pl-10" mat-header-cell *matHeaderCellDef> CHRD > 8 </th>
+        <td class="pl-10" mat-cell *matCellDef="let element" [ngClass]="{'txt':highligthError(element)}">
+          {{element.chrdot}}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="chrdndot">
+        <th class="pl-10" mat-header-cell *matHeaderCellDef> CHRDND > 8 </th>
+        <td class="pl-10" mat-cell *matCellDef="let element" [ngClass]="{'txt':highligthError(element)}">
+          {{element.chrdndot}}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="remarks">
+        <th class="pl-10" mat-header-cell *matHeaderCellDef> Remarks </th>
+        <td class="pl-10" mat-cell *matCellDef="let element" [ngClass]="{'txt':highligthError(element)}">
+        {{element.remarks}} </td>
+      </ng-container>
+
+      @if (error) {
+        <div>
+          <tr mat-header-row *matHeaderRowDef="tkDetailedColumns; sticky: true"></tr>
+          <tr mat-row *matRowDef="let row; columns: tkDetailedColumns;"
+          [ngClass]="{'edited': highligthError(row)}"></tr>
+        </div>
+      }
+      @if (!error) {
+        <div>
+          <tr mat-header-row *matHeaderRowDef="tkDetailedNColumns; sticky: true"></tr>
+          <tr mat-row *matRowDef="let row; columns: tkDetailedNColumns;"></tr>
+        </div>
+      }
+
+    </table>
+
+    <mat-paginator [attr.disabled]="isLoadingResults ? true : null"
+      (page)="handlePageEvent($event)" [length]="totalRows" [pageSize]="request.Length"
+      [pageIndex]="request.Start" [pageSizeOptions]="[10, 20, 50]" showFirstLastButtons>
+    </mat-paginator>
+  </div>
+</div>

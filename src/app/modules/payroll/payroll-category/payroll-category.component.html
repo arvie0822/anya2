@@ -1,0 +1,275 @@
+<div class="flex flex-col flex-auto min-w-0" *transloco="let t">
+    <!-- Main -->
+    <div class="flex-auto  sm:p-2  w-full min-w-0 sm:inset-0 sm:overflow-auto text-lg {{view?'':''}}">
+        <mat-card>
+            @if (!hidebuttons) {
+            <mat-card-title>
+                <app-card-title title="Payroll Category" [sub]="true" [back]="!view"
+                    (submitTap)="submit()"></app-card-title>
+            </mat-card-title>
+            }
+            @if (hidebuttons) {
+            <mat-card-title>
+                <!-- <app-card-title title="Payroll Category" [sub]="false" [back]="!view"></app-card-title> -->
+                <div class="grid place-items-end">
+                    <!-- <button *ngIf="hidebuttons" (click)="confirm()" class="text-lg" mat-flat-button color="primary" aria-label="example icon">
+            Confirm
+          </button> -->
+                </div>
+            </mat-card-title>
+            }
+            <mat-card-content>
+                <form [formGroup]="payrollCategoryForm">
+                    @if (hide) {
+                    <div class="grid grid-cols-5 gap-2 h-14">
+                        @if (tkVisib) {
+                        <mat-form-field class="w-full text-lg mt-1" appearance="outline">
+                            <mat-label class="label-font-size">{{t('timekeepingCategory')}}</mat-label>
+                            <mat-select formControlName="tkCat" [placeholder]="'No'">
+                                @for (item of tkcat; track item) {
+                                <mat-option [value]="item.id">{{item.description}}</mat-option>
+                                }
+                            </mat-select>
+                        </mat-form-field>
+                        }
+                        @if (hide) {
+                        <mat-form-field class="w-full text-lg" appearance="outline">
+                            <mat-label class="label-font-size">{{t('name')}}</mat-label>
+                            <mat-icon class="mb-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                            <input class="input" formControlName="name" matInput [placeholder]="'Name'" />
+                        </mat-form-field>
+                        }
+                        @if (hide) {
+                        <mat-form-field class="w-full text-lg" appearance="outline">
+                            <mat-label class="label-font-size">{{t('description')}}</mat-label>
+                            <mat-icon class="mb-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                            <input class="input" formControlName="description" matInput [placeholder]="'Description'" />
+                        </mat-form-field>
+                        }
+                        @if (hide) {
+                        <mat-form-field class="w-full text-lg" appearance="outline">
+                            <mat-label class="label-font-size">{{t('status')}}</mat-label>
+                            <mat-icon class="mb-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                            <mat-select formControlName="active">
+                                <mat-option [value]="true">Active</mat-option>
+                                <mat-option [value]="false">Inactive</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                        }
+                    </div>
+                    }
+
+                    <div class="mt-5 mb-3">
+                        <mat-card-title>
+                            <app-card-title title="Settings" [sub]="false" [switch]="false"></app-card-title>
+                        </mat-card-title>
+                    </div>
+
+                    <div class="grid grid-cols-5 gap-2 h-14">
+
+                        <mat-form-field class="w-full text-lg" appearance="outline">
+                            <mat-label class="label-font-size">{{t('payrollCutOff')}}</mat-label>
+                            <mat-icon class="mb-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                            <mat-select formControlName="payrollCutoff">
+                                @for (item of cutoff; track item) {
+                                <mat-option [value]="item.dropdownID">{{item.description}}</mat-option>
+                                }
+                            </mat-select>
+                        </mat-form-field>
+                        <!-- <app-dropdown-custom [control]="payrollCategoryForm.get('payrollCutOff')" [type]="1015"></app-dropdown-custom> -->
+
+                        <mat-form-field class="w-full text-lg" appearance="outline">
+                            <mat-label class="label-font-size">{{t('factorRate')}}</mat-label>
+                            <mat-icon class="mb-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                            <input class="input" formControlName="factorRate" type="number" matInput
+                                [placeholder]="'Factor Rate'" />
+                        </mat-form-field>
+
+                        <!-- <mat-form-field class="w-full text-lg" appearance="outline">
+            <mat-icon class="mb-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+            <mat-select formControlName="InDailyEarnings" multiple>
+              <mat-option *ngFor="let item of dailyRateList"
+              [value]="item.dropdownID">{{item.description}}</mat-option>
+            </mat-select>
+          </mat-form-field> -->
+
+                        <app-dropdown-custom [control]="payrollCategoryForm.get('inDailyEarnings')"
+                            [icon]="'mat_outline:info'" [type]="1047" [value]="paycat.inDailyEarnings" [multiple]="true"
+                            [options]="InitialDE" [all]="true" [useControl]="true"></app-dropdown-custom>
+
+                        <mat-form-field class="w-full text-lg" appearance="outline">
+                            <mat-label class="label-font-size">{{t('dailyRate')}}</mat-label>
+                            <mat-icon class="mb-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                            <mat-select formControlName="dailyRate">
+                                @for (item of dailyRateList; track item) {
+                                <mat-option [value]="item.dropdownID">{{item.description}}</mat-option>
+                                }
+                            </mat-select>
+                        </mat-form-field>
+
+                        <mat-form-field class="w-full text-lg" appearance="outline">
+                            <mat-label class="label-font-size">{{t('hourlyRate')}}</mat-label>
+                            <mat-icon class="mb-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                            <mat-select formControlName="hourlyRate">
+                                @for (item of hourlyRateList; track item) {
+                                <mat-option [value]="item.dropdownID">{{item.description}}</mat-option>
+                                }
+                            </mat-select>
+                        </mat-form-field>
+
+                    </div>
+
+                    <div class="grid grid-cols-5 gap-2 h-14">
+
+                        <mat-form-field class="w-full text-lg" appearance="outline">
+                            <mat-label class="label-font-size">{{t('hoursInADay')}}</mat-label>
+                            <mat-icon class="mb-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                            <input class="input" formControlName="hoursInADay" type="number" matInput
+                                [placeholder]="'Hours in a day'" />
+                        </mat-form-field>
+
+                        <mat-form-field class="w-full text-lg" appearance="outline">
+                            <mat-label class="label-font-size">{{t('wageType')}}</mat-label>
+                            <mat-icon class="mb-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                            <mat-select formControlName="wageType">
+                                @for (item of wage; track item) {
+                                <mat-option [value]="item.dropdownID">{{item.description}}</mat-option>
+                                }
+                            </mat-select>
+                        </mat-form-field>
+
+                        <mat-form-field class="w-full text-lg" appearance="outline">
+                            <mat-label class="label-font-size">{{t('mwe')}}</mat-label>
+                            <mat-icon class="mb-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                            <mat-select formControlName="mwe">
+                                @for (item of boolOption; track item) {
+                                <mat-option [value]="item.dropdownID">{{item.description}}</mat-option>
+                                }
+                            </mat-select>
+                        </mat-form-field>
+
+                        <app-dropdown-custom [multiple]="false" [control]="payrollCategoryForm.get('premiumRateType')"
+                            [type]="1036" [value]="paycat.premiumRateType" [options]="PremRateTypeList"
+                            [useControl]="true"></app-dropdown-custom>
+                        <app-dropdown-custom [multiple]="true" [all]="true"
+                            [control]="payrollCategoryForm.get('fixedDeductions')" [type]="1021"
+                            [value]="paycat.fixedDeductions" [options]="fixedDedList"
+                            [useControl]="true"></app-dropdown-custom>
+
+                    </div>
+
+                    <div class="grid grid-cols-5 gap-2 h-14">
+
+                        <app-dropdown-custom [multiple]="true" [all]="true"
+                            [control]="payrollCategoryForm.get('fixedEarnings')" [type]="1022"
+                            [value]="paycat.fixedEarnings" [options]="fixedEarList"
+                            [useControl]="true"></app-dropdown-custom>
+                        <app-dropdown-custom [multiple]="false" [control]="payrollCategoryForm.get('sss')" [type]="1024"
+                            [value]="paycat.sss" [options]="sssList" [useControl]="true"></app-dropdown-custom>
+                        <app-dropdown-custom [multiple]="false" [control]="payrollCategoryForm.get('hdmf')"
+                            [type]="1025" [value]="paycat.hdmf" [options]="hdmfList"
+                            [useControl]="true"></app-dropdown-custom>
+                        <app-dropdown-custom [multiple]="false" [control]="payrollCategoryForm.get('phic')"
+                            [type]="1026" [value]="paycat.phic" [options]="phicList"
+                            [useControl]="true"></app-dropdown-custom>
+                        <app-dropdown-custom [multiple]="false" [control]="payrollCategoryForm.get('tax')" [type]="1027"
+                            [value]="paycat.tax" [options]="taxList" [useControl]="true"></app-dropdown-custom>
+
+                    </div>
+
+                    <div class="grid grid-cols-5 gap-2 h-14">
+
+                        <!-- <mat-form-field class="w-full text-lg" appearance="outline">
+                            <mat-label class="label-font-size">{{t('deductionHierarchy')}}</mat-label>
+                            <mat-icon class="mb-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                            <mat-select formControlName="deductionHierarchy">
+                                @for (item of dedHierList; track item) {
+                                <mat-option [value]="item.dropdownID">{{item.description}}</mat-option>
+                                }
+                            </mat-select>
+                        </mat-form-field> -->
+
+                        <app-dropdown-custom [multiple]="false" [control]="payrollCategoryForm.get('deductionHierarchy')" [type]="1061"
+                            [value]="paycat.deductionHierarchy" [options]="dedHierList" [useControl]="true" label="Deduction Hierarchys"></app-dropdown-custom>
+
+                        <mat-form-field class="w-full text-lg" appearance="outline">
+                            <mat-label class="label-font-size">{{t('reportSetting')}}</mat-label>
+                            <mat-icon class="mb-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                            <mat-select formControlName="reportSetting">
+                                @for (item of repSettingList; track item) {
+                                <mat-option [value]="item.dropdownID">{{item.description}}</mat-option>
+                                }
+                            </mat-select>
+                        </mat-form-field>
+
+                        <mat-form-field class="w-full text-md" appearance="outline">
+                            <mat-label class="label-font-size">Prorated Maternity</mat-label>
+                            <mat-icon class="mb-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                            <mat-select formControlName="proratedMaternity">
+                                @for (item of boolOption2; track item) {
+                                    <mat-option [value]="item.dropdownID">{{item.description}}</mat-option>
+                                    }
+                            </mat-select>
+                        </mat-form-field>
+
+                        <mat-form-field class="w-full text-lg" appearance="outline">
+                            <mat-label class="label-font-size">{{t('sssMaternity')}}</mat-label>
+                            <mat-icon class="mb-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                            <mat-select formControlName="sssMaternity">
+                                @for (item of sssMatList; track item) {
+                                <mat-option [value]="item.dropdownID">{{item.description}}</mat-option>
+                                }
+                            </mat-select>
+                        </mat-form-field>
+
+                        <app-dropdown-custom [multiple]="false" [control]="payrollCategoryForm.get('_13thMonthPay')"
+                            [type]="1037" [value]="paycat._13thMonthPay" [options]="_13MonthList"
+                            [useControl]="true"></app-dropdown-custom>
+                    </div>
+
+                    <div class="grid grid-cols-5 gap-2 h-14">
+                        <app-dropdown-custom [multiple]="false" [control]="payrollCategoryForm.get('_14thMonthPay')"
+                            [type]="1038" [value]="paycat._14thMonthPay" [options]="_14MonthList"
+                            [useControl]="true"></app-dropdown-custom>
+                        <app-dropdown-custom [multiple]="false" [control]="payrollCategoryForm.get('_15thMonthPay')"
+                            [type]="1039" [value]="paycat._15thMonthPay" [options]="_15MonthList"
+                            [useControl]="true"></app-dropdown-custom>
+                        <app-dropdown-custom [multiple]="false" [control]="payrollCategoryForm.get('_16thMonthPay')"
+                            [type]="1040" [value]="paycat._16thMonthPay" [options]="_16MonthList"
+                            [useControl]="true"></app-dropdown-custom>
+
+                        <mat-form-field class="w-full text-lg" appearance="outline">
+                            <mat-label class="label-font-size">{{t('retroactiveSalaryAdjustment')}}</mat-label>
+                            <mat-icon class="mb-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                            <mat-select formControlName="retroactiveSalaryAdj">
+                                @for (item of boolOption2; track item) {
+                                <mat-option [value]="item.dropdownID">{{item.description}}</mat-option>
+                                }
+                            </mat-select>
+                        </mat-form-field>
+
+                        <mat-form-field class="w-full text-lg" appearance="outline">
+                            <mat-label class="label-font-size">{{t('newHireProratedRegDays')}}</mat-label>
+                            <mat-icon class="mb-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                            <mat-select formControlName="newHireRegDays">
+                                <mat-option [value]="true">Yes</mat-option>
+                                <mat-option [value]="false">No</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <div class="grid grid-cols-5 gap-2 h-14">
+                        <mat-form-field class="w-full text-md" appearance="outline">
+                            <mat-label class="label-font-size">{{t('exitingProratedRegDays')}}</mat-label>
+                            <mat-icon class="mb-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                            <mat-select formControlName="exitingRegDays">
+                                @for (item of boolOption2; track item) {
+                                <mat-option [value]="item.dropdownID">{{item.description}}</mat-option>
+                                }
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                </form>
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>

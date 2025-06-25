@@ -1,0 +1,141 @@
+<!-- Main -->
+<div class="flex-auto p-6 sm:p-6 overflow-y-auto" *transloco="let t">
+  <!-- Main -->
+  <div class="flex-auto  sm:p-2  w-full min-w-0 sm:absolute sm:inset-0 sm:overflow-auto text-lg">
+    <form [formGroup]="unpaidForm">
+      <div class="grid grid-cols-7 gap-4 h-13">
+        <mat-form-field class="w-full text-lg" appearance="outline">
+          <mat-label class="label-font-size">{{ t('date') }}</mat-label>
+          <input formControlName="date" matInput [matDatepicker]="uhd" readonly [placeholder]="'MM/DD/YYYY'" (click)="uhd.open()">
+          <mat-datepicker-toggle matSuffix [for]="uhd"></mat-datepicker-toggle>
+          <mat-datepicker #uhd></mat-datepicker>
+        </mat-form-field>
+        <mat-form-field class="w-full text-lg" appearance="outline">
+          <mat-label class="label-font-size">{{ t('shift') }}</mat-label>
+          <mat-icon class="uploadbutton mb-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+          <mat-select formControlName="shiftId">
+            @for (item of shiftOption; track item) {
+              <mat-option [value]="item.id">{{item.description}}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field class="w-70 xxl:w-100 text-lg h-15" appearance="outline">
+          <mat-label class="label-font-size">{{ t('dateAndTimeFrom') }}</mat-label>
+          <input matInput [ngxMatDatetimePicker]="dtf"  (click)="dtf.open()"
+            placeholder="Choose a date"
+            formControlName="dateTimeFrom"
+            [max]="unpaidForm.controls['dateTimeTo'].value"
+            [disabled]="false">
+            <mat-datepicker-toggle matSuffix [for]="dtf">
+            </mat-datepicker-toggle>
+            <ngx-mat-datetime-picker #dtf
+              [showSpinners]="showSpinners"
+              [showSeconds]="showSeconds"
+              [touchUi]="touchUi"
+              [color]="color"
+              [enableMeridian]="true">
+            </ngx-mat-datetime-picker>
+          </mat-form-field>
+          <mat-form-field class="w-70 xxl:w-100 text-lg h-15" appearance="outline">
+            <mat-label class="label-font-size">{{ t('dateAndTimeTo') }}</mat-label>
+            <input matInput [ngxMatDatetimePicker]="dtt"  (click)="dtt.open()"
+              placeholder="Choose a date"
+              formControlName="dateTimeTo"
+              [min]="unpaidForm.controls['dateTimeFrom'].value"
+              [disabled]="false">
+              <mat-datepicker-toggle matSuffix [for]="dtt">
+              </mat-datepicker-toggle>
+              <ngx-mat-datetime-picker #dtt
+                [showSpinners]="showSpinners"
+                [showSeconds]="showSeconds"
+                [touchUi]="touchUi"
+                [color]="color"
+                [enableMeridian]="true">
+              </ngx-mat-datetime-picker>
+            </mat-form-field>
+            <!-- <app-dropdown [formControl]="reasonuh" [options]="official" [icon]="'mat_outline:info'"></app-dropdown> -->
+            <mat-form-field appearance="outline">
+              <mat-label class="label-font-size">{{ t('reason') }}</mat-label>
+              <mat-icon class="uploadbutton mb-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+              <mat-select formControlName="reasonId">
+                @for (item of official; track item) {
+                  <mat-option [value]="item.id">{{item.description}}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field class="w-full text-lg" appearance="outline">
+              <input type="file" formControlName="uploadPath" #fileInput2 (change)="uploadFile($event, 'displayUH')"  class=" absolute top-1 z-0 h-full w-full cursor-pointer opacity-0" accept=".jpeg,.jpg,.png,.doc,.docx,.pdf,.xls,.xlsx"/>
+              <input class="sample" readonly matInput id="displayUH" cdkFocusInitial />
+              <mat-icon class="mb-2" matPrefix svgIcon="mat_outline:upload"></mat-icon>
+              <button  class="upb" (click)="fileInput2.click($event)" matSuffix mat-button color="primary">Upload</button>
+            </mat-form-field>
+            <!-- <mat-form-field class="w-full text-lg" appearance="outline">
+            <mat-label class="label-font-size">{{ t('upload') }}</mat-label>
+            <mat-icon class="mb-2" matSuffix svgIcon="mat_outline:upload"></mat-icon>
+            <input formControlName="upload_fileuh" matInput type="text" [placeholder]="'Upload'" readonly>
+          </mat-form-field> -->
+          <div class="button-margin-top">
+            <mat-label class="">&nbsp;</mat-label>
+            <button (click)="addUH()" class="text-lg" mat-flat-button color="primary" aria-label="example icon">
+              <mat-icon class="mb-2" svgIcon="mat_outline:post_add"></mat-icon>{{editing? 'Edit' : 'Add'}}
+            </button>
+          </div>
+        </div>
+
+        <div>
+          <table #UHTable mat-table [dataSource]="datasource" class="mat-elevation-z0 border">
+
+            <ng-container matColumnDef="uhAction">
+              <th class="pl-6" mat-header-cell *matHeaderCellDef>Actions</th>
+              <td class="pt-1 pl-2" mat-cell  *matCellDef="let element; let i = index">
+                <!-- <button type="button" class="pl-5" (click)="handleDeleteBreak(i)" mat-button [color]="'warn'">
+                <mat-icon class="mb-2" matSuffix svgIcon="mat_outline:delete"></mat-icon>
+              </button> -->
+              <button class="ml-5" mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+                <mat-icon class="mb-2">{{editing?"edit":"more_vert"}}</mat-icon>
+              </button>
+              <mat-menu #menu="matMenu">
+                <button mat-menu-item (click)="uhDelete(i)">
+                  <mat-icon class="mb-2" color="warn" >delete</mat-icon>
+                  <span>{{t('delete')}}</span>
+                </button>
+                <button mat-menu-item (click)="edit(element,i)">
+                  <mat-icon class="mb-2" color="primary">edit</mat-icon>
+                  <span>{{t('edit')}}</span>
+                </button>
+              </mat-menu>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="uhDate" >
+            <th class="body" mat-header-cell *matHeaderCellDef>{{t('Date')}}</th>
+            <td mat-cell class="body" *matCellDef="let element">{{element.date  | date: 'MM-dd-yy'}}</td>
+          </ng-container>
+          <ng-container matColumnDef="uhShift" >
+            <th class="body" mat-header-cell *matHeaderCellDef> Shift </th>
+            <td mat-cell class="body" *matCellDef="let element">{{element.shiftIddecrip}}</td>
+          </ng-container>
+          <ng-container matColumnDef="uhDateFrom" >
+            <th class="body" mat-header-cell *matHeaderCellDef> {{t('Date And Time From')}} </th>
+            <td mat-cell class="body" *matCellDef="let element">{{element.dateTimeFrom  | date: 'MM-dd-yy HH:mm a'}}</td>
+          </ng-container>
+          <ng-container matColumnDef="uhDateTo" >
+            <th class="body" mat-header-cell *matHeaderCellDef> {{t('Date And Time To')}} </th>
+            <td mat-cell class="body" *matCellDef="let element">{{element.dateTimeTo  | date: 'MM-dd-yy HH:mm a'}}</td>
+          </ng-container>
+          <ng-container matColumnDef="uhReason" >
+            <th class="body" mat-header-cell *matHeaderCellDef>{{t('Reason')}}</th>
+            <td mat-cell class="body" *matCellDef="let element">{{element.reasonIddescrip}}</td>
+          </ng-container>
+          <ng-container matColumnDef="uhUpload_file" >
+            <th class="body" mat-header-cell *matHeaderCellDef> Upload File </th>
+            <td mat-cell class="body" *matCellDef="let element">{{element.uploadPath}}</td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="uhColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: uhColumns;"></tr>
+        </table>
+      </div>
+    </form>
+  </div>
+</div>

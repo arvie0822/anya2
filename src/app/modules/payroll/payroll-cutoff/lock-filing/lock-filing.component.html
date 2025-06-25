@@ -1,0 +1,125 @@
+<h1 mat-dialog-title class="text-xl text-center pb-5 fontstyle">Cutoff Detail</h1><br>
+<form [formGroup]="lockingform" *transloco="let t">
+  <div class="grid grid-row-3">
+    <div class="label-font-size p-1 text-lg fontstyle" mat-dialog-content>Cut-off Name</div>
+    @if (this.data.payrolltype==12697) {
+      <mat-form-field class="w-full text-md h-13 mt-3" appearance="outline" >
+        <mat-label class="label-font-size">{{t('month')}}</mat-label>
+        <mat-icon class="mb-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+        <mat-select formControlName="monthId" required>
+          @for (item of month; track item) {
+            <mat-option [value]="item.id">{{item.description}}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    }
+
+    @if (this.data.payrolltype==12697) {
+      <mat-form-field class="w-full text-md h-13" appearance="outline">
+        <mat-label class="label-font-size">{{t('week')}}</mat-label>
+        <mat-icon class="mb-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+        <mat-select  formControlName="weekId" required>
+          @for (item of Week; track item) {
+            <mat-option [value]="item.id">{{item.description}}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    }
+
+    <mat-form-field class="w-70 xxl:w-100 text-md h-13 mt-2" appearance="outline" >
+      <mat-label class="label-font-size">{{t('dateFrom')}}</mat-label>
+      <input formControlName="dateFrom" matInput [matDatepicker]="df" [placeholder]="'MM/DD/YYYY'"
+        (click)="df.open() ">
+        <mat-datepicker-toggle matSuffix  [for]="df"></mat-datepicker-toggle>
+        <mat-datepicker  #df></mat-datepicker>
+      </mat-form-field>
+
+      <mat-form-field class="w-70 xxl:w-100 text-md h-13 mt-2" appearance="outline">
+        <mat-label class="label-font-size">{{t('dateTo')}}</mat-label>
+        <input formControlName="dateTo" matInput [matDatepicker]="df1" [placeholder]="'MM/DD/YYYY'"
+          (click)="df.open()">
+          <mat-datepicker-toggle matSuffix  [for]="df1"></mat-datepicker-toggle>
+          <mat-datepicker #df1></mat-datepicker>
+        </mat-form-field>
+
+        <div class="label-font-size p-1 text-lg fontstyle" mat-dialog-content>Payout</div>
+        <mat-form-field class="w-70 xxl:w-100 text-md h-13 mt-2" appearance="outline">
+          <input matInput [ngxMatDatetimePicker]="picker"  (click)="picker.open()"
+            placeholder="Choose a date"
+            [min]="minDate" [max]="maxDate"
+            formControlName="payout"
+            [disabled]="false">
+            <mat-datepicker-toggle matSuffix [for]="picker">
+            </mat-datepicker-toggle>
+            <ngx-mat-datetime-picker #picker
+              [showSpinners]="showSpinners"
+              [showSeconds]="showSeconds"
+              [touchUi]="touchUi"
+              [color]="color"
+              [enableMeridian]="true">
+            </ngx-mat-datetime-picker>
+          </mat-form-field>
+
+          <mat-checkbox [disabled]="locked(lockingform.get('filingLockDate').value,true)" (change)="disabledlocking()" formControlName="filingLockStatus" color="primary" class="example-margin h-10">Lock Filing</mat-checkbox>
+
+          <mat-form-field class="w-70 xxl:w-100 text-md h-15 mt-3" appearance="outline">
+            <input matInput [ngxMatDatetimePicker]="picker1"   (click)="picker1.open()"
+              placeholder="Choose a date"
+              formControlName="filingLockDate"
+              [disabled]="locked(lockingform.get('filingLockDate').value,true)">
+              <mat-datepicker-toggle matSuffix [for]="picker1">
+              </mat-datepicker-toggle>
+              <ngx-mat-datetime-picker #picker1  [disabled]="locked(lockingform.get('filingLockDate').value,true)"
+                [showCloseButton]="true"
+                [showSpinners]="showSpinners"
+                [showSeconds]="showSeconds"
+                [stepHour]="stepHour" [stepMinute]="stepMinute"
+                [stepSecond]="false"
+                [touchUi]="touchUi"
+                [color]="color"
+                [enableMeridian]="true">
+              </ngx-mat-datetime-picker>
+            </mat-form-field>
+
+            <!-- <mat-form-field appearance="outline">
+            <mat-label>{{t('payout')}}</mat-label>
+            <input matInput [ngxMatDatetimePicker]="picker" placeholder="MM/DD/YYYY HH:mm a" formControlName="filingLockDate">
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <ngx-mat-datetime-picker #picker></ngx-mat-datetime-picker>
+          </mat-form-field> -->
+
+          <mat-checkbox [disabled]="locked(lockingform.get('approvalLockDate').value,false)" (change)="disabledapproval()" formControlName="approvalLockStatus" color="primary" class="example-margin h-10">Lock Approval</mat-checkbox>
+
+          <mat-form-field class="w-70 xxl:w-100 text-md h-15 mt-3" appearance="outline">
+            <input matInput readonly [ngxMatDatetimePicker]="picker2"   (click)="picker2.open()" (dateChange)="timevalidationlock(lockingform.value.approvalLockDate)"
+              placeholder="Choose a date"
+              formControlName="approvalLockDate"
+              [disabled]="locked(lockingform.get('approvalLockDate').value,false)">
+              <mat-datepicker-toggle matSuffix [for]="picker2">
+              </mat-datepicker-toggle>
+              <ngx-mat-datetime-picker #picker2  [disabled]="locked(lockingform.get('approvalLockDate').value,false)"
+              (opened)="makeMinuteReadonly()"
+                [ariaReadOnly]="true"
+                [showSpinners]="showSpinners"
+                [showSeconds]="showSeconds"
+                [stepHour]="stepHour"
+                [stepMinute]="30"
+                [stepSecond]="stepSecond"
+                [touchUi]="touchUi"
+                [color]="color"
+                [enableMeridian]="true">
+              </ngx-mat-datetime-picker>
+            </mat-form-field>
+
+            <div class="grid grid-cols-3 gap-2">
+              <div></div>
+              <!-- <button mat-flat-button mat-dialog-close color="primary">Cancel</button>
+              <button class="" mat-flat-button color="primary">Save</button> -->
+              <button mat-flat-button mat-dialog-close color="primary">Cancel</button>
+              <button class="" mat-flat-button color="primary" (click)="copyNow()">Save</button>
+            </div>
+          </div>
+        </form>
+
+
+

@@ -1,0 +1,1707 @@
+<div class="flex flex-col flex-auto min-w-0 overflow-auto" *transloco="let t">
+    <!-- Main -->
+    <div class="flex-aut overflow-auto">
+        <form [formGroup]="employeeForm">
+            <!-- Header -->
+            <mat-card class="mat-elevation-z0 borderradiustop mt-2 ml-2 mr-2 border-b">
+                <div class="flex flex-col w-full  mx-auto px-6 sm:px-8">
+                    <div class="flex flex-col sm:flex-row flex-auto sm:items-center min-w-0 my-4 sm:my-4 pt-5 pb-6">
+                        <!-- Avatar and name -->
+                        <div class="flex flex-auto items-center min-w-0">
+                            <div class="flex-0">
+                                <img [src]="imageUrl" class="rounded-full overflow-hidden w-20 h-20">
+                            </div>
+                            <div class="flex flex-col min-w-0 ml-4">
+                                <ng-container *transloco="let t">
+                                    <div
+                                        class="text-2xl md:text-5xl font-semibold tracking-tight leading-7 md:leading-snug truncate">
+                                        {{t('hi')}}, {{employeeForm.value.displayName}}!</div>
+                                </ng-container>
+                            </div>
+                        </div>
+                        <!-- summary details -->
+
+                        <!-- Actions -->
+                        <mat-card-title>
+                            <app-card-title [sub]="submitbutton" [switch]="false" [back]="true"
+                                (submitTap)="submit()"></app-card-title>
+                        </mat-card-title>
+                        <!-- <div class="flex items-center mt-6 sm:mt-0 sm:ml-2 space-x-3">
+            <button (click)="submit()"
+              class="fuse-mat-button-rounded"
+              mat-flat-button
+              [color]="'primary'">
+              <mat-icon
+                class="mb-2"
+              [svgIcon]="'heroicons_solid:save'"></mat-icon>
+              <span class="ml-2">Save Changes</span>
+            </button>
+          </div> -->
+                    </div>
+                    <!-- Project selector -->
+                    <div class="grid grid-cols-10 gap-1 w-[95%] absolute top-[119px]">
+                        <!-- Tab 1 -->
+                        <div>
+                            <div (click)="changeTab('pei')"
+                                class="relative flex self-start pt-2 pl-2 pb-1 cursor-pointer overflow-hidden font-medium rounded-t-xl border border-b dark:bg-[#1e293b] "
+                                style="background-color:rgba(241,245,249,1) ;"
+                                [ngClass]="{'selected-tab': selectedTab === 'pei'}" matRipple *transloco="let t"
+                                [matMenuTriggerFor]="projectsMenu">
+                                <div class="flex items-center">
+                                    <div class="overflow-hidden" autofocus>
+                                        <div class=" ml-11 leading-6 truncate">{{t(selectedProject)}}</div>
+                                    </div>
+                                    <div class="flex items-center justify-center pl-2"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Tab 2 -->
+                        <div (click)="changeTab('woi')"
+                            class="relative flex self-start pt-2 pb-1 pl-2 pr-2 cursor-pointer overflow-hidden rounded-t-xl font-medium border dark:bg-[#1e293b]"
+                            style="background-color:rgba(241,245,249,1) ;"
+                            [ngClass]="{'selected-tab': selectedTab === 'woi'}" matRipple *transloco="let t"
+                            [matMenuTriggerFor]="projectsMenu">
+                            <div class="flex items-center">
+                                <div class="overflow-hidden">
+                                    <div class="ml-11 leading-6 truncate">{{t(selectedProject1)}}</div>
+                                </div>
+                                <div class="flex items-center justify-center pl-2"></div>
+                            </div>
+                        </div>
+
+                        <!-- Tab 3 -->
+                        <div [hidden]="hidePayroll" (click)="changeTab('pai')"
+                            class="relative self-start pt-2 pb-1 pl-2 pr-2 cursor-pointer overflow-hidden rounded-t-xl font-medium border dark:bg-[#1e293b]"
+                            style="background-color:rgba(241,245,249,1) ;"
+                            [ngClass]="{'selected-tab': selectedTab === 'pai'}" matRipple *transloco="let t"
+                            [matMenuTriggerFor]="projectsMenu">
+                            <div class="flex items-center">
+                                <div class="overflow-hidden">
+                                    <div class="ml-11 leading-6 truncate">{{t(selectedProject2)}}</div>
+                                </div>
+                                <div class="flex items-center justify-center pl-2"></div>
+                            </div>
+                        </div>
+
+                        <!-- Tab 4 -->
+                        <div (click)="changeTab('s')"
+                            class="relative flex self-start pt-2 pb-1 pl-2 cursor-pointer overflow-hidden rounded-t-xl font-medium border dark:bg-[#1e293b]"
+                            style="background-color:rgba(241,245,249,1) ;"
+                            [ngClass]="{'selected-tab': selectedTab === 's'}" matRipple *transloco="let t"
+                            [matMenuTriggerFor]="projectsMenu">
+                            <div class="flex items-center">
+                                <div class="overflow-hidden">
+                                    <div class="ml-11 leading-6 truncate">{{t(selectedProject3)}}</div>
+                                </div>
+                                <div class="flex items-center justify-center pl-2"></div>
+                            </div>
+                        </div>
+
+                        <!-- Tab 5 -->
+                        <div (click)="changeTab('l')"
+                            class="relative flex self-start pt-2 pb-1 pl-2 cursor-pointer overflow-hidden rounded-t-xl font-medium border dark:bg-[#1e293b]"
+                            style="background-color:rgba(241,245,249,1) ;"
+                            [ngClass]="{'selected-tab': selectedTab === 'l'}" matRipple *transloco="let t"
+                            [matMenuTriggerFor]="projectsMenu">
+                            <div class="flex items-center">
+                                <div class="overflow-hidden">
+                                    <div class="ml-11 leading-6 truncate">{{t(selectedProject4)}}</div>
+                                </div>
+                                <div class="flex items-center justify-center pl-2"></div>
+                            </div>
+                        </div>
+
+                        <!-- Tab 6 -->
+                        <div [hidden]="hideOthers" (click)="changeTab('O')"
+                            class="relative flex self-start pt-2 pb-1 pl-2 cursor-pointer overflow-hidden rounded-t-xl font-medium border dark:bg-[#1e293b]"
+                            style="background-color:rgba(241,245,249,1) ;"
+                            [ngClass]="{'selected-tab': selectedTab === 'O'}" matRipple *transloco="let t"
+                            [matMenuTriggerFor]="projectsMenu">
+                            <div class="flex items-center">
+                                <div class="overflow-hidden">
+                                    <div class="ml-11 leading-6 truncate">{{t(selectedProject5)}}</div>
+                                </div>
+                                <div class="flex items-center justify-center pl-2"></div>
+                            </div>
+                        </div>
+
+                        <!-- Tab 7 -->
+                        <div (click)="changeTab('E')"
+                            class="relative flex self-start pt-2 pb-1 pl-2 cursor-pointer overflow-hidden rounded-t-xl font-medium border dark:bg-[#1e293b]"
+                            style="background-color:rgba(241,245,249,1) ;"
+                            [ngClass]="{'selected-tab': selectedTab === 'E'}" matRipple *transloco="let t"
+                            [matMenuTriggerFor]="projectsMenu">
+                            <div class="flex items-center">
+                                <div class="overflow-hidden">
+                                    <div class="ml-11 leading-6 truncate">{{t(selectedProject6)}}</div>
+                                </div>
+                                <div class="flex items-center justify-center pl-2"></div>
+                            </div>
+                        </div>
+
+                        <!-- Tab 8 -->
+                        <div [hidden]="hideAdmin" (click)="changeTab('A')"
+                            class="relative flex self-start pt-2 pb-1 pl-2 cursor-pointer overflow-hidden rounded-t-xl font-medium border dark:bg-[#1e293b]"
+                            style="background-color:rgba(241,245,249,1) ;"
+                            [ngClass]="{'selected-tab': selectedTab === 'A'}" matRipple *transloco="let t"
+                            [matMenuTriggerFor]="projectsMenu">
+                            <div class="flex items-center">
+                                <div class="overflow-hidden">
+                                    <div class="ml-11 leading-6 truncate">{{t(selectedProject7)}}</div>
+                                </div>
+                                <div class="flex items-center justify-center pl-2"></div>
+                            </div>
+                        </div>
+
+                        <!-- Tab 9 -->
+                        <div (click)="changeTab('EDL')"
+                            class="relative flex self-start pt-2 pb-1 pl-2 cursor-pointer overflow-hidden rounded-t-xl font-medium border dark:bg-[#1e293b]"
+                            style="background-color:rgba(241,245,249,1) ;"
+                            [ngClass]="{'selected-tab': selectedTab === 'EDL'}" matRipple *transloco="let t"
+                            [matMenuTriggerFor]="projectsMenu">
+                            <div class="flex items-center">
+                                <div class="overflow-hidden">
+                                    <div class="ml-11 leading-6 truncate">{{t(selectedProject8)}}</div>
+                                </div>
+                                <div class="flex items-center justify-center pl-2"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </mat-card>
+
+            <!-- Main -->
+            <mat-card class="mat-elevation-z0 borderradius ml-2 mr-2 mb-2">
+                <div class=" w-full max-h-[343px] overflow-auto flex-auto" *transloco="let t">
+                    <!-- <div class=" w-full flex-auto " *transloco="let t"> -->
+                    <!-- <div class="w-full max-w-screen-xl mx-auto"> -->
+                    <div class="w-full ">
+                        <!-- Tabs -->
+                        <div class="px-5 ">
+                            <div [hidden]="!isPeI">
+                                <mat-stepper orientation="vertical" [selectedIndex]="personalIndex">
+                                    <mat-step>
+                                        <form [formGroup]="employeeForm">
+                                            <ng-template matStepLabel>Personal Information</ng-template>
+                                            <div class="pt-5">
+                                                <div class="grid grid-cols-6 gap-2 h-13">
+                                                    <!-- <mat-form-field class="w-full text-lg" appearance="outline">
+                        <mat-icon class="" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                        <input formControlName="imagePath" matInput type="text" [placeholder]="'Photo'" readonly>
+                        <button type="button" matSuffix mat-button color="primary">
+                          <mat-icon class="mb-2" matPrefix svgIcon="mat_outline:upload"></mat-icon>
+                        </button>
+                      </mat-form-field> -->
+
+                                                    <mat-form-field class="w-full text-lg" appearance="outline">
+                                                        <mat-label class="label-font-size">{{ t('Photo') }}</mat-label>
+                                                        <mat-icon class="" matPrefix
+                                                            svgIcon="mat_outline:info"></mat-icon>
+                                                        <input type="file" id="imageUpload" #fileInput4
+                                                            (change)="uploadFile($event ,'displayMe4', 'imagePath1','imagePath')"
+                                                            class="absolute top-1 z-10 h-full w-full cursor-pointer opacity-0"
+                                                            accept=".jpeg,.jpg,.png" />
+                                                        <input class="sample" formControlName="imagePath" readonly
+                                                            matInput id="displayMe4" cdkFocusInitial />
+                                                        <button class="" (click)="fileInput4.click()" matSuffix
+                                                            mat-button color="primary">
+                                                            <mat-icon class="mb-1" matPrefix
+                                                                svgIcon="mat_outline:upload"></mat-icon>
+                                                        </button>
+                                                    </mat-form-field>
+
+                                                    <app-dropdown [isFix]="true" [all]="false" [multiple]="false"
+                                                        [control]="employeeForm.get('idSalutation')"
+                                                        [options]="dropdownOptions.salutationDef"
+                                                        [icon]="'mat_outline:info'" [type]="29"> </app-dropdown>
+
+                                                    <mat-form-field class="w-full text-lg" appearance="outline">
+                                                        <mat-label class="label-font-size">{{ t('firstName')
+                                                            }}</mat-label>
+                                                        <mat-icon class="" matPrefix
+                                                            svgIcon="mat_outline:info"></mat-icon>
+                                                        <input autocomplete="off" matInput type="text"
+                                                            formControlName="firstName"
+                                                            (change)="onChangeName('firstName')"
+                                                            [placeholder]="'First Name'">
+                                                    </mat-form-field>
+
+                                                    <mat-form-field class="w-full text-lg" appearance="outline">
+                                                        <mat-label class="label-font-size">{{ t('middleName')
+                                                            }}</mat-label>
+                                                        <mat-icon class="" matPrefix
+                                                            svgIcon="mat_outline:info"></mat-icon>
+                                                        <input autocomplete="off" matInput type="text"
+                                                            formControlName="middleName"
+                                                            (change)="onChangeName('middleName')"
+                                                            [placeholder]="'Middle Name'">
+                                                    </mat-form-field>
+
+                                                    <mat-form-field class="w-full text-lg" appearance="outline">
+                                                        <mat-label class="label-font-size">{{ t('lastName')
+                                                            }}</mat-label>
+                                                        <mat-icon class="" matPrefix
+                                                            svgIcon="mat_outline:info"></mat-icon>
+                                                        <input autocomplete="off" matInput type="text"
+                                                            formControlName="lastName"
+                                                            (change)="onChangeName('lastName')"
+                                                            [placeholder]="'Last Name'">
+                                                    </mat-form-field>
+
+                                                    <app-dropdown [isFix]="true" [all]="false" [multiple]="false"
+                                                        [control]="employeeForm.get('idSuffix')"
+                                                        [options]="dropdownOptions.suffixDef"
+                                                        (selected)="onChangeName()" [icon]="'mat_outline:info'"
+                                                        [type]="30"> </app-dropdown>
+                                                </div>
+
+                                                <div class="grid grid-cols-6 gap-2 h-13">
+                                                    <mat-form-field class="w-full text-lg" appearance="outline">
+                                                        <mat-label class="label-font-size">{{ t('Nickname')
+                                                            }}</mat-label>
+                                                        <mat-icon class="" matPrefix
+                                                            svgIcon="mat_outline:info"></mat-icon>
+                                                        <input matInput type="text" formControlName="nickName"
+                                                            [placeholder]="'Nickname'">
+                                                    </mat-form-field>
+
+                                                    <mat-form-field class="w-full text-lg" appearance="outline">
+                                                        <mat-label class="label-font-size">{{ t('Display Name')
+                                                            }}</mat-label>
+                                                        <mat-icon class="" matPrefix
+                                                            svgIcon="mat_outline:info"></mat-icon>
+                                                        <input readonly matInput type="text"
+                                                            formControlName="displayName"
+                                                            [placeholder]="'Display Name'">
+                                                    </mat-form-field>
+
+
+
+
+                                                    <app-dropdown [isFix]="true" [all]="false" [multiple]="false"
+                                                        [control]="employeeForm.get('genderId')"
+                                                        [options]="dropdownOptions.genderDef"
+                                                        [icon]="'mat_outline:info'" [type]="31"> </app-dropdown>
+
+                                                    <app-dropdown [isFix]="true" [all]="false" [multiple]="false"
+                                                        [control]="employeeForm.get('idCivilStatus')"
+                                                        [options]="dropdownOptions.civilStatusDef"
+                                                        [icon]="'mat_outline:info'" [type]="33"> </app-dropdown>
+
+                                                    <app-dropdown [isFix]="true" [all]="false" [multiple]="false"
+                                                        [control]="employeeForm.get('idNationality')"
+                                                        [options]="dropdownOptions.nationalityDef"
+                                                        [icon]="'mat_outline:info'" [type]="32"> </app-dropdown>
+
+                                                    <app-dropdown [isFix]="true" [all]="false" [multiple]="false"
+                                                        [control]="employeeForm.get('idBloodType')"
+                                                        [options]="dropdownOptions.bloodTypeDef"
+                                                        [icon]="'mat_outline:info'" [type]="34"> </app-dropdown>
+                                                </div>
+                                                <div class="grid grid-cols-6 gap-2 h-13">
+                                                    <app-dropdown [isFix]="true" [all]="false" [multiple]="false"
+                                                        [control]="employeeForm.get('idReligion')"
+                                                        [options]="dropdownOptions.religionDef"
+                                                        [icon]="'mat_outline:info'" [type]="35"> </app-dropdown>
+
+                                                    <mat-form-field class="w-full text-lg" appearance="outline">
+                                                        <mat-label class="label-font-size">{{ t('Birthday')
+                                                            }}</mat-label>
+                                                        <input [settings]="{ timePicker: false, format: 'MM-dd-yyyy'}"
+                                                            [max]="maxDate" matInput formControlName="birthDate"
+                                                            [matDatepicker]="db" readonly [placeholder]="'MM/DD/YYYY'">
+                                                        <mat-datepicker-toggle matSuffix
+                                                            [for]="db"></mat-datepicker-toggle>
+                                                        <mat-datepicker #db></mat-datepicker>
+                                                    </mat-form-field>
+
+                                                    <mat-form-field class="w-full text-lg" appearance="outline">
+                                                        <mat-label class="label-font-size">{{ t('Birthplace')
+                                                            }}</mat-label>
+                                                        <mat-icon class="" matPrefix
+                                                            svgIcon="mat_outline:info"></mat-icon>
+                                                        <input matInput type="text" formControlName="birthPlace"
+                                                            [placeholder]="'Birthplace'">
+                                                    </mat-form-field>
+                                                    <!-- <div class="grid grid-cols-2 gap-2 h-13"> -->
+                                                    <mat-form-field class="w-full text-lg" appearance="outline">
+                                                        <mat-label class="label-font-size">{{t('Weight
+                                                            (KGS)')}}</mat-label>
+                                                        <mat-icon class="" matPrefix
+                                                            svgIcon="mat_outline:info"></mat-icon>
+                                                        <input matInput type="number" [step]="0.01"
+                                                            formControlName="weight" [placeholder]="'00.00'">
+                                                    </mat-form-field>
+
+                                                    <mat-form-field class="w-full text-lg" appearance="outline">
+                                                        <mat-label class="label-font-size">{{ t('Height (CM)')
+                                                            }}</mat-label>
+                                                        <mat-icon class="" matPrefix
+                                                            svgIcon="mat_outline:info"></mat-icon>
+                                                        <input matInput type="number" [step]="0.01"
+                                                            formControlName="height" [placeholder]="'00.00'">
+                                                    </mat-form-field>
+                                                    <!-- </div> -->
+                                                </div>
+                                            </div>
+                                            <!-- <div>
+                                      <button mat-flat-button matStepperNext color="primary">Next</button>
+                                    </div> -->
+                                        </form>
+                                    </mat-step>
+                                    <mat-step label="Contact Information">
+                                        <form [formGroup]="employeeForm">
+                                            <div class="pt-5">
+                                                <div class="grid grid-cols-6 gap-2 h-13">
+                                                    <mat-form-field class="w-full text-lg" appearance="outline">
+                                                        <mat-label class="label-font-size">{{ t('personalEmail')
+                                                            }}</mat-label>
+                                                        <mat-icon class="" matPrefix
+                                                            svgIcon="mat_outline:info"></mat-icon>
+                                                        <input matInput formControlName="personalEmailAddress"
+                                                            type="text" [placeholder]="'Personal Email'"
+                                                            (blur)="InvalidEmail()">
+                                                    </mat-form-field>
+                                                    <mat-form-field class="w-full text-lg" appearance="outline">
+                                                        <mat-label class="label-font-size">{{ t('companyEmail')
+                                                            }}</mat-label>
+                                                        <mat-icon class="" matPrefix
+                                                            svgIcon="mat_outline:info"></mat-icon>
+                                                        <input matInput formControlName="companyEmailAddress"
+                                                            type="text" min="0" [placeholder]="'Company Email'"
+                                                            (blur)="InvalidEmail()">
+                                                    </mat-form-field>
+                                                    <mat-form-field class="w-full text-lg" appearance="outline">
+                                                        <mat-label class="label-font-size">{{ t('officeNumber')
+                                                            }}</mat-label>
+                                                        <mat-icon class="" matPrefix
+                                                            svgIcon="mat_outline:info"></mat-icon>
+                                                        <input matInput formControlName="officeNumber" type="text"
+                                                            mask="0000 0000" min="0" [placeholder]="'8xxxxxxx'">
+                                                    </mat-form-field>
+                                                    <mat-form-field class="w-full text-lg" appearance="outline">
+                                                        <mat-label class="ml-10">{{ t('mobileNumber') }}</mat-label>
+                                                        <mat-icon class="" matPrefix
+                                                            svgIcon="mat_outline:info"></mat-icon>
+                                                        <span style="position: relative; bottom: 9px;" matPrefix
+                                                            class="ml-10"
+                                                            style="position: relative; bottom: 12px;">+63</span>
+                                                        <input matInput formControlName="mobile" type="text"
+                                                            mask="000 000 0000" [placeholder]="'9xxxxxxxxx'">
+                                                    </mat-form-field>
+                                                    <mat-form-field class="w-full text-lg" appearance="outline">
+                                                        <mat-label class="label-font-size">{{ t('landline')
+                                                            }}</mat-label>
+                                                        <mat-icon class="" matPrefix
+                                                            svgIcon="mat_outline:info"></mat-icon>
+                                                        <input matInput formControlName="phone" type="text"
+                                                            mask="0000 0000" [placeholder]="'8xxxxxxx'">
+                                                    </mat-form-field>
+                                                    <mat-form-field class="w-full text-lg" appearance="outline">
+                                                        <mat-label class="ml-10">{{ t('alternateNumber') }}</mat-label>
+                                                        <mat-icon class="" matPrefix
+                                                            svgIcon="mat_outline:info"></mat-icon>
+                                                        <span style="position: relative; bottom: 9px;" matPrefix
+                                                            class="ml-10"
+                                                            style="position: relative; bottom: 12px;">+63</span>
+                                                        <input matInput formControlName="alternateMobile" type="text"
+                                                            mask="000 000 0000" [placeholder]="'9xxxxxxxxx'">
+                                                    </mat-form-field>
+                                                </div>
+                                            </div>
+                                            <!-- <div>
+                                                <button mat-flat-button matStepperPrevious color="primary">Back</button>&nbsp;
+                                                <button mat-flat-button matStepperNext color="primary">Next</button>
+                                              </div> -->
+                                        </form>
+                                    </mat-step>
+                                    <mat-step label="Emergency Contact Information">
+                                        <form [formGroup]="employeeForm">
+                                            <div class="pt-5">
+                                                <div class="grid grid-cols-6 gap-2 h-13">
+                                                    <!-- <app-dropdown [isFix]="true" [control]="employeeForm.get('idEmergencyRelation')"  [options]="dropdownOptions.relationshipDef" [icon]="'mat_outline:info'" [type]="116"> </app-dropdown> -->
+                                                    <mat-form-field class="w-full text-lg" appearance="outline">
+                                                        <mat-label class="label-font-size">{{ t('relationship')
+                                                            }}</mat-label>
+                                                        <mat-icon class="" matPrefix
+                                                            svgIcon="mat_outline:info"></mat-icon>
+                                                        <mat-select formControlName="idEmergencyRelation">
+                                                            @for (item of dropdownOptions.relationshipDef; track item) {
+                                                            <mat-option
+                                                                [value]="item.dropdownID">{{item.description}}</mat-option>
+                                                            }
+                                                        </mat-select>
+                                                    </mat-form-field>
+                                                    <mat-form-field class="w-full text-lg" appearance="outline">
+                                                        <mat-label class="label-font-size">{{ t('firstName')
+                                                            }}</mat-label>
+                                                        <mat-icon class="" matPrefix
+                                                            svgIcon="mat_outline:info"></mat-icon>
+                                                        <input matInput formControlName="emergencyFirstName" type="text"
+                                                            min="0" [placeholder]="'First Name'">
+                                                    </mat-form-field>
+                                                    <mat-form-field class="w-full text-lg" appearance="outline">
+                                                        <mat-label class="label-font-size">{{ t('middleName')
+                                                            }}</mat-label>
+                                                        <mat-icon class="" matPrefix
+                                                            svgIcon="mat_outline:info"></mat-icon>
+                                                        <input matInput formControlName="emergencyMiddleName"
+                                                            type="text" min="0" [placeholder]="'Middle Name'">
+                                                    </mat-form-field>
+                                                    <mat-form-field class="w-full text-lg" appearance="outline">
+                                                        <mat-label class="label-font-size">{{ t('lastName')
+                                                            }}</mat-label>
+                                                        <mat-icon class="" matPrefix
+                                                            svgIcon="mat_outline:info"></mat-icon>
+                                                        <input matInput formControlName="emergencyLastName" type="text"
+                                                            min="0" [placeholder]="'Last Name'">
+                                                    </mat-form-field>
+                                                    <mat-form-field class="w-full text-lg" appearance="outline">
+                                                        <mat-label class="ml-10">{{ t('Mobile') }}</mat-label>
+                                                        <mat-icon class="" matPrefix
+                                                            svgIcon="mat_outline:info"></mat-icon>
+                                                        <span style="position: relative; bottom: 12px;" matPrefix
+                                                            class="ml-10">+63</span>
+                                                        <input matInput formControlName="emergencyMobileNumber"
+                                                            type="text" min="0" mask="000 000 0000"
+                                                            [placeholder]="'9xxxxxxxxx'">
+                                                    </mat-form-field>
+                                                    <mat-form-field class="w-full text-lg" appearance="outline">
+                                                        <mat-label class="label-font-size">{{ t('Email') }}</mat-label>
+                                                        <mat-icon class="" matPrefix
+                                                            svgIcon="mat_outline:info"></mat-icon>
+                                                        <input matInput formControlName="emergencyEmail" type="text"
+                                                            [placeholder]="'Email'" (blur)="InvalidEmail()">
+                                                    </mat-form-field>
+                                                </div>
+                                            </div>
+                                            <!-- <div>
+                                                        <button mat-flat-button matStepperPrevious color="primary">Back</button>&nbsp;
+                                                        <button mat-flat-button matStepperNext color="primary">Next</button>
+                                                      </div> -->
+                                        </form>
+                                    </mat-step>
+                                    <mat-step>
+                                        <ng-template matStepLabel>Address</ng-template>
+                                        <div>
+                                            <mat-label class="font-semibold">{{ t('presentAddress') }}</mat-label>
+                                            <form [formGroup]="employeeForm">
+                                                <div class="grid grid-cols-5 gap-2 mt-3 h-13">
+
+                                                    <app-dropdown [isFix]="true" [all]="false" [multiple]="false"
+                                                        [control]="employeeForm.get('preCountry')"
+                                                        [options]="dropdownOptions.countryDef"
+                                                        [icon]="'mat_outline:info'" [type]="3"> </app-dropdown>
+
+                                                    <app-dropdown-entitlement [control]="employeeForm.get('preRegion')"
+                                                        [multiple]="false" [all]="false" [useControl]="true"
+                                                        [id]="this.ef.preCountry" [id_to]="0"
+                                                        [options]="dropdownOptions.regionDef"
+                                                        [icon]="'mat_outline:info'" [type]="10"
+                                                        [triggerByParent]="this.ef.preCountry  > 0"></app-dropdown-entitlement>
+                                                    <app-dropdown-entitlement
+                                                        [control]="employeeForm.get('preProvince')" [multiple]="false"
+                                                        [all]="false" [useControl]="true" [id]="this.ef.preCountry"
+                                                        [id_to]="this.ef.preRegion"
+                                                        [options]="dropdownOptions.provinceDef"
+                                                        [icon]="'mat_outline:info'" [type]="61"
+                                                        [triggerByParent]="this.ef.preRegion   > 0"></app-dropdown-entitlement>
+                                                    <app-dropdown-entitlement [control]="employeeForm.get('preCity')"
+                                                        [multiple]="false" [all]="false" [useControl]="true"
+                                                        [id]="this.ef.preRegion" [id_to]="this.ef.preProvince"
+                                                        [options]="[]" [icon]="'mat_outline:info'" [type]="9"
+                                                        [triggerByParent]="this.ef.preProvince > 0"></app-dropdown-entitlement>
+
+                                                    <mat-form-field class="w-full text-lg" appearance="outline">
+                                                        <mat-label class="label-font-size">{{ t('barangay')
+                                                            }}</mat-label>
+                                                        <mat-icon class="mb-2" matPrefix
+                                                            svgIcon="mat_outline:add_location_alt"></mat-icon>
+                                                        <input formControlName="preBarangay" matInput type="text"
+                                                            [placeholder]="'Barangay'">
+                                                    </mat-form-field>
+
+                                                </div>
+                                                <div class="grid grid-cols-5 gap-2 h-13">
+
+                                                    <mat-form-field class="w-full text-lg" appearance="outline">
+                                                        <mat-label class="label-font-size">{{
+                                                            t('unitFloorNumber')}}</mat-label>
+                                                        <mat-icon class="mb-2" matPrefix
+                                                            svgIcon="mat_outline:add_location_alt"></mat-icon>
+                                                        <input formControlName="preUnitFloor" matInput type="text"
+                                                            [placeholder]="'Unit/Floorr #'">
+                                                    </mat-form-field>
+                                                    <mat-form-field class="w-full text-lg" appearance="outline">
+                                                        <mat-label class="label-font-size">{{ t('building')
+                                                            }}</mat-label>
+                                                        <mat-icon class="mb-2" matPrefix
+                                                            svgIcon="mat_outline:add_location_alt"></mat-icon>
+                                                        <input formControlName="preBuilding" matInput type="text"
+                                                            [placeholder]="'Building'">
+                                                    </mat-form-field>
+                                                    <mat-form-field class="w-full text-lg" appearance="outline">
+                                                        <mat-label class="label-font-size">{{ t('street') }}</mat-label>
+                                                        <mat-icon class="mb-2" matPrefix
+                                                            svgIcon="mat_outline:add_location_alt"></mat-icon>
+                                                        <input formControlName="preStreet" matInput type="text"
+                                                            [placeholder]="'Street'">
+                                                    </mat-form-field>
+                                                    <mat-form-field class="w-full text-lg" appearance="outline">
+                                                        <mat-label class="label-font-size">{{ t('Zip Code')
+                                                            }}</mat-label>
+                                                        <mat-icon class="mb-2" matPrefix
+                                                            svgIcon="mat_outline:add_location_alt"></mat-icon>
+                                                        <input formControlName="preZipCode" mask="0000" matInput
+                                                            type="text" [placeholder]="'Zip Code'">
+                                                    </mat-form-field>
+                                                </div>
+                                            </form>
+
+                                            <mat-divider class=""></mat-divider>
+
+                                            <div class="flex items-center gap-5 mb-3">
+                                                <mat-label class="font-semibold">{{t('Permanent Address')}}</mat-label>
+                                                <mat-checkbox [disabled]="isView" (change)="checkSameAddress($event)"
+                                                    color="primary">Same as Present Address</mat-checkbox>
+                                            </div>
+                                            <form [formGroup]="employeeForm">
+                                                <div class="grid grid-cols-5 gap-2 h-13">
+
+
+
+                                                    <app-dropdown [isFix]="true" [all]="false" [multiple]="false"
+                                                        [control]="employeeForm.get('perCountry')"
+                                                        [options]="dropdownOptions.countryDef"
+                                                        [icon]="'mat_outline:info'" [type]="3"> </app-dropdown>
+
+                                                    <app-dropdown-entitlement [control]="employeeForm.get('perRegion')"
+                                                        [multiple]="false" [all]="false" [useControl]="true"
+                                                        [id]="this.ef.perCountry" [id_to]="0"
+                                                        [options]="dropdownOptions.regionDef"
+                                                        [icon]="'mat_outline:info'" [type]="10"
+                                                        [triggerByParent]="this.ef.perCountry  > 0"></app-dropdown-entitlement>
+                                                    <app-dropdown-entitlement
+                                                        [control]="employeeForm.get('perProvince')" [multiple]="false"
+                                                        [all]="false" [useControl]="true" [id]="this.ef.perCountry"
+                                                        [id_to]="this.ef.perRegion"
+                                                        [options]="dropdownOptions.provinceDef"
+                                                        [icon]="'mat_outline:info'" [type]="61"
+                                                        [triggerByParent]="this.ef.perRegion   > 0"></app-dropdown-entitlement>
+                                                    <app-dropdown-entitlement [control]="employeeForm.get('perCity')"
+                                                        [multiple]="false" [all]="false" [useControl]="true"
+                                                        [id]="this.ef.perRegion" [id_to]="this.ef.perProvince"
+                                                        [options]="[]" [icon]="'mat_outline:info'" [type]="9"
+                                                        [triggerByParent]="this.ef.perProvince > 0"></app-dropdown-entitlement>
+
+                                                    <mat-form-field class="w-full text-lg" appearance="outline">
+                                                        <mat-label class="label-font-size">{{ t('barangay')
+                                                            }}</mat-label>
+                                                        <mat-icon class="mb-2" matPrefix
+                                                            svgIcon="mat_outline:add_location_alt"></mat-icon>
+                                                        <input formControlName="perBarangay" matInput type="text"
+                                                            [placeholder]="'Barangay'">
+                                                    </mat-form-field>
+
+                                                </div>
+                                                <div class="grid grid-cols-5 gap-2">
+
+                                                    <mat-form-field class="w-full text-lg" appearance="outline">
+                                                        <mat-label class="label-font-size">{{ t('unitFloorNumber')
+                                                            }}</mat-label>
+                                                        <mat-icon class="mb-2" matPrefix
+                                                            svgIcon="mat_outline:add_location_alt"></mat-icon>
+                                                        <input formControlName="perUnitFloor" matInput type="text"
+                                                            [placeholder]="'Unit/Floor #'">
+                                                    </mat-form-field>
+
+                                                    <mat-form-field class="w-full text-lg" appearance="outline">
+                                                        <mat-label class="label-font-size">{{ t('building')
+                                                            }}</mat-label>
+                                                        <mat-icon class="mb-2" matPrefix
+                                                            svgIcon="mat_outline:add_location_alt"></mat-icon>
+                                                        <input formControlName="perBuilding" matInput type="text"
+                                                            [placeholder]="'Building'">
+                                                    </mat-form-field>
+
+                                                    <mat-form-field class="w-full text-lg" appearance="outline">
+                                                        <mat-label class="label-font-size">{{ t('street') }}</mat-label>
+                                                        <mat-icon class="mb-2" matPrefix
+                                                            svgIcon="mat_outline:add_location_alt"></mat-icon>
+                                                        <input formControlName="perStreet" matInput type="text"
+                                                            [placeholder]="'Street'">
+                                                    </mat-form-field>
+
+                                                    <mat-form-field class="w-full text-lg" appearance="outline">
+                                                        <mat-label class="label-font-size">{{ t('Zip Code')
+                                                            }}</mat-label>
+                                                        <mat-icon class="mb-2" matPrefix
+                                                            svgIcon="mat_outline:add_location_alt"></mat-icon>
+                                                        <input formControlName="perZipCode" mask="0000" matInput
+                                                            type="text" [placeholder]="'Zip Code'">
+                                                        <mat-error>Please enter a valid zip code</mat-error>
+                                                    </mat-form-field>
+
+                                                </div>
+                                            </form>
+                                            <!-- </div> -->
+                                        </div>
+                                        <!-- <div>
+                                                                      <button mat-flat-button matStepperPrevious color="primary">Back</button>
+                                                                    </div> -->
+                                    </mat-step>
+                                    <mat-step label="Dependents">
+                                        <form [formGroup]="employeeDependentsForm">
+                                            <div class="pt-5">
+                                                <div class="grid grid-cols-7 gap-2 h-13">
+                                                    <!-- <app-dropdown [isFix]="true" [control]="employeeForm.get('idRelationship')"  [options]="dropdownOptions.relationshipDef" [icon]="'mat_outline:info'" [type]="116"> </app-dropdown> -->
+                                                    <mat-form-field class="w-full text-lg" appearance="outline">
+                                                        <mat-label class="label-font-size">{{ t('Relationship')
+                                                            }}</mat-label>
+                                                        <mat-icon class="" matPrefix
+                                                            svgIcon="mat_outline:info"></mat-icon>
+                                                        <mat-select formControlName="idRelationship">
+                                                            @for (item of dropdownOptions.dependentsDef; track item) {
+                                                            <mat-option
+                                                                [value]="item.dropdownID">{{item.description}}</mat-option>
+                                                            }
+                                                        </mat-select>
+                                                    </mat-form-field>
+                                                    <mat-form-field class="w-full text-lg" appearance="outline">
+                                                        <mat-label class="label-font-size">{{ t('First Name')
+                                                            }}</mat-label>
+                                                        <mat-icon class="" matPrefix
+                                                            svgIcon="mat_outline:info"></mat-icon>
+                                                        <input matInput formControlName="firstName" type="text" min="0"
+                                                            [placeholder]="'First Name'">
+                                                    </mat-form-field>
+                                                    <mat-form-field class="w-full text-lg" appearance="outline">
+                                                        <mat-label class="label-font-size">{{ t('Middle Name')
+                                                            }}</mat-label>
+                                                        <mat-icon class="" matPrefix
+                                                            svgIcon="mat_outline:info"></mat-icon>
+                                                        <input matInput formControlName="middleName" type="text" min="0"
+                                                            [placeholder]="'Middle Name'">
+                                                    </mat-form-field>
+                                                    <mat-form-field class="w-full text-lg" appearance="outline">
+                                                        <mat-label class="label-font-size">{{ t('Last Name')
+                                                            }}</mat-label>
+                                                        <mat-icon class="" matPrefix
+                                                            svgIcon="mat_outline:info"></mat-icon>
+                                                        <input matInput formControlName="lastName" type="text" min="0"
+                                                            [placeholder]="'Last Name'">
+                                                    </mat-form-field>
+                                                    <mat-form-field class="w-full text-lg" appearance="outline">
+                                                        <mat-label class="label-font-size">{{ t('Birthday')
+                                                            }}</mat-label>
+                                                        <input readonly matInput formControlName="birthDate"
+                                                            [matDatepicker]="picker" (dateChange)="onChangeBirthAge()"
+                                                            [placeholder]="'MM/DD/YYYY'">
+                                                        <mat-datepicker-toggle matSuffix
+                                                            [for]="picker"></mat-datepicker-toggle>
+                                                        <mat-datepicker #picker></mat-datepicker>
+                                                    </mat-form-field>
+                                                    <mat-form-field class="w-full text-lg" appearance="outline">
+                                                        <mat-label class="label-font-size">{{ t('Age') }}</mat-label>
+                                                        <mat-icon class="" matPrefix
+                                                            svgIcon="mat_outline:info"></mat-icon>
+                                                        <input matInput formControlName="age" type="text" min="0"
+                                                            [placeholder]="'Age'">
+                                                    </mat-form-field>
+                                                    <div class="button-margin-top">
+                                                        <button (click)="handleAdddependent() " class="text-lg w-[10px]"
+                                                            mat-flat-button color="primary" aria-label="example icon">
+                                                            <mat-icon class="mb-2"
+                                                                svgIcon="mat_outline:post_add"></mat-icon>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                    <table #Table_dependents mat-table
+                                                        [dataSource]="dataSource_dependents"
+                                                        class="mat-elevation-z0 w-full bg-transparent border">
+
+                                                        <!-- Position Column -->
+                                                        <ng-container matColumnDef="idRelationship">
+                                                            <th mat-header-cell *matHeaderCellDef> Relationship </th>
+                                                            <td mat-cell *matCellDef="let element">
+                                                                {{element.idRelationshipdescrip}} </td>
+                                                        </ng-container>
+
+                                                        <!-- Name Column -->
+                                                        <ng-container matColumnDef="firstName">
+                                                            <th mat-header-cell *matHeaderCellDef> First Name </th>
+                                                            <td mat-cell *matCellDef="let element">
+                                                                {{element.firstName}}
+                                                            </td>
+                                                        </ng-container>
+
+                                                        <!-- Weight Column -->
+                                                        <ng-container matColumnDef="middleName">
+                                                            <th mat-header-cell *matHeaderCellDef> Middle Name </th>
+                                                            <td mat-cell *matCellDef="let element">
+                                                                {{element.middleName}}
+                                                            </td>
+                                                        </ng-container>
+
+                                                        <!-- Symbol Column -->
+                                                        <ng-container matColumnDef="lastName">
+                                                            <th mat-header-cell *matHeaderCellDef> Last Name </th>
+                                                            <td mat-cell *matCellDef="let element"> {{element.lastName}}
+                                                            </td>
+                                                        </ng-container>
+
+                                                        <ng-container matColumnDef="birthDate">
+                                                            <th mat-header-cell *matHeaderCellDef> Birthday </th>
+                                                            <td mat-cell *matCellDef="let element">
+                                                                {{element.birthDate}}
+                                                            </td>
+                                                        </ng-container>
+
+                                                        <ng-container matColumnDef="age">
+                                                            <th mat-header-cell *matHeaderCellDef> Age </th>
+                                                            <td mat-cell *matCellDef="let element"> {{element.age}}
+                                                            </td>
+                                                        </ng-container>
+
+                                                        <ng-container matColumnDef="action">
+                                                            <th mat-header-cell *matHeaderCellDef> Action</th>
+                                                            <td mat-cell *matCellDef="let element; let i = index">
+                                                                <button type="button" mat-icon-button color="warn"
+                                                                    (click)="Delete(i)">
+                                                                    <mat-icon svgIcon="mat_outline:delete"></mat-icon>
+                                                                </button>
+                                                            </td>
+                                                        </ng-container>
+
+                                                        <tr mat-header-row
+                                                            *matHeaderRowDef="displayedColumns_dependent">
+                                                        </tr>
+                                                        <tr mat-row
+                                                            *matRowDef="let row; columns: displayedColumns_dependent;">
+                                                        </tr>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            <!-- <div>
+                                                                                <button mat-flat-button matStepperPrevious color="primary">Back</button>&nbsp;
+                                                                                <button mat-flat-button matStepperNext color="primary">Next</button>
+                                                                              </div> -->
+                                        </form>
+                                    </mat-step>
+                                </mat-stepper>
+                            </div>
+                        </div>
+
+
+                        <!-- <mat-tab-group> -->
+                        <!-- Work Information -->
+                        <!-- <mat-tab [hidden]="!isWoI" label="{{t('emp-woi')}}">
+                                                                    <ng-template matTabContent> -->
+                        <form [formGroup]="employeeInformationForm">
+                            <div class="px-5 h-full">
+                                <div [hidden]="!isWoI">
+                                    <div class="flex flex-wrap pt-10">
+                                        <mat-form-field class="w-80 h-13 mr-3 text-lg" appearance="outline">
+                                            <mat-label class="label-font-size">{{ t('Biometrics ID') }}</mat-label>
+                                            <mat-icon class="" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                                            <input [formControl]="employeeInformationForm.get('idBio')" matInput
+                                                type="text" [placeholder]="'Biometrics ID'">
+                                        </mat-form-field>
+                                        <form [formGroup]="employeeForm">
+                                            <mat-form-field class="w-80 h-13 mr-3 text-lg" appearance="outline">
+                                                <mat-label class="label-font-size">{{ t('Employee ID') }}</mat-label>
+                                                <mat-icon class="" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                                                <input formControlName="employeeCode" matInput type="text"
+                                                    [placeholder]="'Employee ID'" (change)="onChangeEmployeeId()">
+                                            </mat-form-field>
+                                        </form>
+                                        <mat-form-field class="w-80 h-13 mr-3 text-lg" appearance="outline">
+                                            <mat-label class="label-font-size">{{ t('ERP ID') }}</mat-label>
+                                            <mat-icon class="" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                                            <input formControlName="idERP" matInput type="text"
+                                                [placeholder]="'ERP ID'">
+                                        </mat-form-field>
+                                        <form [formGroup]="employeeForm">
+                                            <mat-form-field class="w-80 h-13 mr-3 text-lg" appearance="outline">
+                                                <mat-label class="label-font-size">{{ t('Username') }}</mat-label>
+                                                <mat-icon class="" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                                                <input formControlName="userName" matInput type="text"
+                                                    [placeholder]="'Username'">
+                                            </mat-form-field>
+                                        </form>
+                                        <div class="w-80 h-13 mr-3"><app-dropdown-custom
+                                                [control]="employeeInformationForm.get('idSupervisor')"
+                                                [icon]="'mat_outline:info'" [type]="1011" [value]="this.ei.idSupervisor"
+                                                [options]="dropdownOptions.userDef"
+                                                [useControl]="true"></app-dropdown-custom></div>
+                                        @if (!profile) {
+                                        <div class="w-80 h-13 mr-3"><app-dropdown-custom
+                                                [control]="employeeInformationForm.get('idCategory')"
+                                                [icon]="'mat_outline:info'" [type]="1007" [value]="this.ei.idCategory"
+                                                [options]="dropdownOptions.categoryDef"
+                                                [useControl]="true"></app-dropdown-custom></div>
+                                        }
+                                        @if (!profile) {
+                                        <div class="w-80 h-13 mr-3"><app-dropdown-custom
+                                                [control]="employeeInformationForm.get('idAccessControl')"
+                                                [useControl]="true" [value]="this.ei.idAccessControl"
+                                                [options]="dropdownOptions.AccessControldef" [icon]="'mat_outline:info'"
+                                                [type]="1008"> </app-dropdown-custom></div>
+                                        }
+
+                                        <div class="w-80 h-13 mr-3"><app-dropdown-custom
+                                                [control]="employeeInformationForm.get('idSubCompany')" [type]="1001"
+                                                [value]="this.ei.idSubCompany" [options]="dropdownOptions.subCompanyDef"
+                                                [useControl]="true" (manual)="manual=$event"></app-dropdown-custom>
+                                        </div>
+                                        @if (ei.idSubCompany) {
+                                        <div class="w-80 h-13 mr-3"><app-dropdown-hierarchy [disabled]="profile"
+                                                [control]="employeeInformationForm.get('idBranch')" [useControl]="true"
+                                                [multiple]="false" [all]="false" [type]="1" [type_id]="-1"
+                                                [id]="[ei.idSubCompany]" [manual]="manual"></app-dropdown-hierarchy>
+                                        </div>
+                                        }
+
+                                        <div class="w-80 h-13 mr-3"><app-dropdown [isFix]="true" [all]="false"
+                                                [multiple]="false"
+                                                [control]="employeeInformationForm.get('idBusinessUnit')"
+                                                [options]="dropdownOptions.busnissUnitDef" [label]="'Business Unit'"
+                                                [icon]="'mat_outline:info'" [type]="121"> </app-dropdown></div>
+                                        @if (!profile) {
+                                        <div class="w-80 h-13 mr-3"><app-dropdown [isFix]="true" [all]="false"
+                                                [multiple]="false" [control]="employeeInformationForm.get('idPeza')"
+                                                [options]="dropdownOptions.pezaClassificationDef"
+                                                [label]="'Peza Classification'" [icon]="'mat_outline:info'"
+                                                [type]="143">
+                                            </app-dropdown></div>
+                                        }
+                                        <div class="w-80 h-13 mr-3"><app-dropdown [isFix]="false"
+                                                [control]="employeeInformationForm.get('idDepartment')"
+                                                [options]="dropdownOptions.departmentDef" [icon]="'mat_outline:info'"
+                                                [type]="38"> </app-dropdown></div>
+                                        <div class="w-80 h-13 mr-3"><app-dropdown [isFix]="true" [all]="false"
+                                                [multiple]="false"
+                                                [control]="employeeInformationForm.get('idEmployeeLevel')"
+                                                [options]="dropdownOptions.employeeLevelDef" [icon]="'mat_outline:info'"
+                                                [type]="123"> </app-dropdown></div>
+                                        <div class="w-80 h-13 mr-3"><app-dropdown [isFix]="true" [all]="false"
+                                                [multiple]="false"
+                                                [control]="employeeInformationForm.get('idEmployeeStatus')"
+                                                [options]="dropdownOptions.employeeStatusDef"
+                                                [icon]="'mat_outline:info'" [type]="36"> </app-dropdown></div>
+
+                                        <div class="w-80 h-13 mr-3"><app-dropdown [isFix]="false"
+                                                [control]="employeeInformationForm.get('idOccupation')"
+                                                [options]="dropdownOptions.occupationDef" [icon]="'mat_outline:info'"
+                                                [type]="37"> </app-dropdown></div>
+                                        @if (!profile) {
+                                        <div class="w-80 h-13 mr-3"><app-dropdown [isFix]="false" [all]="false"
+                                                [multiple]="false"
+                                                [control]="employeeInformationForm.get('idCostCenter')"
+                                                [options]="dropdownOptions.costCenterDef" [icon]="'mat_outline:info'"
+                                                [type]="39"> </app-dropdown></div>
+                                        }
+                                        @if (!profile) {
+                                        <div class="w-80 h-13 mr-3"><app-dropdown [isFix]="false" [all]="false"
+                                                [multiple]="false" [control]="employeeInformationForm.get('idDivision')"
+                                                [options]="dropdownOptions.divisionDef" [icon]="'mat_outline:info'"
+                                                [type]="40"> </app-dropdown></div>
+                                        }
+
+                                        <mat-form-field class="w-80 h-13 mr-3 text-lg" appearance="outline">
+                                            <mat-label class="label-font-size">{{ t('dateHired') }}</mat-label>
+                                            <input (dateChange)="regulardate()"
+                                                [formControl]="employeeInformationForm.get('dateHired')" matInput
+                                                [matDatepicker]="dh" readonly>
+                                            <mat-datepicker-toggle matSuffix [for]="dh"></mat-datepicker-toggle>
+                                            <mat-datepicker #dh></mat-datepicker>
+                                        </mat-form-field>
+                                        <mat-form-field class="w-80 h-13 mr-3 text-lg" appearance="outline">
+                                            <mat-label class="label-font-size">{{ t('probationaryDate') }}</mat-label>
+                                            <input (dateChange)="regular()"
+                                                [formControl]="employeeInformationForm.get('dateProbationary')" matInput
+                                                [matDatepicker]="pd" readonly
+                                                [value]="employeeInformationForm.value.dateProbationary"
+                                                (click)="pd.open()"
+                                                [min]="employeeInformationForm.controls['dateHired'].value">
+                                            <mat-datepicker-toggle matSuffix [for]="pd"></mat-datepicker-toggle>
+                                            <mat-datepicker #pd></mat-datepicker>
+                                        </mat-form-field>
+                                        <mat-form-field class="w-80 h-13 mr-3 text-lg" appearance="outline">
+                                            <mat-label class="label-font-size">{{ t('regularizationDate') }}</mat-label>
+                                            <input [formControl]="employeeInformationForm.get('dateRegularized') "
+                                                matInput [matDatepicker]="rd" readonly [placeholder]="'MM/DD/YY'"
+                                                (click)="rd.open()">
+                                            <mat-datepicker-toggle matSuffix [for]="rd"></mat-datepicker-toggle>
+                                            <mat-datepicker #rd></mat-datepicker>
+                                        </mat-form-field>
+                                        @if (employeeInformationForm.get('idEmployeeStatus').value == 30050) {
+                                        <div class="w-80 h-13 mr-3">
+                                            <mat-form-field class="text-lg" appearance="outline">
+                                                <mat-label class="label-font-size">{{ t('Contract Expiry')
+                                                    }}</mat-label>
+                                                <input
+                                                    [formControl]="employeeInformationForm.get('dateContractValidity')"
+                                                    matInput [matDatepicker]="sd" readonly [placeholder]="'MM/DD/YYYY'"
+                                                    (click)="sd.open()">
+                                                <mat-datepicker-toggle matSuffix [for]="sd"></mat-datepicker-toggle>
+                                                <mat-datepicker #sd></mat-datepicker>
+                                            </mat-form-field>
+                                        </div>
+                                        }
+                                        @if (employeeInformationForm.get('idEmployeeStatus').value == 12665 ||
+                                        employeeInformationForm.get('idEmployeeStatus').value == 95) {
+                                        <mat-form-field class="w-80 h-13 mr-3 text-lg" appearance="outline">
+                                            <mat-label class="label-font-size">{{ t('Effectivity Date') }}</mat-label>
+                                            <input [formControl]="employeeInformationForm.get('dateEffective')" matInput
+                                                [matDatepicker]="de" readonly (click)="de.open()">
+                                            <mat-datepicker-toggle matSuffix [for]="de"></mat-datepicker-toggle>
+                                            <mat-datepicker #de></mat-datepicker>
+                                        </mat-form-field>
+                                        }
+                                    </div>
+                                    <div class="grid grid-cols-7 gap-4 h-13">
+
+                                        @if (employeeInformationForm.get('idEmployeeStatus').value == 95 ||
+                                        employeeInformationForm.get('idEmployeeStatus').value == 12665) {
+                                        <mat-form-field class="w-full text-lg" appearance="outline">
+                                            <mat-label class="label-font-size">{{ t('Separation Date') }}</mat-label>
+                                            <input [formControl]="employeeInformationForm.get('dateSeparated')" matInput
+                                                [matDatepicker]="sd" readonly
+                                                [min]="employeeInformationForm.value.dateEffective"
+                                                [placeholder]="'MM/DD/YYYY'" (click)="sd.open()"
+                                                [disabled]="!employeeInformationForm.value.dateEffective">
+                                            <mat-datepicker-toggle matSuffix [for]="sd"></mat-datepicker-toggle>
+                                            <mat-datepicker #sd></mat-datepicker>
+                                        </mat-form-field>
+                                        }
+
+                                        @if (employeeInformationForm.get('idEmployeeStatus').value == 12665 ||
+                                        employeeInformationForm.get('idEmployeeStatus').value == 95) {
+                                        <mat-form-field class="w-full text-lg" appearance="outline">
+                                            <mat-label class="label-font-size">{{ t('Access Until') }}</mat-label>
+                                            <input [formControl]="employeeInformationForm.get('dateAccessUntil')"
+                                                matInput [matDatepicker]="dh" readonly (click)="dh.open()"
+                                                [min]="employeeInformationForm.value.dateSeparated"
+                                                [disabled]="!employeeInformationForm.value.dateSeparated">
+                                            <mat-datepicker-toggle matSuffix [for]="dh"></mat-datepicker-toggle>
+                                            <mat-datepicker #dh></mat-datepicker>
+                                        </mat-form-field>
+                                        }
+                                        @if (employeeInformationForm.get('idEmployeeStatus').value == 12665 ||
+                                        employeeInformationForm.get('idEmployeeStatus').value == 95){
+                                        <mat-form-field class="w-full text-md" appearance="outline">
+                                            <mat-label class="label-font-size">{{ t('Final Pay Release Date')
+                                                }}</mat-label>
+                                            <input [formControl]="employeeInformationForm.get('dateFinalPayRelease')"
+                                                matInput [matDatepicker]="dfp" readonly (click)="dfp.open()"
+                                                [min]="employeeInformationForm.value.dateSeparated"
+                                                [disabled]="!employeeInformationForm.value.dateSeparated">
+                                            <mat-datepicker-toggle matSuffix [for]="dfp"></mat-datepicker-toggle>
+                                            <mat-datepicker #dfp></mat-datepicker>
+                                        </mat-form-field>
+                                        }
+
+                                    </div>
+
+                                </div>
+                            </div>
+                            <!-- </ng-template>
+                                                                                        </mat-tab> -->
+
+                            <!-- Payroll Information -->
+                            <!-- <mat-tab [hidden]="!isPaI" label="{{t('emp-pai')}}">
+                                                                                        <ng-template matTabContent> -->
+                            <div class="px-5 mat-elevation-z0">
+                                <div [hidden]="!isPaI">
+                                    <div class="flex gap-2 flex-wrap mt-5">
+                                        <div class="h-13">@if (!profile) {
+                                            <app-dropdown-custom
+                                                [control]="employeeInformationForm.get('idTimekeeping')"
+                                                [value]="this.ei.idTimekeeping"
+                                                [options]="dropdownOptions.Timekeepingdef" [except]="true"
+                                                [allDisplay]="false" (selected)="exception()" [useControl]="true"
+                                                [icon]="'mat_outline:info'" [type]="1012">
+                                            </app-dropdown-custom>
+                                            }
+                                        </div>
+                                        <div class="h-13">@if (!profile) {
+                                            <app-dropdown-custom [control]="employeeInformationForm.get('idPayroll')"
+                                                [value]="this.ei.idPayroll" [useControl]="true"
+                                                [options]="dropdownOptions.payrollCategoryDef" [except]="true"
+                                                [allDisplay]="false"
+                                                (selected)="exception() ; computeRates('payrollcat') "
+                                                [icon]="'mat_outline:info'" [type]="1009"> </app-dropdown-custom>
+                                            }
+                                        </div>
+                                        <div class="h-13">@if (!profile) {
+                                            <app-dropdown [isFix]="true"
+                                                [control]="employeeInformationForm.get('idConfidentiality')"
+                                                [options]="dropdownOptions.confidentialDef" [icon]="'mat_outline:info'"
+                                                [type]="42"> </app-dropdown>
+                                            }
+                                        </div>
+                                        <div class="h-13"><app-dropdown [isFix]="true"
+                                                [control]="employeeInformationForm.get('idPayType')"
+                                                [options]="dropdownOptions.unitpaydef" [icon]="'mat_outline:info'"
+                                                label="Pay Scheme" [type]="177" (selected)="unitPay($event)">
+                                            </app-dropdown></div>
+
+                                        @if (fields.rateMonthly) {
+                                        <mat-form-field class="text-lg h-13" appearance="outline">
+                                            <mat-label class="label-font-size">{{ t('Monthly Rate') }}</mat-label>
+                                            <mat-icon class="" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                                            <input [readonly]="employeeInformationForm.value.idPayType == 31167"
+                                                [formControl]="employeeInformationForm.get('rateMonthly')" prefix="₱"
+                                                mask="separator.2" thousandSeparator="," matInput type="text"
+                                                [placeholder]="'Monthly Rate'" (blur)="computeRates('rateMonthly')">
+                                        </mat-form-field>
+                                        }
+
+                                        @if (fields.rateSemiMonthly) {
+                                        <mat-form-field class=" text-lg h-13" appearance="outline">
+                                            <mat-label class="label-font-size">{{ t('Semi Monthly Rate') }}</mat-label>
+                                            <mat-icon class="" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                                            <input [readonly]="employeeInformationForm.value.idPayType == 31167"
+                                                [formControl]="employeeInformationForm.get('rateSemiMonthly')"
+                                                prefix="₱" mask="separator.2" thousandSeparator="," matInput type="text"
+                                                [placeholder]="'Semi Monthly Rate'"
+                                                (blur)="computeRates('rateSemiMonthly')">
+                                        </mat-form-field>
+                                        }
+
+                                        @if (fields.rateDaily) {
+                                        <mat-form-field class=" text-lg h-13" appearance="outline">
+                                            <mat-label class="label-font-size">{{ t('Daily Rate') }}</mat-label>
+                                            <mat-icon class="" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                                            <input [formControl]="employeeInformationForm.get('rateDaily')" readonly
+                                                prefix="₱" mask="separator.2" thousandSeparator="," matInput type="text"
+                                                [placeholder]="'Daily Rate'">
+                                        </mat-form-field>
+                                        }
+                                        @if (fields.rateHourly) {
+                                        <mat-form-field class=" text-lg h-13" appearance="outline">
+                                            <mat-label class="label-font-size">{{ t('Hourly Rate') }}</mat-label>
+                                            <mat-icon class="" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                                            <input [formControl]="employeeInformationForm.get('rateHourly')" readonly
+                                                prefix="₱" mask="separator.2" thousandSeparator="," matInput type="text"
+                                                [placeholder]="'Hourly Rate'">
+                                        </mat-form-field>
+                                        }
+
+                                        <div class="h-13"><app-dropdown [isFix]="true" [useControl]="true"
+                                                [control]="employeeInformationForm.get('idBank')"
+                                                [options]="dropdownOptions.bankDef" [icon]="'mat_outline:info'"
+                                                [type]="2">
+                                            </app-dropdown></div>
+                                        <div class="h-13"><app-dropdown [isFix]="true"
+                                                [control]="employeeInformationForm.get('bankAccountTypeId')"
+                                                [options]="dropdownOptions.bankAccountDef" [icon]="'mat_outline:info'"
+                                                [type]="99"> </app-dropdown></div>
+
+                                        <mat-form-field class=" text-lg h-13" appearance="outline">
+                                            <mat-label class="label-font-size">{{ t('bankAccountNumber') }}</mat-label>
+                                            <mat-icon class="" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                                            <input [formControl]="employeeInformationForm.get('bankAccount')" matInput
+                                                type="text" [placeholder]="'Bank Account'">
+                                        </mat-form-field>
+
+                                        <mat-form-field class=" text-lg h-13" appearance="outline">
+                                            <mat-label class="label-font-size">{{ t('sssNumber') }}</mat-label>
+                                            <mat-icon class="" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                                            <input [formControl]="employeeInformationForm.get('sss')"
+                                                mask="00-0000000-0" placeholder="00-0000000-0" matInput type="text">
+                                        </mat-form-field>
+                                        <mat-form-field class=" text-lg h-13" appearance="outline">
+                                            <mat-label class="label-font-size">{{ t('philhealthNumber') }}</mat-label>
+                                            <mat-icon class="" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                                            <input [formControl]="employeeInformationForm.get('philhealth')"
+                                                mask="00-000000000-0" placeholder="00-000000000-0" matInput type="text">
+                                        </mat-form-field>
+                                        <mat-form-field class=" text-lg h-13" appearance="outline">
+                                            <mat-label class="label-font-size">{{ t('pagibigNumber') }}</mat-label>
+                                            <mat-icon class="" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                                            <input [formControl]="employeeInformationForm.get('pagibig')"
+                                                mask="0000-0000-0000" placeholder="0000-0000-0000" matInput type="text">
+                                        </mat-form-field>
+                                        <mat-form-field class=" text-lg h-13" appearance="outline">
+                                            <mat-label class="label-font-size">{{ t('tinNumber') }}</mat-label>
+                                            <mat-icon class="" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                                            <input [formControl]="employeeInformationForm.get('tin')" mask="000-000-000"
+                                                placeholder="000-000-000" matInput type="text">
+                                        </mat-form-field>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                        <!-- </ng-template>
+                                                                                                      </mat-tab> -->
+
+                        <!-- Shift -->
+                        <!-- <mat-tab [hidden]="!isS" label="{{t('emp-s')}}">
+                                                                                                      <ng-template matTabContent> -->
+                        <div class="px-5">
+                            <div [hidden]="!isS">
+                                <form [formGroup]="unSavedForm">
+                                    <div class="grid grid-cols-5 gap-4 pt-10">
+                                        <mat-form-field class="w-full text-lg" appearance="outline">
+                                            <mat-label class="label-font-size">{{ t('Date From') }}</mat-label>
+                                            <input formControlName="dateFrom"
+                                                [max]="unSavedForm.controls['dateTo'].value" matInput
+                                                [matDatepicker]="df" readonly [placeholder]="'MM/DD/YYYY'"
+                                                (click)="df.open()">
+                                            <mat-datepicker-toggle matSuffix [for]="df"></mat-datepicker-toggle>
+                                            <mat-datepicker #df></mat-datepicker>
+                                        </mat-form-field>
+                                        <mat-form-field class="w-full text-lg" appearance="outline">
+                                            <mat-label class="label-font-size">{{ t('Date To') }}</mat-label>
+                                            <input formControlName="dateTo"
+                                                [min]="unSavedForm.controls['dateFrom'].value" matInput
+                                                [matDatepicker]="dt" readonly [placeholder]="'MM/DD/YYYY'"
+                                                (click)="dt.open()">
+                                            <mat-datepicker-toggle matSuffix [for]="dt"></mat-datepicker-toggle>
+                                            <mat-datepicker #dt></mat-datepicker>
+                                        </mat-form-field>
+                                        <div class="button-margin-top">
+                                            <button class="text-lg w-[10px]" mat-flat-button color="primary"
+                                                aria-label="example icon" (click)="searchShift()">
+                                                <mat-icon class="mb-2" svgIcon="mat_outline:search"></mat-icon>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                                <table #BioTable mat-table [dataSource]="dataSource"
+                                    class="mat-elevation-z0 border bg-transparent" matSort
+                                    (matSortChange)="ShiftSortEvent($event)">
+                                    <ng-container matColumnDef="shiftCode">
+                                        <th mat-header-cell mat-sort-header="shiftCode" *matHeaderCellDef> Shift Code
+                                        </th>
+                                        <td mat-cell *matCellDef="let element"> {{element.shiftCode}} </td>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="date">
+                                        <th mat-header-cell mat-sort-header="date" *matHeaderCellDef> Date </th>
+                                        <td mat-cell *matCellDef="let element"> {{element.date}} </td>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="scheduleIn">
+                                        <th mat-header-cell mat-sort-header="scheduleIn" *matHeaderCellDef> Schedule In
+                                        </th>
+                                        <td mat-cell *matCellDef="let element"> {{element.scheduleIn}} </td>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="scheduleOut">
+                                        <th mat-header-cell mat-sort-header="scheduleOut" *matHeaderCellDef> Schedule
+                                            Out
+                                        </th>
+                                        <td mat-cell *matCellDef="let element"> {{element.scheduleOut}} </td>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="firstBreakIn">
+                                        <th mat-header-cell mat-sort-header="firstBreakIn" *matHeaderCellDef> First
+                                            Break In
+                                        </th>
+                                        <td mat-cell *matCellDef="let element"> {{element.firstBreakIn}} </td>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="firstBreakOut">
+                                        <th mat-header-cell mat-sort-header="firstBreakOut" *matHeaderCellDef> First
+                                            Break
+                                            Out </th>
+                                        <td mat-cell *matCellDef="let element"> {{element.firstBreakOut}} </td>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="secondBreakIn">
+                                        <th mat-header-cell mat-sort-header="secondBreakIn" *matHeaderCellDef> Second
+                                            Break
+                                            In </th>
+                                        <td mat-cell *matCellDef="let element"> {{element.secondBreakIn}} </td>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="secondBreakOut">
+                                        <th mat-header-cell mat-sort-header="secondBreakOut" *matHeaderCellDef> Second
+                                            Break
+                                            Out </th>
+                                        <td mat-cell *matCellDef="let element"> {{element.secondBreakOut}} </td>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="thirdBreakIn">
+                                        <th mat-header-cell mat-sort-header="thirdBreakIn" *matHeaderCellDef> Third
+                                            Break In
+                                        </th>
+                                        <td mat-cell *matCellDef="let element"> {{element.thirdBreakIn}} </td>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="thirdBreakOut">
+                                        <th mat-header-cell mat-sort-header="thirdBreakOut" *matHeaderCellDef> Third
+                                            Break
+                                            Out </th>
+                                        <td mat-cell *matCellDef="let element"> {{element.thirdBreakOut}} </td>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="workingHours">
+                                        <th mat-header-cell mat-sort-header="workingHours" *matHeaderCellDef> Working
+                                            Hours
+                                        </th>
+                                        <td mat-cell *matCellDef="let element"> {{element.workingHours}} </td>
+                                    </ng-container>
+
+                                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                                </table>
+
+                                <mat-paginator class="paganation bg-transparent" (page)="handlePageEvent($event)"
+                                    [length]="totalRows" [pageSize]="shiftRequest.Length"
+                                    [pageIndex]="shiftRequest.Start" [pageSizeOptions]="[20, 50, 100]"
+                                    showFirstLastButtons>
+                                </mat-paginator>
+                            </div>
+                        </div>
+                        <!-- </ng-template>
+                                                                                                        </mat-tab> -->
+
+                        <!-- leave -->
+                        <!-- <mat-tab [hidden]="isL" label="{{t('emp-l')}}">
+                                                                                                        <ng-template matTabContent> -->
+                        <div class="px-5">
+                            <div class="pt-10" [hidden]="!isL">
+                                <table #BioTable mat-table [dataSource]="dataSource_leave"
+                                    class="mat-elevation-z0 w-full border bg-transparent">
+                                    <ng-container matColumnDef="leave_type">
+                                        <th mat-header-cell *matHeaderCellDef> Leave Type </th>
+                                        <td mat-cell *matCellDef="let element"> {{element.leaveType}} </td>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="earned">
+                                        <th mat-header-cell *matHeaderCellDef> Earned </th>
+                                        <td mat-cell *matCellDef="let element"> {{element.earned}} </td>
+                                    </ng-container>
+
+
+                                    <ng-container matColumnDef="carried">
+                                        <th mat-header-cell *matHeaderCellDef> Carry Forward </th>
+                                        <td mat-cell *matCellDef="let element"> {{element.carried}} </td>
+                                    </ng-container>
+
+
+                                    <ng-container matColumnDef="expired">
+                                        <th mat-header-cell *matHeaderCellDef> Carry Forward Expiration Date</th>
+                                        <td mat-cell *matCellDef="let element"> {{element.carryExpiration}} </td>
+                                    </ng-container>
+
+                                    <!-- <ng-container matColumnDef="total_balance">
+                                        <th mat-header-cell *matHeaderCellDef> Total Balance </th>
+                                        <td mat-cell *matCellDef="let element"> {{element.used + element.pendingApproval
+                                            +
+                                            element.pendingSchedule + element.available}} </td>
+                                    </ng-container> -->
+
+                                    <ng-container matColumnDef="total_balance">
+                                        <th mat-header-cell *matHeaderCellDef> Expired Carry Forward </th>
+                                        <td mat-cell *matCellDef="let element"> {{element.expired }} </td>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="leave_used">
+                                        <th mat-header-cell *matHeaderCellDef> Leave Used </th>
+                                        <td mat-cell *matCellDef="let element"> {{element.used}} </td>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="pending_approval">
+                                        <th mat-header-cell *matHeaderCellDef> Pending Approval </th>
+                                        <td mat-cell *matCellDef="let element"> {{element.pendingApproval}} </td>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="pending_schedule">
+                                        <th mat-header-cell *matHeaderCellDef> Pending Schedule </th>
+                                        <td mat-cell *matCellDef="let element"> {{element.pendingSchedule}} </td>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="available">
+                                        <th mat-header-cell *matHeaderCellDef> Available Balance </th>
+                                        <td mat-cell *matCellDef="let element"> {{element.available}} </td>
+                                    </ng-container>
+
+                                    <tr mat-header-row *matHeaderRowDef="displayedColumns_leave"></tr>
+                                    <tr mat-row *matRowDef="let row; columns: displayedColumns_leave;"></tr>
+                                </table>
+                            </div>
+                        </div>
+                        <div class=" rounded-2xl" [hidden]="!isOther">
+                        </div>
+                        <form [formGroup]="unSavedForm">
+                            @if (employeeInformationForm.value.idPayroll == 0 ||
+                            employeeInformationForm.value.idTimekeeping == 0) {
+                            <div class="h-full">
+                                <div class="pl-6 pr-6 rounded-2xl" [hidden]="!isException">
+                                    <mat-tab-group dynamicHeight>
+                                        @if (employeeInformationForm.value.idTimekeeping == 0) {
+                                        <mat-tab label="Timekeeping">
+                                            <div class="grid grid-cols-5 gap-4 h-10">
+                                                <div class="w-80 h-13"><app-dropdown-custom
+                                                        [control]="unSavedForm.get('idTimekeepingexception')"
+                                                        [value]="this.ex.idTimekeeping"
+                                                        [options]="dropdownOptions.Timekeepingdef" [except]="true"
+                                                        [allDisplay]="false" (selected)="exception() ; checkCategory(1)"
+                                                        [useControl]="true" [icon]="'mat_outline:info'" [type]="1012">
+                                                    </app-dropdown-custom></div>
+                                            </div>
+                                            <div class="h-full mat-elevation-z0">
+                                                <app-timekeeping-category (formChanged)="PatchTK($event)" class="mt-5"
+                                                    [_id]="selectedCategory" [data]="timekeepingCategoryForm"
+                                                    [hidebuttons]="true" [parentDetail]="parentDetail"
+                                                    [hide]="false"></app-timekeeping-category>
+                                            </div>
+                                        </mat-tab>
+                                        }
+                                        @if (employeeInformationForm.value.idPayroll == 0) {
+                                        <mat-tab label="Payroll">
+                                            <div class="grid grid-cols-5 gap-4 h-10">
+                                                <div class="w-80 h-13"><app-dropdown-custom
+                                                        [control]="unSavedForm.get('idPayrollexception')"
+                                                        [value]="this.ex.idPayroll" [useControl]="true"
+                                                        [options]="dropdownOptions.payrollCategoryDef" [except]="true"
+                                                        [allDisplay]="false"
+                                                        (selected)="exception() ; checkCategory(2) ; computeRates('payrollcat') "
+                                                        [icon]="'mat_outline:info'" [type]="1009">
+                                                    </app-dropdown-custom>
+                                                </div>
+                                            </div>
+                                            <div class="h-full" class="h-full mat-elevation-z0">
+                                                <app-payroll-category (formChanged)="PatchPayroll($event)"
+                                                    [_id]="selectedCategory" [data]="payrollForm" [hidebuttons]="true"
+                                                    [hide]="false" [parentDetail]="parentDetail"></app-payroll-category>
+                                            </div>
+                                        </mat-tab>
+                                        }
+                                    </mat-tab-group>
+                                    <!-- <div class="grid grid-cols-5 gap-4 h-13">
+                                                                                                                <mat-form-field class="w-full text-lg" appearance="outline">
+                                                                                                                  <mat-icon class="uploadbutton " matPrefix svgIcon="mat_outline:info"></mat-icon>
+                                                                                                                  <mat-select formControlName="exceptionCateg">
+                                                                                                                    <mat-option *ngFor="let item of exceptiontk" [value]="item.id" >{{item.description}}</mat-option>
+                                                                                                                  </mat-select>
+                                                                                                                </mat-form-field>
+                                                                                                                <mat-form-field class="w-full text-lg" appearance="outline">
+                                                                                                                  <mat-icon class="uploadbutton " matPrefix svgIcon="mat_outline:info"></mat-icon>
+                                                                                                                  <mat-select formControlName="categoryDropdown" (selectionChange)="checkCategory(unSavedForm.value.exceptionCateg) ;">
+                                                                                                                    <mat-option *ngFor="let item of categoryList(unSavedForm.value.exceptionCateg)" [value]="item.dropdownID" >{{item.description}}</mat-option>
+                                                                                                                  </mat-select>
+                                                                                                                </mat-form-field>
+                                                                                                              </div> -->
+                                    <!-- <div class="h-full">
+                                                                                                              <app-timekeeping-category (formChanged)="PatchTK($event)" class="mt-5" [_id]="selectedCategory" [data]="timekeepingCategoryForm" [hidebuttons]="true" [parentDetail]="parentDetail" [hide]="false"></app-timekeeping-category>
+                                                                                                            </div>
+                                                                                                            <div class="h-full" class="mt-5">
+                                                                                                              <app-payroll-category (formChanged)="PatchPayroll($event)" [_id]="selectedCategory" [data]="payrollForm" [hidebuttons]="true" [hide]="false" [parentDetail]="parentDetail"></app-payroll-category>
+                                                                                                            </div> -->
+                                    <!-- <div *ngIf="unSavedForm.value.exceptionCateg == 2" class="mt-5">
+                                                                                                            <app-category-detail></app-category-detail>
+                                                                                                          </div>
+                                                                                                          <div *ngIf="unSavedForm.value.exceptionCateg == 3" class="mt-5">
+                                                                                                            <app-access-control></app-access-control>
+                                                                                                          </div> -->
+                                    <!-- <div class="grid grid-cols-5 gap-4 h-13">
+                                                                                                          <mat-form-field *ngIf="employeeInformationForm.value.idPayroll == 1"  class="w-full text-lg" appearance="outline">
+                                                                                                            <mat-icon class="uploadbutton " matPrefix svgIcon="mat_outline:info"></mat-icon>
+                                                                                                            <mat-select formControlName="exceptionPayCateg">
+                                                                                                              <mat-option *ngFor="let item of exceptionpay" [value]="item.id">{{item.description}}</mat-option>
+                                                                                                            </mat-select>
+                                                                                                          </mat-form-field>
+                                                                                                        </div> -->
+                                    <!-- <div  *ngIf="unSavedForm.value.exceptionPayCateg == 0 && employeeInformationForm.value.idPayroll == 1">
+                                                                                                        <app-timekeeping-category class="mt-5" [parentDetail]="parentDetail"></app-timekeeping-category>
+                                                                                                      </div> -->
+                                    <!-- <div *ngIf="employeeForm.value.exceptionPayCateg == 0" class="mt-5"> -->
+                                    <!-- </div> -->
+                                    <!-- <div *ngIf="unSavedForm.value.exceptionPayCateg == 0 && employeeInformationForm.value.idPayroll == 1"  [parentDetail]="parentDetail" class="mt-5">
+                                                                                                    <app-payroll-category></app-payroll-category>
+                                                                                                  </div>
+                                                                                                  <div *ngIf="unSavedForm.value.exceptionPayCateg == 1" class="mt-5">
+                                                                                                    <app-access-control></app-access-control>
+                                                                                                  </div> -->
+                                </div>
+                            </div>
+                            }
+
+                        </form>
+                        <div class=" rounded-2xl p-6 pt-10" [hidden]="!isAdminTab">
+                            <form [formGroup]="adminForm">
+                                <div>
+                                    <mat-card-title>
+                                        <app-card-title title="Settings" [sub]="false"
+                                            [switch]="false"></app-card-title>
+                                    </mat-card-title>
+                                </div>
+                                <div class="grid grid-cols-6 gap-2 mt-5">
+
+                                    <app-dropdown [isFix]="true" [control]="adminForm.get( 'idBand')" label="Band"
+                                        [options]="dropdownOptions.bandsDef" [icon]="'mat_outline:info'" [type]="111">
+                                    </app-dropdown>
+                                    <app-dropdown [isFix]="true" [control]="adminForm.get( 'idBandLevel')"
+                                        label="Band Level" [options]="dropdownOptions.bandsLevelDef"
+                                        [icon]="'mat_outline:info'" [type]="112">
+                                    </app-dropdown>
+                                    <app-dropdown [isFix]="true" [control]="adminForm.get( 'idBudgetClassification')"
+                                        label="Budget Classification" [options]="dropdownOptions.budgetClassDef"
+                                        [icon]="'mat_outline:info'" [type]="113">
+                                    </app-dropdown>
+                                    <app-dropdown [isFix]="true" [control]="adminForm.get( 'currencyContract')"
+                                        label="Contract Currency" [options]="dropdownOptions.contractCurrencyDef"
+                                        [icon]="'mat_outline:info'" [type]="122"> </app-dropdown>
+                                    <app-dropdown [isFix]="true" [control]="adminForm.get('incentiveCurrency')"
+                                        label="Incentive Currency" [options]="dropdownOptions.contractCurrencyDef"
+                                        [icon]="'mat_outline:info'" [type]="122"> </app-dropdown>
+                                    <app-dropdown [isFix]="true" [control]="adminForm.get( 'currencyPayroll')"
+                                        [label]="'Payroll Currency'" [options]="dropdownOptions.currencyPayrollDef"
+                                        [icon]="'mat_outline:info'" [type]="122"> </app-dropdown>
+
+                                </div>
+                                @if (isEdit) {
+                                <div>
+                                    <mat-card-title>
+                                        <app-card-title title="Payroll Status" [sub]="false"
+                                            [switch]="false"></app-card-title>
+                                    </mat-card-title>
+                                    <form [formGroup]="payrollstatForm">
+                                        <div class="grid grid-cols-6 gap-2 mt-5">
+
+                                            <app-dropdown [control]="payrollstatForm.get( 'onHoldReason' )"
+                                                [label]="'On Hold Reason'" [options]="dropdownOptions.onHoldReasonDef"
+                                                [icon]="'mat_outline:info'" [type]="185"> </app-dropdown>
+                                            @if(payrollstatForm.get('onHoldReason').value){
+                                            <mat-form-field appearance="outline">
+                                                <mat-label class="label-font-size">{{ t('Duration') }}</mat-label>
+                                                <mat-icon class="uploadbutton " matPrefix
+                                                    svgIcon="mat_outline:info"></mat-icon>
+                                                <mat-select (selectionChange)="dsiabledbutton('duration')"
+                                                    formControlName="rangeId">
+                                                    @for (item of dropdownOptions.indefinite; track item) {
+                                                    <mat-option
+                                                        [value]="item.dropdownID">{{item.description}}</mat-option>
+                                                    }
+                                                </mat-select>
+                                            </mat-form-field>
+                                            }
+                                            @if (payrollstatForm.value.rangeId == 30595 || payrollstatForm.value.rangeId
+                                            == 30596) {
+                                            <mat-form-field class="w-full text-lg" appearance="outline">
+                                                <mat-label class="label-font-size">{{ t('Date From') }}</mat-label>
+                                                <input formControlName="adddatefrom" matInput [matDatepicker]="df"
+                                                    readonly [placeholder]="'MM/DD/YYYY'" (click)="df.open()"
+                                                    (dateChange)="validate('adddatefrom')">
+                                                <mat-datepicker-toggle matSuffix [for]="df"></mat-datepicker-toggle>
+                                                <mat-datepicker #df></mat-datepicker>
+                                            </mat-form-field>
+                                            }
+
+                                            @if(payrollstatForm.value.rangeId == 30595 || payrollstatForm.value.rangeId
+                                            == 30596){
+                                            <mat-form-field class="w-full text-lg" appearance="outline"
+                                                *ngIf="payrollstatForm.value.rangeId == 30595 || payrollstatForm.value.rangeId == 30596">
+                                                <mat-label class="label-font-size">{{t('Date To')}}</mat-label>
+                                                <input formControlName="adddateto" matInput [matDatepicker]="dt"
+                                                    [readonly]="payrollstatForm.value.rangeId == 30595"
+                                                    [placeholder]="'MM/DD/YYYY'" (click)="dt.open()"
+                                                    (dateChange)="validate('adddateto')">
+                                                <mat-datepicker-toggle matSuffix [for]="dt"></mat-datepicker-toggle>
+                                                <mat-datepicker #dt></mat-datepicker>
+                                            </mat-form-field>
+                                            }
+
+                                            <!-- <app-dropdown-custom *ngIf="payrollForm.value.rangeId == 1" [multiple]="true"
+                                                                                                        [control]="payrollForm.get('payrollCutoffLockingId')" [icon]="'mat_outline:info'"
+                                                                                                        [type]="1032" [value]="this.pf.payrollCutoffLockingId" [options]="dropdownOptions.cutoffdef"
+                                                                                                      [useControl]="true"></app-dropdown-custom>
+                                                                                                      <app-dropdown-custom *ngIf="payrollForm.value.rangeId == 2" [multiple]="false"
+                                                                                                        [control]="payrollForm.get('payrollCutoffLockingId')" [icon]="'mat_outline:info'"
+                                                                                                        [type]="1032" [value]="this.pf.payrollCutoffLockingId" [options]="dropdownOptions.cutoffdef"
+                                                                                                      [useControl]="true"></app-dropdown-custom> -->
+                                            <!-- @if (payrollstatForm.value.rangeId == 30596) {
+                                            <mat-form-field appearance="outline">
+                                                <mat-label class="label-font-size">{{ t('Cutoff') }}</mat-label>
+                                                <mat-icon class="uploadbutton " matPrefix
+                                                    svgIcon="mat_outline:info"></mat-icon>
+                                                <mat-select formControlName="payrollCutoffLockingId">
+                                                    @for (item of dropdownOptions.cutoffdef; track item) {
+                                                    <mat-option
+                                                        [value]="item.dropdownID">{{item.description}}</mat-option>
+                                                    }
+                                                </mat-select>
+                                            </mat-form-field>
+                                            } -->
+                                            <!-- <mat-form-field class="w-full text-lg" appearance="outline">
+                                                                                                      <input
+                                                                                                        [max]="maxDate" matInput formControlName="payout"
+                                                                                                        [matDatepicker]="pd" readonly [placeholder]="'MM/DD/YYYY'">
+                                                                                                        <mat-datepicker-toggle matSuffix [for]="pd"></mat-datepicker-toggle>
+                                                                                                        <mat-datepicker #pd></mat-datepicker>
+                                                                                                      </mat-form-field>
+                                                                                                      <mat-form-field class="w-full text-lg" appearance="outline">
+                                                                                                        <mat-label class="label-font-size">{{ t('Date Created') }}</mat-label>
+                                                                                                        <input
+                                                                                                          [max]="maxDate" matInput formControlName="dateCreated"
+                                                                                                          [matDatepicker]="dc" readonly [placeholder]="'MM-dd-yyyy'">
+                                                                                                          <mat-datepicker-toggle matSuffix [for]="dc"></mat-datepicker-toggle>
+                                                                                                          <mat-datepicker #dc></mat-datepicker>
+                                                                                                        </mat-form-field>
+                                                                                                        <mat-form-field class="w-full text-lg" appearance="outline">
+                                                                                                          <mat-icon class="" matPrefix
+                                                                                                          svgIcon="mat_outline:info"></mat-icon>
+                                                                                                          <input matInput formControlName="createdByName" type="text" min="0">
+                                                                                                        </mat-form-field> -->
+                                            <!-- @if (payrollstatForm.value.rangeId != 0 &&
+                                            payrollstatForm.value.payrollCutoffLockingId != 0 ||
+                                            payrollstatForm.value.rangeId != 0 && payrollstatForm.value.adddatefrom !=
+                                            '' ) { -->
+                                            @if(showAddButton()){
+                                            <div class="button-margin-top">
+                                                <button [disabled]="buttondis" (click)="addPayroll()" class="text-lg"
+                                                    mat-flat-button color="primary" aria-label="example icon">
+                                                    <mat-icon class="mb-2" svgIcon="mat_outline:post_add"></mat-icon>Add
+                                                </button>
+                                            </div>
+                                            }
+                                            <!-- } -->
+                                        </div>
+                                        <div>
+                                            <table #Table_payroll mat-table [dataSource]="dataSource_payroll"
+                                                class="mat-elevation-z0 border bg-transparent">
+                                                <ng-container matColumnDef="actionPay">
+                                                    <th class=" pl-5" mat-header-cell *matHeaderCellDef>Actions</th>
+                                                    <td class="pt-[0.8%] pl-1" mat-cell
+                                                        *matCellDef="let element; let i = index">
+                                                        <button class="ml-4" mat-icon-button [matMenuTriggerFor]="menu"
+                                                            aria-label="Example icon-button with a menu">
+                                                            <mat-icon class="icon-size-6 mb-2">more_vert</mat-icon>
+                                                        </button>
+                                                        <mat-menu #menu="matMenu">
+                                                            <!-- <button mat-menu-item (click)="onEdit(element,i)">
+                                                                                                                <mat-icon class="icon-size-6 : mt-5"
+                                                                                                                color="primary">edit</mat-icon>
+                                                                                                                <span>Edit</span>
+                                                                                                              </button> -->
+                                                            <button mat-menu-item (click)="handleDeleteBreak(i)">
+                                                                <mat-icon class="icon-size-6 : mt-5"
+                                                                    color="warn">delete</mat-icon>
+                                                                <span>Delete</span>
+                                                            </button>
+                                                        </mat-menu>
+                                                    </td>
+                                                </ng-container>
+
+                                                <ng-container matColumnDef="onHoldReason">
+                                                    <th mat-header-cell *matHeaderCellDef> On Hold Reason </th>
+                                                    <td mat-cell *matCellDef="let element">{{element._onHoldReason}}
+                                                    </td>
+                                                </ng-container>
+
+                                                <ng-container matColumnDef="rangeId">
+                                                    <th mat-header-cell *matHeaderCellDef> Range </th>
+                                                    <td mat-cell *matCellDef="let element">{{element._rangeId}}</td>
+                                                </ng-container>
+                                                <ng-container matColumnDef="dateFrom">
+                                                    <th mat-header-cell *matHeaderCellDef> Date From </th>
+                                                    <td mat-cell *matCellDef="let element"> {{element.dateFrom}} </td>
+                                                </ng-container>
+                                                <ng-container matColumnDef="dateTo">
+                                                    <th mat-header-cell *matHeaderCellDef> Date To </th>
+                                                    <td mat-cell *matCellDef="let element"> {{element.dateTo}} </td>
+                                                </ng-container>
+                                                <!-- <ng-container matColumnDef="payout">
+                                                    <th mat-header-cell *matHeaderCellDef> Payout Date </th>
+                                                    <td mat-cell *matCellDef="let element"> {{element.payout}} </td>
+                                                </ng-container> -->
+                                                <ng-container matColumnDef="dateCreated">
+                                                    <th mat-header-cell *matHeaderCellDef> Date Created </th>
+                                                    <td mat-cell *matCellDef="let element"> {{element.dateCreated |
+                                                        date:'MM/dd/yyyy'}} </td>
+                                                </ng-container>
+                                                <ng-container matColumnDef="createdByName">
+                                                    <th mat-header-cell *matHeaderCellDef> Created By </th>
+                                                    <td mat-cell *matCellDef="let element; let i = index">
+                                                        {{element.createdByName}}
+                                                    </td>
+                                                </ng-container>
+                                                <tr mat-header-row *matHeaderRowDef="displayedColumns_payroll"></tr>
+                                                <tr mat-row *matRowDef="let row; columns: displayedColumns_payroll;">
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </form>
+                                </div>
+                                }
+                            </form>
+                        </div>
+
+                        <div class="px-5">
+                            <div class="pt-10" [hidden]="!isEDLTab">
+                                <table mat-table [dataSource]="dataSource_EDL"
+                                    class="mat-elevation-z0 border w-full bg-transparent" matSort
+                                    (matSortChange)="handleSortEvent($event)">
+                                    <ng-container matColumnDef="type">
+                                        <th mat-header-cell mat-sort-header="type" *matHeaderCellDef> Type </th>
+                                        <td mat-cell class="mat-cell-edl" *matCellDef="let element"> {{element.type}}
+                                        </td>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="employeeId">
+                                        <th mat-header-cell mat-sort-header="employeeId" *matHeaderCellDef> Employee ID
+                                        </th>
+                                        <td mat-cell class="mat-cell-edl" *matCellDef="let element">
+                                            {{element.employeeId}}
+                                        </td>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="paycode">
+                                        <th mat-header-cell mat-sort-header="payCode" *matHeaderCellDef> Pay Code </th>
+                                        <td mat-cell class="mat-cell-edl" *matCellDef="let element"> {{element.payCode}}
+                                        </td>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="amount">
+                                        <th mat-header-cell mat-sort-header="amortizationAmount" *matHeaderCellDef>
+                                            Amount
+                                        </th>
+                                        <td mat-cell class="mat-cell-edl" *matCellDef="let element">
+                                            {{element.amortizationAmount}} </td>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="cutoffId">
+                                        <th mat-header-cell mat-sort-header="frequency" *matHeaderCellDef> Frequency
+                                        </th>
+                                        <td mat-cell class="mat-cell-edl" *matCellDef="let element">
+                                            {{element.frequency}}
+                                        </td>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="recurStartDate">
+                                        <th mat-header-cell mat-sort-header="recurStartDate" *matHeaderCellDef> Recur
+                                            Start
+                                            Date </th>
+                                        <td mat-cell class="mat-cell-edl" *matCellDef="let element">
+                                            {{element.recurStartDate | date:'MM/dd/yyyy'}} </td>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="recurEndDate">
+                                        <th mat-header-cell mat-sort-header="recurEndDate" *matHeaderCellDef> Recur End
+                                            Date
+                                        </th>
+                                        <td mat-cell class="mat-cell-edl" *matCellDef="let element">
+                                            {{element.recurEndDate
+                                            | date:'MM/dd/yyyy'}} </td>
+                                    </ng-container>
+
+                                    <tr mat-header-row *matHeaderRowDef="displayedColumns_EDL"></tr>
+                                    <tr mat-row *matRowDef="let row; columns: displayedColumns_EDL;"></tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </mat-card>
+        </form>
+    </div>
+</div>

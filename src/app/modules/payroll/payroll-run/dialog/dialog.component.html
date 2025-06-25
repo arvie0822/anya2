@@ -1,0 +1,41 @@
+<table mat-table class="mat-elevation-z0">
+
+    <!--- Note that these columns can be defined in any order.
+          The actual rendered columns are set as a property on the row definition" -->
+
+    <ng-container matColumnDef="Date">
+      <th mat-header-cell *matHeaderCellDef> Date </th>
+      <td mat-cell *matCellDef="let element"> {{element.Date}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="Sched_in">
+      <th mat-header-cell *matHeaderCellDef> Sched In </th>
+      <td mat-cell *matCellDef="let element"> {{element.Sched_in}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="Sched_out">
+      <th mat-header-cell *matHeaderCellDef> Sched Out </th>
+      <td mat-cell *matCellDef="let element"> {{element.Sched_out}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="Time_in">
+        <th mat-header-cell *matHeaderCellDef> Time In </th>
+        <td mat-cell *matCellDef="let element"> {{element.Time_in}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="Time_out">
+        <th mat-header-cell *matHeaderCellDef> Time Out </th>
+        <td mat-cell *matCellDef="let element"> {{element.Time_out}} </td>
+      </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table><br>
+
+  <div class="grid grid-cols-5 gap-2 w h-5">
+    <div></div>
+    <div></div>
+    <div></div>
+    <button mat-flat-button (click)="copy(true)" color="primary">Confirm</button>
+    <button mat-flat-button mat-dialog-close color="warn">Cancel</button>
+  </div>

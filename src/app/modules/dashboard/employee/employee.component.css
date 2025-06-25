@@ -1,0 +1,249 @@
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.box {
+  flex: 1;
+  overflow: hidden;
+  transition: 0.5s;
+  margin: 0 .5%;
+  box-shadow: 0px 0px 0px #ccc;
+}
+
+.image-container {
+  width: 100%;
+  height: 100%; /* Ensure it follows the parent height */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.fixed-height {
+  height: 300px; /* Ensure it follows the parent size */
+}
+
+.img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain; /* Ensure it fits within the parent */
+  display: block;
+}
+
+/* .box img {
+  width: calc(100% - 2px);
+  height: 100%;
+  object-fit: cover;
+  transition: 1s;
+} */
+
+/* .box:hover {
+  flex: 1 1 50%;
+} */
+
+.mat-datepicker-toggle{
+  position: relative;
+  bottom: 7px;
+  font-size: small;
+}
+/* .label-font-size{
+  font-size: 120% ;
+} */
+input{
+  position: relative;
+  bottom: 7px;
+  font-size: medium;
+}
+.icon {
+  position: relative;
+  bottom: 10px;
+}
+
+.TR.active {
+  flex: 1 1 50%;
+}
+
+.AS.active {
+  flex: 1 1 50%;
+}
+
+.icon-AS.active {
+  color: var(--fuse-primary);
+}
+
+.icon-TR.active {
+  color: var(--fuse-primary);
+}
+
+::ng-deep .mat-menu-panel {
+  max-width: 350px !important;
+}
+
+/* full calendar vars */
+
+::ng-deep .dashboard {
+      /* width: 100% !important; */
+      --fc-small-font-size: .85em;
+      --fc-page-bg-color: var(--fuse-bg-card);
+      --fc-neutral-bg-color: rgba(208, 208, 208, 0.3);
+      --fc-neutral-text-color: #808080;
+      --fc-border-color: #ddd;
+
+      --fc-button-text-color: #fff;
+      --fc-button-bg-color: var(--fuse-primary);
+      --fc-button-border-color: #2C3E50;
+      --fc-button-hover-bg-color: #1e2b37;
+      --fc-button-hover-border-color: #1a252f;
+      --fc-button-active-bg-color: #1a252f;
+      --fc-button-active-border-color: #151e27;
+
+      --fc-event-bg-color: var(--fuse-primary);
+      --fc-event-border-color: var(--fuse-primary);
+      --fc-event-text-color: #fff;
+      --fc-event-selected-overlay-color: rgba(0, 0, 0, 0.25);
+
+      --fc-more-link-bg-color: #d0d0d0;
+      --fc-more-link-text-color: inherit;
+
+      --fc-event-resizer-thickness: 8px;
+      --fc-event-resizer-dot-total-width: 8px;
+      --fc-event-resizer-dot-border-width: 1px;
+
+      --fc-non-business-color: rgba(215, 215, 215, 0.3);
+      --fc-bg-event-color: rgb(143, 223, 130);
+      --fc-bg-event-opacity: 0.3;
+      --fc-highlight-color: rgba(188, 232, 241, 0.3);
+      --fc-today-bg-color: rgba(255, 220, 40, 0.15);
+      --fc-now-indicator-color: red;
+
+      background-color:var(--fuse-bg-card);
+}
+
+.fc-daygrid-body.fc-daygrid-body-balanced,
+.fc-scrollgrid-sync-table {
+  /* width: 800px !important;
+  height: 600px !important; */
+}
+/* full calendar vars */
+
+
+.div-bg {
+  background-color:var(--fuse-bg-card);
+}
+
+table {
+  width: 100%;
+}
+
+.mat-row,.mat-header-row {
+  height: 30px; /* adjust the height value as needed */
+}
+
+
+/*announcement*/
+.carousel {
+  position: relative;
+}
+
+.slide {
+  position: relative;
+}
+/* .box:hover .slide img {
+  width: calc(100% - 2px);
+  height: 100%;
+  object-fit: cover;
+  transition: .8s;
+} */
+
+.slide img {
+  width: 50%;
+  height: 50%;
+  /* position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover; */
+}
+
+.news-bg {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 1rem;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: #fff;
+}
+
+.news-bg h2 {
+  margin: 0;
+  font-size: medium;
+}
+
+.news-bg p {
+  margin: 0;
+  font-size: small;
+}
+
+.hovers:hover .prev,
+.hovers:hover .next {
+  display: flex;
+}
+
+.prev, .next {
+  font-size: 3rem;
+  background-color: transparent;
+  color: #504545;
+  border: none;
+  cursor: pointer;
+  display: none;
+}
+.prev {
+  position: absolute;
+  top: 40%;
+  left: 15px;
+}
+.next {
+  position: absolute;
+  top: 40%;
+  right: 15px;
+}
+
+.prev:hover, .next:hover {
+  color: #ccc;
+}
+/*announcement*/
+
+::ng-deep .mat-form-field.mat-form-field-appearance-fill .mat-form-field-wrapper .mat-form-field-flex {
+  min-height: 38px !important;
+}
+
+.widget-label {
+  position: absolute;
+  z-index: 99;
+  top: 20px;
+  left: 250px;
+  font-weight: 600;
+}
+
+.header-title {
+  font-size: clamp(0.625rem, 0.5288rem + 0.3077vw, 0.875rem);
+  font-weight: 600;
+  margin: 2px 0 0 2px;
+}
+
+.header-text {
+  font-size: clamp(0.625rem, 0.5769rem + 0.1538vw, 0.75rem);
+}
+
+.aligns.mat-mdc-menu-item .mat-mdc-menu-item-text{
+    margin-left: -5px !important;
+}
+
+.iconalign .mat-mdc-select {
+    margin-bottom: 15px !important;
+}

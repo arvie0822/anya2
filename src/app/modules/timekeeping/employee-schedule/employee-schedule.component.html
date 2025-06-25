@@ -1,0 +1,601 @@
+<div class="flex flex-col flex-auto min-w-0" *transloco="let t">
+  <!-- Main -->
+  <div class="flex-auto  sm:p-2  w-full min-w-0 sm:absolute sm:inset-0 sm:overflow-auto text-md">
+    <!-- Content -->
+    <mat-card class="h-full">
+      <mat-card-title>
+        <app-card-title title="Assign Shift" [sub]="(hidesubmits || hideSave) && dataDate.length > 0"
+        [back]="true" (submitTap)="submit()"></app-card-title>
+      </mat-card-title><br>
+
+      <form [formGroup]="scheduleDayForm">
+
+        <div class="flex flex-wrap space-x-3">
+
+          <mat-form-field class="w-50 text-md h-10" appearance="outline">
+            <mat-label class="label-font-size">{{t('dateFrom')}}</mat-label>
+            <input formControlName="dateFrom" matInput [matDatepicker]="df" readonly
+              [placeholder]="'MM/DD/YYYY'" (dateChange)="setdate1year()"
+              [max]="scheduleDayForm.controls['dateTo'].value" (click)="df.open()">
+              <mat-datepicker-toggle matSuffix [for]="df"></mat-datepicker-toggle>
+              <mat-datepicker #df></mat-datepicker>
+            </mat-form-field>
+
+            <mat-form-field class="w-50 text-md min-h-10 " appearance="outline">
+              <mat-label class="label-font-size">{{t('dateTo')}}</mat-label>
+              <input formControlName="dateTo" matInput [matDatepicker]="df2" readonly
+                [placeholder]="'MM/DD/YYYY'" [min]="minDate" [max]="maxDate" (click)="df2.open()">
+                <mat-datepicker-toggle matSuffix [for]="df2"></mat-datepicker-toggle>
+                <mat-datepicker #df2></mat-datepicker>
+              </mat-form-field>
+
+              <mat-form-field class="w-50 text-md h-10" appearance="outline">
+                <mat-label class="label-font-size">{{t('Alternate Week')}}</mat-label>
+                <mat-icon class="" matPrefix [svgIcon]="'mat_outline:info'"></mat-icon>
+                <mat-select class="select" formControlName="weekCount" [placeholder]="'Alternate Week'"
+                  (ngModelChange)="handlerWeekChange()">
+                  @for (option of weekOptions; track option) {
+                    <mat-option [value]="option.dropdownID">
+                      {{option.description}}
+                    </mat-option>
+                  }
+                </mat-select>
+              </mat-form-field>
+
+              <div class="h-10">
+                <app-employee-hierarchy [showTag]="!currentModule" [defaultTag]="defaultTag" [all]="true" [multiple]="true" (selected)="field_count = $event " [notincludetag]="[132]" [resultHierarchy]="resultHierarchy"></app-employee-hierarchy>
+              </div>
+
+              <div>
+                @if (!hideSubmit) {
+                  <button matTooltip="Add" matTooltipPosition="right" [disabled]="enableAdd"
+                    type="button" class="w-[10px]" mat-flat-button color="primary"
+                    (click)="handleAddSearch('add')" aria-label="example icon">
+                    <mat-icon class="mb-2" svgIcon="mat_outline:post_add"></mat-icon>
+                  </button>
+                }
+              </div>
+
+            </div>
+          </form>
+
+          @if (hidesubmits) {
+            <div id='spacetable' class="scroll-container mb-1 mat-elevation-z0 mt-4">
+              <table #shiftTable mat-table [dataSource]="dataSource" class="w-full mat-elevation-z0">
+                <ng-container matColumnDef="apply">
+                  <th mat-header-cell class="w-[150px]" *matHeaderCellDef>{{t('Apply To All')}}</th>
+                  <td mat-cell class="cells" *matCellDef="let element; let i = index">
+                    <mat-form-field class="w-full text-lg mt-2 hover:text-base" appearance="outline">
+                      <mat-icon class="mb-2" matPrefix [svgIcon]="'mat_outline:info'"></mat-icon>
+                      <mat-select (selectionChange)="handleAddSearch('delete')"
+                        (ngModelChange)=" change(i, 'apply') ; handleApply($event, i) ; validatechild() "
+                        [(ngModel)]="element.apply.id" [placeholder]="'Apply To All'"
+                        (infiniteScroll)="getNextBatchParent()" msInfiniteScroll [complete]="complete"
+                        threshold="{{systemSettings.infinitScrollThreshold}}">
+                        <mat-option>
+                          <ngx-mat-select-search class="mat-elevation-z3"
+                            [formControl]="inputChangeParent" [placeholderLabel]="'Find ' + ' ..'"
+                          [noEntriesFoundLabel]="'No ' + placeholder + ' found'"></ngx-mat-select-search>
+                        </mat-option>
+                        @for (option of element.apply.option; track option) {
+                          <mat-option [value]="option.dropdownID">
+                            {{option.description}}
+                          </mat-option>
+                        }
+                      </mat-select>
+                    </mat-form-field>
+                    @for (child of element.apply.child; track child; let x = $index) {
+                      <div>
+                        @if (element.apply.id !==null) {
+                          <mat-form-field class="w-full text-md hover:text-base" appearance="outline">
+                            <mat-icon class="mb-2" matPrefix [svgIcon]="'mat_outline:info'"></mat-icon>
+                            <mat-select [(ngModel)]="element.apply.child[x].id" [placeholder]=""
+                              (selectionChange)=" getdropdownperday(element,i,x,'apply','','') ;handleAddSearch('delete') ; validatechild()"
+                              (ngModelChange)="handleApplychild($event, x, i)  "
+                              (infiniteScroll)="getNextBatchChild()" msInfiniteScroll [complete]="complete"
+                              threshold="{{systemSettings.infinitScrollThreshold}}">
+                              <mat-option>
+                                <ngx-mat-select-search [formControl]="inputChangeChild"
+                                  [placeholderLabel]="'Find ' + ' ..'"
+                                [noEntriesFoundLabel]="'No ' + placeholder + ' found'"></ngx-mat-select-search>
+                              </mat-option>
+                              @for (option of element.apply.child[x].option; track option) {
+                                <mat-option
+                                  [value]="option.dropdownID">
+                                  {{option.description}}
+                                </mat-option>
+                              }
+                            </mat-select>
+                          </mat-form-field>
+                        }
+                      </div>
+                    }
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="monday">
+                  <th class="head" mat-header-cell class="w-[150px]" *matHeaderCellDef> {{t('Monday')}} </th>
+                  <td mat-cell class="cells" *matCellDef="let element ; let i = index">
+                    <mat-form-field class="w-full mt-2 text-md hover:text-base" appearance="outline">
+                      <mat-icon class="mb-2" matPrefix [svgIcon]="'mat_outline:info'"></mat-icon>
+                      <mat-select [(ngModel)]="element.monday.id" [placeholder]="'Monday'"
+                        (ngModelChange)="change(i, 'monday') " (selectionChange)="handleAddSearch('delete')"
+                        (ngModelChange)="timeValidatorparent('sunday','monday',i)"
+                        (infiniteScroll)="getNextBatchParent()" msInfiniteScroll [complete]="complete"
+                        threshold="{{systemSettings.infinitScrollThreshold}}">
+                        <mat-option>
+                          <ngx-mat-select-search [formControl]="inputChangeParent_m"
+                            [placeholderLabel]="'Find ' + ' ..'"
+                          [noEntriesFoundLabel]="'No ' + placeholder + ' found'"></ngx-mat-select-search>
+                        </mat-option>
+                        @for (option of element.monday.option; track option) {
+                          <mat-option
+                            [value]="option.dropdownID">
+                            {{option.description}}
+                          </mat-option>
+                        }
+                      </mat-select>
+                    </mat-form-field>
+                    @for (child of element.monday.child; track child; let x = $index) {
+                      <div>
+                        @if (element.apply.id !==null || element.monday.id !==null) {
+                          <mat-form-field class=" w-full  text-md hover:text-base" appearance="outline"
+                            >
+                            <mat-icon class="mb-2" matPrefix [svgIcon]="'mat_outline:info'"></mat-icon>
+                            <mat-select [(ngModel)]="element.monday.child[x].id" [placeholder]=""
+                              (ngModelChange)="getdropdownperday(element,i,x,'monday','tuesday','sunday')"
+                              (selectionChange)="handleAddSearch('delete')"
+                              (infiniteScroll)="getNextBatchChild()" msInfiniteScroll [complete]="complete"
+                              threshold="{{systemSettings.infinitScrollThreshold}}">
+                              <mat-option>
+                                <ngx-mat-select-search [formControl]="inputChangeChild_m"
+                                  [placeholderLabel]="'Find ' + ' ..'"
+                                [noEntriesFoundLabel]="'No ' + placeholder + ' found'"></ngx-mat-select-search>
+                              </mat-option>
+                              @for (option of element.monday.child[x].option; track option) {
+                                <mat-option
+                                  [value]="option.dropdownID">
+                                  {{option.description}}
+                                </mat-option>
+                              }
+                            </mat-select>
+                          </mat-form-field>
+                        }
+                      </div>
+                    }
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="tuesday">
+                  <th class="head" mat-header-cell class="w-[150px]" *matHeaderCellDef> {{t('Tuesday')}}</th>
+                  <td mat-cell class="cells" *matCellDef="let element ; let i = index">
+                    <mat-form-field class="w-full mt-2 text-md hover:text-base" appearance="outline">
+                      <mat-icon class="mb-2" matPrefix [svgIcon]="'mat_outline:info'"></mat-icon>
+                      <mat-select [(ngModel)]="element.tuesday.id" [placeholder]="'Tuesday'"
+                        (ngModelChange)="change(i, 'tuesday')"
+                        (ngModelChange)="timeValidatorparent('monday','tuesday',i)  ; timeValidatorparent('tuesday','wednesday',i) "
+                        (selectionChange)="handleAddSearch('delete')"
+                        (infiniteScroll)="getNextBatchParent()" msInfiniteScroll [complete]="complete"
+                        threshold="{{systemSettings.infinitScrollThreshold}}">
+                        <mat-option>
+                          <ngx-mat-select-search [formControl]="inputChangeParent_tu"
+                            [placeholderLabel]="'Find ' + ' ..'"
+                          [noEntriesFoundLabel]="'No ' + placeholder + ' found'"></ngx-mat-select-search>
+                        </mat-option>
+                        @for (option of element.tuesday.option; track option) {
+                          <mat-option
+                            [value]="option.dropdownID">
+                            {{option.description}}
+                          </mat-option>
+                        }
+                      </mat-select>
+                    </mat-form-field>
+                    @for (child of element.tuesday.child; track child; let x = $index) {
+                      <div>
+                        @if (element.apply.id !==null || element.tuesday.id !==null) {
+                          <mat-form-field class=" w-full  text-md hover:text-base" appearance="outline"
+                            >
+                            <mat-icon class="mb-2" matPrefix [svgIcon]="'mat_outline:info'"></mat-icon>
+                            <mat-select [(ngModel)]="element.tuesday.child[x].id" [placeholder]=""
+                              (ngModelChange)="getdropdownperday(element,i,x,'tuesday','wednesday','monday')"
+                              (infiniteScroll)="getNextBatchChild()"
+                              (selectionChange)="handleAddSearch('delete')"
+                              (ngModelChange)="timeValidator('tuesday',i,x)" msInfiniteScroll
+                              [complete]="complete" threshold="{{systemSettings.infinitScrollThreshold}}">
+                              <mat-option>
+                                <ngx-mat-select-search [formControl]="inputChangeChild_tu"
+                                  [placeholderLabel]="'Find ' + ' ..'"
+                                [noEntriesFoundLabel]="'No ' + placeholder + ' found'"></ngx-mat-select-search>
+                              </mat-option>
+                              @for (option of element.tuesday.child[x].option; track option) {
+                                <mat-option
+                                  [value]="option.dropdownID">
+                                  {{option.description}}
+                                </mat-option>
+                              }
+                            </mat-select>
+                          </mat-form-field>
+                        }
+                      </div>
+                    }
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="wednesday">
+                  <th class="head" mat-header-cell class="w-[150px]" *matHeaderCellDef> {{t('Wednesday')}}</th>
+                  <td mat-cell class="cells" *matCellDef="let element ; let i = index">
+                    <mat-form-field class="w-full mt-2 text-md hover:text-base" appearance="outline">
+                      <mat-icon class="mb-2" matPrefix [svgIcon]="'mat_outline:info'"></mat-icon>
+                      <mat-select [(ngModel)]="element.wednesday.id" [placeholder]="'Wednesday'"
+                        (ngModelChange)="change(i, 'wednesday')"
+                        (ngModelChange)="timeValidatorparent('tuesday','wednesday',i);timeValidatorparent('wednesday','thursday',i) "
+                        (selectionChange)="handleAddSearch('delete')"
+                        (infiniteScroll)="getNextBatchParent()" msInfiniteScroll [complete]="complete"
+                        threshold="{{systemSettings.infinitScrollThreshold}}">
+                        <mat-option>
+                          <ngx-mat-select-search [formControl]="inputChangeParent_wed"
+                            [placeholderLabel]="'Find ' + ' ..'"
+                          [noEntriesFoundLabel]="'No ' + placeholder + ' found'"></ngx-mat-select-search>
+                        </mat-option>
+                        @for (option of element.wednesday.option; track option) {
+                          <mat-option
+                            [value]="option.dropdownID">
+                            {{option.description}}
+                          </mat-option>
+                        }
+                      </mat-select>
+                    </mat-form-field>
+                    @for (child of element.wednesday.child; track child; let x = $index) {
+                      <div>
+                        @if (element.apply.id !==null || element.wednesday.id !==null) {
+                          <mat-form-field class=" w-full  text-md hover:text-base" appearance="outline"
+                            >
+                            <mat-icon class="mb-2" matPrefix [svgIcon]="'mat_outline:info'"></mat-icon>
+                            <mat-select [(ngModel)]="element.wednesday.child[x].id" [placeholder]=""
+                              (ngModelChange)="getdropdownperday(element,i,x,'wednesday','thursday','tuesday')"
+                              (infiniteScroll)="getNextBatchChild()"
+                              (selectionChange)="handleAddSearch('delete')"
+                              (ngModelChange)="timeValidator('wednesday',i,x)" msInfiniteScroll
+                              [complete]="complete" threshold="{{systemSettings.infinitScrollThreshold}}">
+                              <mat-option>
+                                <ngx-mat-select-search [formControl]="inputChangeChild_wed"
+                                  [placeholderLabel]="'Find ' + ' ..'"
+                                [noEntriesFoundLabel]="'No ' + placeholder + ' found'"></ngx-mat-select-search>
+                              </mat-option>
+                              @for (option of element.wednesday.child[x].option; track option) {
+                                <mat-option
+                                  [value]="option.dropdownID">
+                                  {{option.description}}
+                                </mat-option>
+                              }
+                            </mat-select>
+                          </mat-form-field>
+                        }
+                      </div>
+                    }
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="thursday">
+                  <th class="head" mat-header-cell class="w-[150px]" *matHeaderCellDef> {{t('Thursday')}} </th>
+                  <td mat-cell class="cells" *matCellDef="let element ; let i = index">
+                    <mat-form-field class="w-full mt-2 text-md hover:text-base" appearance="outline">
+                      <mat-icon class="mb-2" matPrefix [svgIcon]="'mat_outline:info'"></mat-icon>
+                      <mat-select [(ngModel)]="element.thursday.id" [placeholder]="'Thursday'"
+                        (ngModelChange)="change(i, 'thursday')"
+                        (ngModelChange)="timeValidatorparent('wednesday','thursday',i)"
+                        (selectionChange)="handleAddSearch('delete')"
+                        (infiniteScroll)="getNextBatchParent()" msInfiniteScroll [complete]="complete"
+                        threshold="{{systemSettings.infinitScrollThreshold}}">
+                        <mat-option>
+                          <ngx-mat-select-search [formControl]="inputChangeParent_thu"
+                            [placeholderLabel]="'Find ' + ' ..'"
+                          [noEntriesFoundLabel]="'No ' + placeholder + ' found'"></ngx-mat-select-search>
+                        </mat-option>
+                        @for (option of element.thursday.option; track option) {
+                          <mat-option
+                            [value]="option.dropdownID">
+                            {{option.description}}
+                          </mat-option>
+                        }
+                      </mat-select>
+                    </mat-form-field>
+                    @for (child of element.thursday.child; track child; let x = $index) {
+                      <div>
+                        @if (element.apply.id !==null || element.thursday.id !==null) {
+                          <mat-form-field class=" w-full  text-md hover:text-base" appearance="outline"
+                            >
+                            <mat-icon class="mb-2" matPrefix [svgIcon]="'mat_outline:info'"></mat-icon>
+                            <mat-select [(ngModel)]="element.thursday.child[x].id" [placeholder]=""
+                              (ngModelChange)="getdropdownperday(element,i,x,'thursday','friday','wednesday')"
+                              (infiniteScroll)="getNextBatchChild()"
+                              (selectionChange)="handleAddSearch('delete')"
+                              (ngModelChange)="timeValidator('thursday',i,x)" msInfiniteScroll
+                              [complete]="complete" threshold="{{systemSettings.infinitScrollThreshold}}">
+                              <mat-option>
+                                <ngx-mat-select-search [formControl]="inputChangeChild_thu"
+                                  [placeholderLabel]="'Find ' + ' ..'"
+                                [noEntriesFoundLabel]="'No ' + placeholder + ' found'"></ngx-mat-select-search>
+                              </mat-option>
+                              @for (option of element.thursday.child[x].option; track option) {
+                                <mat-option
+                                  [value]="option.dropdownID">
+                                  {{option.description}}
+                                </mat-option>
+                              }
+                            </mat-select>
+                          </mat-form-field>
+                        }
+                      </div>
+                    }
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="friday">
+                  <th class="head" mat-header-cell class="w-[150px]" *matHeaderCellDef> {{t('Friday')}} </th>
+                  <td mat-cell class="cells" *matCellDef="let element ; let i = index">
+                    <mat-form-field class="w-full mt-2 text-md hover:text-base" appearance="outline">
+                      <mat-icon class="mb-2" matPrefix [svgIcon]="'mat_outline:info'"></mat-icon>
+                      <mat-select [(ngModel)]="element.friday.id" [placeholder]="'Friday'"
+                        (ngModelChange)="change(i, 'friday')"
+                        (ngModelChange)="timeValidatorparent('thursday','friday',i) "
+                        (selectionChange)="handleAddSearch('delete')"
+                        (infiniteScroll)="getNextBatchParent()" msInfiniteScroll [complete]="complete"
+                        threshold="{{systemSettings.infinitScrollThreshold}}">
+                        <mat-option>
+                          <ngx-mat-select-search [formControl]="inputChangeParent_fri"
+                            [placeholderLabel]="'Find ' + ' ..'"
+                          [noEntriesFoundLabel]="'No ' + placeholder + ' found'"></ngx-mat-select-search>
+                        </mat-option>
+                        @for (option of element.friday.option; track option) {
+                          <mat-option
+                            [value]="option.dropdownID">
+                            {{option.description}}
+                          </mat-option>
+                        }
+                      </mat-select>
+                    </mat-form-field>
+                    @for (child of element.friday.child; track child; let x = $index) {
+                      <div>
+                        @if (element.apply.id !==null || element.friday.id !==null) {
+                          <mat-form-field class=" w-full  text-md hover:text-base" appearance="outline"
+                            >
+                            <mat-icon class="mb-2" matPrefix [svgIcon]="'mat_outline:info'"></mat-icon>
+                            <mat-select [(ngModel)]="element.friday.child[x].id" [placeholder]=""
+                              (ngModelChange)="getdropdownperday(element,i,x,'friday','saturday','thursday')"
+                              (infiniteScroll)="getNextBatchChild()"
+                              (selectionChange)="handleAddSearch('delete')"
+                              (ngModelChange)="timeValidator('friday',i,x)" msInfiniteScroll
+                              [complete]="complete" threshold="{{systemSettings.infinitScrollThreshold}}">
+                              <mat-option>
+                                <ngx-mat-select-search [formControl]="inputChangeChild_fri"
+                                  [placeholderLabel]="'Find ' + ' ..'"
+                                [noEntriesFoundLabel]="'No ' + placeholder + ' found'"></ngx-mat-select-search>
+                              </mat-option>
+                              @for (option of element.friday.child[x].option; track option) {
+                                <mat-option
+                                  [value]="option.dropdownID">
+                                  {{option.description}}
+                                </mat-option>
+                              }
+                            </mat-select>
+                          </mat-form-field>
+                        }
+                      </div>
+                    }
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="saturday">
+                  <th class="head" mat-header-cell class="w-[150px]" *matHeaderCellDef> {{t('Saturday')}} </th>
+                  <td mat-cell class="cells" *matCellDef="let element ; let i = index">
+                    <mat-form-field class="w-full mt-2 text-md hover:text-base" appearance="outline">
+                      <mat-icon class="mb-2" matPrefix [svgIcon]="'mat_outline:info'"></mat-icon>
+                      <mat-select [(ngModel)]="element.saturday.id" [placeholder]="'Saturday'"
+                        (ngModelChange)="change(i, 'saturday')"
+                        (ngModelChange)="timeValidatorparent('friday','saturday',i)"
+                        (selectionChange)="handleAddSearch('delete')"
+                        (infiniteScroll)="getNextBatchParent()" msInfiniteScroll [complete]="complete"
+                        threshold="{{systemSettings.infinitScrollThreshold}}">
+                        <mat-option>
+                          <ngx-mat-select-search [formControl]="inputChangeParent_sat"
+                            [placeholderLabel]="'Find ' + ' ..'"
+                          [noEntriesFoundLabel]="'No ' + placeholder + ' found'"></ngx-mat-select-search>
+                        </mat-option>
+                        @for (option of element.saturday.option ; track option) {
+                          <mat-option
+                            [value]="option.dropdownID">
+                            {{option.description}}
+                          </mat-option>
+                        }
+                      </mat-select>
+                    </mat-form-field>
+                    @for (child of element.saturday.child; track child; let x = $index) {
+                      <div>
+                        @if (element.apply.id !==null || element.saturday.id !==null) {
+                          <mat-form-field class=" w-full  text-md hover:text-base" appearance="outline"
+                            >
+                            <mat-icon class="mb-2" matPrefix [svgIcon]="'mat_outline:info'"></mat-icon>
+                            <mat-select [(ngModel)]="element.saturday.child[x].id" [placeholder]=""
+                              (ngModelChange)="getdropdownperday(element,i,x,'saturday','sunday','friday')"
+                              (infiniteScroll)="getNextBatchChild()"
+                              (selectionChange)="handleAddSearch('delete')"
+                              (ngModelChange)="timeValidator('saturday',i,x)" msInfiniteScroll
+                              [complete]="complete" threshold="{{systemSettings.infinitScrollThreshold}}">
+                              <mat-option>
+                                <ngx-mat-select-search [formControl]="inputChangeChild_sat"
+                                  [placeholderLabel]="'Find ' + ' ..'"
+                                [noEntriesFoundLabel]="'No ' + placeholder + ' found'"></ngx-mat-select-search>
+                              </mat-option>
+                              @for (option of element.saturday.child[x].option; track option) {
+                                <mat-option
+                                  [value]="option.dropdownID">
+                                  {{option.description}}
+                                </mat-option>
+                              }
+                            </mat-select>
+                          </mat-form-field>
+                        }
+                      </div>
+                    }
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="sunday">
+                  <th class="head" mat-header-cell class="w-[150px]" *matHeaderCellDef> {{t('Sunday')}} </th>
+                  <td mat-cell class="cells" *matCellDef="let element ; let i = index">
+                    <mat-form-field class="w-full  mt-2 text-md hover:text-base" appearance="outline">
+                      <mat-icon class="mb-2" matPrefix [svgIcon]="'mat_outline:info'"></mat-icon>
+                      <mat-select [(ngModel)]="element.sunday.id" [placeholder]="'Sunday'"
+                        (ngModelChange)="change(i, 'sunday')"
+                        (ngModelChange)="timeValidatorparent('saturday','sunday',i) "
+                        (selectionChange)="handleAddSearch('delete')"
+                        (infiniteScroll)="getNextBatchParent()" msInfiniteScroll [complete]="complete"
+                        threshold="{{systemSettings.infinitScrollThreshold}}">
+                        <mat-option>
+                          <ngx-mat-select-search [formControl]="inputChangeParent_sun"
+                            [placeholderLabel]="'Find ' + ' ..'"
+                          [noEntriesFoundLabel]="'No ' + placeholder + ' found'"></ngx-mat-select-search>
+                        </mat-option>
+                        @for (option of element.sunday.option ; track option) {
+                          <mat-option
+                            [value]="option.dropdownID">
+                            {{option.description}}
+                          </mat-option>
+                        }
+                      </mat-select>
+                    </mat-form-field>
+                    @for (child of element.sunday.child; track child; let x = $index) {
+                      <div>
+                        @if (element.apply.id !==null || element.sunday.id !==null) {
+                          <mat-form-field class="w-full  text-md hover:text-base" appearance="outline"
+                            >
+                            <mat-icon class="mb-2" matPrefix [svgIcon]="'mat_outline:info'"></mat-icon>
+                            <mat-select [(ngModel)]="element.sunday.child[x].id" [placeholder]=""
+                              (ngModelChange)="getdropdownperday(element,i,x,'sunday','monday','saturday')"
+                              (infiniteScroll)="getNextBatchChild()"
+                              (selectionChange)="handleAddSearch('delete')"
+                              (ngModelChange)="timeValidator('sunday',i,x)" sunday msInfiniteScroll
+                              [complete]="complete" threshold="{{systemSettings.infinitScrollThreshold}}">
+                              <mat-option>
+                                <ngx-mat-select-search [formControl]="inputChangeChild_sun"
+                                  [placeholderLabel]="'Find ' + ' ..'"
+                                [noEntriesFoundLabel]="'No ' + placeholder + ' found'"></ngx-mat-select-search>
+                              </mat-option>
+                              @for (option of element.sunday.child[x].option; track option) {
+                                <mat-option
+                                  [value]="option.dropdownID">
+                                  {{option.description}}
+                                </mat-option>
+                              }
+                            </mat-select>
+                          </mat-form-field>
+                        }
+                      </div>
+                    }
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="action">
+                  <th class="head" mat-header-cell *matHeaderCellDef>
+                  </th>
+                  <td mat-cell *matCellDef="let element; let i = index">
+                    <button type="button" (click)="handleDeleteBreak(i)" mat-icon-button color="warn">
+                      <mat-icon class="mt-3" matSuffix svgIcon="mat_outline:delete"></mat-icon>
+                    </button>
+                  </td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="columns"></tr>
+                <tr mat-row *matRowDef="let row; columns: columns;"></tr>
+              </table>
+            </div>
+          }
+          <mat-tab-group class="mt-4">
+            <mat-tab label="{{t('employee')}}">
+
+              <table #TableEmployee mat-table [dataSource]="dataEmployee" style="width: 100%;"
+                class="mat-elevation-z0 mt-4">
+                <ng-container matColumnDef="employeeCode">
+                  <th mat-header-cell *matHeaderCellDef> {{t('employeeCode')}} </th>
+                  <td mat-cell *matCellDef="let element"> {{element.employeeCode}}
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="displayName">
+                  <th mat-header-cell *matHeaderCellDef>{{t('employeeName')}}</th>
+                  <td mat-cell *matCellDef="let element"> {{element.displayName}}
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="action">
+                  <th class="" mat-header-cell *matHeaderCellDef> {{t('Action')}} </th>
+                  <td mat-cell class="" *matCellDef="let element; let i = index">
+                    <mat-icon (click)="handleEmployeeRemove(element.employeeId,i)" color="warn"
+                    svgIcon="heroicons_outline:trash"></mat-icon>
+                  </td>
+                </ng-container>
+
+
+                <tr mat-header-row *matHeaderRowDef="emplopyeeColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: emplopyeeColumns;"></tr>
+              </table>
+              <mat-paginator (page)="handlePageEvent($event)" [pageSizeOptions]="[10, 20, 50]"
+                showFirstLastButtons [length]="totalRows" [pageSize]="request.Length"
+                [pageIndex]="request.Start">
+              </mat-paginator>
+
+            </mat-tab>
+            <mat-tab label="{{t('Date')}}">
+              <div class="grid grid-cols-7 gap-2 no-wrap h-full m-4">
+                @for (dataSource of dataDate ; track dataSource; let i = $index) {
+                  <div class="gap-2">
+                    <div class="flex gap-">
+                      <mat-form-field class="w-full h-12 text-md" appearance="outline">
+                        <mat-label class="label-font-size">{{dataSource.date | date}} ({{dataSource.day
+                        }})</mat-label>
+                        <!-- <mat-icon id="icons" class="" matPrefix [svgIcon]="'mat_outline:info'"></mat-icon> -->
+                        <mat-icon (click)="handleDayRemove(i)" id="icons" class="icon mr-3 ml-1"
+                        color="warn" matPrefix [svgIcon]="'heroicons_outline:trash'"></mat-icon>
+                        <mat-select id="icons" [disabled]="hideSubmit"
+                          (selectionChange)="datechange(i,'shiftId')" [(ngModel)]="dataSource.shiftId.id"
+                          [placeholder]="'Apply To All'" (infiniteScroll)="getNextBatchParent()"
+                          msInfiniteScroll [complete]="complete"
+                          threshold="{{systemSettings.infinitScrollThreshold}}">
+                          <mat-option>
+                            <ngx-mat-select-search [formControl]="inputChangeParent_date"
+                              [placeholderLabel]="'Find ' + ' ..'"
+                            [noEntriesFoundLabel]="'No ' + placeholder + ' found'"></ngx-mat-select-search>
+                          </mat-option>
+                          @for (option of datelist; track option) {
+                            <mat-option [value]="option.dropdownID">
+                              {{option.description}}
+                            </mat-option>
+                          }
+                        </mat-select>
+                      </mat-form-field>
+                    </div>
+                    @for (child of dataSource.shiftId.child; track child; let x = $index) {
+                      <div class="flex">
+                        <mat-form-field class="w-full h-12 hover:text-base" appearance="outline">
+                          <mat-icon id="child" class="icon mr-3 ml-1" matPrefix
+                          [svgIcon]="'mat_outline:info'"></mat-icon>
+                          <mat-select (openedChange)="clearSearch()" id="icons" [disabled]="hideSubmit"
+                            (openedChange)="childdata(i,x)" [(ngModel)]="child.id" [placeholder]=""
+                            (infiniteScroll)="getNextBatchChild()" msInfiniteScroll [complete]="complete"
+                            threshold="{{systemSettings.infinitScrollThreshold}}">
+                            <mat-option id="options" class="border-2 first-option">
+                              <input id="fieldchild" type="input" class="w-[1000px] search-field"
+                                (click)="$event.stopPropagation()" [placeholder]="t('Find') + ' ..'"
+                                [formControl]="inputChangeChild_date">
+                              </mat-option>
+                              @for (option of dataDate[i].shiftId.child[x].options; track option) {
+                                <mat-option
+                                  [value]="option.dropdownID">
+                                  {{option.description}}
+                                </mat-option>
+                              }
+                            </mat-select>
+                          </mat-form-field>
+                        </div>
+                      }
+                    </div>
+                  }
+
+                </div>
+              </mat-tab>
+            </mat-tab-group>
+          </mat-card>
+        </div>
+      </div>

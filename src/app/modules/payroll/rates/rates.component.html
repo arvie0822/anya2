@@ -1,0 +1,77 @@
+<div class="flex flex-col flex-auto min-w-0" *transloco="let t">
+  <!-- Main -->
+  <div class="flex-auto  sm:p-2  w-full min-w-0 sm:absolute sm:inset-0 sm:overflow-auto text-md">
+
+    <mat-card class="body-card">
+      <div>
+        <mat-card-title class="pt-2 mr-4 h-13 text-[16px]">
+          <app-card-title title="Rates" [sub]="true" [back]="true" (submitTap)="submit()"></app-card-title>
+        </mat-card-title>
+      </div>
+
+      <form [formGroup]="RateTypeForm">
+        <div class="grid grid-cols-7 gap-2 h-15">
+          <mat-form-field class="w-full text-md" appearance="outline">
+            <mat-label class="label-font-size">{{t('name')}}</mat-label>
+            <!-- <mat-icon class="icon-size-5 : mr-2" matPrefix [svgIcon]="'mat_outline:add_location_alt'"></mat-icon> -->
+            <input class="input" formControlName="code" matInput [placeholder]="''">
+          </mat-form-field>
+
+          <mat-form-field class="w-full text-md" appearance="outline">
+            <mat-label class="label-font-size">{{t('description')}}</mat-label>
+            <!-- <mat-icon class="icon-size-5 : mr-2" matPrefix [svgIcon]="'mat_outline:add_location_alt'"></mat-icon> -->
+            <input class="input" formControlName="description" matInput [placeholder]="''">
+          </mat-form-field>
+        </div>
+      </form>
+      <section class="example-container mat-elevation-z0 z-10" tabindex="0">
+        <table mat-table [dataSource]="dataSource" class="mat-elevation-z0 border">
+
+          <ng-container matColumnDef="code">
+            <th class="pr-10" mat-header-cell *matHeaderCellDef> Code </th>
+            <td mat-cell *matCellDef="let element"> <span class="text-md">{{element.code}}</span> </td>
+          </ng-container>
+
+          <ng-container matColumnDef="description">
+            <th class="pr-10" mat-header-cell *matHeaderCellDef> Description </th>
+            <td mat-cell *matCellDef="let element"> <span class="text-md">{{element.description}}</span> </td>
+          </ng-container>
+
+          <ng-container matColumnDef="otRatePerc">
+            <th class="pr-10" mat-header-cell *matHeaderCellDef> Rate </th>
+            <td  mat-cell *matCellDef="let element">
+              <input type="text" [(ngModel)]="element.otRatePerc" [OnlyNumber]="true" [max]="9999999" [min]="0" [maxLength]="7" [allowDecimal]="true" [decimal]="3" suffix="%" class="border-b-2 mt-4 w-[65px] text-md">
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="jeAccountCode">
+            <th class="pr-10" mat-header-cell *matHeaderCellDef> Account Code </th>
+            <td  mat-cell *matCellDef="let element, let i = index">
+              <select [(ngModel)]="element.jeAccountCode" class="border min-w-50 p-2 m-0 text-sm" (ngModelChange)="changeEvent(i,'jeAccountCode')">
+                @for (item of accountCodeList; track item) {
+                  <option [value]="item.dropdownID">{{item.description}}</option>
+                }
+              </select>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="jeAccountId">
+            <th class="pr-10"  mat-header-cell *matHeaderCellDef> Account Name </th>
+            <td  mat-cell *matCellDef="let element, let i = index">
+              <select [(ngModel)]="element.jeAccountId" class="border min-w-50 p-2 m-0 text-sm" (ngModelChange)="changeEvent(i,'jeAccountId')">
+                @for (item of accountNameList; track item) {
+                  <option [value]="item.dropdownID">{{item.description}}</option>
+                }
+              </select>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+      </section>
+
+      <mat-paginator class="paganation" [pageSizeOptions]="[25, 100, 200]" (page)="nextBatch($event)" showFirstLastButtons></mat-paginator>
+    </mat-card>
+  </div>
+</div>

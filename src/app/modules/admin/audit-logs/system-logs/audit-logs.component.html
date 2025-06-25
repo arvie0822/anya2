@@ -1,0 +1,117 @@
+<div class="flex flex-col flex-auto min-w-0" *transloco="let t">
+  <!-- Main -->
+  <div class="flex-auto sm:p-2 w-full min-w-0 sm:absolute sm:inset-0 sm:overflow-auto text-lg">
+    <mat-card>
+      <mat-card-title>
+        <app-card-title title="Audit logs" [sub]="false" [back]="false"></app-card-title>
+      </mat-card-title><br>
+      <mat-card-content>
+        <form [formGroup]="auditForm">
+          <div class="flex flex-cols gap-2 h-14">
+
+            <!-- <mat-form-field appearance="outline">
+            <mat-label class="label-font-size">{{ t('module') }}</mat-label>
+            <mat-icon class="" matPrefix svgIcon="mat_outline:info"></mat-icon>
+            <mat-select formControlName="module" multiple>
+              <mat-option *ngFor="let item of module" [value]="item.dropdownID">{{item.description}}</mat-option>
+            </mat-select>
+          </mat-form-field> -->
+
+          <app-dropdown-custom [control]="auditForm.get('moduleId')" [options]="dropdownOptions.moduledef"
+          [useControl]="true" [multiple]="true" [type]="1015"></app-dropdown-custom>
+
+          <app-dropdown-custom [control]="auditForm.get('createdBy')"
+            [options]="dropdownOptions.employeedef" [useControl]="true" [multiple]="true"
+          [type]="1005"></app-dropdown-custom>
+
+          <mat-form-field appearance="outline">
+            <mat-label class="label-font-size">{{ t('activity') }}</mat-label>
+            <mat-icon class="" matPrefix svgIcon="mat_outline:info"></mat-icon>
+            <mat-select formControlName="auditType" multiple>
+              @for (item of dropdownOptions.auditdef; track item) {
+                <mat-option
+                [value]="item.dropdownID">{{item.description}}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field class="w-60 text-lg" appearance="outline">
+            <mat-label class="label-font-size">{{ t('dateFrom') }}</mat-label>
+            <input formControlName="dateFrom" [max]="auditForm.controls['dateTo'].value" matInput
+              [matDatepicker]="df" readonly [placeholder]="'MM/DD/YYYY'" (click)="df.open()">
+              <mat-datepicker-toggle matSuffix [for]="df"></mat-datepicker-toggle>
+              <mat-datepicker #df></mat-datepicker>
+            </mat-form-field>
+
+            <mat-form-field class="w-60 text-lg" appearance="outline">
+              <mat-label class="label-font-size">{{ t('dateTo') }}</mat-label>
+              <input formControlName="dateTo" [min]="auditForm.controls['dateFrom'].value" matInput
+                [matDatepicker]="dt" readonly [placeholder]="'MM/DD/YYYY'" (click)="dt.open()">
+                <mat-datepicker-toggle matSuffix [for]="dt"></mat-datepicker-toggle>
+                <mat-datepicker #dt></mat-datepicker>
+              </mat-form-field>
+
+              <button type="button" [matTooltip]="'Search'" (click)="search(true)" class="w-[10px]" mat-flat-button color="primary"
+                aria-label="example icon">
+                <mat-icon class="mb-2" svgIcon="mat_outline:search"></mat-icon>
+              </button>
+              <button type="button" class="w-[10px]" (click)="search(false)" mat-flat-button color="primary" matTooltip="Export">
+                <mat-icon  class="mb-2" svgIcon="mat_outline:download"></mat-icon></button>
+
+              <!-- <button type="button" [matTooltip]="'Export'" (click)="handleExportEvent()" [disabled] class="w-[10px]" mat-flat-button color="primary" aria-label="example icon">
+              <mat-icon class="" svgIcon="mat_outline:download"></mat-icon>
+            </button> -->
+          </div>
+
+
+
+          <table mat-table [dataSource]="auditSource" #MatTable matSort class="mat-elevation-z0 mt-5"
+            (matSortChange)="handleSortEvent($event)">
+
+            <ng-container matColumnDef="module">
+              <th mat-header-cell class="sssheader" *matHeaderCellDef> Module </th>
+              <td mat-cell class="sssheader" *matCellDef="let element"> {{element.module}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="activity">
+              <th mat-header-cell class="sssheader" *matHeaderCellDef> Activity </th>
+              <td mat-cell class="sssheader" *matCellDef="let element"> {{element.activity}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="message">
+              <th mat-header-cell class="sssheader" *matHeaderCellDef> Description </th>
+              <td mat-cell class="sssheader" *matCellDef="let element"> {{element.message}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="date">
+              <th mat-header-cell class="sssheader" *matHeaderCellDef> Date </th>
+              <td mat-cell class="sssheader" *matCellDef="let element"> {{element.date}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="doneBy">
+              <th mat-header-cell class="sssheader" *matHeaderCellDef> Done By </th>
+              <td mat-cell class="sssheader" *matCellDef="let element"> {{element.doneBy}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="device">
+              <th mat-header-cell class="sssheader" *matHeaderCellDef> Device </th>
+              <td mat-cell class="sssheader" *matCellDef="let element"> {{element.device}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="browser">
+              <th mat-header-cell class="sssheader" *matHeaderCellDef> Browser </th>
+              <td mat-cell class="sssheader" *matCellDef="let element"> {{element.browser}} </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="auditColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: auditColumns;"></tr>
+
+          </table>
+          <mat-paginator [attr.disabled]="isLoadingResults ? true : null" (page)="handlePageEvent($event)"
+            [length]="totalRows" [pageSize]="request.Length" [pageIndex]="request.Start"
+          [pageSizeOptions]="[10, 20, 50]" showFirstLastButtons></mat-paginator>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

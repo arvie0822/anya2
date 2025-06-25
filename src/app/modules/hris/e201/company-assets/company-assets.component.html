@@ -1,0 +1,147 @@
+<form [formGroup]="companyassetform">
+    <div class="grid grid-cols-10 gap-2">
+        <!-- <mat-form-field class="w-full text-md h-10" appearance="outline">
+                    <mat-label class="label-font-size">Category</mat-label>
+                    <mat-select formControlName="categoryId" [placeholder]="">
+                        <mat-option *ngFor="let option of category" [value]="option.id"> {{ option.description }}</mat-option>
+                    </mat-select>
+                </mat-form-field> -->
+
+        <app-dropdown [control]="companyassetform.get('categoryId')" (objects)="categoryIds = $event"
+            [value]="companyassetform.get('categoryId').value" [options]="dropdownOptions.categoryDef"
+            [icon]="'mat_outline:info'" [type]="165" label="Category"> </app-dropdown>
+
+        <mat-form-field class="w-full h-10" appearance="outline">
+            <mat-label class="label-font-size">Model</mat-label>
+            <input formControlName="model" matInput type="text">
+        </mat-form-field>
+
+        <mat-form-field class="w-full h-10" appearance="outline">
+            <mat-label class="label-font-size">Serial Number</mat-label>
+            <input formControlName="serialNumber" matInput type="text">
+        </mat-form-field>
+
+        <!-- <mat-form-field class="w-full text-md h-10" appearance="outline">
+                    <mat-label class="label-font-size">Condition</mat-label>
+                    <mat-select formControlName="conditionId" [placeholder]="">
+                        <mat-option *ngFor="let option of condition" [value]="option.id"> {{ option.description }}</mat-option>
+                    </mat-select>
+                </mat-form-field> -->
+
+        <app-dropdown [control]="companyassetform.get('conditionId')" [isFix]="false" (objects)="conditionIds = $event"
+            [value]="companyassetform.get('conditionId').value" [options]="dropdownOptions.conditiondef"
+            [icon]="'mat_outline:info'" [type]="182" label="Condition"> </app-dropdown>
+
+        <mat-form-field class="w-full text-md h-10" appearance="outline">
+            <mat-label class="label-font-size">Issued Date </mat-label>
+            <input formControlName="issuedDate" matInput [matDatepicker]="df1" readonly [placeholder]="'MM/DD/YYYY'"
+                (click)="df1.open()" [max]="companyassetform.controls['returnedDate'].value">
+            <mat-datepicker-toggle matSuffix [for]="df1"></mat-datepicker-toggle>
+            <mat-datepicker #df1></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field class="w-full text-md h-10" appearance="outline">
+            <mat-label class="label-font-size">Return Date</mat-label>
+            <input formControlName="returnedDate" matInput [matDatepicker]="df2" readonly [placeholder]="'MM/DD/YYYY'"
+                (click)="df2.open()" [min]="companyassetform.controls['issuedDate'].value">
+            <mat-datepicker-toggle matSuffix [for]="df2"></mat-datepicker-toggle>
+            <mat-datepicker #df2></mat-datepicker>
+        </mat-form-field>
+
+        <app-dropdown [control]="companyassetform.get('returnedConditionId')" [isFix]="false"
+            (objects)="returnconditionIds = $event" [value]="companyassetform.get('returnedConditionId').value"
+            [options]="dropdownOptions.conditiondef" [icon]="'mat_outline:info'" [type]="182" label="Return Condition">
+        </app-dropdown>
+
+        <mat-form-field class="w-full h-10" appearance="outline">
+            <mat-label class="label-font-size">Replacement Value</mat-label>
+            <input formControlName="replacementValue" matInput type="number">
+        </mat-form-field>
+
+        <mat-form-field class="w-full h-10" appearance="outline">
+            <mat-label class="label-font-size">Remarks</mat-label>
+            <input formControlName="remarks" matInput type="text">
+        </mat-form-field>
+
+        <button class="w-10 text-md" (click)="addasset('companyassetform','asset')" mat-flat-button color="primary"
+            aria-label="example icon">
+            <mat-icon class="mb-2" svgIcon="mat_outline:post_add"></mat-icon>
+        </button>
+    </div>
+</form>
+
+<section class="example-container overflow-auto max-h-[500px] mat-elevation-z0" tabindex="0">
+    <table mat-table #companyassettable [dataSource]="dataSourcereturn('asset')" class="mat-elevation-z0 border">
+
+        <ng-container matColumnDef="action">
+            <th mat-header-cell *matHeaderCellDef>Actions</th>
+            <td mat-cell *matCellDef="let element ; let i = index">
+                <button class="" mat-icon-button [matMenuTriggerFor]="menu" [disabled]="editing " aria-label="">
+                    <mat-icon class="icon-size-6">{{editing?"edit":"more_vert"}}</mat-icon>
+                </button>
+                <mat-menu #menu="matMenu">
+                    <button mat-menu-item (click)="deledit('editasset',element,i)">
+                        <mat-icon class="icon-size-6" color="primary">edit</mat-icon>
+                        <span>Edit</span>
+                    </button>
+                    <button mat-menu-item (click)="deledit('deleteasset',element,i)">
+                        <mat-icon class="icon-size-6" color="warn">delete</mat-icon>
+                        <span>Delete</span>
+                    </button>
+                </mat-menu>
+            </td>
+        </ng-container>
+
+        <ng-container matColumnDef="categoryId">
+            <th mat-header-cell *matHeaderCellDef> Category </th>
+            <td mat-cell *matCellDef="let element"> {{element.categoryDescription}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="model">
+            <th mat-header-cell *matHeaderCellDef> Model </th>
+            <td mat-cell *matCellDef="let element"> {{element.model}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="serialNumber">
+            <th mat-header-cell *matHeaderCellDef> Serial Number </th>
+            <td mat-cell *matCellDef="let element"> {{element.serialNumber}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="conditionId">
+            <th mat-header-cell *matHeaderCellDef> Condition </th>
+            <td mat-cell *matCellDef="let element"> {{element.conditionDescription}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="issuedDate">
+            <th mat-header-cell *matHeaderCellDef> Issued Date </th>
+            <td mat-cell *matCellDef="let element"> {{element.issuedDate | date:'MM/dd/yyyy'}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="returnedDate">
+            <th mat-header-cell *matHeaderCellDef> Return Date </th>
+            <td mat-cell *matCellDef="let element"> {{element.returnedDate | date:'MM/dd/yyyy'}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="returnedConditionId">
+            <th mat-header-cell *matHeaderCellDef> Return Condition </th>
+            <td mat-cell *matCellDef="let element"> {{element.returnedConditionDescription}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="replacementValue">
+            <th mat-header-cell *matHeaderCellDef> Replacement </th>
+            <td mat-cell *matCellDef="let element"> {{element.replacementValue}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="remarks">
+            <th mat-header-cell *matHeaderCellDef> Remarks </th>
+            <td mat-cell *matCellDef="let element"> {{element.remarks}} </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns ; sticky : true"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+    <!-- <div class="grid grid-cols-2 gap-2">
+                    <mat-paginator [length]="20" #paginator0 [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons
+                    aria-label="Select page of periodic elements"> </mat-paginator>
+                </div> -->
+</section>

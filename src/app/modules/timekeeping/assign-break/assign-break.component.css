@@ -1,0 +1,154 @@
+table {
+    width: 100%;
+}
+
+.mat-column-Employee_Code {
+    width: 20%;
+    overflow: auto;
+}
+
+.put-border {
+    border: 1px solid rgb(217, 223, 208);
+    padding: 8px;
+    width: 70%;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+/* .label-font-size{
+    font-size: 120% ;
+} */
+.mat-card#spacetable{
+    padding-bottom: 5px;
+    padding-top: 5px;
+}
+
+.inputsearch{
+    position: relative;
+    bottom: 0px;
+    font-size: medium;
+}
+input#fieldchild{
+    position: relative;
+    bottom: 0px;
+    font-size: medium;
+    width: 100%;
+}
+.mat-option{
+    position: relative;
+    bottom: 7px;
+    font-size: medium;
+}
+
+
+/* .mat-datepicker-toggle{
+    position: relative;
+    bottom: 7px;
+    font-size: medium;
+} */
+/* .icon {
+    position: relative;
+    bottom: 10px;
+} */
+/* .icon#icons {
+    position: relative;
+    bottom: 8px;
+} */
+/* .mat-select{
+    position: relative;
+    font-size: medium;
+}
+.mat-select#icons{
+    position: relative;
+    bottom: 9px;
+    font-size: 14px;
+}
+
+.mat-select#child{
+    position: relative;
+    bottom: 7px;
+    font-size: 14px;
+}
+
+.select{
+    position: relative;
+    bottom: 9px;
+    font-size: medium;
+} */
+
+.scroll-container {
+    display: flex;
+    align-items: center;
+    overflow: auto;
+}
+.header {
+    text-align: end;
+}
+
+.head{
+    padding-left: 15px;
+}
+
+::ng-deep .mat-form-field.mat-form-field-appearance-fill .mat-form-field-wrapper .mat-form-field-flex {
+    min-height: 40px !important;
+}
+
+/* .mat-icon#icons{
+    position: relative;
+    font-size: 5px;
+}
+
+.mat-icon#child{
+    position: relative;
+    font-size: 5px;
+    bottom: 7px;
+} */
+
+::ng-deep .mat-tab-body.mat-tab-body-active {
+    overflow-y: none !important;
+}
+
+.search-field {
+    background-color: white;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+}
+
+.first-option {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background-color: white;
+}
+
+.mat-mdc-form-field.mat-form-field-appearance-fill .mat-mdc-text-field-wrapper .mat-mdc-form-field-flex .mat-mdc-form-field-infix {
+    position: static;
+    display: flex;
+    align-items: center;
+    width: 88px;
+    min-height: 28px;
+    padding: 0;
+    border: 0;
+}
+
+.scroll-container {
+    display: flex;
+    align-items: center;
+    overflow: auto;
+}
+
+
+.cells{
+    padding : 0 5px 0 5px !important;
+}
+
+
+.mat-mdc-form-field-bottom-align::before {
+    height: 0px !important;
+}
+
+.mat-mdc-form-field-subscript-wrapper, .mat-mdc-form-field-bottom-align::before {
+    line-height: 1px !important;
+}
+

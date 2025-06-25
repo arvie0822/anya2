@@ -1,0 +1,59 @@
+@if (useControl) {
+   <mat-form-field *transloco="let t" class="w-full text-lg" appearance="outline">
+    <mat-label class="label-font-size" matTooltip="{{placeholder}}">{{placeholder}}</mat-label>
+    <!-- <mat-icon class="icon-size-5 : mr-2" matPrefix svgIcon="mat_outline:info"></mat-icon> -->
+    <mat-select class="text-lg" [formControl]="control" [id]="id" [multiple]="multiple"
+      (selectionChange)="selectedEvent($event)" [placeholder]="placeholder" (infiniteScroll)="getNextBatch()"
+      msInfiniteScroll [complete]="complete" [threshold]="'10%'" (openedChange)="onSelectOpen($event)">
+      <mat-option class="border-1 first-option">
+        <input type="input" class="border-[1px] pr-4 pl-4 search-field bg-white dark:bg-[#1e293b]"
+          (click)="$event.stopPropagation()" (keydown.space)="$event.stopPropagation()"
+          (keydown.control.a)="$event.stopPropagation(); $event.target.select()"
+          [placeholder]="t('Find') + placeholder + ' ..'" [formControl]="inputChange">
+        </mat-option>
+        @if (all && this.options?.length > 0) {
+          <mat-option [value]="0" (click)="selectAll()" #allSelected>All</mat-option>
+        }
+        @for (option of data | async; track option) {
+          <mat-option [value]="option.dropdownID"
+            (click)="selectItem(option.dropdownID, control.value)">
+            {{option.description}}
+          </mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  }
+
+
+  @if (!useControl) {
+    <mat-form-field *transloco="let t" class="w-full text-lg" appearance="outline">
+      <mat-label class="label-font-size" matTooltip="{{placeholder}}">{{placeholder}}</mat-label>
+      <!-- <mat-icon class="icon-size-5 : mr-2" matPrefix svgIcon="mat_outline:info"></mat-icon> -->
+      <mat-select class="text-lg" [id]="id" [(ngModel)]="value" [multiple]="multiple"
+        (selectionChange)="selectedEvent($event)" [placeholder]="placeholder" (infiniteScroll)="getNextBatch()"
+        msInfiniteScroll [complete]="complete" [threshold]="'10%'" (openedChange)="onSelectOpen($event)">
+        <mat-option class="border-1 first-option">
+          <input type="input" class="border-[1px] pr-4 pl-4 search-field bg-white dark:bg-[#1e293b]"
+            (click)="$event.stopPropagation()" (keydown.space)="$event.stopPropagation()"
+            (keydown.control.a)="$event.stopPropagation(); $event.target.select()"
+            [placeholder]="t('Find') + placeholder + ' ..'" [formControl]="inputChange">
+          </mat-option>
+          @if (all && this.options?.length > 0) {
+            <mat-option [value]="0" (click)="selectAll()" #allSelected>All</mat-option>
+          }
+          @for (option of data | async; track option.dropdownID) {
+            <mat-option [value]="option.dropdownID"
+              (click)="selectItem(option.dropdownID, value)">
+              {{option.description}}
+            </mat-option>
+          }
+          <mat-select-trigger> {{selDisplayNgModel(value)}}
+            @if (multiple && value?.length > 1 && isALL(value)) {
+              <span class="example-additional-selection">
+                (+{{(value?.length || 0) - 1}} {{value?.length === 2 ? 'other' : 'others'}})
+              </span>
+            }
+          </mat-select-trigger>
+        </mat-select>
+      </mat-form-field>
+    }

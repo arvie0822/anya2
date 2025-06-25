@@ -1,0 +1,24 @@
+<h1 class="text-lg h-8 ml-5 fonts">Select to Copy Information</h1>
+<div>
+    <div class="h-8">
+        <mat-checkbox color="primary" [(ngModel)]="branchinformation" >Branch Information</mat-checkbox>
+    </div>
+    <div  class="h-8">
+        <mat-checkbox color="primary" [(ngModel)]="addressinformation">Branch Address</mat-checkbox>
+    </div>
+    <div  class="h-8">
+        <mat-checkbox color="primary" [(ngModel)]="govermentinfo"     > Government Information </mat-checkbox>
+    </div>
+    <div  class="h-8">
+        <mat-checkbox color="primary" [(ngModel)]="contactinformation">Contact Information</mat-checkbox>
+    </div>
+    <div  class="h-8">
+        <mat-checkbox color="primary" [(ngModel)]="branchsettings"    >Branch Settings Information</mat-checkbox>
+    </div><br>
+    <div class="grid grid-cols-4 gap-2">
+        <div></div>
+        <div></div>
+        <button mat-flat-button mat-dialog-close color="primary">Cancel</button>
+        <button class="" mat-flat-button color="primary"(click)="copyNow()">Copy</button>
+    </div>
+</div>

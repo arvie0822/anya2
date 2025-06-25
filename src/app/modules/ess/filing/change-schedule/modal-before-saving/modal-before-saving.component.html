@@ -1,0 +1,33 @@
+<section class="example-container mat-elevation-z0" *transloco="let t">
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z0 tables">
+
+        <!--- Note that these columns can be defined in any order.
+              The actual rendered columns are set as a property on the row definition" -->
+
+        <ng-container matColumnDef="Date">
+            <th mat-header-cell *matHeaderCellDef> {{t('Date')}} </th>
+            <td mat-cell *matCellDef="let element"> {{element.Date}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="Shift">
+            <th mat-header-cell *matHeaderCellDef> {{t('Shift')}} </th>
+            <td mat-cell *matCellDef="let element"> {{element.Shift}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="New_Shift">
+            <th mat-header-cell *matHeaderCellDef> {{t('New Shift')}} </th>
+            <td mat-cell *matCellDef="let element"> {{element.New_Shift}} </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+</section>
+
+<div class="grid grid-cols-5 gap-2 w h-1 mt-3"  *transloco="let t">
+    <div></div>
+    <div></div>
+    <div></div>
+    <button mat-flat-button mat-dialog-close (click)="copy(false)" color="warn">{{t('Cancel')}}</button>
+    <button mat-flat-button (click)="copy(true)" color="primary">{{t('Confirm')}}</button>
+</div>

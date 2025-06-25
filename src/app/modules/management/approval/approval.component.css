@@ -1,0 +1,149 @@
+/* .label-font-size{
+    font-size: 15px;
+}
+
+.mat-icon{
+    position: relative;
+    bottom: 8px;
+}
+.open_ {
+    top: 8px !important
+}
+
+.mat-select{
+    position: relative;
+    bottom: 13px;
+    font-size: medium;
+}
+.input{
+    position: relative;
+    bottom: 10px;
+    font-size: medium;
+}
+table {
+    width: 100%;
+}
+
+ .mat-datepicker-toggle{
+  position: relative;
+  bottom: 7px;
+  font-size: small;
+ }
+
+
+/* table css */
+/* .body-card {
+     position: relative;
+     height: 100%;
+     padding-top: 1px;
+ }
+
+ .child-mat-tab-group {
+    position: absolute;
+    top: 50px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    max-height: 100%;
+    overflow: auto;
+ } */
+
+/* .child-mat-tab {
+    position: absolute;
+    top: 50px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    max-height: 100%;
+    overflow: auto;
+ } */
+
+/* .child-history-table {
+    position: absolute;
+    top: 100px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    max-height: 100%;
+    overflow: auto;
+ } */
+
+/* .paganation {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+} */
+
+/* .example-container {
+    position: absolute;
+    top:100px;
+    left: 15px;
+    right: 15px;
+    bottom: 80px;
+    max-height: 100%;
+    overflow: auto;
+} */
+
+/* ::ng-deep .mat-badge-medium .mat-badge-content {
+    line-height: 24px !important
+}  */
+
+.mat-mdc-tab-group .mat-mdc-tab-header .mat-mdc-tab-label-container {
+    margin: 12px 0;
+}
+
+
+.mat-mdc-cell {
+    white-space: nowrap;
+    padding: 0 0 0 10px !important;
+}
+
+.mat-mdc-header-cell {
+    white-space: nowrap;
+    padding: 0 0 0px 10px !important;
+}
+
+/* .mdc-checkbox {
+    width: 0px !important;
+    height: 10px !important;
+} */
+
+/* .mdc-checkbox__background {
+    width: 12px !important;
+    height: 12px !important;
+    border: 1px solid #64748b !important;
+} */
+
+/* .mat-badge-small .mat-badge-content {
+    width: 17px;
+    height: 17px;
+    font-size: 8px;
+    line-height: 20px;
+  }
+
+
+   ::ng-deep .mat-badge-medium .mat-badge-content {
+    width: 20px !important;;
+    height: 20px !important;;
+    font-size: 8px !important;;
+    line-height: 20px !important;;
+  }
+
+  ::ng-deep.mat-badge-large .mat-badge-content {
+    width: 40px !important;
+    height: 23px !important;;
+    font-size: 6px !important;;
+    line-height: 24px !important;;
+    right: -28px !important;
+  } */
+
+.color-regularize {
+    background-color: rgb(17, 147, 17) !important;
+    color: white !important;
+}
+
+.color-extend {
+    background-color: rgb(2, 32, 95) !important;
+    color: white !important;
+}

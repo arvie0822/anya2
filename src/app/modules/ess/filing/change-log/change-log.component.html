@@ -1,0 +1,162 @@
+<!-- Main -->
+<div class="flex-auto p-2 sm:p-6 overflow-y-auto" *transloco="let t">
+    <!-- Main -->
+    <div class="flex-auto  sm:p-2  w-full min-w-0 sm:absolute sm:inset-0 sm:overflow-auto text-lg">
+        <table #CLTable mat-table [dataSource]="datasource" class="mat-elevation-z0 border">
+
+            <ng-container matColumnDef="actioncl">
+                <th class="no-wrap mat-header-cells" mat-header-cell *matHeaderCellDef></th>
+                <td mat-cell *matCellDef="let element; let i = index">
+                    <button [disabled]="disabledbutton" class="ml-2" mat-icon-button [matMenuTriggerFor]="menu"
+                        aria-label="Example icon-button with a menu">
+                        <mat-icon class="icon-size-6">more_vert</mat-icon>
+                    </button>
+                    <mat-menu #menu="matMenu">
+                        <button mat-menu-item (click)="handleDeleteBreak(i)">
+                            <mat-icon class="icon-size-6" color="warn">delete</mat-icon>
+                            <span>{{t('delete')}}</span>
+                        </button>
+
+                        <!-- <button mat-menu-item
+              (click)="disabled(element.shiftId) ; element.disable = false ; validation(0,element,'');samedate(i) "
+              *ngIf="element.status =='First Level Approval'">
+              <mat-icon class="mb-2" color="primary">edit</mat-icon>
+              <span>Edit</span>
+            </button> -->
+                        <!-- <button mat-menu-item (click)="cancel(element.encryptedId)" *ngIf="element.status !==''">
+                            <mat-icon class="mb-2" color="primary">cancel</mat-icon>
+                            <span>Cancel</span>
+                        </button> -->
+                    </mat-menu>
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="datecl" class="mat-column">
+                <th class="no-wrap mat-header-cells " mat-header-cell *matHeaderCellDef>{{t('Date')}}</th>
+                <td mat-cell class="pl-5" *matCellDef="let element">
+                    <mat-form-field class="w-40 text-lg h-13 mt-3" appearance="outline">
+                        <mat-icon class="mb-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                        <input [disabled]="true" class="input" [(ngModel)]="element.datecl" matInput type="text"
+                            [placeholder]="" readonly>
+                    </mat-form-field>
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="shift_codecl" class="mat-column">
+                <th class="no-wrap mat-header-cells" mat-header-cell *matHeaderCellDef>Shift Code</th>
+                <td class="pl-5" mat-cell *matCellDef="let element">
+                    <mat-form-field class="w-40 text-lg h-13 mt-3 date" appearance="outline">
+                        <mat-icon class="mb-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                        <input [disabled]="true" class="input" [(ngModel)]="element.changeLogCode" matInput type="text"
+                            [placeholder]="" readonly>
+                    </mat-form-field>
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="sched_incl">
+                <th class="no-wrap mat-header-cells" mat-header-cell *matHeaderCellDef>{{t('Sched In')}}</th>
+                <td mat-cell class="pl-5" *matCellDef="let element">
+                    <mat-form-field class="w-50 hover:w-60 text-lg mt-3 h-13" appearance="outline">
+                        <mat-icon class="mb-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                        <input [disabled]="true" class="input" [(ngModel)]="element.sched_incl" matInput type="text"
+                            [placeholder]="" readonly>
+                    </mat-form-field>
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="sched_outcl">
+                <th class="no-wrap mat-header-cells" mat-header-cell *matHeaderCellDef>{{t('Sched Out')}}</th>
+                <td mat-cell class="pl-5" *matCellDef="let element">
+                    <mat-form-field class="hover:w-60  w-50 text-lg mt-3 h-13" appearance="outline">
+                        <mat-icon class="mb-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                        <input [disabled]="true" class="input" [(ngModel)]="element.sched_outcl" matInput type="text"
+                            [placeholder]="" readonly>
+                    </mat-form-field>
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="time_incl">
+                <th class="no-wrap mat-header-cells" mat-header-cell *matHeaderCellDef>{{t('Time In')}}</th>
+                <td mat-cell class="pl-5" *matCellDef="let element ; let i =index">
+                    <mat-form-field class="w-50 xxl:w-100 hover:w-60  text-lg mt-3 h-13" appearance="outline" required>
+                        <input readonly matInput [ngxMatDatetimePicker]="picker1" (click)="picker1.open()"
+                            placeholder="Choose a date" (dateChange)="validation(0,element,'df')" [datepicker]="false"
+                            [max]="getNextDay(element.datecl)" [min]="getPrevDay(element.datecl)"
+                            [(ngModel)]="element.timeIn" [disabled]="element.disable || disabledbutton">
+                        <mat-datepicker-toggle matSuffix [for]="picker1">
+                        </mat-datepicker-toggle>
+                        <ngx-mat-datetime-picker #picker1 [showSpinners]="showSpinners" [showSeconds]="showSeconds"
+                            [stepHour]="stepHour" [stepMinute]="stepMinute" [stepSecond]="false" [touchUi]="touchUi"
+                            [color]="color" [enableMeridian]="true">
+                        </ngx-mat-datetime-picker>
+                    </mat-form-field>
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="time_outcl">
+                <th class="no-wrap mat-header-cells" mat-header-cell *matHeaderCellDef>{{t('Time Out')}}</th>
+                <td mat-cell class="pl-5" *matCellDef="let element ; let i =index">
+                    <mat-form-field class="w-50 xxl:w-100 hover:w-60  text-lg mt-3 h-13" appearance="outline" required>
+                        <input readonly matInput [ngxMatDatetimePicker]="picker2" (click)="picker2.open()"
+                            placeholder="Choose a date" (dateChange)="validation(0,element,'dt')" [min]="getPrevDay(element.datecl)"
+                            [max]="getNextDay(element.datecl)" [(ngModel)]="element.timeOut"
+                            [disabled]="element.disable || disabledbutton">
+                        <mat-datepicker-toggle matSuffix [for]="picker2">
+                        </mat-datepicker-toggle>
+                        <ngx-mat-datetime-picker #picker2 [showSpinners]="showSpinners" [label]="close"
+                            [showSeconds]="showSeconds" [stepHour]="stepHour" [stepMinute]="stepMinute"
+                            [stepSecond]="false" [touchUi]="touchUi" [color]="color" [enableMeridian]="true">
+                        </ngx-mat-datetime-picker>
+                    </mat-form-field>
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="reasoncl">
+                <th class="no-wrap mat-header-cells" mat-header-cell *matHeaderCellDef>{{t('Reason')}}</th>
+                <td mat-cell class="w-full pl-5 pr-5" *matCellDef="let element ; let i =index">
+                    <div class="dark:hidden flex w-full min-w-40"
+                        style=" border-style: solid; border-color: rgb(189, 187, 187); border-width: 1px; border-radius: 3px; height: 29px;">
+                        <textarea [disabled]="element.disable || disabledbutton" (blur)="reasonmodal($event,i)"
+                            class="area w-full pl-5 mt-2" matInput [(ngModel)]="element.reason"></textarea>
+                    </div>
+                    <div class="hidden dark:flex w-full min-w-40"
+                        style=" border-style: solid; border-color: rgb(231, 231, 231); border-width: 1px; border-radius: 3px; height: 29px;">
+                        <textarea [disabled]="element.disable || disabledbutton" (blur)="reasonmodal($event,i)"
+                            class="area w-full pl-5 mt-2" matInput [(ngModel)]="element.reason"></textarea>
+                    </div>
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="upload_filecl">
+                <th class="no-wrap mat-header-cells" mat-header-cell *matHeaderCellDef>Upload</th>
+                <td mat-cell class="pl-5" *matCellDef="let element ; let i =index">
+                    <mat-form-field class="w-[30px] text-lg mt-3 h-13" appearance="outline">
+                        <input type="file" [(ngModel)]="element.uploadPath" #fileInput2
+                            (change)="uploadFile($event, 'displayCS',i,element)"
+                            class="absolute top-1 z-0 h-full w-full cursor-pointer opacity-0"
+                            accept=".jpeg,.jpg,.png,.doc,.docx,.pdf,.xls,.xlsx" />
+                        <input class="sample" readonly matInput id="displayCS" cdkFocusInitial />
+                        <mat-icon class="mb-2" matPrefix svgIcon="mat_outline:upload" (click)="fileInput2.click($event)"
+                            matTooltip={{element.uploadPath}}></mat-icon>
+                        <button [disabled]="disabledbutton" class="upb hidden" (click)="fileInput2.click($event)"
+                            matSuffix mat-button color="primary">Upload</button>
+                    </mat-form-field>
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="clstatus">
+                <th class="no-wrap mat-header-cells" mat-header-cell *matHeaderCellDef>{{t('Status')}}</th>
+                <td mat-cell *matCellDef="let element">
+                    <mat-form-field class="w-30 text-lg h-13 mt-3" appearance="outline">
+                        <mat-icon class="mb-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                        <input [disabled]="true" class="input" [(ngModel)]="element.status" matInput type="text"
+                            [placeholder]="" readonly>
+                    </mat-form-field>
+                </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="clColumns; sticky: true"></tr>
+            <tr mat-row *matRowDef="let row; columns: clColumns;"></tr>
+        </table>
+    </div>
+</div>

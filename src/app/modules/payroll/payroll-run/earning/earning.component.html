@@ -1,0 +1,97 @@
+<div class="flex-auto p-6 sm:p-6 overflow-y-auto">
+  <!-- Main -->
+  <div class="flex-auto  sm:p-2  w-full min-w-0 sm:absolute sm:inset-0 sm:overflow-auto text-md h-full">
+    <table #earnT mat-table [dataSource]="dt" class="mat-elevation-z0 border" tabindex="0">
+
+      @if (error) {
+        <ng-container matColumnDef="errorLogs">
+          <th class="pl-2 pr-2" mat-header-cell *matHeaderCellDef> Error Logs </th>
+          <td class="pl-2 pr-2 pb-2" mat-cell *matCellDef="let element" [ngClass]="{'txt':highligthError(element)}">{{element.errorLogs}}
+          </td>
+        </ng-container>
+      }
+
+      <ng-container matColumnDef="employeeId">
+        <th class="pl-2 pr-2" mat-header-cell *matHeaderCellDef> Employee ID </th>
+        <td class="pl-2 pr-2 pb-2" mat-cell *matCellDef="let element" [ngClass]="{'txt':highligthError(element)}">{{element.employeeId}}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="employeeName">
+        <th class="pl-2 pr-2" mat-header-cell *matHeaderCellDef> Employee Name </th>
+        <td class="pl-2 pr-2 pb-2" mat-cell *matCellDef="let element" [ngClass]="{'txt':highligthError(element)}">
+          {{element.employeeName}}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="earningsTypeId">
+        <th class="pl-2 pr-2" mat-header-cell *matHeaderCellDef> Earnings Code </th>
+        <td class="pl-2 pr-2 pb-2" mat-cell *matCellDef="let element" [ngClass]="{'txt':highligthError(element)}">{{element.earningsTypeId}}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="earningsAmount">
+        <th class="pl-2 pr-2" mat-header-cell *matHeaderCellDef> Earnings Amount </th>
+        <td class="pl-2 pr-2 pb-2" mat-cell *matCellDef="let element" [ngClass]="{'txt':highligthError(element)}">{{element.earningsAmount}}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="recurStartDate">
+        <th class="pl-2 pr-2" mat-header-cell *matHeaderCellDef> Recur Start Date </th>
+        <td class="pl-2 pr-2 pb-2" mat-cell *matCellDef="let element" [ngClass]="{'txt':highligthError(element)}">
+          {{element.recurStartDate}}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="recurEndDate">
+        <th class="pl-2 pr-2" mat-header-cell *matHeaderCellDef> Recur End Date </th>
+        <td class="pl-2 pr-2 pb-2" mat-cell *matCellDef="let element" [ngClass]="{'txt':highligthError(element)}">
+          {{element.recurEndDate}}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="isHoldFrom">
+        <th class="pl-2 pr-2" mat-header-cell *matHeaderCellDef> Hold From </th>
+        <td class="pl-2 pr-2 pb-2" mat-cell *matCellDef="let element" [ngClass]="{'txt':highligthError(element)}">{{element.isHoldFrom}}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="isHoldTo">
+        <th class="pl-2 pr-2" mat-header-cell *matHeaderCellDef> Hold To </th>
+        <td class="pl-2 pr-2 pb-2" mat-cell *matCellDef="let element" [ngClass]="{'txt':highligthError(element)}">
+          {{element.isHoldTo}}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="frequency">
+        <th class="pl-2 pr-2" mat-header-cell *matHeaderCellDef> Frequency </th>
+        <td class="pl-2 pr-2 pb-2" mat-cell *matCellDef="let element" [ngClass]="{'txt':highligthError(element)}">{{element.frequency}}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="remarks">
+        <th class="pl-2 pr-2" mat-header-cell *matHeaderCellDef> Remarks </th>
+        <td class="pl-2 pr-2 pb-2" mat-cell *matCellDef="let element" [ngClass]="{'txt':highligthError(element)}"> {{element.remarks}} </td>
+      </ng-container>
+
+      @if (error) {
+        <div>
+          <tr mat-header-row *matHeaderRowDef="earningsColumns; sticky: true"></tr>
+          <tr mat-row *matRowDef="let row; columns: earningsColumns;" [ngClass]="{'edited': highligthError(row)}"></tr>
+        </div>
+      }
+      @if (!error) {
+        <div>
+          <tr  mat-header-row *matHeaderRowDef="earningsNColumns; sticky: true"></tr>
+          <tr  mat-row *matRowDef="let row; columns: earningsNColumns;" ></tr>
+        </div>
+      }
+
+    </table>
+  <!-- </div> -->
+
+  <mat-paginator class="mat-paginator-sticky" [attr.disabled]="isLoadingResults ? true : null" (page)="handlePageEvent($event)"
+    [length]="totalRows" [pageSize]="request.Length" [pageIndex]="request.Start"
+  [pageSizeOptions]="[10, 20, 50]" showFirstLastButtons></mat-paginator>
+</div>
+</div>

@@ -1,0 +1,195 @@
+<div class="flex flex-col flex-auto min-w-0">
+  <!-- Main -->
+  <div class="flex-auto  sm:p-2  w-full min-w-0 sm:absolute sm:inset-0 sm:overflow-auto text-md">
+
+    <mat-card class="body-card">
+      <mat-card-title>
+        <mat-card-title class="text-[13px] font-bold" style="text-transform: capitalize;">Pre-Approve Overtime List</mat-card-title>
+      </mat-card-title>
+      <form [formGroup]="myForm">
+        <div class="flex space-x-3 mt-4">
+          <!--
+          <mat-form-field class="w-full text-md" appearance="outline">
+            <mat-label class="label-font-size">Date From</mat-label>
+            <input formControlName="dateFrom" matInput [matDatepicker]="df" readonly [placeholder]="'MM/DD/YYYY'" [max]="dateTo"
+              (click)="df.open()">
+              <mat-datepicker-toggle matSuffix [for]="df"></mat-datepicker-toggle>
+              <mat-datepicker #df></mat-datepicker>
+            </mat-form-field>
+
+            <mat-form-field class="w-full text-md" appearance="outline">
+              <mat-label class="label-font-size">Date To</mat-label>
+              <input formControlName="dateTo"  matInput [matDatepicker]="df2" readonly [placeholder]="'MM/DD/YYYY'"
+                (click)="df2.open()">
+                <mat-datepicker-toggle matSuffix [for]="df2"></mat-datepicker-toggle>
+                <mat-datepicker #df2></mat-datepicker>
+              </mat-form-field> -->
+
+              <mat-form-field  class="w-50 text-md dateFrom" appearance="outline">
+                <mat-label class="label-font-size">Date From</mat-label>
+                <input formControlName="dateFrom" [max]="myForm.controls['dateTo'].value" matInput [matDatepicker]="df" readonly [placeholder]="'MM/DD/YYYY'" (click)="df.open()">
+                <mat-datepicker-toggle matSuffix [for]="df"></mat-datepicker-toggle>
+                <mat-datepicker #df></mat-datepicker>
+              </mat-form-field>
+              <mat-form-field class="w-50 text-md dateTo" appearance="outline">
+                <mat-label class="label-font-size">Date To</mat-label>
+                <input formControlName="dateTo" [min]="myForm.controls['dateFrom'].value" matInput [matDatepicker]="dt" readonly [placeholder]="'MM/DD/YYYY'" (click)="dt.open()">
+                <mat-datepicker-toggle matSuffix [for]="dt"></mat-datepicker-toggle>
+                <mat-datepicker #dt></mat-datepicker>
+              </mat-form-field>
+
+              @if (currentModule) {
+                <app-dropdown-custom class="employeeId" [control]="myForm.get('employeeId')"
+                  [icon]="'mat_outline:info'" [type]="1035" [multiple]="true" [all]="true"
+                [options]="dropdownOptions.employeedef" [useControl]="true"></app-dropdown-custom>
+              }
+
+              <div class="flex space-x-3">
+                <button mat-flat-button class="text-md btn-Search w-[20px]" color="primary" (click)="search()" matTooltip="Search">
+                  <mat-icon class="mb-2" matSuffix svgIcon="mat_outline:search"></mat-icon>
+                </button>
+                <button mat-flat-button class="text-md btn-Create w-[20px]" color="primary" (click)="handleCreateEvent()" matTooltip="Create">
+                  <mat-icon class="mb-2" matSuffix svgIcon="mat_outline:playlist_add"></mat-icon>
+                </button>
+                <button mat-flat-button class="text-md btn-Export w-[20px]" color="primary" matTooltip="Export">
+                  <mat-icon class="mb-2" matSuffix svgIcon="mat_outline:download"></mat-icon>
+                </button>
+              </div><br>
+            </div>
+          </form>
+          <section class="example-container mat-elevation-z0 z-10" tabindex="0">
+            <table mat-table #paginator0 [dataSource]="dataSource" (matSortChange)="handleSortEvent($event)" class="mat-elevation-z0  w-full border">
+
+              <!-- First Level Approval -->
+
+              <ng-container matColumnDef="action">
+                <th class="pl-10" mat-header-cell *matHeaderCellDef> </th>
+                <td class="pl-5" mat-cell *matCellDef="let element ; let i = index">
+                  <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+                    <mat-icon class="icon-size-6">more_vert</mat-icon>
+                  </button>
+                  <mat-menu #menu="matMenu">
+                    <!-- <button mat-menu-item  (click)="handleClickEvent('edit' ,element)" >
+                    <mat-icon color="primary">edit</mat-icon>
+                    <span color="primary">Edit</span>
+                  </button> -->
+                  <button mat-menu-item (click)="cancel(element.encryptId)">
+                    <mat-icon class="icon-size-6" color="primary">cancel</mat-icon>
+                    <span color="primary">Cancel</span>
+                  </button>
+                  <button mat-menu-item (click)="handleClickEvent('view' ,element)">
+                    <mat-icon class="icon-size-6" color="primary">open_in_new</mat-icon>
+                    <span color="primary">View</span>
+                  </button>
+                  <!-- <button mat-menu-item (click)="handleClicdownload(element.encryptId,element.employeeId)" *ngIf="myForm.value.filingTypes == 52 && element.status == 'Approved'">
+                  <mat-icon color="primary">download</mat-icon>
+                  <span color="primary">Download</span>
+                </button>
+                <button mat-menu-item (click)="cancel(element.encryptId)"
+                  *ngIf="element.status =='Approved' ||element.status =='First Level Approval' ">
+                  <mat-icon color="primary">cancel</mat-icon>
+                  <span color="primary">Cancel</span>
+                </button> -->
+                <!-- <button mat-menu-item disabled>
+                <mat-icon>voicemail</mat-icon>
+                <span>Check voice mail</span>
+              </button> -->
+            </mat-menu>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="Code">
+          <th mat-header-cell class="no-wrap" *matHeaderCellDef> Code </th>
+          <td mat-cell  class="hover-effect" *matCellDef="let element">
+            <div class="truncate-cell">{{element.Code}} </div>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="Name">
+          <th mat-header-cell class="no-wrap" *matHeaderCellDef> Employee Name </th>
+          <td mat-cell  class="hover-effect" *matCellDef="let element">
+            <div class="truncate-cell">{{element.Name}} </div>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="Time">
+          <th mat-header-cell class="no-wrap" *matHeaderCellDef> Time </th>
+          <td mat-cell  class="hover-effect" *matCellDef="let element">
+            <div class="truncate-cell">{{element.Time}} </div>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="Date_from">
+          <th mat-header-cell class="no-wrap" *matHeaderCellDef> Date From </th>
+          <td class="text-md" mat-cell *matCellDef="let element">
+            <div class="truncate-cell">{{element.Date_from}}</div>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="Date_to">
+          <th mat-header-cell class="no-wrap" *matHeaderCellDef> Date To </th>
+          <td mat-cell  class="hover-effect" *matCellDef="let element">
+            <div class="truncate-cell">{{element.Date_to}} </div>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="leaveType">
+          <th mat-header-cell class="no-wrap" *matHeaderCellDef> Leave Type </th>
+          <td class="text-md" mat-cell *matCellDef="let element">
+            <div class="truncate-cell">{{element.leaveType}} </div>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="Shift_code">
+          <th mat-header-cell class="no-wrap" *matHeaderCellDef> Shift Code </th>
+          <td class="text-md" mat-cell *matCellDef="let element">
+            <div class="truncate-cell">{{element.Shift_code}} </div>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="Hours">
+          <th mat-header-cell class="no-wrap" *matHeaderCellDef> Hours </th>
+          <td class="text-md" mat-cell *matCellDef="let element">
+            <div class="truncate-cell">{{element.Hours}} </div>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="Reason">
+          <th class="" mat-header-cell class="no-wrap" *matHeaderCellDef> Reason </th>
+          <td mat-cell  class="hover-effect" class="" *matCellDef="let element">
+            <div class="truncate-cell" matTooltip="{{element.Reason}}" matTooltipPosition="below">{{element.Reason}} </div>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="status">
+          <th class="" mat-header-cell class="no-wrap" *matHeaderCellDef> Status </th>
+          <td mat-cell  class="hover-effect" class="" *matCellDef="let element">
+            <div class="truncate-cell">{{element.status}} </div>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="Requested_by">
+          <th mat-header-cell class="no-wrap" *matHeaderCellDef> Requested By </th>
+          <td mat-cell  class="hover-effect" *matCellDef="let element">
+            <div class="truncate-cell">{{element.Requested_by}} </div>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="Requested_date">
+          <th mat-header-cell class="no-wrap" *matHeaderCellDef> Requested Date </th>
+          <td mat-cell  class="hover-effect" *matCellDef="let element">
+            <div class="truncate-cell">{{element.Requested_date}} </div>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+    </section>
+
+    <mat-paginator class="paganation" (page)="handlePageEvent($event)"
+      [length]="totalRows" [pageSize]="request.Length" [pageIndex]="request.Start"
+    [pageSizeOptions]="[20, 50, 100]" showFirstLastButtons></mat-paginator>
+  </mat-card>
+</div>
+</div>

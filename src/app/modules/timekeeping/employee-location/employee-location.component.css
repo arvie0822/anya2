@@ -1,0 +1,129 @@
+/* .mat-option{
+    position: relative;
+    bottom: 7px;
+    font-size: medium;
+}
+.label-font-size{
+    font-size: 15px;
+}
+.mat-datepicker-toggle{
+    position: relative;
+    bottom: 7px;
+    font-size: medium;
+}
+.icon {
+    position: relative;
+    bottom: 10px;
+}
+.mat-select{
+    position: relative;
+    font-size: medium;
+}
+.select{
+    position: relative;
+    bottom: 9px;
+    font-size: medium;
+}
+
+.mat-icons {
+    position: relative;
+    bottom: 10px;
+}
+
+.mat-select{
+    position: relative;
+    bottom: 10px;
+}
+
+
+
+tr.mat-header-row {
+    height: 45px;
+}
+
+tr.mat-row {
+    height: 22px;
+}
+
+.mat-cell,.mat-footer-cell {
+    font-size: 14px;
+}
+
+.mat-header-cell {
+    font-size: 15px;
+}
+
+.tables th,
+.tables td {
+    text-align: center;
+}
+
+.dt-input {
+    position: relative;
+    bottom: 7px;
+    font-size: 15px;
+}
+
+.example-container {
+    height: 220px;
+    overflow: auto;
+    z-index: none;
+}
+table {
+    width: 100%;
+}
+
+.body-card {
+    position: relative;
+    height: 100%;
+    padding-top: 1px;
+}
+
+.child-mat-tab-group {
+   position: absolute;
+   top: 230px;
+   left: 0;
+   right: 0;
+   bottom: 0;
+   max-height: 100%;
+   overflow: auto;
+}
+
+::ng-deep .mat-tab-group .mat-tab-body-content {
+    padding: 5px !important;
+}
+
+.child-mat-tab {
+   position: absolute;
+   top: 50px;
+   left: 0;
+   right: 0;
+   bottom: 0;
+   max-height: 100%;
+   overflow: auto;
+}
+
+
+ .paganation {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+ */
+ .icons {
+ height: 15px !important;
+ min-height: 40px;
+}
+
+.example-container {
+    height: 290px;
+    overflow: auto;
+    z-index: none;
+}
+.example-containers {
+    height: 230px;
+    overflow: auto;
+    z-index: none;
+}

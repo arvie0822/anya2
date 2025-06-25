@@ -1,0 +1,79 @@
+
+
+.body-card {
+    position: relative;
+    height: 100%;
+    padding-top: 1px;
+}
+
+#reportViewer_Control {
+    position: absolute;
+    top: 25px;
+    left: 15px;
+    right: 15px;
+    bottom: 15px;
+    max-height: 100%;
+    /* overflow: auto; */
+}
+
+
+/* bold report custom css */
+::ng-deep .e-toolbar {
+    background-color: var(--fuse-bg-card);
+    border-color: var(--fuse-border);
+    color: var(--fuse-text-default);
+}
+
+::ng-deep .e-reportviewer-viewerblock {
+    background-color: var(--fuse-bg-card);
+    border-color: var(--fuse-border);
+}
+
+::ng-deep .e-reportviewer-viewercontainer {
+    border-color: var(--fuse-border);
+    background-color: var(--fuse-bg-card);
+}
+
+::ng-deep .e-reportviewer-pageviewcontainer {
+    background-color: var(--fuse-bg-card);
+    border-color: var(--fuse-border);
+}
+
+::ng-deep .e-reportviewer-viewer .e-native-toolbar {
+    z-index: 999 !important;
+}
+
+::ng-deep .e-reportviewer-content {
+    color: var(--fuse-text-default);
+}
+
+::ng-deep .e-reportviewer-nativepropertiesheader {
+    color: var(--fuse-text-default);
+}
+
+::ng-deep .e-reportviewer-viewer .e-rv-native-rightToolbar {
+    background: #183060 !important;
+}
+
+/* ::ng-deep .e-reportviewer-pageview #reportViewer_Control_pageviewContainer {
+    background-color: var(--fuse-bg-card);
+} */
+
+/* tool bar */
+::ng-deep .e-toolbar .e-toolbar-items {
+    background: var(--fuse-bg-card);
+}
+
+
+ /* table css */
+::ng-deep .e-reportviewer-pageview {
+    background-color: var(--fuse-bg-card) !important;
+}
+
+::ng-deep table > tbody > tr > td {
+    background-color: var(--fuse-bg-card) !important;
+}
+
+::ng-deep .e-reportviewer-paragrap div{
+    color: var(--fuse-text-default) !important;
+}

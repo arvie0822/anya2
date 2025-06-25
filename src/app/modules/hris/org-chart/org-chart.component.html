@@ -1,0 +1,49 @@
+<div class="flex flex-col flex-auto min-w-0 overflow-hidden">
+    <!-- Main -->
+    <div class="flex-auto overflow-hidden sm:p-2  w-full min-w-0 sm:absolute sm:inset-0 text-md">
+      <!-- Content -->
+      <mat-card class="h-full overflow-hidden relative">
+        <mat-card-title>
+          <app-card-title title="Org Chart" [sub]="false" [back]="true"></app-card-title>
+        </mat-card-title>
+
+        <div class="flex gap-2 absolute top-[14px] left-[150px]">
+          <mat-form-field class="w-50 " appearance="outline">
+            <mat-select [value]="category" [(ngModel)]="category" (selectionChange)="filterByCategory()">
+              <mat-option *ngIf="isHRIS" [value]="0">All</mat-option>
+              <ng-container>
+                <mat-option [value]="1">My Team</mat-option>
+                @if (isHRIS) {
+                    <mat-option [value]="2">My Company</mat-option>
+                    <mat-option [value]="3">My Branch</mat-option>
+                    <mat-option [value]="4">My Department</mat-option>
+                }
+              </ng-container>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field class="w-50 "  appearance="outline">
+            <mat-select [value]="compact" [(ngModel)]="compact" (selectionChange)="handleCompact()">
+              <mat-option [value]="true">Compact</mat-option>
+              <ng-container>
+                <mat-option [value]="false">Horizontal</mat-option>
+              </ng-container>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field class="w-50 text-md h-13 mr-3" appearance="outline">
+            <mat-label class="label-font-size">Search by Employee Name</mat-label>
+            <input class="input" matInput [formControl]="inputChange">
+          </mat-form-field>
+        </div>
+
+        <mat-card-content >
+            <!-- Org Chart -->
+            <div #chartContainer id="chartContainer"></div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+
+
+

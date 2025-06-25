@@ -1,0 +1,50 @@
+<mat-card class="mat-elevation-z0 elevate">
+  <mat-card-title class="h-8">
+    <span class="text-[15px]">{{data.data.title}}</span>
+  </mat-card-title>
+  <mat-card-content class="mat-elevation-z0">
+    <div class="grid grid-cols-{{template.length}} gap-2">
+      @for (filter of template; track filter) {
+        <!-- Input Fields -->
+        @if (filter.type=='input') {
+          <mat-form-field class="w-full text-md" appearance="outline">
+            <mat-label class="label-font-size">{{filter.label}}</mat-label>
+            <mat-icon class="icon-size-5 : mr-2" matSuffix svgIcon="{{filter.icon}}"></mat-icon>
+            <input class="input" [id]="filter.id" matInput [(ngModel)]="filter._value"/>
+          </mat-form-field>
+        }
+        <!-- Select dropdown -->
+        @if (filter.type=='select') {
+          <mat-form-field class="w-20 text-md" appearance="outline">
+            <mat-label class="label-font-size">{{filter.label}}</mat-label>
+            <mat-select [id]="filter.id" [(ngModel)]="filter._value" [multiple]="filter.multiselect">
+              @for (item of filter.options; track item) {
+                <mat-option>{{item.description}}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        }
+        <!-- Custom dropdown -->
+        @if (filter.type=='custom') {
+          <app-dropdown-custom [useControl]="false" (selected)="filter._value = $event" [id]="filter.id" [all]="filter.all" [multiple]="filter.multiselect" [type]="filter.dropdownType.uri"></app-dropdown-custom>
+        }
+        <!-- Date Picker -->
+        @if (filter.type=='date') {
+          <div class="w-full text-md">
+            <mat-form-field class="w-full text-md" appearance="outline">
+              <mat-label class="label-font-size"> {{filter.label}}</mat-label>
+              <input matInput [(ngModel)]="filter._value" [matDatepicker]="picker" readonly
+                [placeholder]="'MM/DD/YYYY'" (click)="picker.open()">
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+              </mat-form-field>
+            </div>
+          }
+        }
+      </div>
+    </mat-card-content>
+    <mat-card-actions align="end" class="gap-2">
+      <button mat-stroked-button (click)="close()">Cancel</button>
+      <button mat-stroked-button (click)="submit()" color="primary">Confirm</button>
+    </mat-card-actions>
+  </mat-card>

@@ -1,0 +1,219 @@
+// .mat-select,
+// // .mat-input {
+// //   position: relative;
+// //   bottom: 9px;
+// //   font-size: small;
+
+// // }
+
+// // .maticon {
+// //   position: relative;
+// //   bottom: 8px;
+// // }
+
+// // .input {
+// //   position: relative;
+// //   bottom: 9px;
+// //   font-size: small;
+// // }
+
+// table {
+//   width: 100%;
+// }
+
+// // has error
+// .witherror {
+//   background-color: rgb(207, 85, 85);
+// }
+
+// .txterror {
+//   color: white;
+// }
+
+// //error log transition
+// .truncate-cell {
+//   position: relative;
+//   max-width: 200px;
+//   overflow: hidden;
+//   white-space: nowrap;
+//   text-overflow: ellipsis;
+//   transition: max-width 60s;
+// }
+
+// // .hover-effect:hover .truncate-cell {
+//   // max-width: none;
+//   // animation: moveLeftAnimation 50s forwards;
+// // }
+
+// @keyframes moveLeftAnimation {
+//   from {
+//     transform: translateX(0);
+//   }
+
+//   to {
+//     transform: translateX(-100%);
+//   }
+// }
+
+
+// // table setup
+// .body-card {
+//   position: relative;
+//   height: 100%;
+//   padding-top: 10px;
+// }
+
+// .example-container {
+//   position: absolute;
+//   top: 105px;
+//   left: 15px;
+//   right: 15px;
+//   bottom: 80px;
+//   max-height: 100%;
+//   overflow: auto;
+// }
+
+// .paganation {
+//   position: absolute;
+//   left: 0;
+//   right: 0;
+//   bottom: 0;
+// }
+// // table no-wrap
+// .no-wrap {
+//   white-space: nowrap;
+//   padding: 10px;
+// }
+// //table padding
+// .padding {
+//   padding-left: 10px;
+//   padding-right: 10px;
+// }
+
+// // table height
+// tr.mat-header-row {
+//   height: 35px;
+// }
+
+// tr.mat-row {
+//   height: 27px;
+// }
+
+// //cell font size
+// .mat-cell,.mat-footer-cell {
+//     font-size: 14px;
+// }
+
+// .mat-header-cell {
+//     font-size: 15px;
+// }
+
+
+// //animation loader
+// @keyframes rotate {
+//   0% {
+//     transform: rotate(0deg);
+//   }
+
+//   100% {
+//     transform: rotate(360deg);
+//   }
+// }
+
+// .rotate {
+//   animation: rotate 2s infinite linear;
+// }
+
+// .mat-select {
+//     position: relative;
+//     bottom: 9px;
+//     font-size: medium;
+// }
+
+// ::ng-deep .mat-select-panel {
+//     max-width: none !important /* Set a maximum width */
+//   }
+
+
+//animation loader
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.rotate {
+  animation: rotate 2s infinite linear;
+}
+
+
+// table setup
+.body-card {
+  position: relative;
+  height: 100%;
+  padding-top: 10px;
+}
+
+.example-container {
+  position: absolute;
+  top: 105px;
+  left: 15px;
+  right: 15px;
+  bottom: 80px;
+  max-height: 100%;
+  overflow: auto;
+}
+.paganation {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+.no-wrap {
+  white-space: nowrap;
+  padding: 10px;
+}
+
+// has error
+.witherror {
+  background-color: rgb(207, 85, 85);
+}
+
+.txterror {
+  color: white;
+}
+
+//error log transition
+.truncate-cell {
+  position: relative;
+  max-width: 200px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  transition: max-width 60s;
+}
+
+// .hover-effect:hover .truncate-cell {
+//   max-width: none;
+//   animation: moveLeftAnimation 50s forwards;
+// }
+
+// @keyframes moveLeftAnimation {
+//   from {
+//     transform: translateX(0);
+//   }
+
+//   to {
+//     transform: translateX(-100%);
+//   }
+// }
+
+.example-container .witherror {
+    background-color: rgb(207, 85, 85) !important;
+}
+
+

@@ -1,0 +1,268 @@
+@if (onPageLoad) {
+  <div class="flex flex-col flex-auto min-w-0" >
+    <div class="flex-auto  sm:p-2  w-full min-w-0 sm:absolute sm:inset-0 sm:overflow-auto text-md" *transloco="let t">
+      <mat-card class="body-card">
+        <mat-card-title class="text-[13px] font-bold ml-2 mt-3" style="text-transform: capitalize;">{{title}} List</mat-card-title>
+        <mat-card-content>
+          <div  class="flex flex-wrap mt-4">
+            @for (filter of table.filter ; track filter; let i = $index) {
+              @if (filter.type=='input') {
+                <mat-form-field class="w-50 text-lg h-13 mr-3" appearance="outline">
+                  <mat-label class="label-font-size" matTooltip="{{filter.label}}">{{filter.label}}</mat-label>
+                  <mat-icon class="icons" matSuffix svgIcon="{{filter.icon}}"></mat-icon>
+                  <input class="input" [id]="filter.id" matInput [reset]="input" [(ngModel)]="filter.value" (change)="handleInputEvent($event)">
+                </mat-form-field>
+              }
+              @if (filter.type=='select') {
+                <mat-form-field class="w-50 text-md h-13 mr-3" appearance="outline">
+                  <mat-label class="label-font-size">{{filter.label}}</mat-label>
+                  <mat-select [id]="filter.id" [(ngModel)]="filter.value" [multiple]="filter.multiselect">
+                    @for (item of filter.options; track item) {
+                      <mat-option [value]="item.dropdownID">{{item.description}}</mat-option>
+                    }
+                  </mat-select>
+                </mat-form-field>
+              }
+              @if (filter.type=='date') {
+                <mat-form-field class="w-50 text-md h-13 mr-3" appearance="outline" let i = index>
+                  <mat-label class="label-font-size">{{filter.label}}</mat-label>
+                  <input matInput [(ngModel)]="filter.value" [matDatepicker]="picker" readonly [min]="_min(filter)"
+                    [placeholder]="'MM/DD/YYYY'" (click)="picker.open()" >
+                    <mat-datepicker-toggle class="dateui" matSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>
+                  </mat-form-field>
+                }
+                <!-- dropdownfix -->
+                @if (filter.type=='select-fix') {
+                  <div class="h-13 mr-3">
+                    <app-dropdown [isFix]="true" [all]="filter.all" (selected)="filter.value=$event" [reset]="resetFix" [multiple]="filter.multiselect" [value]="filter.value"  [options]="filter.options" [useControl]="false" [icon]="'mat_outline:info'" [type]="filter.dropdown"> </app-dropdown>
+                  </div>
+                }
+                <!-- Custom dropdown -->
+                @if (filter.type=='custom' && modulechecking(filter?.moduleId, currentModule)) {
+                  <div class="h-13 mr-3">
+                    <app-dropdown-custom  (selected)="filingID($event)" (objects)="getObjects($event,filter)" [isExcluded]="filter?.isExcluded" [dropdownValue]="filter.dropdownValue" [all]="filter.all" (selected)="filter.value=$event" [reset]="resetCustom" [label]="filter.label" [multiple]="filter.multiselect" [type]="filter.dropdownType.uri" [useControl]="false"></app-dropdown-custom>
+                  </div>
+                }
+                <!-- Employee Hierarchy -->
+                @if (filter.type=='e-hierarchy' && modulechecking(filter?.moduleId, currentModule) ) {
+                  <div class="h-13 mr-3">
+                    <app-employee-hierarchy [isExcluded]="filter?.isExcluded" [showTag]="filter.showtag" [defaultTag]="filter.tagType" [multiple]="filter.multiselect" [includeInactive]="table.includeInactive" [all]="filter.all" [reset]="resetHierarchy" [resultHierarchy]="resultHierarchy"></app-employee-hierarchy>
+                  </div>
+                }
+              }
+              <button mat-flat-button color="primary" (click)="loadData(false)" class="fuse-mat-button-midium text-sm w-[10px] mr-3"
+                matTooltip="{{ 'Search' | transloco }}">
+                <mat-icon matSuffix  class="mb-2" svgIcon="mat_outline:search"></mat-icon>
+              </button>
+              @if (table.btn_reload) {
+                <button mat-flat-button color="primary" (click)="refresh()" class="fuse-mat-button-midium text-sm w-[10px] mr-3"
+                  matTooltip="{{ 'Reload' | transloco }}">
+                  <mat-icon class="mb-2" matSuffix svgIcon="mat_outline:refresh"></mat-icon>
+                </button>
+              }
+              @if (table.btn_create) {
+                <button mat-flat-button color="primary" (click)="handleCreateEvent()" class="fuse-mat-button-midium text-sm w-[10px] mr-3"
+                  matTooltip="{{ 'Create' | transloco }}">
+                  <mat-icon class="mb-2" matSuffix svgIcon="mat_outline:playlist_add"></mat-icon>
+                </button>
+              }
+              @if (table.btn_export) {
+                <button mat-flat-button color="primary" (click)="handleExportEvent()" class="fuse-mat-button-midium text-sm w-[10px] mr-3"
+                  matTooltip="{{ 'Export' | transloco }}">
+                  <mat-icon class="mb-2" matSuffix svgIcon="mat_outline:download"></mat-icon>
+                </button>
+              }
+              @if (table.btn_upload) {
+                <button mat-flat-button color="primary" (click)="handleUploadEvent()" class="fuse-mat-button-midium text-sm w-[10px] mr-3"
+                  matTooltip="{{ 'Upload' | transloco }}">
+                  <mat-icon class="mb-2" matSuffix svgIcon="mat_outline:upload"></mat-icon>
+                </button>
+              }
+            @if(caseId == 2 || caseId == 4){
+            <csvbox-button class="csvbox-btn" [licenseKey]="licenseKey" [user]="user" [dynamicColumns]="dynamicColumns"
+                [environment]="environment" [imported]="imported.bind(this)">
+                @if (table.btn_csv) {
+                  <button mat-flat-button color="primary" class="text-sm w-[10px] mr-3"
+                  matTooltip="Use your own upload template">
+                  <mat-icon class="mb-2" matSuffix svgIcon="mat_outline:upload_file"></mat-icon>
+              </button>
+                }
+            </csvbox-button>
+            }
+
+              @if (table.btn_download) {
+                <button mat-flat-button color="primary" (click)="handleDownloadEvent()" class="fuse-mat-button-midium text-sm w-[10px] mr-3"
+                  matTooltip="{{ 'Download' | transloco }}">
+                  <mat-icon class="mb-2" matSuffix svgIcon="mat_outline:file_download"></mat-icon>
+                </button>
+              }
+              @if (table.btn_delete) {
+                <button mat-flat-button color="warn" (click)="handleDeleteEvent()" class="fuse-mat-button-midium text-sm w-[10px] mr-3"
+                  matTooltip="{{ 'Delete' | transloco }}">
+                  <mat-icon class="mb-2" matSuffix svgIcon="mat_outline:delete"></mat-icon>
+                </button>
+              }
+            </div>
+          </mat-card-content>
+          <mat-card-content>
+            @if (loadtable) {
+              <section class="example-container mat-elevation-z0 z-10 mt-9" tabindex="0" [ngStyle]="{top: top()}">
+                <table mat-table #MatTable matSort class="border" [attr.disabled]="isLoadingResults ? true : null"
+                  [dataSource]="dataSource" (matSortChange)="handleSortEvent($event)">
+                  <ng-container matColumnDef="checkbox">
+                    <th mat-header-cell *matHeaderCellDef></th>
+                    <td mat-cell class="pl-5 w-10" *matCellDef="let element; let i = index">
+                      <div>
+                        <mat-checkbox [color]="'primary'"
+                          [(ngModel)]="element.checked"
+                          (change)="check(i,$event)">
+                        </mat-checkbox>
+                      </div>
+                    </td>
+                  </ng-container>
+                  <ng-container cdkColumnDef="action" >
+                    <th mat-header-cell *cdkHeaderCellDef></th>
+                    <td mat-cell class="" *cdkCellDef="let element">
+                      @if (!table.action) {
+                        <div>
+                          <button  mat-icon-button disabled aria-label="Example icon-button with a menu">
+                            <mat-icon class="icon-size-6">more_vert</mat-icon>
+                          </button>
+                        </div>
+                      }
+                      @if (table.action && !table.tkGeneration) {
+                        <div >
+                          <button class="icon-size-7 mt-2" mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+                            <mat-icon class="icon-size-6">more_vert</mat-icon>
+                          </button>
+                          <mat-menu #menu="matMenu">
+                            @if (table.edit && checkStatus(element)) {
+                              <button mat-menu-item (click)="handleClickEvent('edit' ,element)">
+                                <mat-icon class="icon-size-6" color="primary">edit</mat-icon>
+                                <span color="primary">{{t('Edit')}}</span>
+                              </button>
+                            }
+                            @if (table.view) {
+                              <button mat-menu-item (click)="handleClickEvent('view' ,element)">
+                                <mat-icon class="icon-size-6" color="primary">open_in_new</mat-icon>
+                                <span color="primary">{{t('View')}}</span>
+                              </button>
+                            }
+                            @if (table.duplicate) {
+                              <button mat-menu-item (click)="handleClickEvent('duplicate' ,element)">
+                                <mat-icon class="icon-size-6" color="primary">file_copy</mat-icon>
+                                <!-- <mat-icon class="icon-size-6" color="primary" svgIcon="heroicons_outline:document-duplicate"></mat-icon> -->
+                                <span color="primary">{{t('Duplicate')}}</span>
+                              </button>
+                            }
+                            @if(caseId == 1 || caseId == 3){
+                            <csvbox-button class="csvbox-container" [licenseKey]="licenseKey" [user]="user"
+                                [dynamicColumns]="dynamicColumns" [environment]="environment" [imported]="imported.bind(this)">
+                                @if(table.upload) {
+                                  <button mat-menu-item>
+                                    <mat-icon class="icon-size-6" color="primary">upload</mat-icon>
+                                    <span color="primary">Upload</span>
+                                </button>
+                                }
+                            </csvbox-button>
+                            }
+                            @if (table.clear) {
+                              <button mat-menu-item (click)="handleClearPayrollUpload(element.payrollCode)">
+                                <mat-icon class="icon-size-6" color="primary">clear</mat-icon>
+                                <span color="primary">Clear Upload</span>
+                            </button>
+                            }
+
+                            @if ((element.uploadPath !=='' && element.uploadPath !== null && showhidemangmentfiling && showhidemangmentfiling && !showhidemangmentpre ) || ( filingdownloadid == 52 && element.status == 'Approved' && showhidemangmentfiling && !showhidemangmentpre)) {
+                              <button mat-menu-item
+                                (click)="handleClicdownload(element.encryptId,element.employeeId,element.id,element)">
+                                <mat-icon class="icon-size-6" color="primary">download</mat-icon>
+                                <span color="primary">{{t('Download')}}</span>
+                              </button>
+                            }
+                            @if((table.cancel && element.status !== 'Cancelled') && (table.cancel && element.status !== 'Disapproved')){
+                              <button mat-menu-item (click)="handleCancelEvent(element)">
+                                <mat-icon class="icon-size-6" color="primary">cancel</mat-icon>
+                                <span color="primary">{{t('Cancel')}}</span>
+                              </button>
+                            }
+                            <!-- <button mat-menu-item disabled>
+                            <mat-icon>voicemail</mat-icon>
+                            <span>Check voice mail</span>
+                          </button> -->
+                        </mat-menu>
+                      </div>
+                    }
+                    @if (table.action && table.tkGeneration) {
+                      <div >
+                        <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+                          <mat-icon class="icon-size-6">more_vert</mat-icon>
+                        </button>
+                        <mat-menu #menu="matMenu">
+                          <button mat-menu-item  (click)="handleTKEvent('view' ,element)">
+                            <mat-icon class="icon-size-6" color="primary">open_in_new</mat-icon>
+                            <span color="primary">View Generated TK</span>
+                          </button>
+                          <button mat-menu-item  (click)="handleTKEvent('reGenerate' ,element)">
+                            <mat-icon class="icon-size-6" color="primary">edit</mat-icon>
+                            <span color="primary">Regenerate TK</span>
+                          </button>
+                          <button mat-menu-item  (click)="handleTKEvent('viewAdjustment' ,element)">
+                            <mat-icon class="icon-size-6" color="primary">open_in_new</mat-icon>
+                            <span color="primary">View TK Adjustment</span>
+                          </button>
+                          <!-- <button mat-menu-item  (click)="handleTKEvent('initailadjustment' ,element)">
+                            <mat-icon class="icon-size-6" color="primary">edit</mat-icon>
+                            <span color="primary">Initial TK Adjustment</span>
+                          </button> -->
+                          <button mat-menu-item  (click)="handleTKEvent('adjustment' ,element)">
+                            <mat-icon class="icon-size-6" color="primary">edit</mat-icon>
+                            <span color="primary">Generate TK Adjustment</span>
+                          </button>
+                          <!-- <button mat-menu-item disabled>
+                          <mat-icon>voicemail</mat-icon>
+                          <span>Check voice mail</span>
+                        </button> -->
+                      </mat-menu>
+                    </div>
+                  }
+                </td>
+              </ng-container>
+              <ng-container cdkColumnDef="isProcess">
+                <th class="tableindex" *cdkHeaderCellDef>Processed</th>
+                <td class="text-center border-t border-b" *cdkCellDef="let element">
+                  @if (element.isProcess) {
+                    <span
+                      class="inline-flex z-20 items-center justify-center font-bold text-xs px-2.5 py-0.5 rounded-full tracking-wide uppercase bg-green-200 text-green-800 dark:bg-green-600 dark:text-green-50">
+                      <span class="leading-relaxed whitespace-nowrap">Completed</span>
+                    </span>
+                  }
+                  @if (!element.isProcess) {
+                    <mat-progress-spinner class="ml-[65px]" [diameter]="24" [mode]="'indeterminate'">
+                    </mat-progress-spinner>
+                  }
+                </td>
+              </ng-container>
+              @for (column of columns; track column) {
+                <ng-container [matColumnDef]="column.column">
+                  <th mat-header-cell class="table-header no-wrap custom-cell-width" *cdkHeaderCellDef mat-sort-header>{{ column.title }}</th>
+                  <td mat-cell *cdkCellDef="let row" class="hover-effect">
+                    <div class="truncate-cell" [matTooltip]="row[column.column]">{{ row[column.column] }}</div>
+                  </td>
+                </ng-container>
+              }
+              <tr mat-header-row *matHeaderRowDef="columndefs; sticky: true"></tr>
+              <tr mat-row *matRowDef="let row; columns: columndefs" (click)="onRowSelect(row)"></tr>
+            </table>
+          </section>
+        }
+        <mat-paginator class="paganation" [attr.disabled]="isLoadingResults ? true : null" (page)="handlePageEvent($event)"
+          [length]="totalRows" [pageSize]="request.Length" [pageIndex]="request.Start"
+          [pageSizeOptions]="[20, 50, 100]" showFirstLastButtons>
+        </mat-paginator>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
+}

@@ -1,0 +1,106 @@
+<div class="flex-auto p-6 sm:p-6 overflow-y-auto">
+    <!-- Main -->
+    <div class="flex-auto sm:p-2  w-full min-w-0 sm:absolute sm:inset-0 sm:overflow-auto text-md">
+            <div class="scroll mat-elevation-z0">
+
+                <table #earnT mat-table [dataSource]="datasource" class="mat-elevation-z0 border">
+
+                    <!-- <ng-container matColumnDef="Emp_id">
+                        <th class="pl-10" mat-header-cell *matHeaderCellDef> Employee ID </th>
+                        <td class="pl-10" mat-cell *matCellDef="let element">{{element.Emp_id}}
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Emp_Name">
+                        <th class="pl-10" mat-header-cell *matHeaderCellDef> Name </th>
+                        <td class="pl-10" mat-cell *matCellDef="let element">{{element.Emp_Name}}
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Date">
+                        <th class="pl-10" mat-header-cell *matHeaderCellDef> Date </th>
+                        <td class="pl-10" mat-cell *matCellDef="let element">{{element.Date}}
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="ic">
+                        <th class="pl-10" mat-header-cell *matHeaderCellDef> Income Code </th>
+                        <td class="pl-10" mat-cell *matCellDef="let element">{{element.ic}}
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="amount">
+                        <th class="pl-10" mat-header-cell *matHeaderCellDef> Amount </th>
+                        <td class="pl-10" mat-cell *matCellDef="let element">{{element.amount}}
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="startDate">
+                        <th class="pl-10" mat-header-cell *matHeaderCellDef> Recur Start Date </th>
+                        <td class="pl-10" mat-cell *matCellDef="let element">{{element.startDate}}
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="endDate">
+                        <th class="pl-10" mat-header-cell *matHeaderCellDef> Recur End Date </th>
+                        <td class="pl-10" mat-cell *matCellDef="let element">{{element.endDate}}
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="frequency">
+                        <th class="pl-10" mat-header-cell *matHeaderCellDef> Frequency </th>
+                        <td class="pl-10" mat-cell *matCellDef="let element">{{element.frequency}}
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="closedOn">
+                        <th class="pl-10" mat-header-cell *matHeaderCellDef> Closed On </th>
+                        <td class="pl-10" mat-cell *matCellDef="let element">{{element.closedOn}}
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Remarks">
+                        <th class="pl-10" mat-header-cell *matHeaderCellDef> Remarks </th>
+                        <td class="pl-10" mat-cell *matCellDef="let element"> {{element.Remarks}} </td>
+                    </ng-container> -->
+
+                    <ng-container matColumnDef="employeeId">
+                        <th class="pl-10" mat-header-cell *matHeaderCellDef> Employee ID </th>
+                        <td class="pl-10" mat-cell *matCellDef="let element">{{element.employeeId}}
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="employeeName">
+                        <th class="pl-10" mat-header-cell *matHeaderCellDef> Employee Name </th>
+                        <td class="pl-10" mat-cell *matCellDef="let element">
+                            {{element.employeeName}}
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="bankName">
+                        <th class="pl-10" mat-header-cell *matHeaderCellDef> Bank Name </th>
+                        <td class="pl-10" mat-cell *matCellDef="let element">{{element.bankName}}
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="bankAccount">
+                        <th class="pl-10" mat-header-cell *matHeaderCellDef> Account Number </th>
+                        <td class="pl-10" mat-cell *matCellDef="let element">
+                            {{element.bankAccount}}
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="amount">
+                        <th class="pl-10" mat-header-cell *matHeaderCellDef> Amount </th>
+                        <td class="pl-10" mat-cell *matCellDef="let element">
+                            {{element.amount}}
+                        </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="bankColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: bankColumns;"></tr>
+                </table>
+            </div>
+        <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"></mat-paginator><br>
+    </div>
+</div>

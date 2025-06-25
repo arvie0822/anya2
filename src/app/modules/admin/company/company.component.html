@@ -1,0 +1,157 @@
+<div class="flex flex-col flex-auto min-w-0" *transloco="let t">
+  <!-- Main -->
+  <div class="flex-auto sm:p-2">
+    <mat-card>
+      <mat-card-title>
+        <app-card-title title="{{t('Company Profile')}}" [sub]="true" [switch]="false" (switchTap)="changeOrient()"
+        (submitTap)="submit()"></app-card-title>
+      </mat-card-title>
+      <form [formGroup]="companyForm">
+        <div class="grid grid-cols-9 gap-7 ">
+          <div class="col-span-7 mat-elevation-z0 mt-3">
+            <div class="grid grid-cols-3 gap-2 h-14">
+              <mat-form-field class=" w-full text-lg " appearance="outline">
+                <mat-label class="label-font-size">{{('companyName' | transloco )}}</mat-label>
+                <mat-icon class="mr-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                <input class="input" matInput type="text" formControlName="companyName"
+                  [placeholder]="'Company Name'">
+                </mat-form-field>
+                <mat-form-field class=" w-full text-lg" appearance="outline">
+                  <mat-label class="label-font-size">{{t('companyCode')}}</mat-label>
+                  <mat-icon class="mr-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                  <input class="input" matInput type="text" formControlName="companyCode"
+                    [placeholder]="'Company Code'">
+                  </mat-form-field>
+                  <mat-form-field class=" w-full text-lg" appearance="outline">
+                    <mat-label class="label-font-size">{{t('email')}}</mat-label>
+                    <mat-icon class="mr-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                    <input class="input" type="email" matInput formControlName="emailAddress"
+                      [placeholder]="'@illimitado.com'">
+                    </mat-form-field>
+                  </div>
+                  <div class="grid grid-cols-3 gap-2 h-13">
+                    <mat-form-field class=" w-full text-lg" appearance="outline">
+                      <!-- <mat-label class="label-font-size ml-10">{{t('telephoneNo')}}</mat-label> -->
+                      <mat-icon class="mr-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                      <span style="position: relative; bottom: 5px;" matPrefix>+63 &nbsp;</span>
+                      <input class="input" matInput type="text" mask="000 000 0000"
+                        formControlName="telephone" [placeholder]="'Telephone No.'">
+                      </mat-form-field>
+                      <mat-form-field class="w-full text-lg" appearance="outline">
+                        <mat-label class="label-font-size">{{t('enableNotification')}}</mat-label>
+                        <mat-select class="text-lg" formControlName="isEmail" [placeholder]="">
+                          <mat-option class="label-font-size" [value]="true">Yes</mat-option>
+                          <mat-option class="label-font-size" [value]="false">No</mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                      <mat-form-field class="w-full text-lg" appearance="outline">
+                        <mat-label class="label-font-size">{{t('companyLogo')}}</mat-label>
+                        <input type="file" id="imageUpload" #fileInput
+                          (change)="uploadFile($event ,'displayMe', 'companyLogo1','companyLogo')"
+                          class="absolute top-1 z-10 h-full w-full cursor-pointer opacity-0"
+                          accept=".jpeg,.jpg,.png" />
+                          <canvas #canvas style="display: none;"></canvas>
+                          <input readonly matInput id="displayMe" formControlName="companyLogo" cdkFocusInitial
+                            class="z-0" />
+                            <mat-icon class="mr-2" matPrefix svgIcon="mat_outline:upload"></mat-icon>
+                            <button class="uploadbutton" (click)="fileInput.click()" matSuffix mat-button
+                            color="primary">Upload</button>
+                          </mat-form-field>
+
+                        </div>
+                      </div>
+                    <div [ngStyle]="{
+                        'width.px': 230,
+                        'height.px': 230,
+                        'display': 'flex',
+                        'justify-content': 'center',
+                        'align-items': 'center',
+                        'position': 'fixed',
+                        'top' : '100px',
+                        'right' : '50px',
+                      }">
+                        @if (imageUrl) {
+                          <img class="col-span-2" [src]="imageUrl"  style="max-width: 100%; max-height: 100%; object-fit: contain;">
+                        }
+                      </div>
+
+                    </div>
+                    <div>
+                      <mat-card-title>
+                        <app-card-title title="{{t('Password Settings')}}" [sub]="false" [switch]="false"
+                        (switchTap)="changeOrient()" (submitTap)="submit()"></app-card-title>
+                      </mat-card-title>
+                    </div>
+                    <div class="grid grid-cols-9 gap-0 ">
+                      <div class="col-span-7 mat-elevation-z0 mt-3">
+                        <div class="grid grid-cols-4 gap-2 mt-3 h-14">
+                          <mat-form-field class="w-full text-lg" appearance="outline">
+                            <mat-label class="label-font-size">{{t('restrictPrevious3Passwords')}}</mat-label>
+                            <mat-select class="text-lg" formControlName="restrictPreviousPw" [placeholder]="'No'">
+                              <mat-option [value]="true">Yes</mat-option>
+                              <mat-option [value]="false">No</mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                          <mat-form-field class="w-full text-lg" appearance="outline">
+                            <mat-label class="label-font-size">{{t('passwordExpires')}}</mat-label>
+                            <mat-select class="text-lg" disableRipple value="selected" formControlName="isPwExpires"
+                              [placeholder]="'No'">
+                              <mat-option [value]="true">Yes</mat-option>
+                              <mat-option [value]="false">No</mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                          @if (companyForm.value.isPwExpires) {
+                            <mat-form-field class="w-full text-lg"
+                              appearance="outline">
+                              <mat-label class="label-font-size">{{t('passwordExpiresDays')}}</mat-label>
+                              <mat-icon class="mr-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                              <input class="input" matInput type="number" min="0" formControlName="daysPwExpires"
+                                [placeholder]="">
+                              </mat-form-field>
+                            }
+                            @if (companyForm.value.isPwExpires) {
+                              <mat-form-field class="w-full text-lg"
+                                appearance="outline">
+                                <mat-label class="label-font-size">{{t('remindPassword')}}</mat-label>
+                                <mat-icon class="mr-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                                <input class="input" matInput type="number" min="0"
+                                  formControlName="daysRemindPwExpires" placeholder="expiration Days">
+                                </mat-form-field>
+                              }
+                            </div>
+                          </div>
+                        </div>
+                        <div>
+                          <mat-card-title>
+                            <app-card-title title="Integration API Key" [sub]="false" [switch]="false"
+                            (switchTap)="changeOrient()" (submitTap)="submit()"></app-card-title>
+                          </mat-card-title>
+                        </div>
+                        <div class="grid grid-cols-9 gap-0 ">
+                          <div class="col-span-8 mat-elevation-z0 mt-3">
+                            <div class="grid grid-cols-4 gap-2 mt-3 h-14">
+                              <mat-form-field class="w-full text-lg" appearance="outline">
+                                <mat-label class="label-font-size">{{t('keys')}}</mat-label>
+                                <input readonly class="input" formControlName="apiKeys" matInput
+                                  [type]="hide ? 'text' : 'password'" min="0" [placeholder]="hide ? '' : '********'">
+                                  <mat-icon (click)="copyToClipboard()" class="mr-2" matPrefix
+                                  svgIcon="mat_solid:content_copy"></mat-icon>
+                                  <mat-icon class="icon-size-6 mt-2 mr-3" matSuffix (click)="togglePasswordVisibility()"
+                                    (mouseenter)="hide = true" (mouseleave)="hide = false">
+                                    {{ hide ? 'visibility' : 'visibility_off' }}
+                                  </mat-icon>
+                                </mat-form-field>
+                                <div>
+                                  <button type="button" (click)="generate()" mat-flat-button color="primary"
+                                    matTooltip="Export">
+                                    <mat-label class="text-lg pl-3">{{t('generate')}}</mat-label>
+                                    <mat-icon class="mb-2" svgIcon="heroicons_solid:key"></mat-icon>
+                                  </button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </form>
+                      </mat-card>
+                    </div>
+                  </div>

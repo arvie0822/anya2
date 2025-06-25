@@ -1,0 +1,105 @@
+/*
+.mat-datepicker-toggle{
+position: relative;
+bottom: 6px;
+font-size: medium;
+}
+input{
+    position: relative;
+    bottom: 10px;
+    font-size: medium;
+}
+.label-font-size{
+    font-size: 15px;
+}
+.mat-i.hon
+{
+    position: relative;
+    bottom: 8px;
+}
+.input
+{
+    position: relative;
+    bottom: 10px;
+    font-size: medium;
+}
+.mat-select{
+    position: relative ;
+    bottom: 10px ;
+    font-size: medium;
+} */
+.example-margin, .mdc-label{
+    width: 100px;
+    padding-left: 1px !important;
+    /* padding-top: 5px !important; */
+}
+
+.example-margin, .mdc-checkbox{
+    height: 30px !important;
+    padding-right: 6px !important;
+    top: 6px !important;
+    left: -5px;
+}
+
+.mat-datepicker-content {
+    display: block;
+    border-radius: 4px;
+    background-color: rgb(215, 215, 215);
+}
+
+.mat-mdc-form-field.mat-form-field-appearance-fill .mat-mdc-text-field-wrapper .mat-mdc-form-field-flex {
+    padding: 0 0px 0 1px !important;
+}
+
+.ngx-mat-timepicker form .ngx-mat-timepicker-table .ngx-mat-timepicker-tbody tr td.ngx-mat-timepicker-meridian .mdc-button {
+    min-width: 64px;
+    line-height: 36px;
+    min-width: 0;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    flex-shrink: 0;
+    bottom: 9px;
+}
+
+.ngx-mat-timepicker form .ngx-mat-timepicker-table .ngx-mat-timepicker-tbody tr td .mat-mdc-icon-button {
+    height: 10px;
+    width: 24px;
+    line-height: 24px;
+    padding: 0;
+    bottom: 6px;
+}
+
+.ngx-mat-timepicker form .ngx-mat-timepicker-table .ngx-mat-timepicker-tbody tr td .mat-mdc-form-field .mdc-text-field--filled .mat-mdc-form-field-infix input {
+    text-align: center;
+    font-size: 11px !important;
+}
+
+.mat-datepicker-content .mat-datepicker-close-button {
+    position: absolute;
+    top: 365px;
+    left: 180px;
+    margin-top: 8px;
+}
+
+.mat-datepicker-content .mat-datepicker-close-button {
+    /* position: absolute; */
+    bottom: 15px !important;
+    left: 120px !important;
+    /* margin-top: 8px; */
+    width: 100px !important;
+    top: 0%;
+    position: relative !important;
+}
+
+.fontstyle{
+    font-weight: 600 !important;
+}
+
+.example-margin, .mdc-checkbox {
+    height: 30px !important;
+    padding-right: 6px !important;
+    top: 6px !important;
+    left: -5px;
+}

@@ -1,0 +1,44 @@
+<div class="flex flex-col flex-auto min-w-0" *transloco="let t">
+  <!-- Main -->
+  <div class="flex-auto  sm:p-2  w-full min-w-0 sm:absolute sm:inset-0 sm:overflow-auto text-md">
+    <!-- Content -->
+    <mat-card class="h-full">
+      <mat-card-title>
+        <app-card-title title="Pay Codes" [sub]="true" [back]="true" [switch]="false" (submitTap)="submit()"></app-card-title>
+      </mat-card-title>
+
+      <div class="grid grid-cols-7 gap-2 h-13 mt-4">
+        <mat-form-field appearance="outline">
+          <mat-label class="label-font-size">{{t('payCodeType')}}</mat-label>
+          <mat-icon class="mb-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+          <mat-select [disabled]="isEdit" [(ngModel)]="paycodestype">
+            @for (item of dropdownOptions.paycodeDef; track item) {
+              <mat-option [value]="item.dropdownID">{{item.description}}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <!-- Earnings module  -->
+      @if (paycodestype == 22862) {
+        <mat-card class="h-100 card mat-elevation-z0">
+          <app-earnings></app-earnings>
+        </mat-card>
+      }
+
+      <!-- Deduction module  -->
+      @if (paycodestype == 22863) {
+        <mat-card class="h-100 card mat-elevation-z0">
+          <app-deductions></app-deductions>
+        </mat-card>
+      }
+
+      <!-- loan module -->
+      @if (paycodestype == 30002) {
+        <mat-card class="h-100 card mat-elevation-z0">
+          <app-loans></app-loans>
+        </mat-card>
+      }
+
+    </mat-card>
+  </div>
+</div>

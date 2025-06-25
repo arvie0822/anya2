@@ -1,0 +1,1757 @@
+<div class="flex flex-col flex-auto min-w-0" *transloco="let t">
+    <!-- Main -->
+    <div class="flex-auto  sm:p-2  w-full min-w-0 sm:inset-0 sm:overflow-auto text-lg {{view?'':'sm:absolute'}}">
+        <mat-card class="h-full overflow-auto">
+            <mat-card-title>
+                @if (!hidebuttons) {
+                <app-card-title title="Timekeeping Settings" [sub]="true" [switch]="false" [back]="!view"
+                    (switchTap)="changeOrient()" (submitTap)="submit()"></app-card-title>
+                }
+                <!-- <div class="grid place-items-end">
+        <button *ngIf="hidebuttons" (click)="confirm()" class="text-lg" mat-flat-button color="primary" aria-label="example icon">
+          Confirm
+        </button>
+      </div> -->
+            </mat-card-title>
+            <mat-card-content>
+                <form [formGroup]="timekeepingCategoryForm">
+                    @if (hide) {
+                    <div class="grid grid-cols-11 gap-2 h-15 mt-3">
+                        <mat-form-field class="w-full text-lg col-span-2" appearance="outline">
+                            <mat-label class="label-font-size">{{t('categoryName')}}</mat-label>
+                            <mat-icon class="" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                            <input class="input" formControlName="name" matInput [placeholder]="'Category Name'">
+                        </mat-form-field>
+                        <mat-form-field class="w-full text-lg col-span-2" appearance="outline">
+                            <mat-label class="label-font-size">{{t('description')}}</mat-label>
+                            <mat-icon class="" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                            <input class="input" formControlName="description" matInput [placeholder]="'Description'">
+                        </mat-form-field>
+                    </div>
+                    }
+
+                    <mat-tab-group  #tabGroup mat-align-tabs="start" mat-stretch-tabs="false">
+                        <mat-tab label="Schedule Hours">
+                            <div class="grid grid-cols-10 gap-2 h-13 ">
+                                <div class="col-span-2">
+                                    <mat-form-field class="w-full text-lg mt-1" appearance="outline">
+                                        <mat-label class="label-font-size">{{t('setUpSchedule')}}</mat-label>
+                                        <mat-select formControlName="scheduleTypeId" [placeholder]="'No'"
+                                            (selectionChange)="onSelectionChanged($event)">
+                                            <mat-option [value]="0">Select an option</mat-option>
+                                            @for (item of scheduleType; track item) {
+                                            <mat-option [value]="item.dropdownID">{{item.description}}</mat-option>
+                                            }
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                                <!--+++++++++++++++++++++++++++++++ full flex set up======================================== -->
+
+                                @if (tk.scheduleTypeId===30052 ) {
+                                <div class="col-span-2">
+                                    <mat-form-field class="w-full text-lg mt-1" appearance="outline">
+                                        <mat-label class="label-font-size">{{t('assumeLogs')}}</mat-label>
+                                        <mat-select formControlName="assumeClockInOut" [placeholder]="'No'">
+                                            <mat-option [value]="0">No</mat-option>
+                                            @for (item of assume_logs; track item) {
+                                            <mat-option [value]="item.dropdownID">{{item.description}}</mat-option>
+                                            }
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                                }
+
+                                <!--+++++++++++++++++++++++++++++++ partial set up======================================== -->
+
+                                @if (tk.scheduleTypeId===30053) {
+                                <div class="col-span-2">
+                                    <mat-form-field class="w-full text-lg mt-1" appearance="outline">
+                                        <mat-label class="label-font-size">{{t('assumeLogs')}}</mat-label>
+                                        <mat-select formControlName="assumeClockInOut" [placeholder]="'No'">
+                                            <mat-option [value]="0">No</mat-option>
+                                            @for (item of assume_logs; track item) {
+                                            <mat-option [value]="item.dropdownID">{{item.description}}</mat-option>
+                                            }
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                                }
+                                <div class="col-span-2">
+                                    <mat-form-field class="w-full text-lg mt-1" appearance="outline">
+                                        <mat-label class="label-font-size">{{t('setUpHalfday')}}</mat-label>
+                                        <mat-select formControlName="hasHalfday" [placeholder]="'No'">
+                                            <mat-option [value]="true">Yes</mat-option>
+                                            <mat-option [value]="false">No</mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            @if (timekeepingCategoryForm.value.scheduleTypeId ==30054) {
+                            <div class="grid grid-cols-6 gap-2 h-12 mt-3">
+                                <!-- <mat-form-field class="w-full text-lg mt-1" appearance="outline">
+                <mat-select formControlName="assumelogs" [placeholder]="'No'">
+                  <mat-option [value]="true">Yes</mat-option>
+                  <mat-option [value]="false">No</mat-option>
+                </mat-select>
+              </mat-form-field> -->
+                                <!--+++++++++++++++++++++++++++++++ regular set up======================================== -->
+                                <mat-form-field class="w-full text-lg mt-1" appearance="outline">
+                                    <mat-label class="label-font-size">{{t('assumeLogs')}}</mat-label>
+                                    <mat-select formControlName="assumeClockInOut" [placeholder]="'No'">
+                                        <mat-option [value]="0">No</mat-option>
+                                        @for (item of assume_logs; track item) {
+                                        <mat-option [value]="item.dropdownID">{{item.description}}</mat-option>
+                                        }
+                                    </mat-select>
+                                </mat-form-field>
+                                <div class="mt-1">
+                                    <app-dropdown-custom [all]="false" [multiple]="false"
+                                        [control]="timekeepingCategoryForm.get('breakTypeId')" [options]="breakTypeReg"
+                                        [useControl]="true" [type]="1000"></app-dropdown-custom>
+                                </div>
+                            </div>
+                            }
+                            <!-- <div *ngIf="tk.scheduleTypeId===30054" class="grid grid-cols-11 gap-2 h-15">
+          <div class="col-span-2">
+            <app-dropdown-custom [all]="false" [multiple]="false" [control]="timekeepingCategoryForm.get('breakTypeId')" [options]="breakType" [useControl]="true" [type]="1044"></app-dropdown-custom>
+          </div>
+        </div> -->
+                            <form [formGroup]="CSuiteForm">
+                                @if (tk.scheduleTypeId===30051) {
+                                <table mat-table [dataSource]="dataSource" class="mat-elevation-z0 border mb-0 ">
+                                    <ng-container matColumnDef="Monday">
+                                        <th mat-header-cell *matHeaderCellDef class="pl-8 text-lg">Schedule Hours</th>
+                                        <td mat-cell *matCellDef="let element">
+                                            <mat-form-field class="w-50 text-lg mt-[10%]" appearance="outline">
+                                                <mat-label class="label-font-size">{{t('monday')}}</mat-label>
+                                                <input matInput type="number" formControlName="monday"
+                                                    [placeholder]="''">
+                                                @if (description) {
+                                                <button matSuffix mat-icon-button aria-label="Clear"
+                                                    (click)="description=''">
+                                                    <mat-icon>close</mat-icon>
+                                                </button>
+                                                }
+                                            </mat-form-field>
+                                        </td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="Tuesday">
+                                        <th mat-header-cell *matHeaderCellDef></th>
+                                        <td mat-cell *matCellDef="let element">
+                                            <mat-form-field class="w-50 text-lg mt-[10%]" appearance="outline">
+                                                <mat-label class="label-font-size">{{t('tuesday')}}</mat-label>
+                                                <input matInput type="number" formControlName="tuesday"
+                                                    [placeholder]="''">
+                                                @if (description) {
+                                                <button matSuffix mat-icon-button aria-label="Clear"
+                                                    (click)="description=''">
+                                                    <mat-icon>close</mat-icon>
+                                                </button>
+                                                }
+                                            </mat-form-field>
+                                        </td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="Wednesday">
+                                        <th mat-header-cell *matHeaderCellDef></th>
+                                        <td mat-cell *matCellDef="let element">
+                                            <mat-form-field class="w-50 text-lg mt-[10%]" appearance="outline">
+                                                <mat-label class="label-font-size">{{t('wednesday')}}</mat-label>
+                                                <input matInput type="number" formControlName="wednesday"
+                                                    [placeholder]="''">
+                                                @if (description) {
+                                                <button matSuffix mat-icon-button aria-label="Clear"
+                                                    (click)="description=''">
+                                                    <mat-icon>close</mat-icon>
+                                                </button>
+                                                }
+                                            </mat-form-field>
+                                        </td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="Thursday">
+                                        <th mat-header-cell *matHeaderCellDef class="text-lg"></th>
+                                        <td mat-cell *matCellDef="let element">
+                                            <mat-form-field class="w-50 text-lg mt-[10%]" appearance="outline">
+                                                <mat-label class="label-font-size">{{t('thursday')}}</mat-label>
+                                                <input matInput type="number" formControlName="thursday"
+                                                    [placeholder]="''">
+                                                @if (description) {
+                                                <button matSuffix mat-icon-button aria-label="Clear"
+                                                    (click)="description=''">
+                                                    <mat-icon>close</mat-icon>
+                                                </button>
+                                                }
+                                            </mat-form-field>
+                                        </td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="Friday">
+                                        <th mat-header-cell *matHeaderCellDef></th>
+                                        <td mat-cell *matCellDef="let element">
+                                            <mat-form-field class="w-50 text-lg mt-[10%]" appearance="outline">
+                                                <mat-label class="label-font-size">{{t('friday')}}</mat-label>
+                                                <input matInput type="number" formControlName="friday"
+                                                    [placeholder]="''">
+                                                @if (description) {
+                                                <button matSuffix mat-icon-button aria-label="Clear"
+                                                    (click)="description=''">
+                                                    <mat-icon>close</mat-icon>
+                                                </button>
+                                                }
+                                            </mat-form-field>
+                                        </td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="Saturday">
+                                        <th mat-header-cell *matHeaderCellDef></th>
+                                        <td mat-cell *matCellDef="let element">
+                                            <mat-form-field class="w-50 text-lg mt-[10%]" appearance="outline">
+                                                <mat-label class="label-font-size">{{t('saturday')}}</mat-label>
+                                                <input matInput type="number" formControlName="saturday"
+                                                    [placeholder]="''">
+                                                @if (description) {
+                                                <button matSuffix mat-icon-button aria-label="Clear"
+                                                    (click)="description=''">
+                                                    <mat-icon>close</mat-icon>
+                                                </button>
+                                                }
+                                            </mat-form-field>
+                                        </td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="Sunday">
+                                        <th mat-header-cell *matHeaderCellDef></th>
+                                        <td mat-cell *matCellDef="let element">
+                                            <mat-form-field class="w-50 text-lg mt-[10%]" appearance="outline">
+                                                <mat-label class="label-font-size">{{t('sunday')}}</mat-label>
+                                                <input matInput type="number" formControlName="sunday"
+                                                    [placeholder]="''">
+                                                @if (description) {
+                                                <button matSuffix mat-icon-button aria-label="Clear"
+                                                    (click)="description=''">
+                                                    <mat-icon>close</mat-icon>
+                                                </button>
+                                                }
+                                            </mat-form-field>
+                                        </td>
+                                    </ng-container>
+                                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                                </table>
+                                }
+                            </form>
+
+                            <form [formGroup]="PartialFlexiForm">
+                                @if (tk.scheduleTypeId===30053) {
+                                <div class="grid grid-cols-10 gap-2 h-12 mt-3">
+                                    <div class="col-span-2">
+                                        <mat-form-field class="w-full text-lg mt-1" appearance="outline">
+                                            <mat-label class="label-font-size">{{t('canClockIn')}}</mat-label>
+                                            <mat-icon class="mb-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                                            <input matInput formControlName="clockIn" [placeholder]="'Hrs before and'">
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-span-2">
+                                        <mat-form-field class="w-full text-lg mt-1" appearance="outline">
+                                            <mat-label class="label-font-size">{{t('hrsAfterScheduleIn')}}</mat-label>
+                                            <mat-icon class="mb-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                                            <input matInput formControlName="hours"
+                                                [placeholder]="'Hrs after schedule in'">
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-span-2 mt-1">
+                                        <app-dropdown-custom [all]="false" [multiple]="false"
+                                            [control]="PartialFlexiForm.get('breakTypeId')" [options]="breakTypeReg"
+                                            [useControl]="true" [type]="1000"></app-dropdown-custom>
+                                    </div>
+                                </div>
+                                }
+                            </form><br>
+
+                            <form [formGroup]="FullFlexiForm">
+                                @if (tk.scheduleTypeId===30052) {
+                                <mat-card class="h-full mat-elevation-z0 overflow-auto">
+                                    @if (tk.scheduleTypeId===30052) {
+                                    <div class="schedulecss border"><span>Schedule Hours</span></div>
+                                    }
+                                    @if (tk.scheduleTypeId===30052) {
+                                    <table mat-table [dataSource]="ds_FullFlexi" class="mat-elevation-z0 border ">
+                                        <ng-container matColumnDef="days">
+                                            <th mat-header-cell *matHeaderCellDef class="pl-8 text-lg">Days</th>
+                                            <td mat-cell *matCellDef="let element">
+                                                {{element.days}}
+                                            </td>
+                                        </ng-container>
+                                        <ng-container matColumnDef="hours_work">
+                                            <th mat-header-cell *matHeaderCellDef class="pl-8 text-lg">Hours Work</th>
+                                            <td mat-cell *matCellDef="let element">
+                                                <mat-form-field class="w-full text-lg mt-5 " appearance="outline">
+                                                    <input matInput [formControlName]="element.hours_work" type="number"
+                                                        min="0" [placeholder]="''">
+                                                    @if (description) {
+                                                    <button matSuffix mat-icon-button aria-label="Clear"
+                                                        (click)="description=''">
+                                                    </button>
+                                                    }
+                                                </mat-form-field>
+                                            </td>
+                                        </ng-container>
+                                        <ng-container matColumnDef="minutes">
+                                            <th mat-header-cell *matHeaderCellDef class="pl-8 text-lg">Minutes</th>
+                                            <td mat-cell *matCellDef="let element">
+                                                <mat-form-field class="w-full text-lg mt-5" appearance="outline">
+                                                    <input matInput [formControlName]="element.minutes" type="number"
+                                                        min="0" [placeholder]="''">
+                                                    @if (description) {
+                                                    <button matSuffix mat-icon-button aria-label="Clear"
+                                                        (click)="description=''">
+                                                    </button>
+                                                    }
+                                                </mat-form-field>
+                                            </td>
+                                        </ng-container>
+                                        <ng-container matColumnDef="deduct_break">
+                                            <th mat-header-cell *matHeaderCellDef class="pl-8 text-lg">Deduct Break</th>
+                                            <td mat-cell *matCellDef="let element">
+                                                <mat-form-field class="w-full text-sm mt-5" appearance="outline">
+                                                    <mat-select [formControlName]="element.deduct_break"
+                                                        [placeholder]="''">
+                                                        <mat-option [value]="true">Yes</mat-option>
+                                                        <mat-option [value]="false">No</mat-option>
+                                                    </mat-select>
+                                                </mat-form-field>
+                                            </td>
+                                        </ng-container>
+                                        <ng-container matColumnDef="break_type">
+                                            <th mat-header-cell *matHeaderCellDef class="pl-8 text-lg">Break Type</th>
+                                            <td class="" mat-cell *matCellDef="let element">
+                                                <div class="mt-5">
+                                                    <app-dropdown-custom [all]="false" [multiple]="false"
+                                                        [control]="FullFlexiForm.get(element.break_type)"
+                                                        [options]="breakTypeReg" [useControl]="true"
+                                                        [type]="1000"></app-dropdown-custom>
+                                                </div>
+                                            </td>
+                                        </ng-container>
+                                        <tr class="" mat-header-row *matHeaderRowDef="dc_FullFlexi ; sticky: true"></tr>
+                                        <tr mat-row *matRowDef="let row; columns: dc_FullFlexi"></tr>
+                                    </table>
+                                    }
+                                </mat-card>
+                                }
+                            </form>
+
+                            <br>
+                            @if (tk.hasHalfday) {
+                            <mat-divider></mat-divider>
+                            }
+                            <br>
+                            @if (tk.hasHalfday) {
+                            <mat-card-title>
+                                <app-card-title title="Halfday Settings" [sub]="false" [switch]="false"
+                                    [back]="false"></app-card-title>
+                            </mat-card-title>
+                            }
+                            <mat-card-content>
+                                <form [formGroup]="HalfDayForm">
+                                    @if (tk.hasHalfday) {
+                                    <div class="flex flex-wrap justify-start ">
+                                        @if (tk.hasHalfday) {
+                                        <div class=" mr-2">
+                                            <mat-form-field class="w-full text-lg mt-1" appearance="outline">
+                                                <mat-label class="label-font-size">{{t('halfdaySetup')}}</mat-label>
+                                                <mat-select formControlName="halfDaySetupId"
+                                                    [placeholder]="'Hours Work'" (Change)="changesMe()">
+                                                    @for (item of halfdayType; track item) {
+                                                    <mat-option
+                                                        [value]="item.dropdownID">{{item.description}}</mat-option>
+                                                    }
+                                                </mat-select>
+                                            </mat-form-field>
+                                        </div>
+                                        }
+                                        @if (hd.halfDaySetupId===30055) {
+                                        <div class="mr-2">
+                                            <mat-form-field class="w-full text-lg mt-1 h-13" appearance="outline">
+                                                <mat-label
+                                                    class="label-font-size">{{t('halfdayIfHoursWorkBetween')}}</mat-label>
+                                                <mat-icon class="mb-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                                                <input type="number" min="0" formControlName="start" matInput
+                                                    [placeholder]="'Start'" (blur)="lessthan()">
+                                            </mat-form-field>
+                                            @if (istimeerrrorto) {
+                                            <div class="text-red-400" required>Invalid Time</div>
+                                            }
+                                        </div>
+                                        }
+                                        @if (hd.halfDaySetupId===30055) {
+                                        <div class="">
+                                            <mat-form-field class="w-full text-lg mt-1 h-13" appearance="outline">
+                                                <mat-label class="label-font-size">{{t('end')}}</mat-label>
+                                                <mat-icon class="mb-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                                                <input type="number" min="0" formControlName="end" matInput
+                                                    [placeholder]="''" (blur)="greaterthan()">
+                                            </mat-form-field>
+                                            @if (istimeerrror) {
+                                            <div class="text-red-400" required>Invalid Time</div>
+                                            }
+                                        </div>
+                                        }
+                                        @if (hd.halfDaySetupId===30056) {
+                                        <div class=" mr-2">
+                                            <mat-form-field class="w-full text-lg mt-1" appearance="outline">
+                                                <mat-label class="label-font-size">{{t('firstHalfEnd')}}</mat-label>
+                                                <mat-icon class="mb-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                                                <input matInput formControlName="start" type="number" min="0"
+                                                    [placeholder]="'hrs after schedule in'">
+                                            </mat-form-field>
+                                        </div>
+                                        }
+                                        @if (hd.halfDaySetupId===30056) {
+                                        <div class="">
+                                            <mat-form-field class="w-full text-lg mt-1" appearance="outline">
+                                                <mat-label class="label-font-size">{{t('secondHalfStart')}}</mat-label>
+                                                <mat-icon class="mb-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                                                <input matInput formControlName="end" type="number" min="0"
+                                                    [placeholder]="'hrs after schedule in'">
+                                            </mat-form-field>
+                                        </div>
+                                        }
+                                    </div>
+                                    }
+                                </form>
+                            </mat-card-content>
+                        </mat-tab>
+                        <mat-tab label="Tardiness/Undertime and Absences">
+                            <div class="grid grid-cols-11 gap-2 h-15">
+                                <div class="col-span-2">
+                                    <mat-form-field class="w-full text-lg mt-1" appearance="outline">
+                                        <mat-label class="label-font-size">{{t('setupAbsent')}}</mat-label>
+                                        <mat-select formControlName="hasRangeAbsent" [placeholder]="'Hours Work'">
+                                            <mat-option [value]="true">Yes</mat-option>
+                                            <mat-option [value]="false">No</mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                                @if (tk.hasRangeAbsent) {
+                                <div class="col-span-2">
+                                    <mat-form-field class="w-full text-lg mt-1" appearance="outline">
+                                        <mat-label
+                                            class="label-font-size">{{t('absentWhenHoursWorkBetween')}}</mat-label>
+                                        <mat-icon class="mb-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                                        <input formControlName="absentFrom" matInput type="number" min="0"
+                                            [placeholder]="'From'">
+                                    </mat-form-field>
+                                </div>
+                                }
+                                @if (tk.hasRangeAbsent) {
+                                <div class="col-span-2">
+                                    <mat-form-field class="w-full text-lg mt-1" appearance="outline">
+                                        <mat-label class="label-font-size">{{t('hours')}}</mat-label>
+                                        <mat-icon class="mb-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                                        <input formControlName="absentTo" matInput type="number" min="0"
+                                            [placeholder]="'to'">
+                                    </mat-form-field>
+                                </div>
+                                }
+                            </div>
+                            <mat-divider></mat-divider><br>
+                            <mat-card-title>
+                                <app-card-title title="Tardy and Undertime Settings"></app-card-title>
+                            </mat-card-title>
+                            <mat-card-content class="max-h-[290px] overflow-auto">
+                                <form [formGroup]="TardySetupForm">
+                                    <div class="grid grid-cols-10 gap-2 h-15 mt-4">
+                                        <div class="col-span-3">
+                                            <form [formGroup]="timekeepingCategoryForm">
+                                                <mat-form-field class="w-full text-lg mt-1" appearance="outline">
+                                                    <mat-label class="label-font-size">{{t('setUp')}}</mat-label>
+                                                    <mat-select formControlName="tardySetupId"
+                                                        [placeholder]="'Hours Work'" (selectionChange)="resetfield()">
+                                                        @for (item of tardyUnderType; track item) {
+                                                        <mat-option
+                                                            [value]="item.dropdownID">{{item.description}}</mat-option>
+                                                        }
+                                                    </mat-select>
+                                                </mat-form-field>
+                                            </form>
+                                        </div>
+                                        @if (tk.tardySetupId===30060 || tk.tardySetupId===30059 ) {
+                                        <div class="">
+                                            <mat-form-field class="w-full text-lg mt-1" appearance="outline">
+                                                <mat-label class="label-font-size">{{t('displayOn')}}</mat-label>
+                                                <mat-select formControlName="sumDisplayOn" [placeholder]="''">
+                                                    @for (item of displayOnTypeF; track item) {
+                                                    <mat-option
+                                                        [value]="item.dropdownID">{{item.description}}</mat-option>
+                                                    }
+                                                </mat-select>
+                                            </mat-form-field>
+                                        </div>
+                                        }
+                                        @if (tk.tardySetupId===30057 || tk.tardySetupId===30060) {
+                                        <div class="col-span-2">
+                                            <mat-form-field class="w-full text-lg mt-1" appearance="outline">
+                                                <mat-label
+                                                    class="label-font-size">{{t('decayingGraceStarts')}}</mat-label>
+                                                <mat-icon class="mb-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                                                <input type="number" formControlName="tardyGraceMins" matInput
+                                                    [placeholder]="'Decaying grace starts'">
+                                            </mat-form-field>
+                                        </div>
+                                        }
+
+                                        @if (tk.tardySetupId===30058) {
+                                        <div class="col-span-2">
+                                            <mat-form-field class="w-full text-md mt-1" appearance="outline">
+                                                <mat-label class="label-font-size">{{t('decayingGraceStarts')}}</mat-label>
+                                                <mat-icon class="icon-size-5 : mr-2" matPrefix
+                                                    svgIcon="mat_outline:info"></mat-icon>
+                                                <input formControlName="undertimeGraceMins" matInput type="number"
+                                                    [placeholder]="'Decaying grace starts'">
+                                            </mat-form-field>
+                                        </div>
+                                        }
+                                        @if (tk.tardySetupId===30057 || tk.tardySetupId===30058 ||
+                                        tk.tardySetupId===30060 ) {
+                                        <!-- <div class="col-span-2">
+                                            <mat-form-field class="w-full text-lg mt-1" appearance="outline">
+                                                <mat-label
+                                                    class="label-font-size">{{t('decayingStartMinutes')}}</mat-label>
+                                                <mat-icon class="mb-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                                                <input type="number" formControlName="tardyMins" matInput type="number"
+                                                    [placeholder]="'Decaying Start'">
+                                            </mat-form-field>
+                                        </div> -->
+                                        }
+                                        <!-- <div class="mt-1 h-13">
+                                            <app-dropdown [isFix]="true" label="Deduction Start"
+                                                [control]="TardySetupForm.get('tardyStart')"
+                                                [options]="nightdiffbasis" [icon]="'mat_outline:info'" [type]="181">
+                                            </app-dropdown>
+                                        </div> -->
+
+                                        @if (tk.tardySetupId === 30058 && ts.undertimeGraceMins > 0 ) {
+                                            <div class="col-span-2">
+                                                <div class="mt-1 h-13">
+                                                    <app-dropdown [isFix]="true" label="Deduction Start"
+                                                        [control]="TardySetupForm.get('undertimeStart')"
+                                                        [options]="nightdiffbasis" [icon]="'mat_outline:info'" [type]="181">
+                                                    </app-dropdown>
+                                                </div>
+                                            </div>
+                                        }
+
+                                        @if (tk.tardySetupId===30057 || tk.tardySetupId===30058 ||
+                                        tk.tardySetupId===30060 ) {
+                                        <div class="">
+                                            <mat-form-field class="w-full text-lg mt-1" appearance="outline">
+                                                <mat-label class="label-font-size">{{t('roundingPolicy')}}</mat-label>
+                                                <mat-select formControlName="tardyRoundingId"
+                                                    [placeholder]="'Hours Work'" (selectionChange)="Disablerd()">
+                                                    @for (item of roundPolicyType; track item) {
+                                                    <mat-option
+                                                        [value]="item.dropdownID">{{item.description}}</mat-option>
+                                                    }
+                                                </mat-select>
+                                            </mat-form-field>
+                                        </div>
+                                        }
+                                        <!-- <div class=""
+                                                      *ngIf="tk.tardySetupId===30057 || tk.tardySetupId===30058 || tk.tardySetupId===30060 ">
+                                                      <mat-form-field class="w-full text-lg h-12 mt-1" appearance="outline">
+                                                        <mat-select [placeholder]="''">
+                                                          <mat-option [value]="1">Daily</mat-option>
+                                                          <mat-option [value]="2">Per Cut-Off</mat-option>
+                                                        </mat-select>
+                                                      </mat-form-field>
+                                                    </div> -->
+
+                                    </div>
+                                    <div>
+                                        <!-- tardines && undertime: tardines -->
+                                        @if (tk.tardySetupId===30059) {
+                                        <mat-card class="mat-elevation-z0">
+                                            <mat-card-title>
+                                                <app-card-title title="Tardy Grace Minutes "></app-card-title>
+                                            </mat-card-title>
+                                            <mat-card-content>
+                                                <form [formGroup]="TardySetupForm">
+                                                    <!-- tardines -->
+                                                    <div>
+                                                        <div class="grid grid-cols-11 gap-2 h-10 mt-4">
+                                                            <div class="col-span-2">
+                                                                <mat-form-field class="w-full text-lg mt-1"
+                                                                    appearance="outline">
+                                                                    <mat-label
+                                                                        class="label-font-size">{{t('decayingGraceStarts')}}</mat-label>
+                                                                    <mat-icon class="mb-2" matPrefix
+                                                                        svgIcon="mat_outline:info"></mat-icon>
+                                                                    <input formControlName="tardyGraceMins" matInput
+                                                                        type="number"
+                                                                        [placeholder]="'Decaying grace starts'">
+                                                                </mat-form-field>
+                                                            </div>
+                                                            <!-- <div class="col-span-2">
+                                                                <mat-form-field class="w-full text-lg mt-1"
+                                                                    appearance="outline">
+                                                                    <mat-label
+                                                                        class="label-font-size">{{t('decayingStartMinutes')}}</mat-label>
+                                                                    <mat-icon class="mb-2" matPrefix
+                                                                        svgIcon="mat_outline:info"></mat-icon>
+                                                                    <input formControlName="tardyMins" matInput
+                                                                        type="number" [placeholder]="'Decaying Start'">
+                                                                </mat-form-field>
+                                                            </div> -->
+
+                                                            <div class="mt-1 col-span-2 h-13">
+                                                                <app-dropdown [isFix]="true" label="Deduction Start"
+                                                                    [control]="TardySetupForm.get('tardyStart')"
+                                                                    [options]="nightdiffbasis"
+                                                                    [icon]="'mat_outline:info'" [type]="181">
+                                                                </app-dropdown>
+                                                            </div>
+
+                                                            <div class="col-span-2">
+                                                                <mat-form-field class="w-full text-lg mt-1"
+                                                                    appearance="outline">
+                                                                    <mat-label
+                                                                        class="label-font-size">{{t('roundingPolicy')}}</mat-label>
+                                                                    <mat-select formControlName="tardyRoundingId"
+                                                                        [placeholder]="'Hours Work'"
+                                                                        (selectionChange)="Disablerd()">
+                                                                        @for (item of roundPolicyType; track item) {
+                                                                        <mat-option
+                                                                            [value]="item.dropdownID">{{item.description}}</mat-option>
+                                                                        }
+                                                                    </mat-select>
+                                                                </mat-form-field>
+                                                            </div>
+                                                            <div class="">
+                                                                <!-- <mat-form-field class="w-full text-lg h-12 mt-1" appearance="outline">
+                                                                      <mat-select [placeholder]="''">
+                                                                        <mat-option [value]="1">Time Period</mat-option>
+                                                                        <mat-option [value]="2">Daily</mat-option>
+                                                                        <mat-option [value]="3">Per Cut-Off</mat-option>
+                                                                      </mat-select>
+                                                                    </mat-form-field> -->
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </mat-card-content>
+                                        </mat-card>
+                                        }
+
+                                        <!-- Tardiness -->
+                                        @if (ts.tardyRoundingId===30061 &&
+                                        (tk.tardySetupId===30060||tk.tardySetupId===30057||tk.tardySetupId===30059)) {
+                                        <mat-card class="mat-elevation-z0">
+                                            <mat-divider></mat-divider><br>
+                                            <mat-card-title>
+                                                <app-card-title title="{{byBracketTitle}}"></app-card-title>
+                                            </mat-card-title>
+                                            <mat-card-content class="mt-4">
+                                                <form [formGroup]="BracketForm">
+                                                    <table #bracket mat-table [dataSource]="ds_tardiness"
+                                                        class="mat-elevation-z0 border">
+                                                        <ng-container matColumnDef="from">
+                                                            <th mat-header-cell *matHeaderCellDef class="pl-8 text-lg">
+                                                                From (Minutes)</th>
+                                                            <td mat-cell *matCellDef="let element;let i = index"
+                                                                class="pl-8 text-lg">
+                                                                <div class="h-13 mt-3">
+                                                                    <mat-form-field class="w-full text-lg"
+                                                                        appearance="outline">
+                                                                        <mat-icon class="mb-2" matPrefix
+                                                                            svgIcon="mat_outline:info"></mat-icon>
+                                                                        <input matInput type="number" min="0"
+                                                                            [value]="element.from"
+                                                                            (change)="val_changes(ds_tardiness,'from',$event,i)"
+                                                                            (blur)="lessthanmin('from','to',i)">
+                                                                    </mat-form-field>
+                                                                    @if (istimeerrrorto) {
+                                                                    <div class="text-red-400" required>Invalid Time
+                                                                    </div>
+                                                                    }
+                                                                </div>
+                                                            </td>
+                                                        </ng-container>
+                                                        <ng-container matColumnDef="to">
+                                                            <th mat-header-cell *matHeaderCellDef class="pl-8 text-lg">
+                                                                To (Minutes)</th>
+                                                            <td mat-cell *matCellDef="let element;let i = index"
+                                                                class="pl-8 text-lg">
+                                                                <div class="h-13 mt-3">
+                                                                    <mat-form-field class="w-full text-lg"
+                                                                        appearance="outline">
+                                                                        <mat-icon class="mb-2" matPrefix
+                                                                            svgIcon="mat_outline:info"></mat-icon>
+                                                                        <input matInput type="number" min="0"
+                                                                            [value]="element.to"
+                                                                            (change)="val_changes(ds_tardiness,'to',$event,i)"
+                                                                            (blur)="greaterthansum('from','to',i)">
+                                                                    </mat-form-field>
+                                                                    @if (istimeerrror) {
+                                                                    <div class="text-red-400" required>Invalid Time
+                                                                    </div>
+                                                                    }
+                                                                </div>
+                                                            </td>
+                                                        </ng-container>
+                                                        <ng-container matColumnDef="deduct">
+                                                            <th mat-header-cell *matHeaderCellDef class="pl-8 text-lg">
+                                                                Deduct</th>
+                                                            <td mat-cell *matCellDef="let element;let i = index"
+                                                                class="pl-8 text-lg">
+                                                                <div class="h-13 mt-3">
+                                                                    <mat-form-field class="w-full text-lg"
+                                                                        appearance="outline">
+                                                                        <mat-icon class="mb-2" matPrefix
+                                                                            svgIcon="mat_outline:info"></mat-icon>
+                                                                        <input matInput type="number" min="0"
+                                                                            [value]="element.deduct"
+                                                                            (change)="val_changes(ds_tardiness,'deduct',$event,i)">
+                                                                    </mat-form-field>
+                                                                </div>
+                                                            </td>
+                                                        </ng-container>
+                                                        <ng-container matColumnDef="delete">
+                                                            <th mat-header-cell *matHeaderCellDef class="pl-8 text-lg">
+                                                                <button mat-icon-button class="w-full"
+                                                                    (click)="addTardiness()" color="primary">
+                                                                    <mat-icon class="icons"
+                                                                        [svgIcon]="'heroicons_solid:plus-circle'"></mat-icon>
+                                                                </button>
+                                                            </th>
+                                                            <td mat-cell *matCellDef="let element" class="pl-8 text-lg">
+                                                                <div class="mt-1 mb-1">
+                                                                    <button type="button" matSuffix
+                                                                        (click)="deleteTardiness(i)"
+                                                                        class="Bborder w-full" mat-icon-button
+                                                                        color="warn">
+                                                                        <mat-icon class="icons"
+                                                                            svgIcon="mat_outline:delete"></mat-icon>
+                                                                    </button>
+                                                                </div>
+                                                            </td>
+                                                        </ng-container>
+                                                        <tr mat-header-row *matHeaderRowDef="dc_bracket"></tr>
+                                                        <tr mat-row *matRowDef="let row; columns: dc_bracket;"></tr>
+                                                    </table>
+                                                </form>
+                                            </mat-card-content>
+                                            <!-- Sum of tardyness ===== -->
+                                        </mat-card>
+                                        }
+
+                                        <!-- tardines && undertime: undertime -->
+                                        @if (tk.tardySetupId===30059) {
+                                        <mat-divider></mat-divider>
+                                        }<br>
+                                        @if (tk.tardySetupId===30059) {
+                                        <mat-card class="mat-elevation-z0">
+                                            <mat-card-title>
+                                                <app-card-title title="Undertime Grace Minutes "></app-card-title>
+                                            </mat-card-title>
+                                            <mat-card-content>
+                                                <form [formGroup]="TardySetupForm">
+                                                    <div>
+                                                        <div class="grid grid-cols-11 gap-2 h-10 mt-4">
+                                                            <div class="col-span-2">
+                                                                <mat-form-field class="w-full text-lg mt-1"
+                                                                    appearance="outline">
+                                                                    <mat-label
+                                                                        class="label-font-size">{{t('decayingGraceStarts')}}</mat-label>
+                                                                    <mat-icon class="mb-2" matPrefix
+                                                                        svgIcon="mat_outline:info"></mat-icon>
+                                                                    <input formControlName="undertimeGraceMins" matInput
+                                                                        type="number"
+                                                                        [placeholder]="'Decaying grace starts'">
+                                                                </mat-form-field>
+                                                            </div>
+                                                            <!-- <div class="col-span-2">
+                                                                <mat-form-field class="w-full text-lg mt-1"
+                                                                    appearance="outline">
+                                                                    <mat-label
+                                                                        class="label-font-size">{{t('decayingStartMinutes')}}</mat-label>
+                                                                    <mat-icon class="mb-2" matPrefix
+                                                                        svgIcon="mat_outline:info"></mat-icon>
+                                                                    <input formControlName="undertimeMins" matInput
+                                                                        type="number" [placeholder]="'Decaying Start'">
+                                                                </mat-form-field>
+                                                            </div> -->
+                                                            <div class="mt-1 col-span-2 h-13">
+                                                                <app-dropdown [isFix]="true" label="Deduction Start"
+                                                                    [control]="TardySetupForm.get('undertimeStart')"
+                                                                    [options]="nightdiffbasis"
+                                                                    [icon]="'mat_outline:info'" [type]="181">
+                                                                </app-dropdown>
+                                                            </div>
+                                                            <div class="col-span-2">
+                                                                <mat-form-field class="w-full text-lg mt-1"
+                                                                    appearance="outline">
+                                                                    <mat-label
+                                                                        class="label-font-size">{{t('roundingPolicy')}}</mat-label>
+                                                                    <mat-select formControlName="undertimeRoundingId"
+                                                                        [placeholder]="'Hours Work'"
+                                                                        (selectionChange)="Disablerdunder()">
+                                                                        @for (item of roundPolicyType; track item) {
+                                                                        <mat-option
+                                                                            [value]="item.dropdownID">{{item.description}}</mat-option>
+                                                                        }
+                                                                    </mat-select>
+                                                                </mat-form-field>
+                                                            </div>
+                                                            <div class="">
+                                                                <!-- <mat-form-field class="w-full text-lg h-12 mt-1" appearance="outline">
+                                                                                <mat-select [placeholder]="''">
+                                                                                  <mat-option [value]="1">Time Period</mat-option>
+                                                                                  <mat-option [value]="2">Daily</mat-option>
+                                                                                  <mat-option [value]="3">Per Cut-Off</mat-option>
+                                                                                </mat-select>
+                                                                              </mat-form-field> -->
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </mat-card-content>
+                                        </mat-card>
+                                        }
+
+                                        <!-- UnderTime -->
+                                        @if ((ts.tardyRoundingId===30061||ts.undertimeRoundingId===30061) &&
+                                        (tk.tardySetupId===30058||tk.tardySetupId===30059)) {
+                                        <mat-card class="mat-elevation-z0">
+                                            <mat-divider></mat-divider><br>
+                                            <mat-card-title>
+                                                <app-card-title title="Undertime"></app-card-title>
+                                            </mat-card-title>
+                                            <mat-card-content class="mt-4">
+                                                <form [formGroup]="BracketUndertimeForm">
+                                                    <table #bracketUndertime mat-table [dataSource]="ds_undertime"
+                                                        class="mat-elevation-z0 border">
+                                                        <ng-container matColumnDef="from">
+                                                            <th mat-header-cell *matHeaderCellDef class="pl-8 text-lg">
+                                                                From (Minutes)</th>
+                                                            <td mat-cell *matCellDef="let element;let i = index"
+                                                                class="pl-8 text-lg">
+                                                                <div class="h-13 mt-3">
+                                                                    <mat-form-field class="w-full text-lg"
+                                                                        appearance="outline">
+                                                                        <mat-icon class="mb-2" matPrefix
+                                                                            svgIcon="mat_outline:info"></mat-icon>
+                                                                        <input matInput type="number" min="0"
+                                                                            [value]="element.from"
+                                                                            (change)="val_changes(ds_undertime,'from',$event,i)"
+                                                                            (blur)="lessthanmin('from','to',i)">
+                                                                    </mat-form-field>
+                                                                    @if (istimeerrrorto) {
+                                                                    <div class="text-red-400" required>Invalid Time
+                                                                    </div>
+                                                                    }
+                                                                </div>
+                                                            </td>
+                                                        </ng-container>
+                                                        <ng-container matColumnDef="to">
+                                                            <th mat-header-cell *matHeaderCellDef class="pl-8 text-lg">
+                                                                To (Minutes)</th>
+                                                            <td mat-cell *matCellDef="let element;let i = index"
+                                                                class="pl-8 text-lg">
+                                                                <div class="h-13 mt-3">
+                                                                    <mat-form-field class="w-full text-lg"
+                                                                        appearance="outline">
+                                                                        <mat-icon class="mb-2" matPrefix
+                                                                            svgIcon="mat_outline:info"></mat-icon>
+                                                                        <input matInput type="number" min="0"
+                                                                            [value]="element.to"
+                                                                            (change)="val_changes(ds_undertime,'to',$event,i)"
+                                                                            (blur)="greaterthansum('from','to',i)">
+                                                                    </mat-form-field>
+                                                                    @if (istimeerrror) {
+                                                                    <div class="text-red-400" required>Invalid Time
+                                                                    </div>
+                                                                    }
+                                                                </div>
+                                                            </td>
+                                                        </ng-container>
+                                                        <ng-container matColumnDef="deduct">
+                                                            <th mat-header-cell *matHeaderCellDef class="pl-8 text-lg">
+                                                                Deduct</th>
+                                                            <td mat-cell *matCellDef="let element;let i = index"
+                                                                class="pl-8 text-lg">
+                                                                <div class="h-13 mt-3">
+                                                                    <mat-form-field class="w-full text-lg"
+                                                                        appearance="outline">
+                                                                        <mat-icon class="mb-2" matPrefix
+                                                                            svgIcon="mat_outline:info"></mat-icon>
+                                                                        <input matInput type="number" min="0"
+                                                                            [value]="element.deduct"
+                                                                            (change)="val_changes(ds_undertime,'deduct',$event,i)">
+                                                                    </mat-form-field>
+                                                                </div>
+                                                            </td>
+                                                        </ng-container>
+                                                        <ng-container matColumnDef="delete">
+                                                            <th mat-header-cell *matHeaderCellDef class="pl-8 text-lg">
+                                                                <button mat-icon-button class="w-full"
+                                                                    (click)="addUndertime()" color="primary">
+                                                                    <mat-icon class="icons"
+                                                                        [svgIcon]="'heroicons_solid:plus-circle'"></mat-icon>
+                                                                </button>
+                                                            </th>
+                                                            <td mat-cell *matCellDef="let element" class="pl-8 text-lg">
+                                                                <div class="mt-1 mb-1">
+                                                                    <button type="button" matSuffix
+                                                                        (click)="deleteUndertime(i)"
+                                                                        class="Bborder w-full" mat-icon-button
+                                                                        color="warn">
+                                                                        <mat-icon class="icons"
+                                                                            svgIcon="mat_outline:delete"></mat-icon>
+                                                                    </button>
+                                                                </div>
+                                                            </td>
+                                                        </ng-container>
+                                                        <tr mat-header-row *matHeaderRowDef="dc_bracket"></tr>
+                                                        <tr mat-row *matRowDef="let row; columns: dc_bracket;"></tr>
+                                                    </table>
+                                                </form>
+                                            </mat-card-content>
+                                            <!-- Sum of tardyness ===== -->
+                                        </mat-card>
+                                        }
+
+                                    </div>
+                                </form>
+                            </mat-card-content>
+                        </mat-tab>
+                        <mat-tab label="Night Diff" *transloco="let t">
+                            <div class="grid grid-cols-6 gap-2 h-14">
+                                <mat-form-field class="w-full text-lg mt-1" appearance="outline">
+                                    <mat-label class="label-font-size">{{t('setupNightDiff')}}</mat-label>
+                                    <mat-select formControlName="hasNightDiff" [placeholder]="'Hours Work'">
+                                        <mat-option [value]="true">Yes</mat-option>
+                                        <mat-option [value]="false">No</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                                @if (tk.hasNightDiff) {
+                                <mat-form-field class="w-full text-lg mt-1" appearance="outline">
+                                    <mat-label class="label-font-size">{{t('hoursBetween')}}</mat-label>
+                                    <mat-icon class="mb-2" matPrefix svgIcon="mat_outline:access_time"></mat-icon>
+                                    <input formControlName="nightDiffIn" readonly type="text" matTimepicker
+                                        #ts="matTimepicker">
+                                </mat-form-field>
+                                }
+                                <div>
+                                    @if (tk.hasNightDiff) {
+                                    <mat-form-field class="w-full text-lg mt-1 h-12" appearance="outline" required>
+                                        <mat-label class="label-font-size">{{t('to')}}</mat-label>
+                                        <mat-icon class="mb-2" matPrefix svgIcon="mat_outline:access_time"></mat-icon>
+                                        <input formControlName="nightDiffOut" readonly type="text" matTimepicker
+                                            #ts="matTimepicker">
+                                    </mat-form-field>
+                                    }
+                                    @if (istimeerrror) {
+                                    <div class="text-red-400" required>Invalid Time</div>
+                                    }
+                                </div>
+                                @if (tk.hasNightDiff) {
+                                <mat-form-field class="w-full text-lg mt-1" appearance="outline">
+                                    <mat-label class="label-font-size">{{t('roundingPolicy')}}</mat-label>
+                                    <mat-select formControlName="nightDiffRoundingId" [placeholder]="''"
+                                        (selectionChange)="nightDiff_RP()">
+                                        @for (item of roundPolicyType; track item) {
+                                        <mat-option [value]="item.dropdownID">{{item.description}}</mat-option>
+                                        }
+                                    </mat-select>
+                                </mat-form-field>
+                                }
+                                @if (tk.hasNightDiff) {
+                                <mat-form-field class="w-full text-lg mt-1" appearance="outline">
+                                    <mat-label class="label-font-size">{{t('minimumMinutes')}}</mat-label>
+                                    <mat-icon class="mb-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                                    <input formControlName="nightDiffMin" matInput type="number"
+                                        [placeholder]="'Minutes'">
+                                </mat-form-field>
+                                }
+                                @if (tk.hasNightDiff) {
+                                <mat-form-field class="w-full text-lg mt-1" appearance="outline">
+                                    <mat-label class="label-font-size">{{t('maximumMinutes')}}</mat-label>
+                                    <mat-icon class="mb-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                                    <input formControlName="nightDiffMax" matInput type="number"
+                                        [placeholder]="'Minutes'">
+                                </mat-form-field>
+                                }
+                            </div>
+                            <br>@if (tk.nightDiffRoundingId===30061) {
+                            <mat-divider></mat-divider>
+                            }<br>
+                            @if (tk.nightDiffRoundingId===30061) {
+                            <mat-card class="mat-elevation-z0">
+                                <mat-card-title class="mb-3">
+                                    <app-card-title title="Nightdiff By Bracket "></app-card-title>
+                                </mat-card-title>
+                                <mat-card-content>
+                                    <form [formGroup]="BracketNightDiffForm">
+                                        <table #bracketNightDiff mat-table [dataSource]="ds_nightdiff"
+                                            class="mat-elevation-z0 border">
+                                            <ng-container matColumnDef="from">
+                                                <th mat-header-cell *matHeaderCellDef class="pl-8 text-lg">From
+                                                    (Minutes)</th>
+                                                <td mat-cell *matCellDef="let element;let i = index"
+                                                    class="pl-8 text-lg">
+                                                    <div class="h-11 mt-2">
+                                                        <mat-form-field class="w-full text-lg" appearance="outline">
+                                                            <mat-icon class="mb-2" matPrefix
+                                                                svgIcon="mat_outline:info"></mat-icon>
+                                                            <input matInput type="number" min="0" [value]="element.from"
+                                                                (change)="val_changes(ds_nightdiff,'from',$event,i)"
+                                                                (blur)="lessthanmin('from','to',i)">
+                                                        </mat-form-field>
+                                                        @if (istimeerrrorto) {
+                                                        <div class="text-red-400" required>
+                                                            Invalid Time</div>
+                                                        }
+                                                    </div>
+                                                </td>
+                                            </ng-container>
+                                            <ng-container matColumnDef="to">
+                                                <th mat-header-cell *matHeaderCellDef class="pl-8 text-lg">To (Minutes)
+                                                </th>
+                                                <td mat-cell *matCellDef="let element;let i = index"
+                                                    class="pl-8 text-lg">
+                                                    <div class="h-11 mt-2">
+                                                        <mat-form-field class="w-full text-lg" appearance="outline">
+                                                            <mat-icon class="mb-2" matPrefix
+                                                                svgIcon="mat_outline:info"></mat-icon>
+                                                            <input matInput type="number" min="0" [value]="element.to"
+                                                                (change)="val_changes(ds_nightdiff,'to',$event,i)"
+                                                                (blur)="greaterthansum('from','to',i)">
+                                                        </mat-form-field>
+                                                        @if (istimeerrror) {
+                                                        <div class="text-red-400" required>Invalid
+                                                            Time</div>
+                                                        }
+                                                    </div>
+                                                </td>
+                                            </ng-container>
+                                            <ng-container matColumnDef="deduct">
+                                                <th mat-header-cell *matHeaderCellDef class="pl-8 text-lg">Deduct</th>
+                                                <td mat-cell *matCellDef="let element;let i = index"
+                                                    class="pl-8 text-lg">
+                                                    <div class="h-11 mt-2">
+                                                        <mat-form-field class="w-full text-lg" appearance="outline">
+                                                            <mat-icon class="mb-2" matPrefix
+                                                                svgIcon="mat_outline:info"></mat-icon>
+                                                            <input matInput type="number" min="0"
+                                                                [value]="element.deduct"
+                                                                (change)="val_changes(ds_nightdiff,'deduct',$event,i)">
+                                                        </mat-form-field>
+                                                    </div>
+                                                </td>
+                                            </ng-container>
+                                            <ng-container matColumnDef="delete">
+                                                <th mat-header-cell *matHeaderCellDef class="pl-8 text-lg">
+                                                    <button mat-flat-button class="w-full" (click)="addNightDiff()"
+                                                        color="primary">
+                                                        <mat-icon class="mb-2"
+                                                            [svgIcon]="'heroicons_solid:plus-circle'"></mat-icon><span
+                                                            class="ml-3">Add</span>
+                                                    </button>
+                                                </th>
+                                                <td mat-cell *matCellDef="let element" class="pl-8 text-lg">
+                                                    <div class="mt-1">
+                                                        <button type="button" matSuffix (click)="deleteNightDiff(i)"
+                                                            class="Bborder w-full" mat-icon-button color="warn">
+                                                            <mat-icon class="mb-2"
+                                                                svgIcon="mat_outline:delete"></mat-icon>
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                            </ng-container>
+                                            <tr mat-header-row *matHeaderRowDef="dc_bracket"></tr>
+                                            <tr mat-row *matRowDef="let row; columns: dc_bracket;"></tr>
+                                        </table>
+                                    </form>
+                                </mat-card-content>
+                            </mat-card>
+                            }
+                        </mat-tab>
+                        <mat-tab label="Regular and Restday Overtime">
+                            <mat-card-title>
+                                <app-card-title title="Regular Overtime"></app-card-title>
+                            </mat-card-title>
+                            <div class="flex flex-nowrap gap-2 h-15 mt-4">
+                                <!-- Regular===== -->
+                                <mat-form-field class="w-80 hover:w-120 text-lg mt-1" appearance="outline">
+                                    <mat-label class="label-font-size">{{t('overtimeHoursBasis')}}</mat-label>
+                                    <mat-select (selectionChange)="clear('regularOt')" formControlName="regularOTTypeId"
+                                        [placeholder]="'Hours Work'">
+                                        @for (item of regular_RG_OT_Type; track item) {
+                                        <mat-option [value]="item.dropdownID">{{item.description}}</mat-option>
+                                        }
+                                    </mat-select>
+                                </mat-form-field>
+                                <!-- <mat-form-field *ngIf="timekeepingCategoryForm.value.regularOTTypeId == 30635 || timekeepingCategoryForm.value.regularOTTypeId == 30627 || timekeepingCategoryForm.value.regularOTTypeId ==30636  || timekeepingCategoryForm.value.regularOTTypeId ==30065 " class="w-80 text-lg mt-1" appearance="outline">
+                                                                                    <mat-select formControlName="regularBreakHours" [placeholder]="'Hours Work'">
+                                                                                      <mat-option *ngFor="let item of hoursbasis"
+                                                                                      [value]="item.dropdownID">{{item.description}}</mat-option>
+                                                                                    </mat-select>
+                                                                                  </mat-form-field> -->
+                                @if (timekeepingCategoryForm.value.regularOTTypeId == 30064 ||
+                                timekeepingCategoryForm.value.regularOTTypeId == 30066 ||
+                                timekeepingCategoryForm.value.regularOTTypeId ==30065 ||
+                                timekeepingCategoryForm.value.regularOTTypeId == 31141 ) {
+                                <!-- <div class="mt-1">
+                                    <app-dropdown-custom [all]="false" [multiple]="false"
+                                        [control]="timekeepingCategoryForm.get('regularOTBreakTypeId')"
+                                        [options]="breakType" [useControl]="true" [type]="1044"></app-dropdown-custom>
+                                </div> -->
+                                }
+                                <!-- <mat-form-field class="w-80 text-lg mt-1" appearance="outline" *ngIf="timekeepingCategoryForm.value.regularOTTypeId == 30066 || timekeepingCategoryForm.value.regularOTTypeId ==30065">
+                                                                                  <mat-icon class="" matPrefix
+                                                                                  svgIcon="mat_outline:info"></mat-icon>
+                                                                                  <input class="input" type="number" formControlName="regularMin" matInput [placeholder]="'Min (Hours)'">
+                                                                                </mat-form-field>
+                                                                                <mat-form-field class="w-80 text-lg mt-1" appearance="outline" *ngIf="timekeepingCategoryForm.value.regularOTTypeId == 30066 || timekeepingCategoryForm.value.regularOTTypeId ==30065">
+                                                                                  <mat-icon class="" matPrefix
+                                                                                  svgIcon="mat_outline:info"></mat-icon>
+                                                                                  <input class="input" type="number" formControlName="regularMax" matInput [placeholder]="'Max (Hours)'">
+                                                                                </mat-form-field> -->
+                            </div>
+                            <mat-card-title>
+                                <app-card-title title="Rest Day Overtime"></app-card-title>
+                            </mat-card-title>
+                            <div class="flex flex-nowrap gap-2 h-15 mt-4">
+                                <!-- RestDay==== -->
+                                <mat-form-field class="w-80 hover:w-120 text-lg mt-1" appearance="outline">
+                                    <mat-label class="label-font-size">{{t('overtimeBasedOn')}}</mat-label>
+                                    <mat-select formControlName="rDOTTypeId" [placeholder]="'Hours Work'">
+                                        @for (item of regular_RG_OT_Type; track item) {
+                                        <mat-option [value]="item.dropdownID">{{item.description}}</mat-option>
+                                        }
+                                    </mat-select>
+                                </mat-form-field>
+                                <!-- <mat-form-field *ngIf="timekeepingCategoryForm.value.rDOTTypeId == 30064 || timekeepingCategoryForm.value.rDOTTypeId == 30066 || timekeepingCategoryForm.value.rDOTTypeId == 30065 || timekeepingCategoryForm.value.rDOTTypeId == 31141" class="w-80 text-lg mt-1" appearance="outline">
+                                                                                <mat-label class="label-font-size">{{t('breakHoursBasis')}}</mat-label>
+                                                                                <mat-select formControlName="rDBreakHours" [placeholder]="'Hours Work'">
+                                                                                  <mat-option *ngFor="let item of hoursbasis"
+                                                                                  [value]="item.dropdownID">{{item.description}}</mat-option>
+                                                                                </mat-select> 31141
+                                                                              </mat-form-field> -->
+                                @if (timekeepingCategoryForm.value.rDOTTypeId == 30064
+                                || timekeepingCategoryForm.value.rDOTTypeId == 30066
+                                || timekeepingCategoryForm.value.rDOTTypeId == 30065
+                                || timekeepingCategoryForm.value.rDOTTypeId == 31141) {
+                                <!-- <div class="mt-1">
+                                    <app-dropdown-custom [all]="false" [multiple]="false"
+                                        [control]="timekeepingCategoryForm.get('rDOTBreakTypeId')" [options]="breakType"
+                                        [useControl]="true" [type]="1044"></app-dropdown-custom>
+                                </div> -->
+                                }
+
+                                @if (timekeepingCategoryForm.value.rDOTTypeId == 30065) {
+                                <mat-form-field class="w-80 text-lg mt-1" appearance="outline">
+                                    <mat-label class="label-font-size">{{t('rdAfterSchedInMinutes')}}</mat-label>
+                                    <mat-icon class="" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                                    <input class="input" type="number" formControlName="rdMinutesAfterSchedIn" matInput
+                                        [placeholder]="">
+                                </mat-form-field>
+                                }
+                                <!-- <mat-form-field class="w-80 text-lg mt-1" appearance="outline">
+                                                                              <mat-icon class="" matPrefix
+                                                                              svgIcon="mat_outline:info"></mat-icon>
+                                                                              <input (blur)="convert('thresholdHoursAfterClockIn')" class="input" type="text" formControlName="thresholdHoursAfterClockIn"  matInput [placeholder]="">
+                                                                            </mat-form-field> -->
+                                @if (timekeepingCategoryForm.value.rDOTTypeId == 30066 ||
+                                timekeepingCategoryForm.value.rDOTTypeId == 30065 ) {
+                                <mat-form-field class="w-80 text-lg mt-1" appearance="outline">
+                                    <mat-label class="label-font-size">{{t('minHours')}}</mat-label>
+                                    <mat-icon class="" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                                    <input class="input" type="number" formControlName="rDMin" matInput
+                                        [placeholder]="'Min (Hours)'">
+                                </mat-form-field>
+                                }
+                                @if (timekeepingCategoryForm.value.rDOTTypeId == 30066 ||
+                                timekeepingCategoryForm.value.rDOTTypeId == 30065) {
+                                <mat-form-field class="w-80 text-lg mt-1" appearance="outline">
+                                    <mat-label class="label-font-size">{{t('maxHours')}}</mat-label>
+                                    <mat-icon class="" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                                    <input class="input" type="number" formControlName="rDMax" matInput
+                                        [placeholder]="'Max (Hours)'">
+                                </mat-form-field>
+                                }
+                                <!-- @if (timekeepingCategoryForm.value.rDOTTypeId !==0) {
+                                <mat-form-field class="w-50 text-lg mt-1" appearance="outline">
+                                    <mat-label class="label-font-size">{{t('basedOn')}}</mat-label>
+                                    <mat-select formControlName="rdBaseOn" [placeholder]="'Hours Work'">
+                                        @for (item of baseOnType; track item) {
+                                        <mat-option [value]="item.dropdownID">{{item.description}}</mat-option>
+                                        }
+                                    </mat-select>
+                                </mat-form-field>
+                                } -->
+                            </div>
+                            <!-- working resday  -->
+                            <div class=" grid grid-cols-3 gap-2">
+                                <mat-card-title>
+                                    <app-card-title title="Working Restday"></app-card-title>
+                                </mat-card-title>
+                            </div>
+                            <div class="flex flex-nowrap gap-2 h-15 mt-4">
+                                <mat-form-field class="w-80 hover:w-120 text-lg mt-1" appearance="outline">
+                                    <mat-label class="label-font-size">{{t('overtimeHoursBasis')}}</mat-label>
+                                    <mat-select formControlName="wRDOTTypeId" [placeholder]="'Hours Work'">
+                                        @for (item of regular_RD_OT_Type; track item) {
+                                        <mat-option [value]="item.dropdownID">{{item.description}}</mat-option>
+                                        }
+                                    </mat-select>
+                                </mat-form-field>
+                                <!-- <mat-form-field  *ngIf="timekeepingCategoryForm.value.wRDOTTypeId == 30635 || timekeepingCategoryForm.value.wRDOTTypeId == 30627 || timekeepingCategoryForm.value.wRDOTTypeId ==30636  || timekeepingCategoryForm.value.wRDOTTypeId ==30065 " class="w-80 text-lg mt-1" appearance="outline">
+                                                                            <mat-select formControlName="workBreakHours" [placeholder]="'Hours Work'">
+                                                                              <mat-option *ngFor="let item of hoursbasis"
+                                                                              [value]="item.dropdownID">{{item.description}}</mat-option>
+                                                                            </mat-select>
+                                                                          </mat-form-field> -->
+                                <!-- @if (timekeepingCategoryForm.value.wRDOTTypeId == 30064
+                                || timekeepingCategoryForm.value.wRDOTTypeId == 30066
+                                || timekeepingCategoryForm.value.wRDOTTypeId == 30065
+                                || timekeepingCategoryForm.value.wRDOTTypeId == 30627
+                                || timekeepingCategoryForm.value.wRDOTTypeId == 30636
+                                || timekeepingCategoryForm.value.wRDOTTypeId == 30635) {
+                                <div class="mt-1">
+                                    <app-dropdown-custom [all]="false" [multiple]="false"
+                                        [control]="timekeepingCategoryForm.get('wRDOTBreakTypeId')"
+                                        [options]="breakType" [useControl]="true" [type]="1044"></app-dropdown-custom>
+                                </div>
+                                } -->
+
+                                <!-- @if (timekeepingCategoryForm.value.wRDOTTypeId == 30066) {
+                                <mat-form-field class="w-80 text-lg mt-1" appearance="outline">
+                                    <mat-label class="label-font-size">{{t('minHours')}}</mat-label>
+                                    <mat-icon class="" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                                    <input class="input" type="number" formControlName="wRDMin" matInput
+                                        [placeholder]="'Min (Hours)'">
+                                </mat-form-field>
+                                }
+                                @if (timekeepingCategoryForm.value.wRDOTTypeId == 30066) {
+                                <mat-form-field class="w-80 text-lg mt-1" appearance="outline">
+                                    <mat-label class="label-font-size">{{t('maxHours')}}</mat-label>
+                                    <mat-icon class="" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                                    <input class="input" type="number" formControlName="wRDMax" matInput
+                                        [placeholder]="'Max (Hours)'">
+                                </mat-form-field>
+                                } -->
+                                <!-- @if (timekeepingCategoryForm.value.wRDOTTypeId !== 0) {
+                                <mat-form-field class="w-50 text-lg mt-1" appearance="outline">
+                                    <mat-label class="label-font-size">{{t('basedOn')}}</mat-label>
+                                    <mat-select formControlName="wrdBaseOn" [placeholder]="'Hours Work'">
+                                        @for (item of baseOnType; track item) {
+                                        <mat-option [value]="item.dropdownID">{{item.description}}</mat-option>
+                                        }
+                                    </mat-select>
+                                </mat-form-field>
+                                } -->
+                            </div>
+                            <!-- //additional -->
+                            <mat-card-title>
+                                <app-card-title title="Pre-Approve Overtime"></app-card-title>
+                            </mat-card-title>
+                            <div class="flex flex-nowrap gap-2 h-15 mt-4">
+                                <!-- pre-approval-overtime===== -->
+                                <mat-form-field class="w-80 hover:w-120 text-lg mt-1" appearance="outline">
+                                    <mat-label class="label-font-size">{{t('overtimeHoursBasis')}}</mat-label>
+                                    <mat-select (selectionChange)="clear('preaaproveot')"
+                                        formControlName="preAppOTTypeId" [placeholder]="'Hours Work'">
+                                        @for (item of preapp_PR_OT_Type; track item) {
+                                        <mat-option [value]="item.dropdownID">{{item.description}}</mat-option>
+                                        }
+                                    </mat-select>
+                                </mat-form-field>
+                                <!-- <mat-form-field *ngIf="timekeepingCategoryForm.value.preAppOTTypeId== 30635 || timekeepingCategoryForm.value.preAppOTTypeId== 30627 || timekeepingCategoryForm.value.preAppOTTypeId==30636  || timekeepingCategoryForm.value.preAppOTTypeId==30065 " class="w-80 text-lg mt-1" appearance="outline">
+                                                                          <mat-select formControlName="preBreakHours" [placeholder]="'Hours Work'">
+                                                                            <mat-option *ngFor="let item of hoursbasis"
+                                                                            [value]="item.dropdownID">{{item.description}}</mat-option>
+                                                                          </mat-select>
+                                                                        </mat-form-field> -->
+                                @if (timekeepingCategoryForm.value.preAppOTTypeId == 31146) {
+                                <!-- <div class="mt-1">
+                                    <app-dropdown-custom [all]="false" [multiple]="false"
+                                        [control]="timekeepingCategoryForm.get('preAppOTBreakTypeId')"
+                                        [options]="breakType" [useControl]="true" [type]="1044"></app-dropdown-custom>
+                                </div> -->
+                                }
+                                <!-- @if (timekeepingCategoryForm.value.preAppOTTypeId == 30066) {
+                                <mat-form-field class="w-80 text-lg mt-1" appearance="outline">
+                                    <mat-label class="label-font-size">{{t('minHours')}}</mat-label>
+                                    <mat-icon class="" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                                    <input class="input" type="number" formControlName="preAppMin" matInput
+                                        [placeholder]="'Min (Hours)'">
+                                </mat-form-field>
+                                }
+                                @if (timekeepingCategoryForm.value.preAppOTTypeId == 30066) {
+                                <mat-form-field class="w-80 text-lg mt-1" appearance="outline">
+                                    <mat-label class="label-font-size">{{t('maxHours')}}</mat-label>
+                                    <mat-icon class="" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                                    <input class="input" type="number" formControlName="preAppMax" matInput
+                                        [placeholder]="'Max (Hours)'">
+                                </mat-form-field>
+                                } -->
+                            </div>
+                        </mat-tab>
+                        <mat-tab label="Holiday">
+                            <!-- ==================== regular holiday ========================= -->
+                            <mat-card-title>
+                                <app-card-title title="Regular Holiday"></app-card-title>
+                            </mat-card-title>
+                            <div class="flex flex-nowrap gap-2 h-15 mt-4">
+                                <!-- <mat-form-field class="w-50 text-lg mt-1" appearance="outline">
+                                    <mat-label class="label-font-size">{{t('basedOn')}}</mat-label>
+                                    <mat-select formControlName="rHBased" [placeholder]="'Hours Work'">
+                                        @for (item of baseOnType; track item) {
+                                        <mat-option [value]="item.dropdownID">{{item.description}}</mat-option>
+                                        }
+                                    </mat-select>
+                                </mat-form-field> -->
+                                <mat-form-field class="w-80 hover:w-100 text-lg mt-1" appearance="outline">
+                                    <mat-label class="label-font-size">{{t('holidayRule')}}</mat-label>
+                                    <mat-select formControlName="rHRule" [placeholder]="'Hours Work'">
+                                        @for (item of holidayRuleType; track item) {
+                                        <mat-option [value]="item.dropdownID">{{item.description}}</mat-option>
+                                        }
+                                    </mat-select>
+                                </mat-form-field>
+                                <mat-form-field class="w-80 hover:w-120 text-lg mt-1" appearance="outline">
+                                    <mat-label class="label-font-size">{{t('withShift')}}</mat-label>
+                                    <mat-select (selectionChange)="clear('regularholiday')" formControlName="rHShift"
+                                        [placeholder]="'Holiday hours are'">
+                                        @for (item of regular_PR_OT_Type; track item) {
+                                        <mat-option [value]="item.dropdownID">{{item.description}}</mat-option>
+                                        }
+                                    </mat-select>
+                                </mat-form-field>
+                                <!-- <mat-form-field class="w-80 text-lg mt-1" appearance="outline" *ngIf="timekeepingCategoryForm.value.rHShift== 30635 || timekeepingCategoryForm.value.rHShift== 30627 || timekeepingCategoryForm.value.rHShift==30636  || timekeepingCategoryForm.value.rHShift==30065 ">
+                                                                        <mat-select formControlName="rHHours" [placeholder]="'Hours Work'">
+                                                                          <mat-option *ngFor="let item of hoursbasis"
+                                                                          [value]="item.dropdownID">{{item.description}}</mat-option>
+                                                                        </mat-select>
+                                                                      </mat-form-field> -->
+                                <!-- @if (timekeepingCategoryForm.value.rHShift !== 31141) {
+                                <div class="mt-1">
+                                    <app-dropdown-custom [all]="false" [multiple]="false"
+                                        [control]="timekeepingCategoryForm.get('rhHolidayBreak')" [options]="breakType"
+                                        [useControl]="true" [type]="1044"></app-dropdown-custom>
+                                </div>
+                                } -->
+                                <!-- <div class="col-span-2">
+                                                                      <mat-form-field class="w-full text-lg mt-1" appearance="outline">
+                                                                        <mat-label class="label-font-size">{{t('withoutShift')}}</mat-label>
+                                                                        <mat-select formControlName="rhNoShift" [placeholder]="'Holiday hours are'">
+                                                                          <mat-option *ngFor="let item of regular_RD_OT_Type"
+                                                                          [value]="item.dropdownID">{{item.description}}</mat-option>
+                                                                        </mat-select>
+                                                                      </mat-form-field>
+                                                                    </div> -->
+                                @if (tk.rHRule===30069) {
+                                <mat-form-field class="w-80 text-lg mt-1" appearance="outline">
+                                    <mat-label
+                                        class="label-font-size">{{t('considerRestdayPriorToHoliday')}}</mat-label>
+                                    <mat-select formControlName="rHPrio" [placeholder]="'Hours Work'">
+                                        <mat-option [value]="true">Yes</mat-option>
+                                        <mat-option [value]="false">No</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                                }
+                                <!-- @if (timekeepingCategoryForm.value.rHShift==30066) {
+                                <mat-form-field class="w-40 text-lg mt-1" appearance="outline">
+                                    <mat-label class="label-font-size">{{t('minHrs')}}</mat-label>
+                                    <mat-icon class="" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                                    <input class="input" type="number" formControlName="rHMin" matInput
+                                        [placeholder]="''">
+                                </mat-form-field>
+                                } -->
+                                @if (timekeepingCategoryForm.value.rHShift==30066) {
+                                <mat-form-field class="w-40 text-lg mt-1" appearance="outline">
+                                    <mat-label class="label-font-size">{{t('maxHrs')}}</mat-label>
+                                    <mat-icon class="" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                                    <input class="input" type="number" formControlName="rHMax" matInput
+                                        [placeholder]="''">
+                                </mat-form-field>
+                                }
+                            </div>
+
+                            <!-- ==================== Special Non-Working Holiday ========================= -->
+                            <mat-card-title>
+                                <app-card-title title="Special Non-Working Holiday"></app-card-title>
+                            </mat-card-title>
+                            <div class="flex flex-nowrap gap-2 h-15 mt-4">
+                                <!-- <mat-form-field class="w-50 text-lg mt-1" appearance="outline">
+                                    <mat-label class="label-font-size">{{t('basedOn')}}</mat-label>
+                                    <mat-select formControlName="sNHBased" [placeholder]="'Hours Work'">
+                                        @for (item of baseOnType; track item) {
+                                        <mat-option [value]="item.dropdownID">{{item.description}}</mat-option>
+                                        }
+                                    </mat-select>
+                                </mat-form-field> -->
+                                <mat-form-field class="w-80 hover:w-100 text-lg mt-1" appearance="outline">
+                                    <mat-label class="label-font-size">{{t('holidayRule')}}</mat-label>
+                                    <mat-select formControlName="sNHRule" [placeholder]="'Hours Work'">
+                                        @for (item of holidayRuleType; track item) {
+                                        <mat-option [value]="item.dropdownID">{{item.description}}</mat-option>
+                                        }
+                                    </mat-select>
+                                </mat-form-field>
+                                <mat-form-field class="w-80 hover:w-120 text-lg mt-1" appearance="outline">
+                                    <mat-label class="label-font-size">{{t('withShift')}}</mat-label>
+                                    <mat-select (selectionChange)="clear('specialholiday')" formControlName="sNHShift"
+                                        [placeholder]="'Holiday hours are'">
+                                        @for (item of regular_PR_OT_Type; track item) {
+                                        <mat-option [value]="item.dropdownID">{{item.description}}</mat-option>
+                                        }
+                                    </mat-select>
+                                </mat-form-field>
+                                <!-- <div *ngIf="timekeepingCategoryForm.value.sNHShift==30635 || timekeepingCategoryForm.value.sNHShift==30627 || timekeepingCategoryForm.value.sNHShift==30636  || timekeepingCategoryForm.value.sNHShift==30065 ">
+                                                                    <mat-form-field class="w-80 text-lg mt-1" appearance="outline">
+                                                                      <mat-select formControlName="sNHours" [placeholder]="'Hours Work'">
+                                                                        <mat-option *ngFor="let item of hoursbasis"
+                                                                        [value]="item.dropdownID">{{item.description}}</mat-option>
+                                                                      </mat-select>
+                                                                    </mat-form-field>
+                                                                  </div> -->
+                                <!-- @if (timekeepingCategoryForm.value.sNHShift !== 31141) {
+                                <div class="mt-1">
+                                    <app-dropdown-custom [all]="false" [multiple]="false"
+                                        [control]="timekeepingCategoryForm.get('snHolidayBreak')" [options]="breakType"
+                                        [useControl]="true" [type]="1044"></app-dropdown-custom>
+                                </div>
+                                } -->
+                                <!-- <div class="col-span-2">
+                                                                  <mat-form-field class="w-80 text-lg mt-1" appearance="outline">
+                                                                    <mat-select formControlName="snhNoShift" [placeholder]="'Holiday hours are'">
+                                                                      <mat-option *ngFor="let item of regular_RD_OT_Type"
+                                                                      [value]="item.dropdownID">{{item.description}}</mat-option>
+                                                                    </mat-select>
+                                                                  </mat-form-field>
+                                                                </div> -->
+                                @if (tk.sNHRule===30069) {
+                                <div>
+                                    <mat-form-field class="w-80 text-lg mt-1" appearance="outline">
+                                        <mat-label
+                                            class="label-font-size">{{t('considerRestdayPriorToHoliday')}}</mat-label>
+                                        <mat-select formControlName="sHPrio" [placeholder]="'Hours Work'">
+                                            <mat-option [value]="true">Yes</mat-option>
+                                            <mat-option [value]="false">No</mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                                }
+                                <!-- @if (timekeepingCategoryForm.value.sNHShift==30066) {
+                                <mat-form-field class="w-40 text-lg mt-1" appearance="outline">
+                                    <mat-label class="label-font-size">{{t('minHrs')}}</mat-label>
+                                    <mat-icon class="" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                                    <input class="input" type="number" formControlName="sNHMin" matInput
+                                        [placeholder]="''">
+                                </mat-form-field>
+                                } -->
+                                @if (timekeepingCategoryForm.value.sNHShift==30066) {
+                                <mat-form-field class="w-40 text-lg mt-1" appearance="outline">
+                                    <mat-label class="label-font-size">{{t('maxHrs')}}</mat-label>
+                                    <mat-icon class="" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                                    <input class="input" type="number" formControlName="sNHMax" matInput
+                                        [placeholder]="''">
+                                </mat-form-field>
+                                }
+                            </div>
+
+                            <!-- ==================== Special Working Holiday ========================= -->
+
+                            <mat-card-title>
+                                <app-card-title title="Special Working Holiday"></app-card-title>
+                            </mat-card-title>
+                            <div class="flex flex-nowrap gap-2 h-15 mt-4">
+                                <!-- <mat-form-field class="w-50 text-lg mt-1" appearance="outline">
+                                    <mat-label class="label-font-size">{{t('basedOn')}}</mat-label>
+                                    <mat-select formControlName="sWHBased" [placeholder]="'Hours Work'">
+                                        @for (item of baseOnType; track item) {
+                                        <mat-option [value]="item.dropdownID">{{item.description}}</mat-option>
+                                        }
+                                    </mat-select>
+                                </mat-form-field> -->
+                                <mat-form-field class="w-80 hover:w-100 text-lg mt-1" appearance="outline">
+                                    <mat-label class="label-font-size">{{t('holidayRule')}}</mat-label>
+                                    <mat-select formControlName="sWHRule" [placeholder]="'Hours Work'">
+                                        @for (item of holidayRuleType; track item) {
+                                        <mat-option [value]="item.dropdownID">{{item.description}}</mat-option>
+                                        }
+                                    </mat-select>
+                                </mat-form-field>
+                                <mat-form-field class="w-80 hover:w-120 text-lg mt-1" appearance="outline">
+                                    <mat-label class="label-font-size">{{t('withShift')}}</mat-label>
+                                    <mat-select (selectionChange)="clear('specialworkingholiday')"
+                                        formControlName="sWHShift" [placeholder]="'Holiday hours are'">
+                                        @for (item of regular_PR_OT_Type; track item) {
+                                        <mat-option [value]="item.dropdownID">{{item.description}}</mat-option>
+                                        }
+                                    </mat-select>
+                                </mat-form-field>
+                                <!-- <div *ngIf="timekeepingCategoryForm.value.swhShift==30635 || timekeepingCategoryForm.value.swhShift==30627 || timekeepingCategoryForm.value.swhShift==30636  || timekeepingCategoryForm.value.swhShift==30065 ">
+                                                                <mat-form-field class="w-80 text-lg mt-1" appearance="outline">
+                                                                  <mat-select formControlName="sWHours" [placeholder]="'Hours Work'">
+                                                                    <mat-option *ngFor="let item of hoursbasis"
+                                                                    [value]="item.dropdownID">{{item.description}}</mat-option>
+                                                                  </mat-select>
+                                                                </mat-form-field>
+                                                              </div> -->
+                                <!-- @if (timekeepingCategoryForm.value.sWHShift !== 31141) {
+                                <div class=" mt-1">
+                                    <app-dropdown-custom [all]="false" [multiple]="false"
+                                        [control]="timekeepingCategoryForm.get('swHolidayBreak')" [options]="breakType"
+                                        [useControl]="true" [type]="1044"></app-dropdown-custom>
+                                </div>
+                                } -->
+                                <!-- <div class="col-span-2">
+                                                              <mat-form-field class="w-80 text-lg mt-1" appearance="outline">
+                                                                <mat-select formControlName="swhNoShift" [placeholder]="'Holiday hours are'">
+                                                                  <mat-option *ngFor="let item of regular_RD_OT_Type"
+                                                                  [value]="item.dropdownID">{{item.description}}</mat-option>
+                                                                </mat-select>
+                                                              </mat-form-field>
+                                                            </div> -->
+                                @if (tk.sWHRule===30069) {
+                                <div>
+                                    <mat-form-field class="w-80 text-lg mt-1" appearance="outline">
+                                        <mat-label
+                                            class="label-font-size">{{t('considerRestdayPriorToHoliday')}}</mat-label>
+                                        <mat-select formControlName="sWHPrio" [placeholder]="'Hours Work'">
+                                            <mat-option [value]="true">Yes</mat-option>
+                                            <mat-option [value]="false">No</mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                                }
+                                <!-- @if (timekeepingCategoryForm.value.sWHShift==30066) {
+                                <mat-form-field class="w-40 text-lg mt-1" appearance="outline">
+                                    <mat-label class="label-font-size">{{t('minHrs')}}</mat-label>
+                                    <mat-icon class="" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                                    <input class="input" type="number" formControlName="sWHMin" matInput
+                                        [placeholder]="''">
+                                </mat-form-field>
+                                } -->
+                                @if (timekeepingCategoryForm.value.sWHShift==30066) {
+                                <mat-form-field class="w-40 text-lg mt-1" appearance="outline">
+                                    <mat-label class="label-font-size">{{t('maxHrs')}}</mat-label>
+                                    <mat-icon class="" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                                    <input class="input" type="number" formControlName="sWHMax" matInput
+                                        [placeholder]="''">
+                                </mat-form-field>
+                                }
+                            </div>
+
+                            <!-- ==================== Company Holiday ========================= -->
+
+                            <mat-card-title>
+                                <app-card-title title="Company Holiday"></app-card-title>
+                            </mat-card-title>
+                            <div class="flex flex-nowrap gap-2 h-18 mt-4">
+                                <!-- <mat-form-field class="w-50 text-lg mt-1" appearance="outline">
+                                    <mat-label class="label-font-size">{{t('basedOn')}}</mat-label>
+                                    <mat-select formControlName="cHBased" [placeholder]="'Hours Work'">
+                                        @for (item of baseOnType; track item) {
+                                        <mat-option [value]="item.dropdownID">{{item.description}}</mat-option>
+                                        }
+                                    </mat-select>
+                                </mat-form-field> -->
+                                <mat-form-field class="w-80 hover:w-100 text-lg mt-1" appearance="outline">
+                                    <mat-label class="label-font-size">{{t('holidayRule')}}</mat-label>
+                                    <mat-select formControlName="cHRule" [placeholder]="'Hours Work'">
+                                        @for (item of holidayRuleType; track item) {
+                                        <mat-option [value]="item.dropdownID">{{item.description}}</mat-option>
+                                        }
+                                    </mat-select>
+                                </mat-form-field>
+                                <mat-form-field class="w-80 hover:w-120 text-lg mt-1" appearance="outline">
+                                    <mat-label class="label-font-size">{{t('withShift')}}</mat-label>
+                                    <mat-select (selectionChange)="clear('companyholiday')" formControlName="cHShift"
+                                        [placeholder]="'Holiday hours are'">
+                                        @for (item of regular_PR_OT_Type; track item) {
+                                        <mat-option [value]="item.dropdownID">{{item.description}}</mat-option>
+                                        }
+                                    </mat-select>
+                                </mat-form-field>
+                                <!-- <div *ngIf="timekeepingCategoryForm.value.cHShift==30635 || timekeepingCategoryForm.value.cHShift==30627 || timekeepingCategoryForm.value.cHShift==30636  || timekeepingCategoryForm.value.cHShift==30065 ">
+                                                            <mat-form-field  class="w-80 text-lg mt-1" appearance="outline">
+                                                              <mat-select formControlName="cHHours" [placeholder]="'Hours Work'">
+                                                                <mat-option *ngFor="let item of hoursbasis"
+                                                                [value]="item.dropdownID">{{item.description}}</mat-option>
+                                                              </mat-select>
+                                                            </mat-form-field>
+                                                          </div> -->
+                                <!-- @if (timekeepingCategoryForm.value.cHShift !== 31141) {
+                                <div class=" mt-1">
+                                    <app-dropdown-custom [all]="false" [multiple]="false"
+                                        [control]="timekeepingCategoryForm.get('chHolidayBreak')" [options]="breakType"
+                                        [useControl]="true" [type]="1044"></app-dropdown-custom>
+                                </div>
+                                } -->
+                                <!-- <div class="col-span-2">
+                                                          <mat-form-field class="w-80 text-lg mt-1" appearance="outline">
+                                                            <mat-select formControlName="chNoShift" [placeholder]="'Holiday hours are'">
+                                                              <mat-option *ngFor="let item of regular_RD_OT_Type"
+                                                              [value]="item.dropdownID">{{item.description}}</mat-option>
+                                                            </mat-select>
+                                                          </mat-form-field>
+                                                        </div> -->
+                                @if (tk.cHRule===30069) {
+                                <div>
+                                    <mat-form-field class="w-80 text-lg mt-1" appearance="outline">
+                                        <mat-label
+                                            class="label-font-size">{{t('considerRestdayPriorToHoliday')}}</mat-label>
+                                        <mat-select formControlName="cHPrio" [placeholder]="'Hours Work'">
+                                            <mat-option [value]="true">Yes</mat-option>
+                                            <mat-option [value]="false">No</mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                                }
+                                <!-- @if (timekeepingCategoryForm.value.cHShift==30066) {
+                                <mat-form-field class="w-40 text-lg mt-1" appearance="outline">
+                                    <mat-label class="label-font-size">{{t('minHrs')}}</mat-label>
+                                    <mat-icon class="" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                                    <input class="input" type="number" formControlName="cHMin" matInput
+                                        [placeholder]="''">
+                                </mat-form-field>
+                                } -->
+                                @if (timekeepingCategoryForm.value.cHShift==30066) {
+                                <mat-form-field class="w-40 text-lg mt-1" appearance="outline">
+                                    <mat-label class="label-font-size">{{t('maxHrs')}}</mat-label>
+                                    <mat-icon class="" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                                    <input class="input" type="number" formControlName="cHMax" matInput
+                                        [placeholder]="''">
+                                </mat-form-field>
+                                }
+                            </div>
+                        </mat-tab>
+                        <mat-tab label="Threshold">
+                            <mat-card class="mat-elevation-z0">
+                                <mat-card-title>
+                                    <app-card-title title="Threshold"></app-card-title>
+                                </mat-card-title>
+                                <mat-card-content>
+                                    <div class="grid grid-cols-11 gap-2 h-13 mt-4">
+                                        <mat-form-field class="w-full text-lg col-span-2" appearance="outline">
+                                            <mat-label class="label-font-size">{{t('hoursAfterSchedOut')}}</mat-label>
+                                            <mat-icon class="" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                                            <input class="input" formControlName="placeHolderOut" type="number" min="0"
+                                                matInput [placeholder]="'Hours after sched out'">
+                                        </mat-form-field>
+                                        <mat-form-field class="w-full text-lg col-span-2" appearance="outline">
+                                            <mat-label class="label-font-size">{{t('hoursBeforeSchedIn')}}</mat-label>
+                                            <mat-icon class="" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                                            <input class="input" formControlName="placeHolderIn" type="number" min="0"
+                                                matInput [placeholder]="'Hours before sched in'">
+                                        </mat-form-field>
+                                        <mat-form-field class="w-full text-lg col-span-2" appearance="outline">
+                                            <mat-label
+                                                class="label-font-size" [matTooltip]="t('useAfterBeforeRuleWhenRules')">{{t('useAfterBeforeRuleWhenRules')}}</mat-label>
+                                            <mat-select formControlName="placeholderOverlap" [placeholder]="''">
+                                                <mat-option [value]="0">Select an option</mat-option>
+                                                <mat-option [value]="1">After</mat-option>
+                                                <mat-option [value]="2">Before</mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+                                        <mat-form-field class="w-full text-md col-span-2" appearance="outline">
+                                            <mat-label class="label-font-size"[matTooltip]="t('Allow prompt message for multiple IN/OUT')">{{t('Allow prompt message for multiple IN/OUT')}}</mat-label>
+                                            <mat-select formControlName="allowMultipleClockInOut" [placeholder]="''">
+                                                <mat-option [value]="true">Yes</mat-option>
+                                                <mat-option [value]="false">No</mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+                                    </div>
+                                </mat-card-content>
+                            </mat-card>
+                        </mat-tab>
+
+                        <mat-tab label="Overtime Setting">
+
+                            <mat-form-field class="w-100 text-lg h-12 sticky top-0" appearance="outline">
+                                <mat-label class="label-font-size">Search type here..</mat-label>
+                                <mat-icon class="" matPrefix
+                                    svgIcon="mat_outline:info"></mat-icon>
+                                <mat-icon class="" matSuffix
+                                    svgIcon="mat_outline:close" (click)="searchType = ''"></mat-icon>
+                                <input matInput [(ngModel)]="searchType" [ngModelOptions]="{standalone: true}"
+                                    placeholder="Search type here..">
+                            </mat-form-field>
+
+                            <section class="example-container mat-elevation-z0">
+                                <table mat-table [dataSource]="searchTypeHanlder()">
+
+                                    <ng-container matColumnDef="description">
+                                        <th mat-header-cell *matHeaderCellDef> Type </th>
+                                        <td mat-cell class="min-w-100" *matCellDef="let element">
+                                            {{element.description}} </td>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="basedOn">
+                                        <th mat-header-cell *matHeaderCellDef> Based On </th>
+                                        <td mat-cell class="ot-settings" *matCellDef="let element; let i = index">
+                                            <mat-form-field class="w-80 text-md h-12 mt-2" appearance="outline">
+                                                <mat-select [(ngModel)]="element.basedOn"
+                                                    [ngModelOptions]="{standalone: true}"
+                                                    (selectionChange)="applyToAll(element,'basedOn')">
+                                                    <mat-option *ngFor="let item of baseOnType"
+                                                        [value]="item.dropdownID">{{item.description}}</mat-option>
+                                                </mat-select>
+                                            </mat-form-field>
+                                        </td>
+                                    </ng-container>
+
+
+                                    <ng-container matColumnDef="schedCarryOver">
+                                            <th mat-header-cell *matHeaderCellDef> Carry Over RG/RD </th>
+                                            <td mat-cell class="ot-settings" *matCellDef="let element; let i = index">
+                                             @if(showMe(element.basedOn,[30646,30068])){
+                                                <mat-form-field class="w-50 text-md h-12 mt-2" appearance="outline">
+                                                    <mat-select [(ngModel)]="element.schedCarryOver"
+                                                        [ngModelOptions]="{standalone: true}"
+                                                        (selectionChange)="applyToAll(element,'schedCarryOver')">
+                                                        <mat-option *ngFor="let item of schedCarryOverList"
+                                                            [value]="item.dropdownID">{{item.description}}</mat-option>
+                                                    </mat-select>
+                                                </mat-form-field>
+                                            }
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="shiftBreak">
+                                        <th mat-header-cell *matHeaderCellDef> Shift Break </th>
+                                        <td mat-cell class="ot-settings" *matCellDef="let element; let i = index">
+                                            <mat-form-field class="w-50 text-md h-12 mt-2" appearance="outline">
+                                                <mat-select [(ngModel)]="element.shiftBreak"
+                                                    [ngModelOptions]="{standalone: true}"
+                                                    (selectionChange)="clearOTBreak(element,$event); applyToAll(element,'shiftBreak')">
+                                                    <mat-option *ngFor="let item of shiftBreakList"
+                                                        [value]="item.dropdownID">{{item.description}}</mat-option>
+                                                </mat-select>
+                                            </mat-form-field>
+                                    </ng-container>
+                                    <ng-container matColumnDef="breakType">
+                                        <th mat-header-cell *matHeaderCellDef> OT Break </th>
+                                        <td mat-cell class="ot-settings" *matCellDef="let element; let i = index">
+                                            @if(!element.shiftBreak && isDDLoaded){
+                                                <div class="w-80 text-md h-12 mt-2" >
+                                                    <app-dropdown-custom [all]="false" [multiple]="false" [customRequest]="customRequest"
+                                                        [useControl]="false" [value]="element.breakType" (manualselect) = "applyToAll(element,'breakType')" [options]="breakType"
+                                                        (selected)="element.breakType=$event"
+                                                        [type]="1000" ></app-dropdown-custom>
+                                                </div>
+                                            }
+                                    </ng-container>
+                                    <tr mat-header-row *matHeaderRowDef="otColumns; sticky: true"></tr>
+                                    <tr mat-row *matRowDef="let row; columns: otColumns;"></tr>
+                                </table>
+                            </section>
+                        </mat-tab>
+
+
+                    </mat-tab-group>
+                </form>
+            </mat-card-content>
+        </mat-card>
+        <!-- </div> -->
+    </div>

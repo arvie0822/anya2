@@ -1,0 +1,5 @@
+ <csvbox-button *ngIf="show" #csvbuttonclicked class="csvbox-btn" [licenseKey]="licenseKey" [environment]="environment" [user]="user" [imported]="imported.bind(this)">
+    <button mat-flat-button color="primary"  class="text-sm" matTooltip="Upload Own Template" >
+      <mat-icon class="icon-size-5" matPrefix svgIcon="mat_outline:upload" ></mat-icon>
+    </button>
+  </csvbox-button>

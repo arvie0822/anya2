@@ -1,0 +1,35 @@
+<!-- <div class="flex-auto p-6 sm:p-6 overflow-y-auto">
+<div class="flex-auto sm:p-2  w-full min-w-0 sm:absolute sm:inset-0 sm:overflow-auto text-md"> -->
+  <div class="ex1">
+    <table [id]="id" #tableId mat-table [dataSource]="filenameList" class="mat-elevation-z2">
+
+      <ng-container matColumnDef="checkbox">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let element; let i = index">
+          <mat-checkbox [disabled]="isDisabled || !isLoadDone" [(ngModel)]="element.checkbox" (change)="check(i,$event);$event ? selection.toggle(row) : null"
+          [color]="'primary'"></mat-checkbox>
+        </td>
+      </ng-container>
+
+
+      <ng-container matColumnDef="file">
+        <th mat-header-cell *matHeaderCellDef>Uploaded Files</th>
+        <td mat-cell *matCellDef="let element" [ngClass]="{'txt':selectView.isSelected(element)}"> {{element.file?.name}}</td>
+      </ng-container>
+
+      <tr mat-row *matRowDef="let row; columns: uploadColumns;" [ngClass]="{highlighted:selectView.isSelected(row)}" (click)="onRowClick(i,row)"></tr>
+
+    </table>
+    @if (!isLoadDone) {
+      <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+    }
+    @if (!isLoadDone) {
+      <p>Please wait a few minutes...</p>
+    }
+    @if (!isSaveDone) {
+      <p>Saving...please wait</p>
+    }
+
+  </div>
+<!-- </div>
+</div> -->

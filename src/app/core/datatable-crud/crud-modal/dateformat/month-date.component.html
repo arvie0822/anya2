@@ -1,0 +1,7 @@
+<mat-form-field class="w-full text-md" appearance="outline">
+    <mat-label class="label-font-size"> {{label}}</mat-label>
+    <input matInput [formControl]="control" [matDatepicker]="picker" readonly
+        [placeholder]="'Month Day'" [min]="minDate" [max]="maxDate" (click)="picker.open()">
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+</mat-form-field>

@@ -1,0 +1,161 @@
+/* input{
+    position: relative;
+    bottom: 10px;
+    font-size: medium;
+}
+.icon-size-5{
+    position: relative;
+    bottom: 10px;
+    border-radius: 3px !important;
+}
+
+.label-font-size{
+    font-size: 15px;
+}
+
+
+.mat-column-action {
+    width: 50px;
+}
+
+
+.Bborder {
+    border-radius: 5px;
+}
+
+.example-container {
+    max-height: 150px;
+    width: 100%;
+    max-width: 100%;
+    overflow: auto;
+  }
+
+  table {
+    width: 100%;
+  }
+
+  .mat-mdc-table-sticky-border-elem-right {
+    border-left: 1px solid #e0e0e0;
+  }
+
+  .mat-mdc-table-sticky-border-elem-left {
+    border-right: 1px solid #e0e0e0;
+  }
+
+  .mat-datepicker-toggle{
+    position: relative;
+    bottom: 8px;
+    font-size: medium;
+}
+
+.time-picker {
+    position: relative;
+}
+
+.time-picker {
+    position: relative;
+}
+
+.time-picker::-webkit-calendar-picker-indicator {
+    background: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px"%3E%3Ccircle cx="12" cy="12" r="10" stroke="black" fill="none" /%3E%3Cpath d="M12,2C6.5,2,2,6.5,2,12s4.5,10,10,10s10-4.5,10-10S17.5,2,12,2z M16.2,16.2L11,13V7h1.5v5.2l4.5,2.7L16.2,16.2z" style="fill: black;" /%3E%3C/svg%3E');
+    background-repeat: no-repeat;
+    display: inline-block;
+    height: 24px;
+    width: 24px;
+    cursor: pointer;
+}
+
+:host ::ng-deep .mat-form-field-infix {
+    display: flex;
+}
+
+.mat-icon {
+    position: relative;
+    bottom: 10px;
+}
+
+.mat-select {
+    position: relative;
+    bottom: 10px;
+    font-size: medium;
+}
+
+ */
+
+ /* table {
+    width: 100%;
+  } */
+
+.example-container {
+    max-height: 200px;
+    width: 100%;
+    max-width: 100%;
+    overflow: auto;
+  }
+
+
+  .mat-mdc-card-content {
+    display: block;
+    padding: 0 0px !important;
+}
+
+
+.mdc-data-table__cell, .mdc-data-table__header-cell {
+    padding: 0 0px 0 16px !important;
+}
+
+.mat-mdc-header-row { /* for table row */
+    height: 40px !important;
+    font-size: 11px !important;
+}
+
+.icons {
+    height: 15px !important;
+    min-height: 40px;
+}
+
+.time-picker {
+    position: relative;
+}
+
+.time-picker {
+    position: relative;
+}
+
+.time-picker::-webkit-calendar-picker-indicator {
+    background: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px"%3E%3Ccircle cx="12" cy="12" r="10" stroke="black" fill="none" /%3E%3Cpath d="M12,2C6.5,2,2,6.5,2,12s4.5,10,10,10s10-4.5,10-10S17.5,2,12,2z M16.2,16.2L11,13V7h1.5v5.2l4.5,2.7L16.2,16.2z" style="fill: black;" /%3E%3C/svg%3E');
+    /* background: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="20" %3E%3Cpath d="M12,2C6.5,2,2,6.5,2,12s4.5,10,10,10s10-4.5,10-10S17.5,2,12,2z M16.2,16.2L11,13V7h1.5v5.2l4.5,2.7L16.2,16.2z"/%3E%3C/svg%3E'); */
+    background-repeat: no-repeat;
+    display: inline-block;
+    height: 24px;
+    width: 24px;
+    cursor: pointer;
+}
+
+:host ::ng-deep .mat-form-field-infix {
+    display: flex;
+}
+
+/* .mdc-text-field--outlined .mat-mdc-form-field-infix, .mdc-text-field--no-label .mat-mdc-form-field-infix {
+    padding-top: 3px !important;
+} */
+
+
+.mdc-text-field--no-label:not(.mdc-text-field--textarea) .mat-mdc-form-field-input-control.mdc-text-field__input, .mat-mdc-text-field-wrapper .mat-mdc-form-field-input-control {
+    height: auto;
+    bottom: 3px;
+}
+
+:root {
+    --header-bg-color: white;
+    --header-text-color: black;
+}
+
+.dark-theme {
+    --header-bg-color: #333;
+    --header-text-color: white;
+}
+
+.mat-mdc-header-cell{
+    z-index: 2 !important;
+}

@@ -1,0 +1,194 @@
+<!-- Main -->
+<div class="flex-auto p-6 sm:p-6 overflow-y-auto" *transloco="let t">
+  <!-- Main -->
+  <div class="flex-auto  sm:p-2  w-full min-w-0 sm:absolute sm:inset-0 sm:overflow-auto text-lg">
+    <!-- Content -->
+    <mat-card class="pt-1 h-full mat-elevation-z0">
+      <mat-card-title class="ml-2 mt-5">
+        <app-card-title title="Filing"  [sub]="!disabledbutton && !disabledbuttonOT " [back]="true"
+        (submitTap)="submit()"></app-card-title>
+      </mat-card-title>
+      <div class="h-[85%] mb-1 mt-1">
+        <form [formGroup]="filingForm">
+          <div class="flex space-x-3 ml-2 mt-2 h-10">
+
+            <!-- //mngmt -->
+            @if (globalmoduleId && showdrop == 68 || hidemepmngmt  ) {
+              <app-dropdown-custom [control]="filingForm.get('employeeId')"
+                (selected)="empdropdown() ; validation()" [disabled]="isedit" [icon]="'mat_outline:info'"
+                [type]="1035" [all]="false" [multiple]="false" [options]="dropdownOptions.employeedef" (objects)="crypid = $event"
+                [useControl]="true">
+              </app-dropdown-custom>
+            }
+
+            <!-- //admin -->
+            @if (globalmoduleId && showdrop == 160 || hidedt ) {
+              <app-dropdown-custom label="Employee" [control]="filingForm.get('employeeId')"
+                (selected)="empdropdown() ; validation()" [IsencyptIds]="ecnrypeemployee"  [icon]="'mat_outline:info'"
+                [type]="1011" [all]="false" [multiple]="false" [options]="dropdownOptions.allemplodef" (objects)="crypid = $event"
+                [useControl]="true">
+              </app-dropdown-custom>
+            }
+
+            <div class="w-60 text-lg">
+              @if ((this.filingForm.value.employeeId !=0 && globalmoduleId)||(!globalmoduleId)) {
+                <app-dropdown-custom
+                  (selected)="validation(); leaves()" [disabled]="isedit"  [control]="filingForm.get('filingTypes')" [type]="1028"
+                  [value]="this.filingForm.value.filingTypes" [options]="dropdownOptions.filingdef" [IsencyptIds]="ecnrypeemployee"
+                  [useControl]="true">
+                </app-dropdown-custom>
+              }
+            </div>
+
+
+            @if (filingtypeid==34) {
+              <mat-form-field class="w-50 text-lg" appearance="outline">
+                <mat-label>{{ t('shiftType') }}</mat-label>
+                <mat-select formControlName="shiftType">
+                  @for (item of shiftTypeList; track item) {
+                    <mat-option
+                    [value]="item.dropdownID">{{item.description}}</mat-option>
+                  }
+                </mat-select>
+              </mat-form-field>
+            }
+
+            @if (filingForm.value.filingTypes == 37) {
+              <mat-form-field appearance="outline">
+                <mat-label class="label-font-size">Include expired</mat-label>
+                <mat-icon class="uploadbutton mb-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                <mat-select (selectionChange)="isexpire()" formControlName="includeExpiry">
+                  @for (item of application; track item) {
+                    <mat-option [value]="item.id">{{item.description}}</mat-option>
+                  }
+                </mat-select>
+              </mat-form-field>
+            }
+
+            @if (filingForm.value.filingTypes == 32 || filingForm.value.filingTypes == 33 || filingForm.value.filingTypes == 36 || filingForm.value.filingTypes == 35 || filingForm.value.filingTypes == 114) {
+              <mat-form-field
+                class="w-50 text-xl" appearance="outline">
+                <mat-label class="label-font-size">{{t('Date From')}}</mat-label>
+                <input (change)="edit()" (dateChange)="filingtype()" formControlName="dateFrom" [min]="min" matInput
+                  [matDatepicker]="df" readonly [placeholder]="'MM/DD/YYYY'" (click)="df.open()">
+                  <mat-datepicker-toggle class="dateui" matSuffix [for]="df"></mat-datepicker-toggle>
+                  <mat-datepicker #df></mat-datepicker>
+                </mat-form-field>
+              }
+
+              @if (filingForm.value.filingTypes == 33 || filingForm.value.filingTypes == 32 || filingForm.value.filingTypes == 35 ||
+                filingForm.value.filingTypes == 36 || filingForm.value.filingTypes == 114) {
+                <mat-form-field
+                  class="w-50 text-lg" appearance="outline">
+                  <mat-label class="label-font-size">{{t('Date To')}}</mat-label>
+                  <input (change)="edit()" (dateChange)="filingtype()" formControlName="dateTo" [min]="min" matInput
+                    [matDatepicker]="dt" readonly [placeholder]="'MM/DD/YYYY'" (click)="dt.open()">
+                    <mat-datepicker-toggle class="dateui" matSuffix [for]="dt"></mat-datepicker-toggle>
+                    <mat-datepicker #dt></mat-datepicker>
+                  </mat-form-field>
+                }
+
+                @if (filingForm.value.filingTypes == 33 || filingForm.value.filingTypes == 32 || filingForm.value.filingTypes == 35 || filingForm.value.filingTypes == 36 || filingForm.value.filingTypes == 114) {
+                  <div
+                    class="flex mb-[3px]">
+                    <div>
+                        @if(hidesearchbut) {
+                            <button [disabled]="disabledbutton || hidedt" (click)="search($event) ; edit() ; validation()"
+                            class="mb-1 ml-1 px-1 sm:px-4 min-w-10" mat-flat-button [color]="'primary'" matTooltip="Search">
+                            <mat-icon class="mb-2" svgIcon="mat_outline:search"></mat-icon>
+                          </button>
+                        }
+                    </div>
+                    <div></div>
+                  </div>
+                }
+              </div>
+            </form>
+
+
+            <!-- ===============================================Change Schedule========================================= -->
+
+            @if ((filingtypeid==32 && module == '81')  || (filingtypeid==32 && filingForm.value.employeeId != null && module == '68') || (filingtypeid==32 && filingForm.value.employeeId != null && module == '160')) {
+              <mat-card class="scroll-container h-[100%] shadows  mat-elevation-z0 mt-1"
+                >
+                <app-change-schedule  [selectedemployee]="ecnrypeemployee" (employeeIds)="empIds($event)" (disabledsubmit)="disabledsub($event)" (validate)="edit($event)" [cssubmit]="cssubmit" [datasource]="CSSource"
+                ></app-change-schedule>
+              </mat-card>
+            }
+            <!-- ================================================Change Log============================================== -->
+
+            @if ((filingtypeid==33 && module == '81')  || (filingtypeid==33 && filingForm.value.employeeId != null && module == '68') || (filingtypeid==33 && filingForm.value.employeeId != null && module == '160')) {
+              <mat-card class="scroll-container p-0 h-[100%] mat-elevation-z0 mt-1"
+                >
+                <app-change-log  [selectedemployee]="ecnrypeemployee" (employeeIds)="empIds($event)" (disabledsubmit)="disabledsub($event)" (validate)="edit($event)" [clsubmit]="clsubmit" [datasource]="CLSource"
+                ></app-change-log>
+              </mat-card>
+            }
+
+            <!-- ======================================================Leave============================================= -->
+
+            @if ((filingtypeid==34 && filingForm.value.shiftType != null) && (filingtypeid==34 && module == '81') || (filingtypeid==34 && filingForm.value.employeeId != null && module == '68') || (filingtypeid==34 && filingForm.value.employeeId != null && module == '160')) {
+              <mat-card class="h-[100%] mat-elevation-z0 mt-1 shadows"
+                >
+                <app-leave [selectedemployee]="ecnrypeemployee" (employeeIds)="empIds($event)" (disabledsubmit)="disabledsub($event)"  [isMultiShift]="filingForm.value.shiftType"
+                (ismultiple)="sample($event)"></app-leave>
+              </mat-card>
+            }
+
+            <!-- ========================================================Overtime======================================== -->
+
+            @if ((filingtypeid==36 && module == '81') || (filingtypeid==36 && filingForm.value.employeeId != null && module == '68') || (filingtypeid==36 && filingForm.value.employeeId != null && module == '160')) {
+              <mat-card class="scroll-container h-[100%] shadows mat-elevation-z0 mt-1"
+                >
+                <app-overtime (employeeIds)="empIds($event)" (employeeIds)="empIds($event)" (disabledsubmit)="disabledsub($event)" [datasource]="OTSource" [moduleid]="filingForm.value.filingTypes"
+                (pushEvent)="disabledbuttonOT=$event" [selectedemployee]="ecnrypeemployee"></app-overtime>
+              </mat-card>
+            }
+
+            <!-- ============================================= Offset==================================================== -->
+
+            @if ((filingtypeid==37 && module == '81' && this.filingForm.value.includeExpiry != null) || (filingtypeid==37 && filingForm.value.employeeId != null && module == '68'  && this.filingForm.value.includeExpiry != null) || (filingtypeid==37 && filingForm.value.employeeId != null && module == '160'  && this.filingForm.value.includeExpiry != null)) {
+              <mat-card class="h-[100%] mat-elevation-z0 shadows mt-1"
+                >
+                <app-offset  [selectedemployee]="ecnrypeemployee" (employeeIds)="empIds($event)" (disabledsubmit)="disabledsub($event)" [datasource]="OFFSource"
+                [expirations]="filingForm.value.includeExpiry"></app-offset>
+              </mat-card>
+            }
+
+            <!-- ============================================= Official Business========================================= -->
+
+            @if (filingtypeid==35) {
+              <mat-card class="scroll-container h-[100%] shadows mat-elevation-z0">
+                <app-official-business (employeeIds)="empIds($event)" (disabledsubmit)="disabledsub($event)" [selectedemployee]="ecnrypeemployee" (pushEvent)="disabledbuttonOT=$event"
+                [datasource]="OBSource"></app-official-business>
+              </mat-card>
+            }
+
+            <!-- ==============================================Unpaid Hours============================================== -->
+
+            @if (filingtypeid==64) {
+              <mat-card class="scroll-container h-[100%] shadows shadows mat-elevation-z0">
+                <app-unpaid-hours (employeeIds)="empIds($event)" (disabledsubmit)="disabledsub($event)" [datasource]="UHSource"></app-unpaid-hours>
+              </mat-card>
+            }
+
+            <!-- ================================================ COE =================================================== -->
+
+            @if (filingtypeid==52) {
+              <mat-card class="scroll-container h-[100%] shadows mat-elevation-z0">
+                <app-coe (employeeIds)="empIds($event)" (disabledsubmit)="disabledsub($event)" [selectedemployee]="ecnrypeemployee"></app-coe>
+              </mat-card>
+            }
+
+            <!-- ================================================ Change Location =================================================== -->
+
+            @if (filingtypeid==114) {
+              <mat-card class="scroll-container h-[100%] shadows mat-elevation-z0">
+                <app-change-location [selectedemployee]="ecnrypeemployee"  (employeeIds)="empIds($event)" (disabledsubmit)="disabledsub($event)" [datasource]="CLocSource"></app-change-location>
+              </mat-card>
+            }
+
+          </div>
+        </mat-card>
+      </div>
+    </div>

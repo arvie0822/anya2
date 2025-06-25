@@ -1,0 +1,412 @@
+<div class="flex flex-col flex-auto min-w-0" *transloco="let t">
+  <!-- Main -->
+  <div class="flex-auto  sm:p-2  w-full min-w-0 sm:absolute sm:inset-0 sm:overflow-auto text-md">
+    <!-- Content -->
+    <mat-card class="body-card h-full">
+      <mat-card-title>
+        <app-card-title title="Role-based Access Control" [sub]="true" [back]="true"
+        (submitTap)="submit()"></app-card-title>
+      </mat-card-title>
+      <form [formGroup]="accessForm">
+        <div class=" grid grid-cols-6 gap-2 h-15">
+          <mat-form-field class="w-full text-lg" appearance="outline">
+            <mat-label class="label-font-size">{{ t('accessName') }}</mat-label>
+            <mat-icon class=" " matPrefix svgIcon="mat_outline:info"></mat-icon>
+            <input class="input" matInput formControlName="name" [placeholder]="'Access Name'">
+          </mat-form-field>
+
+          <mat-form-field class="w-full text-lg" appearance="outline">
+            <mat-label class="label-font-size">{{ t('description') }}</mat-label>
+            <mat-icon class="" matPrefix svgIcon="mat_outline:info"></mat-icon>
+            <input class="input" matInput formControlName="description" [placeholder]="'Description'">
+          </mat-form-field>
+
+          <mat-form-field class="w-full text-lg" appearance="outline">
+            <mat-label class="label-font-size">{{ t('status') }}</mat-label>
+            <mat-icon class="" matPrefix svgIcon="mat_outline:info"></mat-icon>
+            <mat-select class="text-lg" [placeholder]="'Status'" formControlName="active">
+              <mat-option class="text-lg" [value]="true">Active</mat-option>
+              <mat-option class="text-lg" [value]="false">Inactive</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </form>
+
+      <mat-tab-group class="mt-4 absolute top-24 left-1 right-1 bottom-5 hidescroll" mat-align-tabs="start"
+        mat-stretch-tabs="false">
+        <mat-tab class="hidescroll" label="Module Access">
+          <mat-tab-group class="mt-4 hidescroll" mat-align-tabs="start" mat-stretch-tabs="false">
+            @for (parent of lastLevelModule; track parent; let i = $index) {
+              <mat-tab class="hidescroll" mat-sticky
+                label="{{parent.moduleName}}">
+                <mat-stepper class="overflow-auto screenheight " orientation="vertical">
+                  @for (subparent of parent.child; track subparent; let j = $index) {
+                    @if (noChild(subparent?.child)) {
+                      <mat-step>
+                        <ng-template matStepLabel class="relative">{{subparent.moduleName}}
+                          <div class="checkboxs">
+                            <mat-checkbox color="primary" [disabled]="subparent.isView"
+                              [(ngModel)]="subparent.isFullAccess" class="mt-3">
+                            Full Access</mat-checkbox>
+                            <mat-checkbox color="primary"
+                              (change)="handlerView($event.checked, 'SubParent', i, parent.moduleId)"
+                              [disabled]="subparent.isFullAccess"
+                              [(ngModel)]="subparent.isView" class="example-margin">
+                            View</mat-checkbox>
+                            <mat-checkbox color="primary"
+                              [disabled]="subparent.isFullAccess || !subparent.isView"
+                              [(ngModel)]="subparent.isAdd" class="example-margin">
+                            Add</mat-checkbox>
+                            <mat-checkbox color="primary"
+                              [disabled]="subparent.isFullAccess || !subparent.isView"
+                              [(ngModel)]="subparent.isEdit" class="example-margin">
+                            Edit</mat-checkbox>
+                            @if (subparent.props != null) {
+                              <mat-checkbox color="primary"
+                                [disabled]="subparent.isFullAccess || !subparent.isView"
+                                [(ngModel)]="subparent.isField" class="example-margin">
+                              Fields </mat-checkbox>
+                            }
+                          </div>
+                          <p class="text-[9px] text-gray-500 absolute bottom-0">{{subparent.path}}
+                          </p>
+                        </ng-template>
+                        @if (subparent.isField) {
+                          <div>
+                            <table mat-table [dataSource]="subparent.props"
+                              class="table1 mat-elevation-z0">
+                              <ng-container matColumnDef="name">
+                                <th mat-header-cell *matHeaderCellDef> Fields </th>
+                                <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+                              </ng-container>
+                              <ng-container matColumnDef="view">
+                                <th mat-header-cell *matHeaderCellDef>
+                                  @if (subparent.isView) {
+                                    <mat-checkbox class="icon-size-6"
+                                      color="primary" class="example-margin"
+                                    (change)="handlerAll($event.checked, 'SubParent', parent.moduleId, subparent.moduleId, j, 'View')">View</mat-checkbox>
+                                  }
+                                </th>
+                                <td mat-cell *matCellDef="let element">
+                                  @if (subparent.isView) {
+                                    <mat-checkbox class="icon-size-6"
+                                      color="primary" [(ngModel)]="element.view"
+                                    class="example-margin"></mat-checkbox>
+                                  }
+                                </td>
+                              </ng-container>
+                              <ng-container matColumnDef="add">
+                                <th mat-header-cell *matHeaderCellDef>
+                                  @if (subparent.isAdd) {
+                                    <mat-checkbox color="primary"
+                                      class="example-margin"
+                                    (change)="handlerAll($event.checked, 'SubParent', parent.moduleId, subparent.moduleId, j, 'Add')">Add</mat-checkbox>
+                                  }
+                                </th>
+                                <td mat-cell *matCellDef="let element">
+                                  @if (subparent.isAdd) {
+                                    <mat-checkbox color="primary"
+                                      [(ngModel)]="element.add"
+                                    class="example-margin"></mat-checkbox>
+                                  }
+                                </td>
+                              </ng-container>
+                              <ng-container matColumnDef="edit">
+                                <th mat-header-cell *matHeaderCellDef>
+                                  @if (subparent.isEdit) {
+                                    <mat-checkbox color="primary"
+                                      class="example-margin"
+                                    (change)="handlerAll($event.checked, 'SubParent', parent.moduleId, subparent.moduleId, j, 'Edit')">Edit</mat-checkbox>
+                                  }
+                                </th>
+                                <td mat-cell *matCellDef="let element">
+                                  @if (subparent.isEdit) {
+                                    <mat-checkbox color="primary"
+                                      [(ngModel)]="element.edit"
+                                    class="example-margin"></mat-checkbox>
+                                  }
+                                </td>
+                              </ng-container>
+                              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                              <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                            </table>
+                          </div>
+                        }
+                      </mat-step>
+                    }
+                    @if (withChild(subparent?.child)) {
+                      @for (child of subparent.child; track child; let k = $index) {
+                        <mat-step>
+                          <ng-template matStepLabel class="relative">{{child.moduleName}}
+                            <div class="checkboxs">
+                              <mat-checkbox color="primary" [(ngModel)]="child.isFullAccess"
+                                class="example-margin">Full
+                              Access</mat-checkbox>
+                              <mat-checkbox color="primary"
+                                (change)="handlerView($event.checked, 'Child', i, subparent.moduleId, child.moduleId)"
+                                [disabled]="child.isFullAccess" [(ngModel)]="child.isView"
+                                class="example-margin">
+                              View</mat-checkbox>
+                              <mat-checkbox color="primary"
+                                [disabled]="child.isFullAccess || !subparent.isView"
+                                [(ngModel)]="child.isEdit" class="example-margin">
+                              Edit</mat-checkbox>
+                              <mat-checkbox color="primary"
+                                [disabled]="child.isFullAccess || !child.isView"
+                                [(ngModel)]="child.isAdd" class="example-margin">
+                              Add</mat-checkbox>
+                              @if (child.props != null) {
+                                <mat-checkbox color="primary"
+                                  [disabled]="child.isFullAccess || !child.isView"
+                                  [(ngModel)]="child.isField" class="example-margin">
+                                Fields</mat-checkbox>
+                              }
+                            </div>
+                          </ng-template>
+                          @if (child.isField) {
+                            <div>
+                              <table mat-table [dataSource]="child.props"
+                                class="table1 mat-elevation-z">
+                                <ng-container matColumnDef="name">
+                                  <th mat-header-cell *matHeaderCellDef> Fields </th>
+                                  <td mat-cell *matCellDef="let element"> {{element.name}}
+                                  </td>
+                                </ng-container>
+                                @if (child.isView) {
+                                  <ng-container matColumnDef="view">
+                                    <th mat-header-cell *matHeaderCellDef>
+                                      <mat-checkbox color="primary" class="example-margin"
+                                      (change)="handlerAll($event.checked, 'Child', subparent.moduleId, child.moduleId, k, 'View')">View</mat-checkbox>
+                                    </th>
+                                    <td mat-cell *matCellDef="let element">
+                                      <mat-checkbox color="primary" [(ngModel)]="element.view"
+                                      class="example-margin"></mat-checkbox>
+                                    </td>
+                                  </ng-container>
+                                }
+                                <ng-container matColumnDef="add">
+                                  <th mat-header-cell *matHeaderCellDef>
+                                    <mat-checkbox color="primary" class="example-margin"
+                                    (change)="handlerAll($event.checked, 'Child', subparent.moduleId, child.moduleId, k, 'Add')">Add</mat-checkbox>
+                                  </th>
+                                  <td mat-cell *matCellDef="let element">
+                                    <mat-checkbox color="primary" [(ngModel)]="element.add"
+                                    class="example-margin"></mat-checkbox>
+                                  </td>
+                                </ng-container>
+                                <ng-container matColumnDef="edit">
+                                  <th mat-header-cell *matHeaderCellDef>
+                                    <mat-checkbox color="primary" class="example-margin"
+                                    (change)="handlerAll($event.checked, 'Child', subparent.moduleId, child.moduleId, k, 'Edit')">Edit</mat-checkbox>
+                                  </th>
+                                  <td mat-cell *matCellDef="let element">
+                                    <mat-checkbox color="primary" [(ngModel)]="element.edit"
+                                    class="example-margin"></mat-checkbox>
+                                  </td>
+                                </ng-container>
+                                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                                <tr mat-row *matRowDef="let row; columns: displayedColumns;">
+                                </tr>
+                              </table>
+                            </div>
+                          }
+                        </mat-step>
+                      }
+                    }
+                  }
+                </mat-stepper>
+              </mat-tab>
+            }
+          </mat-tab-group>
+
+        </mat-tab>
+        <mat-tab label="Company Access">
+
+          <div class="flex ml-5">
+            <!-- <app-dropdown-hierarchy [useControl]="false" [multiple]="filter.multiselect" [isReports]="true"  [all]="filter.all" [customRequest]="customRequest(filter.id)" [objectValue]="false" (selected)="filter.value = $event" [type]="filter.tagType.type"  [type_id]="filter.tagType.type_id" [id]="getIds(filter.tagType.id)"></app-dropdown-hierarchy> -->
+
+
+            <div class="w-50 h-13 mr-3"><app-dropdown-custom [reset]="reset" [useControl]="false" [type]="1053" [multiple]="true"
+                [all]="allowAll" (exluded)="exclModules      = $event" [options]="[]" (objects)="modules      = $event"
+                [value]="modulesValue" [objectValue]="true" [customRequest]="cdRequest"
+                [disableOptions]="disableOptions"></app-dropdown-custom></div>
+            <div class="w-50 h-13 mr-3"><app-dropdown-custom [reset]="reset" [useControl]="false"
+              [type]="1001" [multiple]="true" [all]="true" (exluded)="exclCompanys     = $event"
+              [options]="[]" (objects)="company      = $event" [value]="companyValue"
+            [objectValue]="true" (manual)="manual=$event"></app-dropdown-custom></div>
+            <div class="w-50 h-13 mr-3"><app-dropdown-hierarchy [reset]="reset" [useControl]="false"
+              [type]="1" [multiple]="true" [all]="true" (exluded)="exclBranchs      = $event"
+              [type_id]="-1" (objects)="branch       = $event" [value]="branchValue"
+            [objectValue]="true" [id]="getIds(company)" [manual]="manual"></app-dropdown-hierarchy>
+          </div>
+          <div class="w-50 h-13 mr-3"><app-dropdown-hierarchy [reset]="reset" [useControl]="false"
+            [type]="3" [multiple]="true" [all]="true" (exluded)="exclDepartments  = $event"
+            [type_id]="-2" (objects)="department   = $event" [value]="departmentValue"
+          [objectValue]="true" [id]="getIds(branch)" [manual]="manual"></app-dropdown-hierarchy>
+        </div>
+        <div class="w-50 h-13 mr-3"><app-dropdown [reset]="reset" [useControl]="false" [type]="42"
+          [multiple]="true" [all]="true" (exluded)="exclConfi        = $event" [options]="[]"
+          (objects)="confidential = $event" [value]="confidentialValue" [objectValue]="true"
+        label="Confidentials" [isFix]="true"></app-dropdown></div>
+        <!-- <div class="flex h-13 mr-3"><app-employee-hierarchy [showTag]="false" [defaultTag]="defaultTag" [multiple]="true" [all]="true" [reset]="reset" [resultHierarchy]="resultHierarchy"></app-employee-hierarchy></div> -->
+
+        <button class="text-sm" mat-flat-button color="primary" (click)="addCompnayAccess()">
+          <mat-icon class="mb-2" svgIcon="mat_outline:add"></mat-icon>
+        </button>
+
+      </div>
+      <mat-card>
+        <table #DDsource mat-table [dataSource]="dropdownSource" class="mat-elevation-z0 border">
+          <!-- action -->
+          <ng-container matColumnDef="action">
+            <th mat-header-cell *matHeaderCellDef></th>
+            <td mat-cell class="pl-5 w-10" *matCellDef="let element">
+              <div>
+                <button mat-icon-button [matMenuTriggerFor]="menu"
+                  aria-label="Example icon-button with a menu">
+                  <mat-icon class="icon-size-6">more_vert</mat-icon>
+                </button>
+                <mat-menu #menu="matMenu">
+                  <button mat-menu-item (click)="editRow(element)">
+                    <mat-icon class="icon-size-6" color="primary">edit</mat-icon>
+                    <span color="primary">Edit</span>
+                  </button>
+                  <button mat-menu-item (click)="deleteRow(element.ModuleId)">
+                    <mat-icon class="mb-2" color="warn" svgIcon="heroicons_outline:trash"></mat-icon>
+                    <span color="primary">Delete</span>
+                  </button>
+                </mat-menu>
+              </div>
+
+            </td>
+          </ng-container>
+
+          <!-- Module Column -->
+          <ng-container matColumnDef="module">
+            <th class="no-wrap" mat-header-cell *matHeaderCellDef> Module Name </th>
+            <td class="hover-effect" mat-cell *matCellDef="let element"> {{element.moduleName}}
+            </td>
+          </ng-container>
+
+          <!-- Company Column -->
+          <ng-container matColumnDef="company">
+            <th class="no-wrap" mat-header-cell *matHeaderCellDef> Company </th>
+            <td class="hover-effect" mat-cell *matCellDef="let element">
+              <div class="truncate-cell"
+                [matTooltip]="loadDescription(element.companys,'companyName')">
+              {{loadDescription(element.companys,'companyName')}}</div>
+            </td>
+          </ng-container>
+
+          <!-- Branch Column -->
+          <ng-container matColumnDef="branch">
+            <th class="no-wrap" mat-header-cell *matHeaderCellDef> Branch </th>
+            <td class="hover-effect" mat-cell *matCellDef="let element">
+              <div class="truncate-cell"
+                [matTooltip]="loadDescription(element.branchs,'branchName')">
+              {{loadDescription(element.branchs,'branchName')}}</div>
+            </td>
+          </ng-container>
+
+          <!-- Department Column -->
+          <ng-container matColumnDef="department">
+            <th class="no-wrap" mat-header-cell *matHeaderCellDef> Department </th>
+            <td class="hover-effect" mat-cell *matCellDef="let element">
+              <div class="truncate-cell"
+                [matTooltip]="loadDescription(element.departments,'departmentName')">
+              {{loadDescription(element.departments,'departmentName')}}</div>
+            </td>
+          </ng-container>
+
+          <!-- Confidentials Column -->
+          <ng-container matColumnDef="confidential">
+            <th class="no-wrap" mat-header-cell *matHeaderCellDef> Confidentials </th>
+            <td class="hover-effect" mat-cell *matCellDef="let element">
+              <div class="truncate-cell"
+                [matTooltip]="loadDescription(element.confidentials,'confidentialName')">
+              {{loadDescription(element.confidentials,'confidentialName')}}</div>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="dropdownColumns ; sticky:true"></tr>
+          <tr mat-row *matRowDef="let row; columns: dropdownColumns;"></tr>
+        </table>
+
+      </mat-card>
+
+    </mat-tab>
+
+
+    <mat-tab mat-sticky label="EDC" class="hidescroll2">
+      <mat-tab-group (selectedTabChange)="changeEdcTab($event)" mat-align-tabs="start"
+        mat-stretch-tabs="false" class="hidescroll2">
+
+        <mat-tab label="Employee EDC"></mat-tab>
+        <mat-tab label="Supervisor EDC"></mat-tab>
+        <mat-tab label="HR EDC"></mat-tab>
+
+      </mat-tab-group>
+
+      <mat-card class="screenheight">
+        <table mat-table [dataSource]="sourceData()" class="edctable mat-elevation-z0 border">
+
+          <ng-container matColumnDef="Field">
+            <th mat-header-cell *matHeaderCellDef> Field </th>
+            <td class="pr-20" mat-cell *matCellDef="let element"> {{element.fieldName}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="All">
+            <th mat-header-cell *matHeaderCellDef> All </th>
+            <td class="pr-20" mat-cell *matCellDef="let element ; let i = index">
+              <mat-checkbox color="primary" (click)="checkall(i,sourceData(),element.allowedEDC)"
+                [(ngModel)]="element.allowedEDC" class="example-margin"> Allow
+              EDC</mat-checkbox>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="Approval">
+            <th mat-header-cell *matHeaderCellDef> Approval </th>
+            <td class="pr-2" mat-cell *matCellDef="let element ; let i = index">
+              @if (hideapprov) {
+                <div class="gap-2 w-80 h-10">
+                  <app-dropdown-custom dropdownValue="dropdownID" [disableOptions]="i == 0 ? [] : disableOptions"
+                    [value]="element.approvalProcessId" [disabled]="!element.allowedEDC"
+                    (selected)="element.approvalProcessId=$event ; toall(i,element.approvalProcessId,'approvalProcessId','Approval',sourceData())"
+                  [options]="dropdownOptions.approvalDef" [type]="1045"></app-dropdown-custom>
+                </div>
+              }
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="Required">
+            <th mat-header-cell *matHeaderCellDef>Required</th>
+            <td class="pr-2" mat-cell *matCellDef="let element;let i = index">
+              @if (hideapprov) {
+                <mat-form-field class="w-80 text-md h-10" appearance="outline">
+                  <mat-label class="label-font-size">{{ t('reason') }}</mat-label>
+                  <mat-icon matPrefix svgIcon="mat_outline:info"></mat-icon>
+                  <mat-select [(ngModel)]="element.reasonAttachment"
+                    [disabled]="!element.allowedEDC"
+                    (selectionChange)="toall(i,element.reasonAttachment,'reasonAttachment','Required',sourceData())"
+                    [placeholder]="">
+                    @for (item of dropdownOptions.purposedef; track item) {
+                      <mat-option
+                      [value]="item.dropdownID">{{item.description}}</mat-option>
+                    }
+                  </mat-select>
+                </mat-form-field>
+              }
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="edcCoumns ; sticky : true"></tr>
+          <tr mat-row *matRowDef="let row; columns: edcCoumns;"></tr>
+        </table>
+      </mat-card>
+
+    </mat-tab>
+  </mat-tab-group>
+
+</mat-card>
+</div>
+</div>

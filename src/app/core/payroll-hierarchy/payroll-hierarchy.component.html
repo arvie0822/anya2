@@ -1,0 +1,49 @@
+<div class="flex flex-wrap space-x-3">
+  <!-- <div class="flex border-2"> -->
+  @if (showTag) {
+    <mat-form-field class="w-50 text-md h-13" appearance="outline">
+      <mat-label class="label-font-size">Tag type</mat-label>
+      <mat-icon class="icon-size-5 : mr-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+      <mat-select class="select" [multiple]="true" [(ngModel)]="selectedTag" (ngModelChange)="handlerChange()"
+        (selectionChange)="selectedevent()">
+        @for (option of tagOptions; track option) {
+          <mat-option [value]="option.dropdownTypeID">
+            {{option.description}}
+          </mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  }
+
+  @for (select of dropdowns; track select) {
+    @if (select.visible) {
+      <mat-form-field class="w-50 text-md h-13" appearance="outline"
+        (click)="currentDropdown(select)">
+        <mat-label class="label-font-size">{{select.change}}</mat-label>
+        <mat-select [disabled]="select.options.length === 0" class="select" [multiple]="multiple" [(ngModel)]="select.value"
+          (infiniteScroll)="getNextBatch()" msInfiniteScroll
+          [complete]="complete" [threshold]="'20%'">
+          <mat-option class="input">
+            <ngx-mat-select-search [formControl]="inputChange" [placeholderLabel]="'Find ' + placeholder + ' ..'"
+            [noEntriesFoundLabel]="'No ' + placeholder + ' found'"></ngx-mat-select-search>
+          </mat-option>
+          @if (all) {
+            <mat-option [value]="0" (click)="selectAll(select, $event)" (click)="bank(select,true)">Select All</mat-option>
+          }
+          @for (option of select.options; track option) {
+            <mat-option [value]="option.dropdownID" (click)="handlerSelectiveChange(select, $event,false)">
+              {{option.description}}
+            </mat-option>
+          }
+          <mat-select-trigger> {{selDisplayNgModel(select.value,select.options)}}
+            @if (multiple && select.value?.length > 1 && isALLs(select?.value)) {
+              <span class="example-additional-selection">
+                (+{{(select.value?.length || 0) - 1}} {{select.value?.length === 2 ? 'other' : 'others'}})
+              </span>
+            }
+          </mat-select-trigger>
+        </mat-select>
+      </mat-form-field>
+    }
+  }
+</div>

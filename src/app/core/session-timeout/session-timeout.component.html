@@ -1,0 +1,10 @@
+<mat-card class="p-2 mat-elevation-z0" id="sessionTimeout">
+    <mat-card-title>Session Timeout</mat-card-title>
+    <mat-card-content>
+        <p>{{data}}</p>
+    </mat-card-content>
+    <mat-card-actions align="right" class="space-x-4">
+        <button mat-flat-button color="primary" (click)="logout()">Logout</button>
+        <button mat-flat-button style="background-color: #4cbb17; color: #fff;" (click)="stay()">Stay Signed-In</button>
+    </mat-card-actions>
+</mat-card>

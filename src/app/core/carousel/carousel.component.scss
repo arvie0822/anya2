@@ -1,0 +1,215 @@
+.carousel-container {
+    position: relative;
+    margin: auto;
+    text-align: center;
+    width: 1200px;
+    // border-radius: 15px;
+    box-shadow: 0 6px 12 #dce1e1;
+}
+
+.carousel-container img {
+    // display: none;
+    // border-radius: 15px;
+    max-width:100%;
+    max-height:100%;
+    cursor: hand;cursor: pointer;
+}
+
+// .carousel-container img.image-active {
+//     max-width:100%;
+//     max-height:100%;
+// }
+
+//dot/indicator
+.carousel-dot-container {
+    position: absolute;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    padding: 0;
+    margin-bottom: 1rem;
+}
+
+.dot {
+    cursor: pointer;
+    height: 13px;
+    width: 13px;
+    margin: 0 5px;
+    background-color: #000;
+    border-radius: 50%;
+    display: inline-block;
+    transition: opacity 0.6s ease;
+    opacity: 0.5;
+}
+
+.active,
+.dot:hover {
+    opacity: 1;
+}
+
+
+//image transition fade effect
+.fade {
+    animation-name: fade;
+    animation-duration: 1.5s;
+}
+
+@keyframes fade {
+    from {
+        opacity: 0.4;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.btn-carousel {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 15%;
+    padding: 0;
+    color: #000;
+    text-align: center;
+    background: 0 0;
+    border: 0;
+    cursor: pointer;
+}
+
+.btn-prev {
+    left: 0;
+}
+
+.btn-next {
+    right: 0;
+}
+
+.icon-carousel {
+    color: #000;
+    opacity: 0.5;
+    transition: all 0.15s ease;
+}
+
+.icon-carousel:hover {
+    opacity: 0.9;
+}
+
+.icon-carousel:active {
+    opacity: 0.5;
+}
+
+.icon-next,
+.icon-prev {
+    font-size: 35px;
+}
+
+
+
+//carousel-context-container
+.carousel-context-container {
+    background-color: gray;
+    position: absolute;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    padding: 0;
+    margin-bottom: 3rem;
+    cursor: hand;cursor: pointer;
+}
+
+.carousel-context-container .title {
+    color: white;
+    font-size: larger;
+    cursor: hand;cursor: pointer;
+}
+
+.carousel-context-container .desc {
+    color: white;
+    font-size: small;
+    cursor: hand;cursor: pointer;
+}
+
+/////////////////////////////////////////////////////
+.div-main {
+// background-color: #fff;
+// border-radius: 15px;
+width: 100%;
+// height: 400px;
+min-height: 400px;
+max-height: block;
+}
+.div-body {
+    background-color: #fff;
+    // border: 1px;
+    // border-color: brown;
+    // position: relative;
+    width: 100%;
+    // height: block;
+    // height: 200px;
+    overflow: hidden;
+    // resize: both;
+    // width: 300px;
+}
+.img-bg {
+    // object-fit: contain;
+    height: 100%;
+    // width: 100%;
+    // width: 200px;
+    // height: 400px;
+    // position: relative;
+    // height: block;
+    // background-color: #7e7a7a;
+    // border-radius: 15px 15px 0 0;
+    // width: 500px;
+//     height: 400px;
+// min-height: 300px;
+    // position: absolute;
+    z-index: 1;
+    // width: 100%;
+    // top: 0;
+    // left: 0;
+    // height: 300px;
+
+
+}
+
+.titles {
+    background-color: rgba(122, 114, 114, 0.498);
+    // border-radius: 10px;
+    // right: 0;
+    // left: 0;
+    // bottom: 0;
+    // display: flex;
+    // justify-content: center;
+    // padding-right: 5px;
+    // padding-left: 5px;
+    // height: 100px;
+    // cursor: hand;cursor: pointer;
+    position: absolute;
+    z-index: 2;    /* Place this image in front of the img1 */
+    // width: 100%;
+    // top: 100px;
+    // left: 0;
+    // right: 0;
+    // bottom: 0;
+    // width: 450px;
+    color: white;
+    padding: 5px;
+}
+
+
+
+// .tit {
+//     align-items: center;
+// }
+
+// .desc {
+//     align-items: center;
+// }

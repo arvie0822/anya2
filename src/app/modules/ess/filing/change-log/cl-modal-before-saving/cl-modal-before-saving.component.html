@@ -1,0 +1,45 @@
+
+
+<section class="example-container mat-elevation-z0"  *transloco="let t">
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z0 tables">
+
+        <!--- Note that these columns can be defined in any order.
+              The actual rendered columns are set as a property on the row definition" -->
+
+        <ng-container matColumnDef="Date">
+            <th class="" mat-header-cell *matHeaderCellDef> {{t('Date')}} </th>
+            <td class="" mat-cell *matCellDef="let element"> {{element.Date}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="Sched_in">
+            <th mat-header-cell *matHeaderCellDef> {{t('Sched In')}} </th>
+            <td mat-cell *matCellDef="let element"> {{element.Sched_in}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="Sched_out">
+            <th mat-header-cell *matHeaderCellDef> {{t('Sched Out')}} </th>
+            <td mat-cell *matCellDef="let element"> {{element.Sched_out}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="Time_in">
+            <th mat-header-cell *matHeaderCellDef> {{t('Time In')}} </th>
+            <td mat-cell *matCellDef="let element"> {{element.Time_in}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="Time_out">
+            <th mat-header-cell *matHeaderCellDef> {{t('Time Out')}} </th>
+            <td mat-cell *matCellDef="let element"> {{element.Time_out}} </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+</section>
+
+<div class="grid grid-cols-5 gap-2 w h-1 mt-3"  *transloco="let t">
+    <div></div>
+    <div></div>
+    <div></div>
+    <button mat-flat-button mat-dialog-close (click)="copy(false)" color="warn">{{t('Cancel')}}</button>
+    <button mat-flat-button (click)="copy(true)" color="primary">{{t('Confirm')}}</button>
+</div>

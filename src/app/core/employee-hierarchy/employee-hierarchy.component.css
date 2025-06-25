@@ -1,0 +1,64 @@
+/* .mat-datepicker-toggle{
+    position: relative;
+    bottom: 7px;
+    font-size: medium;
+} */
+
+/* .mat-icon {
+    position: relative;
+    bottom: 10px;
+}
+
+.select{
+    position: relative;
+    bottom: 9px;
+    font-size: medium;
+} */
+/* table{
+    width: 100%;
+}
+
+.search-field {
+    background-color: white;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+}
+
+.first-option {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background: #fff;
+}
+
+.label-font-size{
+    font-size: 120% ;
+} */
+
+/* .cdk-overlay-pane {
+    position: absolute;
+    pointer-events: auto;
+    box-sizing: border-box;
+    z-index: 1000;
+    display: flex;
+    max-width: 100%;
+    max-height: 100%;
+    width: 250px !important;
+} */
+
+.search-field {
+    background-color: white;
+    position: absolute;
+    top: -1px !important;
+    left: 0;
+    right: 0;
+    height: 100%;
+}
+.first-option {
+    position: sticky !important;
+    top: 0;
+    z-index: 1;
+    background: #fff;
+}

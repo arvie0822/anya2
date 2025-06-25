@@ -1,0 +1,60 @@
+<mat-card class="mat-elevation-z0" *transloco="let t">
+    <mat-card-title>
+        <app-card-title title="Setup Currency"></app-card-title>
+    </mat-card-title>
+    <mat-card-content>
+
+        <div class="grid grid-cols-3 gap-2">
+            <div class="col-span-2">
+                <div class="grid grid-cols-2 gap-2 mt-4">
+                    <app-dropdown [isFix]="true" [useControl]="false" (selected)="idCurrency = $event" [disableOptions]="disabledOpt" [value]="idCurrency" [all]="false" [options]="dropdownOptions.contractCurrencyDef"  [icon]="'mat_outline:info'" label="Contact Currency" [type]="122"> </app-dropdown>
+
+                    <mat-form-field class="field" appearance="outline">
+                        <mat-label class="label-font-size">{{t('rate')}}</mat-label>
+                        <input class="input" min="0" [max]="9999999999" matInput type="number" [(ngModel)]="currencyRate" placeholder="Rate">
+                    </mat-form-field>
+
+                </div>
+            </div>
+            <div class="col-span-1 mt-3.5">
+                <button (click)="add()" class="mt-0.5 w-14 mr-1" mat-flat-button color="primary" aria-label="example icon" matTooltip="Add">
+                    <mat-icon class="mb-2" svgIcon="mat_outline:add"></mat-icon>
+                </button>
+
+            </div>
+        </div>
+
+        <table #table mat-table [dataSource]="dataSource" class="mat-elevation-z0">
+
+            <ng-container matColumnDef="action">
+                <th mat-header-cell *matHeaderCellDef> Action</th>
+                <td mat-cell *matCellDef="let element; let i = index">
+                <button type="button"  mat-icon-button color="warn" (click)="delete(i)">
+                <mat-icon class="mb-6" svgIcon="mat_outline:delete"></mat-icon>
+                </button>
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="currencyDescription">
+              <th mat-header-cell *matHeaderCellDef> Currency </th>
+              <td mat-cell *matCellDef="let element"> {{element.currencyDescription}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="currencyRate">
+              <th mat-header-cell *matHeaderCellDef> Rate </th>
+              <td mat-cell *matCellDef="let element"> {{element.currencyRate}} </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+        </table>
+
+    </mat-card-content>
+
+    <mat-card-actions align="end">
+        <button mat-stroked-button class="mr-2" (click)="closeModal()">Close</button>
+        <button mat-flat-button (click)="submit()" color="primary">Save</button>
+    </mat-card-actions>
+
+</mat-card>

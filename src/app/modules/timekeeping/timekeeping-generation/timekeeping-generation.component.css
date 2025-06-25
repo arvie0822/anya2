@@ -1,0 +1,114 @@
+/*
+.mat-select {
+    position: relative;
+    bottom: 9px;
+    font-size: medium;
+}
+
+.icon {
+    position: relative;
+    bottom: 10px;
+}
+
+.mat-datepicker-toggle {
+    position: relative;
+    bottom: 7px;
+    font-size: medium;
+}
+
+input {
+    position: relative;
+    bottom: 0px;
+    font-size: medium;
+}
+
+table {
+    width: 100%;
+}
+
+.mat-divider {
+    border-top-color: rgb(172, 172, 172) !important;
+}
+
+.body-card {
+    position: relative;
+    height: 100%;
+    padding-top: 1px;
+}
+
+.example-container {
+    position: absolute;
+    top: 170px;
+    left: 15px;
+    right: 15px;
+    bottom: 80px;
+    max-height: 80%;
+    overflow: none;
+}
+
+th.mat-header-cell {
+    white-space: nowrap;
+    padding-right: 20px;
+}
+
+.mat-cell {
+    white-space: nowrap;
+}
+
+.scroll {
+    overflow-x: scroll;
+    height: 100%;
+}
+
+mat-paginator {
+    display: flex;
+    justify-content: start;
+}
+
+::ng-deep .mat-form-field-appearance-outline .mat-form-field-wrapper {
+    height: 10% !important;
+}
+
+.first-option {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background: #fff;
+}
+
+.search-field {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+}
+
+::ng-deep body.light .mat-option.mat-active {
+    background: none !important;
+} */
+
+.example-containers {
+    position: absolute;
+    top: 120px;
+    left: 15px;
+    right: 15px;
+    bottom: 80px;
+    max-height: 50%;
+    overflow: none;
+}
+
+
+.search-field {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 30px !important;
+}
+
+.first-option {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background: #fff;
+}

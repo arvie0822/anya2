@@ -1,0 +1,125 @@
+/* input{
+    position: relative;
+    bottom: 10px;
+    font-size: medium;
+} */
+/* .mat-select{
+    position: relative;
+    bottom: 10px;
+    font-size: medium;
+}
+.icon-size-5{
+    position: relative;
+    bottom: 11px;
+    right: 1px;
+    border-radius: 3px !important;
+} */
+
+/* .mat-column-action {
+    width: 50px;
+} */
+
+.edited {
+    background-color:darkkhaki;
+}
+
+.badge-on {
+    border-radius: 5px;
+    background-color: green;
+    font-size: smaller;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    font-weight: 600;
+    color: white !important;
+}
+
+.badge-off {
+    border-radius: 5px;
+    background-color: firebrick;
+    font-size: smaller;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    font-weight: 600;
+    color: white !important;
+}
+
+table {
+    width: 100%;
+}
+
+.body-card {
+    position: relative;
+    height: 100%;
+    padding-top: 1px;
+}
+
+.example-containers {
+    position: absolute;
+    top: 80px;
+    left: 15px;
+    right: 15px;
+    bottom: 80px;
+    max-height: 100%;
+    overflow: auto;
+}
+.paganation {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+tr.mat-header-row {
+    height: 35px;
+}
+
+tr.mat-row {
+    height: 22px;
+}
+
+.mat-cell,.mat-footer-cell {
+    font-size: 14px;
+}
+
+.mat-header-cell {
+    font-size: 15px;
+}
+.no-wrap {
+  white-space: nowrap;
+  padding: 10px;
+}
+
+.truncate-cell {
+  position: relative;
+  max-width: 200px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  transition: max-width 60s;
+}
+
+.hover-effect:hover .truncate-cell {
+  max-width: none;
+  animation: moveLeftAnimation 50s forwards;
+}
+
+@keyframes moveLeftAnimation {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-100%);
+  }
+}
+
+
+
+.mat-mdc-card-content {
+    display: block;
+    padding: 0 0px !important;
+}

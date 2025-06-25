@@ -1,0 +1,156 @@
+/* .label-font-size{
+    font-size: 12px;
+} */
+/* .icon-n{
+    position: relative;
+    bottom: 8px;
+} */
+/* .input{
+    position: relative;
+    bottom: 10px;
+    font-size: 15px;
+}
+
+.mat-icon
+input{
+    position: relative;
+    bottom: 10px;
+    font-size: medium;
+}
+.mat-select{
+    position: relative;
+    bottom: 11px;
+    font-size: 12px;
+} */
+.toggle{
+    margin-top:2.5px ;
+    height: 45.8%;
+    border-style: solid;
+    border-width: 2.8px !important;
+    border-color: rgb(136, 136, 136);
+}
+/* table {
+    width: 100%;
+} */
+
+.mat-mdc-tab-body-content .hidescroll2{
+    overflow: hidden !important;
+}
+
+.edctable{
+    width: 80% !important;
+    height: 20% !important;
+    /* overflow: auto !important; */
+}
+
+.example-margin {
+  margin: 0px 10px 0 0;
+}
+
+/* svg {
+    height: 60% !important;
+    margin-top: 3px !important;
+} */
+
+::ng-deep.mat-icon{
+    height: 70% !important;
+}
+
+
+/* check box possition */
+.checkboxs {
+    position: absolute;
+    left: 40%;
+    top: 15%;
+}
+
+.body-card {
+    position: relative;
+    height: 100%;
+    padding-top: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.example-container {
+    position: absolute;
+    top: 90px;
+    left: 15px;
+    right: 15px;
+    /* bottom: 10px; */
+    max-height: 100%;
+    overflow: auto;
+}
+
+/* .label-font-size {
+    font-size: 15px;
+} */
+/*
+.sample {
+    position: relative;
+    bottom: 11px;
+}
+
+.mat-select{
+    position: relative;
+    bottom: 11px;
+    font-size: medium;
+} */
+
+.labelheader{
+    font-family: sans-serif !important;
+    font-weight: bold !important;
+    font-size: medium;
+}
+.sample{
+    max-height: 430px; /* Adjust the height as needed */
+    overflow-y: auto;
+}
+
+/* table no-wrap */
+.no-wrap {
+    white-space: nowrap;
+    padding: 10px;
+}
+
+/* long cell value transition */
+.truncate-cell {
+    position: relative;
+    max-width: 300px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+::ng-deep .mdc-data-table__table {
+    min-width: 0% !important;
+}
+
+/* .mdc-checkbox__checkmark {
+    top: -5px !important;
+} */
+
+.hidescroll {
+    overflow: hidden !important;
+}
+.mat-mdc-tab-body-content {
+    /* overflow: auto !important; */
+}
+
+.screenheight{
+    height: 100%;
+    overflow: auto;
+}
+
+.mat-mdc-tab-body.mat-mdc-tab-body-active, .hidescroll2 {
+    position: relative;
+    overflow-x: hidden;
+    overflow-y: hidden !important;
+    z-index: 1;
+    flex-grow: 1;
+}
+
+.hidescroll2{
+    overflow: hidden !important;
+}
+

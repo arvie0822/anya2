@@ -1,0 +1,138 @@
+/* .mat-datepicker-toggle{
+    position: relative;
+    bottom: 7px;
+    font-size: medium;
+}
+.label-font-size{
+    font-size: 120% ;
+}
+.cosl-label .mat-select-value{
+    font-size: 99% ;
+    text-align: center;
+}
+input{
+    position: relative;
+    bottom: 13px;
+    font-size: medium;
+}
+.icon {
+    position: relative;
+    bottom: 10px;
+}
+.mat-select{
+    position: relative;
+    bottom: 8px;
+
+}
+.select{
+    position: relative;
+    bottom: 9px;
+    font-size: 100%;
+}
+table{
+    width: 100%;
+}
+.mat-divider
+{
+    border-top-color: rgb(172, 172, 172) !important;
+}
+.remarks-label{
+    font-size: 99%;
+}
+.amount-label{
+    font-size: 99%;
+}
+.mat-option{
+    font-size: 100%;
+}
+.mat-cell{
+    align-items: center;
+    text-align: center;
+}
+
+
+.body-card {
+    position: relative;
+    height: 100%;
+    padding-top: 1px;
+}
+
+.example-container {
+    position: absolute;
+    top: 120px;
+    left: 15px;
+    right: 15px;
+    bottom: 80px;
+    max-height: 100%;
+    overflow: auto;
+}
+
+.paganation {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+.table-header {
+    z-index: 1;
+}
+
+tr.mat-header-row {
+    height: 35px;
+}
+
+tr.mat-row {
+    height: 22px;
+    font-size: small;
+} */
+
+
+.body-card {
+    position: relative;
+    height: 100%;
+    padding-top: 1px;
+}
+
+.example-container {
+    position: absolute;
+    top: 120px;
+    left: 15px;
+    right: 15px;
+    bottom: 80px;
+    max-height: 100%;
+    overflow: auto;
+}
+
+.paganation {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+
+.table-header {
+    z-index: 1;
+}
+
+tr.mat-header-row {
+    height: 35px;
+}
+
+tr.mat-row {
+    height: 22px;
+    font-size: small;
+}
+
+.mat-cell{
+    align-items: center;
+    text-align: center;
+}
+
+.mdc-data-table__table {
+    /* width: 100% !important; */
+    white-space: nowrap !important;
+}
+
+

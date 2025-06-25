@@ -1,0 +1,647 @@
+<div class="mat-elevation-z0 relative">
+    <div class="grid grid-cols-2 gap-2">
+        <mat-card-title class="sticky-card-title mr-4 mt-6 h-10">
+            <app-card-title title="TimeKeeping Detailed"></app-card-title>
+        </mat-card-title>
+        <div class="grid grid-cols-6 gap-2 mt-4 mb-1">
+            <div class="col-span-1"></div>
+            @if (showclose) {
+            <div></div>
+            }
+            <button mat-flat-button color="primary" (click)="handleExportEvent(1)" class="text-md">
+                <mat-icon matSuffix svgIcon="mat_outline:download"></mat-icon>Export
+            </button>
+            <button mat-flat-button color="primary" (click)="handleExportEvent(2)" class="text-md col-span-2">
+                <mat-icon matSuffix svgIcon="mat_outline:download"></mat-icon>Export Summary
+            </button>
+            @if (data.type != 'view' && this.data.type != 'generate-view' || this.data.type !== 'initailadjustment') {
+            <button mat-flat-button (click)="submit()" color="primary">
+                Save
+            </button>
+            }
+            @if (!showclose) {
+            <button mat-flat-button mat-dialog-close color="warn">
+                Close
+            </button>
+            }
+        </div>
+    </div>
+
+    <section class="example-container">
+        <table mat-table [dataSource]="dataSource" class="mat-elevation-z0">
+            <!-- Position Column -->
+            <ng-container matColumnDef="employeeCode">
+                <th mat-header-cell class="headwwrap" *matHeaderCellDef>Emp Code</th>
+                <td mat-cell class="no-wrap" *matCellDef="let element">
+                    {{ element.employeeCode }}
+                </td>
+            </ng-container>
+
+            <!-- Name Column -->
+            <ng-container matColumnDef="displayName">
+                <th class="pl-10" mat-header-cell *matHeaderCellDef>
+                    Emp Name
+                </th>
+                <td class="pl-10" mat-cell *matCellDef="let element">
+                    {{ element.displayName }}
+                </td>
+            </ng-container>
+
+            <!-- Name Column -->
+            <ng-container matColumnDef="subCompany">
+                <th class="pl-10" mat-header-cell *matHeaderCellDef>
+                    Sub Company
+                </th>
+                <td class="pl-10" mat-cell *matCellDef="let element">
+                    {{ element.subCompany }}
+                </td>
+            </ng-container>
+
+            <!-- Name Column -->
+            <ng-container matColumnDef="branch">
+                <th class="pl-10" mat-header-cell *matHeaderCellDef>Branch</th>
+                <td class="pl-10" mat-cell *matCellDef="let element">
+                    {{ element.branch }}
+                </td>
+            </ng-container>
+
+            <!-- Weight Column -->
+            <ng-container matColumnDef="date">
+                <th class="pl-10" mat-header-cell *matHeaderCellDef>Date</th>
+                <td class="pl-10" mat-cell *matCellDef="let element">
+                    {{ element.date | date : "MM/dd/yy" }}
+                </td>
+            </ng-container>
+
+            <!-- Symbol Column -->
+            <ng-container matColumnDef="isRestDay">
+                <th class="pl-10" mat-header-cell *matHeaderCellDef>RD</th>
+                <td class="pl-10" mat-cell *matCellDef="let element">
+                    {{ element.isRestDay == true ? "Yes" : "No" }}
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="type">
+                <th class="pl-10" mat-header-cell *matHeaderCellDef>Type</th>
+                <td class="pl-10" mat-cell *matCellDef="let element">
+                    {{ element.type }}
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="scheduleTimeIn">
+                <th class="pl-10" mat-header-cell *matHeaderCellDef>
+                    Sched In
+                </th>
+                <td class="pl-10" mat-cell *matCellDef="let element">
+                    {{ element.scheduleTimeIn | date : "MM/dd/yyyy hh:mm a" }}
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="scheduleTimeOut">
+                <th class="pl-10" mat-header-cell *matHeaderCellDef>
+                    Sched out
+                </th>
+                <td class="pl-10" mat-cell *matCellDef="let element">
+                    {{ element.scheduleTimeOut | date : "MM/dd/yyyy hh:mm a" }}
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="displayTimeIn">
+                <th class="pl-10" mat-header-cell *matHeaderCellDef>Time In</th>
+                <td class="pl-10" mat-cell *matCellDef="let element">
+                    {{ element.displayTimeIn | date : "MM/dd/yy hh:mm a" }}
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="displayTimeOut">
+                <th class="pl-10" mat-header-cell *matHeaderCellDef>
+                    Time Out
+                </th>
+                <td class="pl-10" mat-cell *matCellDef="let element">
+                    {{ element.displayTimeOut | date : "MM/dd/yy hh:mm a" }}
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="regularHours">
+                <th class="pl-10" mat-header-cell *matHeaderCellDef>RG</th>
+                <td class="pl-10" mat-cell *matCellDef="let element">
+                    {{
+                    element.regularHours
+                    | number : (element.regularHours > 0 ? "1.2-2" : 0)
+                    }}
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="late">
+                <th class="pl-10" mat-header-cell *matHeaderCellDef>Tardy</th>
+                <td class="pl-10" mat-cell *matCellDef="let element">
+                    {{
+                    element.late | number : (element.late > 0 ? "1.2-2" : 0)
+                    }}
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="undertime">
+                <th class="pl-10" mat-header-cell *matHeaderCellDef>UT</th>
+                <td class="pl-10" mat-cell *matCellDef="let element">
+                    {{
+                    element.undertime
+                    | number : (element.undertime > 0 ? "1.2-2" : 0)
+                    }}
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="isAbsent">
+                <th class="pl-10" mat-header-cell *matHeaderCellDef>Absent</th>
+                <td class="pl-10" mat-cell *matCellDef="let element">
+                    {{
+                    element.isAbsent == null
+                    ? ""
+                    : element.isAbsent == true
+                    ? "Yes"
+                    : "No"
+                    }}
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="isHalfday">
+                <th class="pl-10" mat-header-cell *matHeaderCellDef>Halfday</th>
+                <td class="pl-10" mat-cell *matCellDef="let element">
+                    {{
+                    element.isHalfday == null
+                    ? ""
+                    : element.isHalfday == true
+                    ? "Yes"
+                    : "No"
+                    }}
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="lwopHour">
+                <th class="pl-10" mat-header-cell *matHeaderCellDef>LWOP</th>
+                <td class="pl-10" mat-cell *matCellDef="let element">
+                    {{
+                    element.lwopHour
+                    | number : (element.lwopHour > 0 ? "1.2-2" : 0)
+                    }}
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="ptoHour">
+                <th class="pl-10" mat-header-cell *matHeaderCellDef>PTO</th>
+                <td class="pl-10" mat-cell *matCellDef="let element">
+                    {{
+                    element.ptoHour
+                    | number : (element.ptoHour > 0 ? "1.2-2" : 0)
+                    }}
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="vlHour">
+                <th class="pl-10" mat-header-cell *matHeaderCellDef>VL</th>
+                <td class="pl-10" mat-cell *matCellDef="let element">
+                    {{
+                    element.vlHour
+                    | number : (element.vlHour > 0 ? "1.2-2" : 0)
+                    }}
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="slHour">
+                <th class="pl-10" mat-header-cell *matHeaderCellDef>SL</th>
+                <td class="pl-10" mat-cell *matCellDef="let element">
+                    {{
+                    element.slHour
+                    | number : (element.slHour > 0 ? "1.2-2" : 0)
+                    }}
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="otherlHour">
+                <th class="pl-10" mat-header-cell *matHeaderCellDef>OTLV</th>
+                <td class="pl-10" mat-cell *matCellDef="let element">
+                    {{
+                    element.otherlHour
+                    | number : (element.otherlHour > 0 ? "1.2-2" : 0)
+                    }}
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="regularHoursND">
+                <th class="pl-10" mat-header-cell *matHeaderCellDef>ND</th>
+                <td class="pl-10" mat-cell *matCellDef="let element">
+                    {{
+                    element.regularHoursND
+                    | number
+                    : (element.regularHoursND > 0 ? "1.2-2" : 0)
+                    }}
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="ot">
+                <th class="pl-10" mat-header-cell *matHeaderCellDef>RGOT</th>
+                <td class="pl-10" mat-cell *matCellDef="let element">
+                    {{ element.ot | number : (element.ot > 0 ? "1.2-2" : 0) }}
+                </td>
+            </ng-container>
+
+            <!-- <ng-container matColumnDef="oT8">
+          <th class="pl-10" mat-header-cell *matHeaderCellDef>
+            RGOT > 8
+          </th>
+          <td class="pl-10" mat-cell *matCellDef="let element">
+            {{ element.oT8 | number : (element.oT8 > 0 ? "1.2-2" : 0) }}
+          </td>
+        </ng-container> -->
+
+            <ng-container matColumnDef="otnd">
+                <th class="pl-10" mat-header-cell *matHeaderCellDef>RGOTND</th>
+                <td class="pl-10" mat-cell *matCellDef="let element">
+                    {{
+                    element.otnd | number : (element.otnd > 0 ? "1.2-2" : 0)
+                    }}
+                </td>
+            </ng-container>
+
+            <!-- <ng-container matColumnDef="otnD8">
+        <th class="pl-10" mat-header-cell *matHeaderCellDef>
+          RGOTND > 8
+        </th>
+        <td class="pl-10" mat-cell *matCellDef="let element">
+          {{
+          element.otnD8
+          | number : (element.otnD8 > 0 ? "1.2-2" : 0)
+          }}
+        </td>
+      </ng-container> -->
+
+            <ng-container matColumnDef="lh">
+                <th class="pl-10" mat-header-cell *matHeaderCellDef>LH</th>
+                <td class="pl-10" mat-cell *matCellDef="let element">
+                    @if (element.isRestDay) {
+                    {{
+                    element.lhrd
+                    | number : (element.lhrd > 0 ? "1.2-2" : 0)
+                    }}
+                    }
+                    @if (!element.isRestDay) {
+                    {{
+                    element.lh | number : (element.lh > 0 ? "1.2-2" : 0)
+                    }}
+                    }
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="lhot">
+                <th class="pl-10" mat-header-cell *matHeaderCellDef>LHOT</th>
+                <td class="pl-10" mat-cell *matCellDef="let element">
+                    {{
+                    element.lhot | number : (element.lhot > 0 ? "1.2-2" : 0)
+                    }}
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="lhotnd">
+                <th class="pl-10" mat-header-cell *matHeaderCellDef>LHOTND</th>
+                <td class="pl-10" mat-cell *matCellDef="let element">
+                    {{
+                    element.lhotnd
+                    | number : (element.lhotnd > 0 ? "1.2-2" : 0)
+                    }}
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="lhoT8">
+                <th class="pl-10" mat-header-cell *matHeaderCellDef>
+                    LHOT > 8
+                </th>
+                <td class="pl-10" mat-cell *matCellDef="let element">
+                    {{
+                    element.lhoT8
+                    | number : (element.lhoT8 > 0 ? "1.2-2" : 0)
+                    }}
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="lhotnD8">
+                <th class="pl-10" mat-header-cell *matHeaderCellDef>
+                    LHOTND > 8
+                </th>
+                <td class="pl-10" mat-cell *matCellDef="let element">
+                    {{
+                    element.lhotnD8
+                    | number : (element.lhotnD8 > 0 ? "1.2-2" : 0)
+                    }}
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="lhrd">
+                <th class="pl-10" mat-header-cell *matHeaderCellDef>LHRDOT</th>
+                <td class="pl-10" mat-cell *matCellDef="let element">
+                    {{
+                    element.lhrdot
+                    | number : (element.lhrdot > 0 ? "1.2-2" : 0)
+                    }}
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="lhrdoT8">
+                <th class="pl-10" mat-header-cell *matHeaderCellDef>
+                    LHRD > 8
+                </th>
+                <td class="pl-10" mat-cell *matCellDef="let element">
+                    {{
+                    element.lhrdoT8
+                    | number : (element.lhrdoT8 > 0 ? "1.2-2" : 0)
+                    }}
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="lhrdotnd">
+                <th class="pl-10" mat-header-cell *matHeaderCellDef>LHRDND</th>
+                <td class="pl-10" mat-cell *matCellDef="let element">
+                    {{
+                    element.lhrdotnd
+                    | number : (element.lhrdotnd > 0 ? "1.2-2" : 0)
+                    }}
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="lhrdotnD8">
+                <th class="pl-10" mat-header-cell *matHeaderCellDef>
+                    LHRDND > 8
+                </th>
+                <td class="pl-10" mat-cell *matCellDef="let element">
+                    {{
+                    element.lhrdotnD8
+                    | number : (element.lhrdotnD8 > 0 ? "1.2-2" : 0)
+                    }}
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="sh">
+                <th class="pl-10" mat-header-cell *matHeaderCellDef>SH</th>
+                <td class="pl-10" mat-cell *matCellDef="let element">
+                    @if (element.isRestDay) {
+                    {{
+                    element.shrd
+                    | number : (element.shrd > 0 ? "1.2-2" : 0)
+                    }}
+                    }
+                    @if (!element.isRestDay) {
+                    {{
+                    element.sh | number : (element.sh > 0 ? "1.2-2" : 0)
+                    }}
+                    }
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="shot">
+                <th class="pl-10" mat-header-cell *matHeaderCellDef>SHOT</th>
+                <td class="pl-10" mat-cell *matCellDef="let element">
+                    {{
+                    element.shot | number : (element.shot > 0 ? "1.2-2" : 0)
+                    }}
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="shotnd">
+                <th class="pl-10" mat-header-cell *matHeaderCellDef>SHOTND</th>
+                <td class="pl-10" mat-cell *matCellDef="let element">
+                    {{
+                    element.shotnd
+                    | number : (element.shotnd > 0 ? "1.2-2" : 0)
+                    }}
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="shoT8">
+                <th class="pl-10" mat-header-cell *matHeaderCellDef>
+                    SHOT > 8
+                </th>
+                <td class="pl-10" mat-cell *matCellDef="let element">
+                    {{
+                    element.shoT8
+                    | number : (element.shoT8 > 0 ? "1.2-2" : 0)
+                    }}
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="shotnD8">
+                <th class="pl-10" mat-header-cell *matHeaderCellDef>
+                    SHOTND > 8
+                </th>
+                <td class="pl-10" mat-cell *matCellDef="let element">
+                    {{
+                    element.shotnD8
+                    | number : (element.shotnD8 > 0 ? "1.2-2" : 0)
+                    }}
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="shrd">
+                <th class="pl-10" mat-header-cell *matHeaderCellDef>SHRDOT</th>
+                <td class="pl-10" mat-cell *matCellDef="let element">
+                    {{
+                    element.shrdot
+                    | number : (element.shrdot > 0 ? "1.2-2" : 0)
+                    }}
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="shrdoT8">
+                <th class="pl-10" mat-header-cell *matHeaderCellDef>
+                    SHRD > 8
+                </th>
+                <td class="pl-10" mat-cell *matCellDef="let element">
+                    {{
+                    element.shrdoT8
+                    | number : (element.shrdoT8 > 0 ? "1.2-2" : 0)
+                    }}
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="shrdotnd">
+                <th class="pl-10" mat-header-cell *matHeaderCellDef>SHRDND</th>
+                <td class="pl-10" mat-cell *matCellDef="let element">
+                    {{
+                    element.shrdotnd
+                    | number : (element.shrdotnd > 0 ? "1.2-2" : 0)
+                    }}
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="shrdotnD8">
+                <th class="pl-10" mat-header-cell *matHeaderCellDef>
+                    SHRDND > 8
+                </th>
+                <td class="pl-10" mat-cell *matCellDef="let element">
+                    {{
+                    element.shrdotnD8
+                    | number : (element.shrdotnD8 > 0 ? "1.2-2" : 0)
+                    }}
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="otrd">
+                <th class="pl-10" mat-header-cell *matHeaderCellDef>RDOT</th>
+                <td class="pl-10" mat-cell *matCellDef="let element">
+                    {{
+                    element.otrd | number : (element.otrd > 0 ? "1.2-2" : 0)
+                    }}
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="otrdnd">
+                <th class="pl-10" mat-header-cell *matHeaderCellDef>RDOTND</th>
+                <td class="pl-10" mat-cell *matCellDef="let element">
+                    {{
+                    element.otrdnd
+                    | number : (element.otrdnd > 0 ? "1.2-2" : 0)
+                    }}
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="otrD8">
+                <th class="pl-10" mat-header-cell *matHeaderCellDef>
+                    RDOT > 8
+                </th>
+                <td class="pl-10" mat-cell *matCellDef="let element">
+                    {{
+                    element.otrD8
+                    | number : (element.otrD8 > 0 ? "1.2-2" : 0)
+                    }}
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="otrdnD8">
+                <th class="pl-10" mat-header-cell *matHeaderCellDef>
+                    RDOTND > 8
+                </th>
+                <td class="pl-10" mat-cell *matCellDef="let element">
+                    {{
+                    element.otrdnD8
+                    | number : (element.otrdnD8 > 0 ? "1.2-2" : 0)
+                    }}
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="dh">
+                <th class="pl-10" mat-header-cell *matHeaderCellDef>DH</th>
+                <td class="pl-10" mat-cell *matCellDef="let element">
+                    @if (element.isRestDay) {
+                    {{
+                    element.dhrd
+                    | number : (element.dhrd > 0 ? "1.2-2" : 0)
+                    }}
+                    }
+                    @if (!element.isRestDay) {
+                    {{
+                    element.dh | number : (element.dh > 0 ? "1.2-2" : 0)
+                    }}
+                    }
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="dhot">
+                <th class="pl-10" mat-header-cell *matHeaderCellDef>DHOT</th>
+                <td class="pl-10" mat-cell *matCellDef="let element">
+                    {{
+                    element.dhot | number : (element.dhot > 0 ? "1.2-2" : 0)
+                    }}
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="dhotnd">
+                <th class="pl-10" mat-header-cell *matHeaderCellDef>DHOTND</th>
+                <td class="pl-10" mat-cell *matCellDef="let element">
+                    {{
+                    element.dhotnd
+                    | number : (element.dhotnd > 0 ? "1.2-2" : 0)
+                    }}
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="dhoT8">
+                <th class="pl-10" mat-header-cell *matHeaderCellDef>
+                    DHOT > 8
+                </th>
+                <td class="pl-10" mat-cell *matCellDef="let element">
+                    {{
+                    element.dhoT8
+                    | number : (element.dhoT8 > 0 ? "1.2-2" : 0)
+                    }}
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="dhotnD8">
+                <th class="pl-10" mat-header-cell *matHeaderCellDef>
+                    DHOTND > 8
+                </th>
+                <td class="pl-10" mat-cell *matCellDef="let element">
+                    {{
+                    element.dhotnD8
+                    | number : (element.dhotnD8 > 0 ? "1.2-2" : 0)
+                    }}
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="dhrd">
+                <th class="pl-10" mat-header-cell *matHeaderCellDef>DHRD</th>
+                <td class="pl-10" mat-cell *matCellDef="let element">
+                    {{
+                    element.dhrdot
+                    | number : (element.dhrdot > 0 ? "1.2-2" : 0)
+                    }}
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="dhrdoT8">
+                <th class="pl-10" mat-header-cell *matHeaderCellDef>
+                    DHRD > 8
+                </th>
+                <td class="pl-10" mat-cell *matCellDef="let element">
+                    {{
+                    element.dhrdoT8
+                    | number : (element.dhrdoT8 > 0 ? "1.2-2" : 0)
+                    }}
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="dhrdotnd">
+                <th class="pl-10" mat-header-cell *matHeaderCellDef>DHRDND</th>
+                <td class="pl-10" mat-cell *matCellDef="let element">
+                    {{
+                    element.dhrdotnd
+                    | number : (element.dhrdotnd > 0 ? "1.2-2" : 0)
+                    }}
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="dhrdotnD8">
+                <th class="pl-10" mat-header-cell *matHeaderCellDef>
+                    DHRDND > 8
+                </th>
+                <td class="pl-10" mat-cell *matCellDef="let element">
+                    {{
+                    element.dhrdotnD8
+                    | number : (element.dhrdotnD8 > 0 ? "1.2-2" : 0)
+                    }}
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="remarks">
+                <th class="pl-10" mat-header-cell *matHeaderCellDef>Remarks</th>
+                <td class="pl-10" mat-cell *matCellDef="let element">
+                    {{ element.remarks }}
+                </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        </table>
+        <br />
+        <mat-paginator class="h-10" (page)="handlePageEvent($event)" [length]="totalRows" [pageSize]="request.Length"
+            [pageIndex]="request.Start" [pageSizeOptions]="[10, 20, 50]" showFirstLastButtons></mat-paginator>
+    </section>
+</div>

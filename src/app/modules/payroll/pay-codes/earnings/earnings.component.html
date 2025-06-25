@@ -1,0 +1,262 @@
+<div class="flex flex-col flex-auto min-w-0" *transloco="let t">
+  <!-- Main -->
+  <div class="flex-auto  sm:p-2  w-full min-w-0 sm:absolute sm:inset-0 text-md">
+    <!-- Content -->
+    <!-- <mat-card> -->
+    <!-- <mat-card-title>
+    <app-card-title title="Earnings" [sub]="false" [back]="false" [switch]="false" (submitTap)="submit()"></app-card-title>
+  </mat-card-title> -->
+  <!-- <app-card-title title="Amount"></app-card-title><br> -->
+  <form [formGroup]="earningform">
+    <div class="flex flex-wrap gap-2 h-13">
+      <mat-form-field class="w-50 text-md" appearance="outline">
+        <mat-label class="label-font-size">{{t('earningCodes')}}</mat-label>
+        <mat-icon class="mb-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+        <input formControlName="code" class="input" matInput [placeholder]="''">
+      </mat-form-field>
+      <mat-form-field class="w-50 text-md" appearance="outline">
+        <mat-label class="label-font-size">{{t('description')}}</mat-label>
+        <mat-icon class="mb-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+        <input formControlName="description" class="input" type="text" matInput [placeholder]="''">
+      </mat-form-field>
+
+      <div class="w-50 hover:w-80">
+        <app-dropdown-custom [multiple]="false" [control]="earningform.get('categoryID')" (selected)="taxable()"  [type]="1041" [value]="ef.categoryID"   [options]="dropdownOptions.categoryDef" [useControl]="true"></app-dropdown-custom>
+      </div>
+
+      <mat-form-field class="w-50 text-md" appearance="outline">
+        <mat-label class="label-font-size">{{t('calculationType')}}</mat-label>
+        <mat-select formControlName="fixed" [placeholder]="''">
+          <mat-option [value]="true">Fixed </mat-option>
+          <mat-option [value]="false">Calculated</mat-option>
+        </mat-select>
+      </mat-form-field>
+      @if (!ef.fixed) {
+        <mat-form-field class="w-50 text-md" appearance="outline"
+          >
+          <mat-label class="label-font-size">{{t('earnDeduct')}}</mat-label>
+          <mat-select formControlName="earnOrDeduct" [placeholder]="''">
+            <mat-option [value]="1">TK-Earn </mat-option>
+            <mat-option [value]="2">TK-Deduct</mat-option>
+          </mat-select>
+        </mat-form-field>
+      }
+      @if (ef.earnOrDeduct == 2 && !ef.fixed) {
+        <mat-form-field class="w-50 text-md" appearance="outline">
+          <mat-label class="label-font-size">{{t('attendance')}}</mat-label>
+          <mat-select formControlName="attendance" multiple [placeholder]="''">
+            <mat-option [value]="0">Select all</mat-option>
+            <mat-option [value]="1">Absent</mat-option>
+            <mat-option [value]="2">Tardiness</mat-option>
+            <mat-option [value]="3">Undertime</mat-option>
+            <mat-option [value]="4">LWOP</mat-option>
+            <mat-option [value]="5">SL</mat-option>
+          </mat-select>
+        </mat-form-field>
+      }
+      @if (ef.earnOrDeduct == 1 && !ef.fixed) {
+        <mat-form-field class="w-50 text-md" appearance="outline">
+          <mat-label class="label-font-size">{{t('formula')}}</mat-label>
+          <mat-icon class="mb-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+          <input formControlName="formula" class="input" type="text" matInput [placeholder]="''">
+        </mat-form-field>
+      }
+      @if ((ef.earnOrDeduct == 2 || ef.earnOrDeduct == 1) && !ef.fixed) {
+        <mat-form-field class="w-50 text-md" appearance="outline"
+          >
+          <mat-label class="label-font-size">{{t('type')}}</mat-label>
+          <mat-select formControlName="type" [placeholder]="''">
+            <mat-option [value]="1">First Cutoff </mat-option>
+            <mat-option [value]="2">Second Cutoff</mat-option>
+            <mat-option [value]="3">Monthly</mat-option>
+            <mat-option [value]="4">Every Cutoff</mat-option>
+          </mat-select>
+        </mat-form-field>
+      }
+
+      <mat-form-field class="w-30 text-md" appearance="outline">
+        <mat-label class="label-font-size">{{t('taxable')}}</mat-label>
+        <mat-select formControlName="isTaxable" [placeholder]="''">
+          <mat-option [value]="true">Yes</mat-option>
+          <mat-option [value]="false">No</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field class="w-30 text-md" appearance="outline">
+        <mat-label class="label-font-size">{{t('deductFromTaxable')}}</mat-label>
+        <mat-select formControlName="isDeductfromTaxable" [placeholder]="''">
+          <mat-option [value]="true">Yes</mat-option>
+          <mat-option [value]="false">No</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <!-- <mat-form-field class="w-full text-md h-13"  appearance="outline" *ngIf="ef.fixed == 2">
+      <mat-icon class="mb-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+      <input class="input" type="number" matInput [placeholder]="''" >
+    </mat-form-field> -->
+  </div>
+
+  <div class="flex flex-warp gap-2 h-13 mt-2">
+    <mat-form-field class="w-50 text-md" appearance="outline">
+      <mat-label class="label-font-size">{{t('onPayslip')}}</mat-label>
+      <mat-select formControlName="isHidePayslip" [placeholder]="''">
+        <mat-option [value]="true">Yes</mat-option>
+        <mat-option [value]="false">No</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field class="w-50 hover:w-60 text-md" appearance="outline">
+      <mat-label class="label-font-size">{{t('partOfGross')}}</mat-label>
+      <mat-select formControlName="isAddtoGross" [placeholder]="''">
+        <mat-option [value]="true">Yes</mat-option>
+        <mat-option [value]="false">No</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field class="w-50 text-md" appearance="outline">
+      <mat-label class="label-font-size">{{t('onPayreg')}}</mat-label>
+      <mat-select formControlName="isHidePayreg" [placeholder]="''">
+        <mat-option [value]="true">Yes</mat-option>
+        <mat-option [value]="false">No</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <div class="w-50 hover:w-90">
+      <app-dropdown  [isFix]="false" [control]="earningform.get('jeAccountCode')"  [options]="dropdownOptions.accountCodeDef" [icon]="'mat_outline:info'" [type]="133" [useControl]="true"> </app-dropdown>
+    </div>
+
+    <div class="w-50 hover:w-90">
+      <app-dropdown  [isFix]="false" [control]="earningform.get('jeAccountId')"  [options]="dropdownOptions.accountNameDef" [icon]="'mat_outline:info'" [type]="134" [useControl]="true"> </app-dropdown>
+    </div>
+    <!-- secondary  -->
+    <div class="w-50 hover:w-90">
+      <app-dropdown  [isFix]="false" [control]="earningform.get('jeAccountCode1')"  [options]="dropdownOptions.accountCodeDef" [icon]="'mat_outline:info'" [type]="133" label="Account Code Secondary" [useControl]="true"> </app-dropdown>
+    </div>
+    <div class="w-50 hover:w-90">
+      <app-dropdown  [isFix]="false" [control]="earningform.get('jeAccountName1')"  [options]="dropdownOptions.accountNameDef" [icon]="'mat_outline:info'" [type]="134" label="Account Name Secondary" [useControl]="true"> </app-dropdown>
+    </div>
+    <mat-form-field class="w-50 text-md" appearance="outline">
+      <mat-label class="label-font-size">{{t('debitCredit')}}</mat-label>
+      <mat-select formControlName="debitOrCredit" [placeholder]="''">
+        <mat-option [value]="1">Debit</mat-option>
+        <mat-option [value]="0">Credit</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field class="w-50 text-md" appearance="outline">
+      <mat-label class="label-font-size">{{t('costOrHR')}}</mat-label>
+      <mat-select formControlName="costOrHr" [placeholder]="''">
+        <mat-option [value]="0">Cost</mat-option>
+        <mat-option [value]="1">HR</mat-option>
+        <mat-option [value]="2">Custom</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+
+    <mat-form-field class="w-50 text-md" appearance="outline">
+      <mat-label class="label-font-size">{{t('status')}}</mat-label>
+      <mat-select formControlName="active" [placeholder]="''">
+        <mat-option [value]="true">Active</mat-option>
+        <mat-option [value]="false">Inactive</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <!-- <div class="col-span-3">
+  <div class="grid grid-cols-3 gap-2 h-13">
+    <mat-form-field class="w-full text-md" appearance="outline">
+      <mat-select formControlName="debitOrCredit" [placeholder]="''">
+        <mat-option [value]="1">Debit</mat-option>
+        <mat-option [value]="0">Credit</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field class="w-full text-md" appearance="outline">
+      <mat-select formControlName="costOrHr" [placeholder]="''">
+        <mat-option [value]="0">Cost</mat-option>
+        <mat-option [value]="1">HR</mat-option>
+        <mat-option [value]="2">Custom</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+
+    <mat-form-field class="w-full text-md" appearance="outline">
+      <mat-select formControlName="active" [placeholder]="''">
+        <mat-option [value]="true">Active</mat-option>
+        <mat-option [value]="false">Inactive</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+</div> -->
+
+
+<!-- <mat-divider></mat-divider><br>
+<div class="grid grid-cols-4 gap-2 h-13">
+  <mat-form-field class="w-full text-md h-13"  appearance="outline">
+    <mat-icon class="mb-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+    <input class="input" matInput [placeholder]="''" >
+  </mat-form-field>
+  <mat-form-field class="w-full text-md h-13"  appearance="outline">
+    <mat-icon class="mb-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+    <input class="input" matInput [placeholder]="''" >
+  </mat-form-field>
+  <mat-form-field class="w-full text-md h-13" appearance="outline">
+    <mat-select [placeholder]="''" >
+      <mat-option value="1">13th Month Pay</mat-option>
+      <mat-option value="2">13 Month Others</mat-option>
+      <mat-option value="3">De Minimis</mat-option>
+      <mat-option value="4">Basic Pay</mat-option>
+      <mat-option value="5">Fringe Benefit</mat-option>
+      <mat-option value="6">Other Allowance TX</mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field class="w-full text-md h-13" appearance="outline">
+    <mat-select  [placeholder]="''" >
+      <mat-option [value]="true">Yes</mat-option>
+      <mat-option [value]="false">No</mat-option>
+    </mat-select>
+  </mat-form-field>
+</div>
+<div class="grid grid-cols-4 gap-2 h-13">
+  <mat-form-field class="w-full text-md h-13" appearance="outline">
+    <mat-select [placeholder]="''" >
+      <mat-option [value]="true">Yes</mat-option>
+      <mat-option [value]="false">No</mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field class="w-full text-md h-13" appearance="outline">
+    <mat-select [placeholder]="''" >
+      <mat-option [value]="true">Yes</mat-option>
+      <mat-option [value]="false">No</mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field class="w-full text-md h-13" appearance="outline">
+    <mat-select [placeholder]="''" >
+      <mat-option [value]="true">Yes</mat-option>
+      <mat-option [value]="false">No</mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field class="w-full text-md h-13" appearance="outline">
+    <mat-select [placeholder]="''" >
+      <mat-option [value]="true">Yes</mat-option>
+      <mat-option [value]="false">No</mat-option>
+    </mat-select>
+  </mat-form-field>
+</div>
+<mat-divider></mat-divider><br>
+<div class="grid grid-cols-5 gap-2 h-15">
+  <mat-form-field class="w-full text-md h-13" appearance="outline">
+    <mat-select formControlName="TimekeepingBased" [placeholder]="''">
+      <mat-option [value]="true">Yes</mat-option>
+      <mat-option [value]="false">No</mat-option>
+    </mat-select>
+  </mat-form-field>
+</div>
+<div class="grid grid-cols-3">
+  <div style=" border-style: solid; border-color: aliceblue; border-width: 1px; margin-top: 2px; border-radius: 3px;"
+    *ngIf="ef.TimekeepingBased" >
+    <textarea class="area ml-1"  matInput formControlName="description" placeholder="" ></textarea>
+  </div>
+</div> -->
+</form>
+</div>
+</div>

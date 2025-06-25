@@ -1,0 +1,183 @@
+/* .label-font-size{
+    font-size: 15px;
+}
+.mat-icon{
+    position: relative;
+    bottom: 8px;
+}
+.mat-select{
+    position: relative;
+    bottom: 11px;
+    font-size: medium;
+}
+.input{
+    position: relative;
+    bottom: 10px;
+    font-size: medium;
+}
+.button-margin-top{
+    padding-top: 1%;
+}
+
+::ng-deep .tab-hide .mat-tab-list .mat-tab-labels {
+  display: none;
+}
+.mat-datepicker-toggle{
+    position: relative;
+    bottom: 7px;
+    font-size: medium;
+}
+
+.scroll-container {
+    display: flex;
+    align-items: center;
+    overflow: auto;
+}
+
+table {
+    width: 100%;
+}
+.button-margin-top{
+    padding-top: 1%;
+  }
+
+.label-font-size{
+  font-size: 15px;
+ }
+ .mat-icon{
+     position: relative;
+     bottom: 11px;
+ }
+ input{
+   position: relative;
+   bottom: 10px;
+   font-size: medium;
+ }
+ .mat-datepicker-toggle{
+  position: relative;
+  bottom: 7px;
+  font-size: medium;
+ }
+.mat-cell{
+    text-align: center;
+    padding-top: 10px;
+    justify-items: center;
+}
+.mat-header-cell{
+    text-align: center;
+}
+
+.text{
+    border-style: solid;
+    border-width: 2px;
+    margin-bottom: 33px;
+    border-radius: 3px;
+    height: 33px;
+    min-width: 100px;
+    max-width: 150px;
+}
+.scroll{
+    overflow-x: scroll;
+}
+.mat-paginator {
+    display: flex;
+    justify-content: start;
+}
+
+table th, table td{
+    white-space: nowrap;
+}
+
+
+.table-container{
+    overflow: auto;
+}
+
+*/
+
+.green-icon {
+    color: green;
+  }
+.red-icon {
+    color: red;
+}
+
+.mat-mdc-header-row {
+    height: 54px !important;
+    font-size: 9px !important;
+}
+
+.mdc-data-table__header-cell {
+    padding: 0 0 0 25px !important;
+}
+
+.mdc-data-table__cell {
+    padding: 0 0 0 25px !important;
+    text-align: center !important
+}
+
+/** pagination **/
+
+.mat-paginator-sticky {
+    bottom: 0px;
+    height: 47px;
+    position: sticky;
+    z-index: 10;
+} 
+
+.mat-mdc-paginator-page-size-select {
+    width: 54px !important;
+}
+
+.mat-mdc-icon-button.mat-mdc-button-base {
+    --mdc-icon-button-state-layer-size: 30px;
+}
+
+.mat-mdc-paginator .mat-mdc-paginator-container {
+    padding: 0 0 !important
+}
+
+.mat-mdc-paginator-icon {
+    display: inline-block;
+    margin-bottom: 13px;
+}
+
+.mat-mdc-icon-button img, .mat-mdc-icon-button svg {
+    width: 22px !important;
+}
+
+.mat-mdc-form-field-icon-suffix .mat-mdc-icon-button svg {
+    padding: 2px !important;
+    margin: 0 4px 0 0 !important;
+}
+
+.mat-mdc-paginator .mat-mdc-paginator-container .mat-mdc-paginator-page-size {
+    align-items: center;
+    min-height: 40px;
+    margin: 0 0 7px 13px;
+}
+
+
+/** calendar **/
+.mat-datepicker-content .mat-calendar {
+    width: 230px !important;
+    height: 280px !important;
+}
+
+.mat-calendar-header {
+    padding: 0 0 !important;
+}
+
+.mat-calendar-controls .mat-mdc-icon-button.mat-mdc-button-base {
+    width: 38px !important;
+    height: 38px !important;
+    margin: 0 5px 0 -12px !important;
+}
+
+.mat-calendar-table-header th {
+    --mat-datepicker-calendar-header-text-size: 9px !important;
+}
+
+.mat-calendar-body-cell {
+    --mat-datepicker-calendar-text-size: 10px !important;
+}

@@ -1,0 +1,116 @@
+<!-- Main -->
+<div class="flex-auto p-2 sm:p-2 overflow-y-auto">
+
+  <mat-card>
+    <mat-card-title>
+      <app-card-title title="Break Type" [sub]="true" [back]="true" (submitTap)="submit()"></app-card-title>
+    </mat-card-title>
+    <mat-card-content>
+      <form [formGroup]="breaktypeForm">
+
+        <div class="grid grid-cols-6 gap-x-2 h-15 mt-4">
+          <mat-form-field class="w-full text-md" appearance="outline">
+            <mat-label class="label-font-size">Description</mat-label>
+            <mat-icon class="" matPrefix svgIcon="mat_outline:info"></mat-icon>
+            <input class="inputtop" matInput type="text" formControlName="description" [placeholder]="'Shift Name'">
+          </mat-form-field>
+
+          <mat-form-field class="w-full text-md" appearance="outline">
+            <mat-label class="label-font-size">Break Type</mat-label>
+            <mat-icon class="icon " matPrefix svgIcon="mat_outline:info"></mat-icon>
+            <mat-select class="" (selectionChange)="handleBreakType()" formControlName="breakId" [placeholder]="'Break Type'">
+              @for (item of dropdownOptions.breakTypeDef; track item) {
+                <mat-option
+                [value]="item.dropdownID">{{item.description}}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field class="w-full text-md" appearance="outline">
+            <mat-label class="label-font-size">Status</mat-label>
+            <mat-icon class="uploadbutton " matPrefix svgIcon="mat_outline:info"></mat-icon>
+            <mat-select formControlName="active" [placeholder]="'active'">
+              @for (item of status; track item) {
+                <mat-option [value]="item.id">{{ item.description }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
+        </div>
+      </form>
+      <div>
+        <mat-divider class="mb-3"></mat-divider>
+      </div>
+      <table #breakTable mat-table [dataSource]="breakSource" class="mat-elevation-z0 border">
+        <ng-container matColumnDef="name">
+          <th class="head pl-9" mat-header-cell *matHeaderCellDef> Name </th>
+          <td mat-cell *matCellDef="let element">
+            <mat-form-field class="w-full text-md h-13 mt-5" appearance="outline">
+              <mat-icon class=" " matPrefix svgIcon="mat_outline:info"></mat-icon>
+              <input class="input " [(ngModel)]="element.name" matInput type="text" [placeholder]="">
+            </mat-form-field>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="mins">
+          <th class="head pl-5" mat-header-cell *matHeaderCellDef> Mins </th>
+          <td mat-cell *matCellDef="let element">
+            <mat-form-field class="w-full text-md h-13 mt-5" appearance="outline">
+              <mat-icon class=" " matPrefix svgIcon="mat_outline:info"></mat-icon>
+              <input class="input" [(ngModel)]="element.mins" matInput type="number" [placeholder]="0">
+            </mat-form-field>
+          </td>
+        </ng-container>
+
+        <ng-container  matColumnDef="after">
+          <th class="head" mat-header-cell *matHeaderCellDef> </th>
+          <td mat-cell *matCellDef="let element">
+            <input class="inputs w-20 pl-6 mt-1" value="After" matInput type="text" [placeholder]="After" readonly>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="hours">
+          <th class="head pl-5" mat-header-cell *matHeaderCellDef> Hours </th>
+          <td mat-cell *matCellDef="let element">
+            <mat-form-field class="w-full text-md h-13 mt-5 " appearance="outline">
+              <mat-icon class="" matPrefix svgIcon="mat_outline:info"></mat-icon>
+              <input class="input" [(ngModel)]="element.hours" matInput type="number" [placeholder]="0">
+            </mat-form-field>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="type">
+          <th class="head pl-5" mat-header-cell *matHeaderCellDef> Type </th>
+          <td mat-cell *matCellDef="let element; let i = index">
+            <mat-form-field class="w-full text-md h-13 mt-5" appearance="outline">
+              <mat-icon class="icon " matPrefix svgIcon="mat_outline:info"></mat-icon>
+              <mat-select class="put-border" [(ngModel)]="element.type" placeholder="Type">
+                @for (item of dropdownOptions.breakDeductionDef; track item) {
+                  <mat-option
+                  [value]="item.dropdownID">{{item.description}}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="action">
+          <th class="head" mat-header-cell *matHeaderCellDef>
+            <button (click)="handleAddBreak()" class="w-full" mat-icon-button
+              [color]="'primary'">
+              <mat-icon class="icons" [svgIcon]="'heroicons_solid:plus-circle'"></mat-icon>
+            </button>
+          </th>
+          <td mat-cell *matCellDef="let element; let i = index">
+            <button type="button" class="w-full" (click)="handleDeleteBreak(i)" mat-icon-button color="warn">
+              <mat-icon class="icons" matSuffix svgIcon="mat_outline:delete"></mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="breakColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: breakColumns;"></tr>
+      </table>
+    </mat-card-content>
+  </mat-card>
+</div>

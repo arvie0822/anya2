@@ -1,0 +1,271 @@
+/* table {
+    width: 100%;
+    }
+    .label-font-size{
+    font-size: 15px;
+    }
+    input{
+        position: relative;
+        bottom: 9px;
+        font-size: medium;
+    }
+
+    ::ng-deep .tab-hide .mat-tab-list .mat-tab-labels {
+    display: none;
+    }
+    .mat-datepicker-toggle{
+    position: relative;
+    bottom: 7px;
+    font-size: medium;
+    }
+    .button-margin-top{
+    padding-top: 1%;
+    }
+    table{
+    width: 86%;
+    }
+    .uploadbutton{
+    position: relative;
+    bottom: 11px;
+    border-radius: 3px !important;
+    }
+    .mat-icon{
+    position: relative;
+    bottom: 9px;
+    }
+    .mat-select{
+    position: relative;
+    bottom: 10px;
+    font-size: medium;
+    }
+    .mat-header-cell{
+    text-align: center;
+    }
+    .mat-cell{
+    text-align: center;
+    }
+    .upload{
+        position: relative;
+        bottom: 15px;
+        right: -5px;
+        border-radius: 3px !important;
+    }
+    .mat-step-header .mat-step-header-ripple{
+        height: 30px;
+    }
+
+    button {
+        position: relative;
+        display: inline-block;
+        cursor: pointer;
+        outline: none;
+        border: 0;
+        vertical-align: middle;
+        text-decoration: none;
+        background: transparent;
+        padding: 0;
+        font-size: inherit;
+        font-family: inherit;
+       }
+
+       button.learn-more {
+        width: 5rem;
+        height: auto;
+       }
+
+       button.learn-more .circle {
+        transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
+        position: relative;
+        display: block;
+        margin: 0;
+        width: 3rem;
+        height: 3rem;
+        background: #4F46E5;
+        border-radius: 1.625rem;
+       }
+
+       button.learn-more .circle .icon {
+        transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        margin: auto;
+        background: #fff;
+       }
+
+       button.learn-more .circle .icon.arrow {
+        transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
+        left: 0.625rem;
+        width: 1.125rem;
+        height: 0.125rem;
+        background: none;
+       }
+
+       button.learn-more .circle .icon.arrow::before {
+        position: absolute;
+        content: "";
+        top: -0.29rem;
+        right: 0.0625rem;
+        width: 0.625rem;
+        height: 0.625rem;
+        border-top: 0.125rem solid #fff;
+        border-right: 0.125rem solid #fff;
+        transform: rotate(225deg);
+       }
+
+       button.learn-more2 {
+        width: 5rem;
+        height: auto;
+       }
+
+       button.learn-more2 .circle2 {
+        transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
+        position: relative;
+        display: block;
+        margin: 0;
+        width: 3rem;
+        height: 3rem;
+        background: #4F46E5;
+        border-radius: 1.625rem;
+       }
+
+       button.learn-more2 .circle2 .icon2 {
+        transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        margin: auto;
+        background: #fff;
+       }
+
+       button.learn-more2 .circle2 .icon2.arrow2 {
+        transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
+        left: 0.625rem;
+        width: 1.125rem;
+        height: 0.125rem;
+        background: none;
+       }
+
+       button.learn-more2 .circle2 .icon2.arrow2::before {
+        position: absolute;
+        content: "";
+        top: -0.29rem;
+        right: 0.0625rem;
+        width: 0.625rem;
+        height: 0.625rem;
+        border-top: 0.125rem solid #fff;
+        border-right: 0.125rem solid #fff;
+        transform: rotate(45deg);
+       }
+
+
+      .button-margin-top{
+        padding-top: 1%;
+        }
+
+    .app-payroll-deduction, .app-payroll-loans {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        height: 200px;
+     }
+
+     .scroll-container {
+        max-height: 300px;
+        overflow: auto;
+    }
+    .field {
+        height: 50px;
+    }
+    .area {
+        height: 40px;
+        padding: 5px;
+        width: 99%;
+    }
+    .text-error.ng-invalid.ng-touched {
+        border: 1px solid #DC2626;
+    }
+    .text-error.ng-valid.ng-touched {
+        border: 1px solid #C9C0C0;
+    }
+
+    .vertical-line {
+        border-left: 1px solid;
+        height: 100px;
+      }
+
+    ::ng-deep.mat-horizontal-stepper-header-container {
+        white-space: nowrap;
+        display: flex;
+        align-items: center;
+        height: 45px;
+        padding: 10px;
+    }
+
+    ::ng-deep.mat-step-header {
+        overflow: hidden;
+        outline: none;
+        cursor: pointer;
+        position: relative;
+        box-sizing: content-box;
+        -webkit-tap-highlight-color: rgba(0,0,0,0);
+        height: 35px !important;
+        width: fit-content;
+    }
+
+    .card-content{
+        position: relative;
+        height: 100%;
+        padding-top: 1px;
+    }
+
+    .child-mat-tab {
+        position: absolute;
+        top: 50px;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        max-height: 100%;
+        overflow: auto;
+    }
+    .search-field {
+        background-color: white;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+      }
+
+.select {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background: #fff;
+} */
+
+.text-error.ng-invalid.ng-touched {
+    border: 1px solid #DC2626;
+}
+.text-error.ng-valid.ng-touched {
+    border: 1px solid #C9C0C0;
+}
+
+.area {
+    height: 40px;
+    padding: 5px;
+    width: 99%;
+}
+
+.icons {
+    height: 15px !important;
+    min-height: 40px;
+    padding: 3px !important;
+}
+
+.mat-mdc-form-field-icon-suffix, [dir=rtl] .mat-mdc-form-field-icon-prefix {
+    padding: 0 0 0 0 !important;
+}
+
+.mat-horizontal-stepper-header {
+    height: 45px !important
+}

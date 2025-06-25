@@ -1,0 +1,12 @@
+input {
+    position: relative;
+    // bottom: 7px;
+    font-size: small;
+}
+::ng-deep .manages .mat-form-field-wrapper .mat-form-field-flex {
+    min-height: 42px !important;
+    margin-top: 2px !important;
+}
+.sample{
+    bottom: 10px;
+}

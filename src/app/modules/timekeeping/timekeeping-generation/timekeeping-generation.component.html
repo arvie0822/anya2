@@ -1,0 +1,588 @@
+<div class="flex flex-col flex-auto min-w-0" *transloco="let t">
+  <!-- Main -->
+  <div class="flex-auto  sm:p-2  w-full min-w-0 sm:absolute sm:inset-0 sm:overflow-auto text-md">
+    <!-- Content -->
+
+    <mat-card class="body-card h-full">
+      <mat-card-title>
+        <app-card-title title="Timekeeping Generation" [sub]="false" [switch]="false"
+        [back]="true"></app-card-title>
+        <div class="grid place-items-end">
+
+        </div>
+      </mat-card-title>
+      <!-- <form [formGroup]="tkgenerationform"> -->
+      <form [formGroup]="tkForm">
+        <div class="grid grid-cols-8 gap-2  mt-3">
+          <mat-form-field class="w-full text-md" appearance="outline">
+            <mat-label class="label-font-size">TK-Generation Type</mat-label>
+            <mat-icon class="mb-2" matPrefix [svgIcon]="'mat_outline:info'"></mat-icon>
+            <mat-select formControlName="type" [placeholder]="''" (ngModelChange)="typeHandler()">
+              <mat-option [value]="1">Regular</mat-option>
+              <!-- <mat-option [value]="2">Off-Cycle</mat-option>
+              <mat-option [value]="3">Final</mat-option> -->
+            </mat-select>
+          </mat-form-field>
+
+          @if (tkForm.value.type == 1) {
+            <mat-form-field class="w-full  text-md" appearance="outline">
+              <mat-label class="label-font-size">Payroll Cutoff</mat-label>
+              <mat-icon class="mb-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+              <mat-select (ngModelChange)="dropdownempty()" [placeholder]="'Payroll Cutoff'"
+                formControlName="payrollId" (ngModelChange)="cutoffHandler($event)">
+                @for (item of payrollCutoff; track item) {
+                  <mat-option
+                  [value]="item">{{item.description}}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+          }
+
+          @if (tkForm.value.type == 1) {
+            <mat-form-field class="w-full  text-md" appearance="outline">
+              <mat-label class="label-font-size">Year</mat-label>
+              <mat-icon class="mb-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+              <mat-select (ngModelChange)="dropdownempty()" [placeholder]="'Year'"
+                formControlName="payrollYear" (ngModelChange)="cutoffSelectionHandler()">
+                @for (item of payrollYear; track item) {
+                  <mat-option
+                  [value]="item.id">{{item.description}}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+          }
+
+          @if (tkForm.value.type == 1) {
+            <mat-form-field class="w-full  text-md" appearance="outline">
+              <mat-label class="label-font-size">Month</mat-label>
+              <mat-icon class="mb-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+              <mat-select (ngModelChange)="dropdownempty()" [placeholder]="'Month'"
+                formControlName="payrollMonth" (ngModelChange)="cutoffSelectionHandler()">
+                @for (item of payrollMonth; track item) {
+                  <mat-option
+                  [value]="item.monthId">{{item.month}}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+          }
+
+          @if (tkForm.value.type == 1) {
+            <mat-form-field class="w-full  text-md" appearance="outline">
+              <mat-label class="label-font-size">Cut Off</mat-label>
+              <mat-select (ngModelChange)="dropdownempty()" [placeholder]="'Cut Off'"
+                formControlName="payrollCutoff" (ngModelChange)="setCutoffHandler()">
+                @for (item of cutoffs; track item) {
+                  <mat-option [value]="item">{{item.description}}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+          }
+
+          @if (tkForm.value.type == 1 || tkForm.value.type == 3) {
+            <mat-form-field class="w-full  text-md"
+              appearance="outline">
+              <mat-label class="label-font-size">Sub Company</mat-label>
+              <mat-icon class="mb-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+              <mat-select (openedChange)="clearSearch()" (ngModelChange)="dropdownempty()" [multiple]="true" [placeholder]="'Sub Company'"
+                formControlName="subCompany">
+                <mat-option class="first-option">
+                  <input type="input" (click)="$event.stopPropagation()"
+                    (keydown.space)="$event.stopPropagation()"
+                    (keydown.control.a)="$event.stopPropagation(); $event.target.select()"
+                    class="border-2 pr-4 pl-4 search-field bg-white dark:bg-[#1e293b]"
+                    [placeholder]="t('Find')  + 'Subcompany' + ' ..'" [formControl]="inputChange_company">
+                  </mat-option>
+                  @if (!inputChange_company.value) {
+                    <mat-option [value]="0"
+                      (click)="selectAllHandler(allSubCompany,'subCompany', subCompany)" #allSubCompany>Select
+                    All</mat-option>
+                  }
+                  @for (item of subCompany; track item) {
+                    <mat-option (click)="selecteddropdown(item.dropdownID,'electedcom', 'subCompany');this.branchHandler()"
+                    [value]="item.dropdownID">{{item.description}}</mat-option>
+                  }
+                  @if (true) {
+                    <mat-select-trigger> {{selDisplayNgModel(tkForm.value.subCompany,subCompany)}}
+                      @if (tkForm.value.subCompany?.length > 1 && isALL(tkForm.value.subCompany)) {
+                        <span
+                          class="example-additional-selection">
+                          (+{{(tkForm.value.subCompany?.length || 0) - 1}} {{tkForm.value.subCompany?.length
+                          === 2 ? 'other' : 'others'}})
+                        </span>
+                      }
+                    </mat-select-trigger>
+                  }
+                </mat-select>
+              </mat-form-field>
+            }
+
+            @if (tkForm.value.type == 1 || tkForm.value.type == 3) {
+              <mat-form-field class="w-full  text-md"
+                appearance="outline">
+                <mat-label class="label-font-size">Branch</mat-label>
+                <mat-icon class="mb-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                <mat-select (openedChange)="clearSearch()" (ngModelChange)="dropdownempty()" [multiple]="true" [placeholder]="'Branch'"
+                  formControlName="branch" >
+                  <mat-option class="first-option">
+                    <input type="input" (click)="$event.stopPropagation()"
+                      (keydown.space)="$event.stopPropagation()"
+                      (keydown.control.a)="$event.stopPropagation(); $event.target.select()"
+                      class="pr-4 pl-4 border-2 search-field bg-white dark:bg-[#1e293b] "
+                      [placeholder]="t('Find')  +  'Branch' + ' ..'" [formControl]="inputChange_branch">
+                    </mat-option>
+                    @if (branch.length > 0 && !inputChange_branch.value) {
+                      <mat-option [value]="0"
+                        (click)="selectAllHandler(allBranch,'branch', branch)" #allBranch>Select
+                      All</mat-option>
+                    }
+                    @for (item of branch; track item) {
+                      <mat-option (click)="selecteddropdown(item.dropdownID,'electedbra', 'branch');employeeHandler(4)"
+                      [value]="item.dropdownID">{{item.description}}</mat-option>
+                    }
+                    @if (true) {
+                      <mat-select-trigger> {{selDisplayNgModel(tkForm.value.branch,branch)}}
+                        @if (tkForm.value.branch?.length > 1 && isALL(tkForm.value.branch)) {
+                          <span
+                            class="example-additional-selection">
+                            (+{{(tkForm.value.branch?.length || 0) - 1}} {{tkForm.value.branch?.length === 2 ?
+                            'other' : 'others'}})
+                          </span>
+                        }
+                      </mat-select-trigger>
+                    }
+                  </mat-select>
+                </mat-form-field>
+              }
+
+              @if (tkForm.value.type == 1 || tkForm.value.type == 3) {
+                <mat-form-field class="w-full  text-md" [matTooltip]="descriptions()"
+                  appearance="outline">
+                  <mat-label class="label-font-size">Employee Category</mat-label>
+                  <mat-icon class="mb-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                  <mat-select (openedChange)="clearSearch()" (ngModelChange)="dropdownempty()" [multiple]="true"
+                    [placeholder]="'Employee Category'" formControlName="category"
+                    >
+                    <mat-option class="first-option">
+                      <input type="input" (click)="$event.stopPropagation()"
+                        (keydown.space)="$event.stopPropagation()"
+                        (keydown.control.a)="$event.stopPropagation(); $event.target.select()"
+                        class="border-2 pr-4 pl-4 search-field bg-white dark:bg-[#1e293b]"
+                        [placeholder]="t('Find')  +  'Category' + ' ..'" [formControl]="inputChange_empCat">
+                      </mat-option>
+                      @if (!inputChange_empCat.value) {
+                        <mat-option [value]="0"
+                          (click)="selectAllHandler(allCategory,'category', category)" #allCategory>Select
+                        All</mat-option>
+                      }
+                      @for (item of category; track item) {
+                        <mat-option (click)="selecteddropdown(item.dropdownID,'electedcat', 'category');employeeHandler(4)"
+                        [value]="item.dropdownID">{{item.description}}</mat-option>
+                      }
+                      @if (true) {
+                        <mat-select-trigger> {{selDisplayNgModel(tkForm.value.category,category)}}
+                          @if (tkForm.value.category?.length > 1 && isALL(tkForm.value.category)) {
+                            <span
+                              class="example-additional-selection">
+                              (+{{(tkForm.value.category?.length || 0) - 1}} {{tkForm.value.category?.length === 2
+                              ? 'other' : 'others'}})
+                            </span>
+                          }
+                        </mat-select-trigger>
+                      }
+                    </mat-select>
+                  </mat-form-field>
+                }
+
+                @if (tkForm.value.type == 3) {
+                  <mat-form-field class="w-full  text-md" appearance="outline">
+                    <mat-label class="label-font-size">Department</mat-label>
+                    <mat-icon class="mb-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                    <mat-select (openedChange)="clearSearch()" (ngModelChange)="dropdownempty()" [multiple]="true" [placeholder]="'Department'"
+                      formControlName="department" >
+                      <mat-option class="first-option">
+                        <input type="input" (click)="$event.stopPropagation()"
+                          (keydown.space)="$event.stopPropagation()"
+                          (keydown.control.a)="$event.stopPropagation(); $event.target.select()"
+                          class="border-2 pr-4 pl-4 search-field bg-white dark:bg-[#1e293b]"
+                          [placeholder]="t('Find')  +  'Department' + ' ..'" [formControl]="inputChange_department">
+                        </mat-option>
+                        @if (!inputChange_department.value) {
+                          <mat-option [value]="0"
+                            (click)="selectAllHandler(allDepartment,'department', department)" #allDepartment>Select
+                          All</mat-option>
+                        }
+                        @for (item of department; track item) {
+                          <mat-option (click)="selecteddropdown(item.dropdownID,'electeddef', 'department');employeeHandler(4)"
+                          [value]="item.dropdownID">{{item.description}}</mat-option>
+                        }
+                        @if (true) {
+                          <mat-select-trigger> {{selDisplayNgModel(tkForm.value.department,department)}}
+                            @if (tkForm.value.department?.length > 1 && isALL(tkForm.value.department)) {
+                              <span
+                                class="example-additional-selection">
+                                (+{{(tkForm.value.department?.length || 0) - 1}} {{tkForm.value.department?.length
+                                === 2 ? 'other' : 'others'}})
+                              </span>
+                            }
+                          </mat-select-trigger>
+                        }
+                      </mat-select>
+                    </mat-form-field>
+                  }
+
+                  @if (tkForm.value.type == 3) {
+                    <mat-form-field class="w-full  text-md" appearance="outline">
+                      <mat-label class="label-font-size">Confidential</mat-label>
+                      <mat-icon class="mb-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                      <mat-select (openedChange)="clearSearch()" (ngModelChange)="dropdownempty()" [multiple]="true" [placeholder]="'Confidential'"
+                        formControlName="confidential" >
+                        <mat-option class="first-option">
+                          <input type="input" (click)="$event.stopPropagation()"
+                            (keydown.space)="$event.stopPropagation()"
+                            (keydown.control.a)="$event.stopPropagation(); $event.target.select()"
+                            class="border-2 pr-4 pl-4 search-field bg-white dark:bg-[#1e293b]"
+                            [placeholder]="t('Find')  +  'Confidential' + ' ..'"
+                            [formControl]="inputChange_confidential">
+                          </mat-option>
+                          @if (!inputChange_confidential.value) {
+                            <mat-option [value]="0"
+                              (click)="selectAllHandler(allConfidential,'confidential', confidential)"
+                            #allConfidential>Select All</mat-option>
+                          }
+                          @for (item of confidential; track item) {
+                            <mat-option (click)="selecteddropdown(item.dropdownID,'electedcon','confidential');employeeHandler(4)"
+                            [value]="item.dropdownID">{{item.description}}</mat-option>
+                          }
+                          @if (true) {
+                            <mat-select-trigger>
+                              {{selDisplayNgModel(tkForm.value.confidential,confidential)}}
+                              @if (tkForm.value.confidential?.length > 1 && isALL(tkForm.value.confidential)) {
+                                <span
+                                  class="example-additional-selection">
+                                  (+{{(tkForm.value.confidential?.length || 0) - 1}}
+                                  {{tkForm.value.confidential?.length === 2 ? 'other' : 'others'}})
+                                </span>
+                              }
+                            </mat-select-trigger>
+                          }
+                        </mat-select>
+                      </mat-form-field>
+                    }
+
+                    @if (tkForm.value.type == 3) {
+                      <mat-form-field class="w-full  text-md" appearance="outline">
+                        <mat-label class="label-font-size">Employee Status</mat-label>
+                        <mat-icon class="mb-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                        <mat-select (openedChange)="clearSearch()" (ngModelChange)="dropdownempty()"  (ngModelChange)="unselect()" [multiple]="true"
+                          [placeholder]="'Employee Status'" formControlName="status"
+                          >
+                          <mat-option class="first-option">
+                            <input type="input" (click)="$event.stopPropagation()"
+                              (keydown.space)="$event.stopPropagation()"
+                              (keydown.control.a)="$event.stopPropagation(); $event.target.select()"
+                              class="border-2 pr-4 pl-4 search-field bg-white dark:bg-[#1e293b]"
+                              [placeholder]="t('Find')  +  'Employee Status' + ' ..'"
+                              [formControl]="inputChange_empstatus">
+                            </mat-option>
+                            @if (!inputChange_empstatus.value) {
+                              <mat-option [value]="0"
+                                (click)="selectAllHandler(allStatus,'status', status)" #allStatus>Select
+                              All</mat-option>
+                            }
+                            @for (item of status; track item) {
+                              <mat-option (click)="selecteddropdown(item.dropdownID,'electedsta', 'status');employeeHandler(4)"
+                              [value]="item.dropdownID">{{item.description}}</mat-option>
+                            }
+                            @if (true) {
+                              <mat-select-trigger> {{selDisplayNgModel(tkForm.value.status,status)}}
+                                @if (tkForm.value.status?.length > 1 && isALL(tkForm.value.status)) {
+                                  <span
+                                    class="example-additional-selection">
+                                    (+{{(tkForm.value.status?.length || 0) - 1}} {{tkForm.value.status?.length === 2 ?
+                                    'other' : 'others'}})
+                                  </span>
+                                }
+                              </mat-select-trigger>
+                            }
+                          </mat-select>
+                        </mat-form-field>
+                      }
+
+                      @if (tkForm.value.type == 3) {
+                        <mat-form-field class="w-full  text-md" appearance="outline">
+                          <mat-label class="label-font-size">Employee</mat-label>
+                          <mat-icon class="mb-2" matPrefix [svgIcon]="'mat_outline:info'"></mat-icon>
+                          <mat-select (ngModelChange)="dropdownempty()" formControlName="employee" [multiple]="true"
+                            [placeholder]="'Employee'" (infiniteScroll)="getNextBatch()" msInfiniteScroll
+                            [complete]="complete" [threshold]="'20%'">
+                            <mat-option class="first-option">
+                              <input type="input" class="border-2 pr-4 pl-4 search-field bg-white dark:bg-[#1e293b]"
+                                (click)="$event.stopPropagation()"
+                                (keydown.space)="$event.stopPropagation()"
+                                (keydown.control.a)="$event.stopPropagation(); $event.target.select()"
+                                [placeholder]="t('Find')  +  'Employee ..'" [formControl]="inputChange">
+                              </mat-option>
+                              @if (employee.length > 0 && !inputChange.value) {
+                                <mat-option [value]="0"
+                                  (click)="selectAllHandler(allEmployee,'employee', employee)" #allEmployee>Select
+                                All</mat-option>
+                              }
+                              @for (option of employee; track option) {
+                                <mat-option [value]="option.dropdownID"
+                                  (click)="selecteddropdown(option.dropdownID,'selectedEmloyees', 'employee')">
+                                  {{option.description}}
+                                </mat-option>
+                              }
+                              @if (true) {
+                                <mat-select-trigger> {{selDisplayNgModel(tkForm.value.employee,employee)}}
+                                  @if (tkForm.value.employee?.length > 1 && isALL(tkForm.value.employee)) {
+                                    <span
+                                      class="example-additional-selection">
+                                      (+{{(tkForm.value.employee?.length || 0) - 1}} {{tkForm.value.employee?.length === 2
+                                      ? 'other' : 'others'}})
+                                    </span>
+                                  }
+                                </mat-select-trigger>
+                              }
+                            </mat-select>
+                          </mat-form-field>
+                        }
+
+                        @if (tkForm.value.type == 3) {
+                          <button [disabled]="disabledgenerate" class="w-full" mat-flat-button
+                            color="primary" (click)="generate()">
+                            <mat-icon class="mb-2" [svgIcon]="'heroicons_solid:clock'"></mat-icon><span class="ml-2">Generates</span>
+                          </button>
+                        }
+
+                        @if (tkForm.value.type == 3) {
+                          <button class="w-full" mat-flat-button color="primary" (click)="search()">
+                            <mat-icon class="mb-2" [svgIcon]="'heroicons_solid:clock'"></mat-icon><span class="ml-2">Searchs</span>
+                          </button>
+                        }
+
+                      </div>
+
+                      @if (tkForm.value.type == 1) {
+                        <div class="grid grid-cols-8 gap-2 h-10">
+                          <mat-form-field class="w-full text-md" appearance="outline">
+                            <mat-label class="label-font-size">Department</mat-label>
+                            <mat-icon class="mb-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                            <mat-select (openedChange)="clearSearch()" (ngModelChange)="dropdownempty()" [multiple]="true" [placeholder]="'Department'"
+                              formControlName="department" >
+                              <mat-option class="first-option">
+                                <input type="input" (click)="$event.stopPropagation()"
+                                  (keydown.space)="$event.stopPropagation()"
+                                  (keydown.control.a)="$event.stopPropagation(); $event.target.select()"
+                                  class="border-2 pr-4 pl-4 search-field bg-white dark:bg-[#1e293b]"
+                                  [placeholder]="t('Find')  +  'Department' + ' ..'" [formControl]="inputChange_department">
+                                </mat-option>
+                                @if (!inputChange_department.value) {
+                                  <mat-option [value]="0"
+                                    (click)="selectAllHandler(allDepartment,'department', department)" #allDepartment>Select
+                                  All</mat-option>
+                                }
+                                @for (item of department; track item) {
+                                  <mat-option (click)="selecteddropdown(item.dropdownID,'electeddef', 'department');employeeHandler(4)"
+                                  [value]="item.dropdownID">{{item.description}}</mat-option>
+                                }
+                                @if (true) {
+                                  <mat-select-trigger> {{selDisplayNgModel(tkForm.value.department,department)}}
+                                    @if (tkForm.value.department?.length > 1 && isALL(tkForm.value.department)) {
+                                      <span
+                                        class="example-additional-selection">
+                                        (+{{(tkForm.value.department?.length || 0) - 1}} {{tkForm.value.department?.length
+                                        === 2 ? 'other' : 'others'}})
+                                      </span>
+                                    }
+                                  </mat-select-trigger>
+                                }
+                              </mat-select>
+                            </mat-form-field>
+                            <mat-form-field class="w-full h-5 text-md" appearance="outline">
+                              <mat-label class="label-font-size">Confidential</mat-label>
+                              <mat-icon class="mb-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                              <mat-select (openedChange)="clearSearch()" (ngModelChange)="dropdownempty()" [multiple]="true" [placeholder]="'Confidential'"
+                                formControlName="confidential" >
+                                <mat-option class="first-option">
+                                  <input type="input" (click)="$event.stopPropagation()"
+                                    (keydown.space)="$event.stopPropagation()"
+                                    (keydown.control.a)="$event.stopPropagation(); $event.target.select()"
+                                    class="border-2 pr-4 pl-4 search-field bg-white dark:bg-[#1e293b]"
+                                    [placeholder]="t('Find')  +  'Confidential' + ' ..'"
+                                    [formControl]="inputChange_confidential">
+                                  </mat-option>
+                                  @if (!inputChange_confidential.value) {
+                                    <mat-option [value]="0"
+                                      (click)="selectAllHandler(allConfidential,'confidential', confidential)"
+                                    #allConfidential>Select All</mat-option>
+                                  }
+                                  @for (item of confidential; track item) {
+                                    <mat-option (click)="selecteddropdown(item.dropdownID,'electedcon', 'confidential');employeeHandler(4)"
+                                    [value]="item.dropdownID">{{item.description}}</mat-option>
+                                  }
+                                  @if (true) {
+                                    <mat-select-trigger>
+                                      {{selDisplayNgModel(tkForm.value.confidential,confidential)}}
+                                      @if (tkForm.value.confidential?.length > 1 && isALL(tkForm.value.confidential)) {
+                                        <span
+                                          class="example-additional-selection">
+                                          (+{{(tkForm.value.confidential?.length || 0) - 1}}
+                                          {{tkForm.value.confidential?.length === 2 ? 'other' : 'others'}})
+                                        </span>
+                                      }
+                                    </mat-select-trigger>
+                                  }
+                                </mat-select>
+                              </mat-form-field>
+                              <mat-form-field class="w-full h-5 text-md" appearance="outline">
+                                <mat-label class="label-font-size">Employee Status</mat-label>
+                                <mat-icon class="mb-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                                <mat-select (openedChange)="clearSearch()" (ngModelChange)="dropdownempty()" (ngModelChange)="unselect()" [multiple]="true"
+                                  [placeholder]="'Employee Status'" formControlName="status"
+                                  >
+                                  <mat-option class="first-option">
+                                    <input type="input" (click)="$event.stopPropagation()"
+                                      (keydown.space)="$event.stopPropagation()"
+                                      (keydown.control.a)="$event.stopPropagation(); $event.target.select()"
+                                      class="border-2 pr-4 pl-4 search-field bg-white dark:bg-[#1e293b]"
+                                      [placeholder]="t('Find')  +  'Employee Status' + ' ..'"
+                                      [formControl]="inputChange_empstatus">
+                                    </mat-option>
+                                    @if (!inputChange_empstatus.value) {
+                                      <mat-option [value]="0" (click)="selectAllHandler(allStatus,'status', status)"
+                                      #allStatus>Select All</mat-option>
+                                    }
+                                    @for (item of status; track item) {
+                                      <mat-option (click)="selecteddropdown(item.dropdownID,'electedsta', 'status');employeeHandler(4)"
+                                      [value]="item.dropdownID">{{item.description}}</mat-option>
+                                    }
+                                    @if (true) {
+                                      <mat-select-trigger> {{selDisplayNgModel(tkForm.value.status,status)}}
+                                        @if (tkForm.value.status?.length > 1 && isALL(tkForm.value.status)) {
+                                          <span
+                                            class="example-additional-selection">
+                                            (+{{(tkForm.value.status?.length || 0) - 1}} {{tkForm.value.status?.length === 2 ?
+                                            'other' : 'others'}})
+                                          </span>
+                                        }
+                                      </mat-select-trigger>
+                                    }
+                                  </mat-select>
+                                </mat-form-field>
+                                <mat-form-field class="w-full hover:col-span-2 h-5 text-md" appearance="outline">
+                                  <mat-label class="label-font-size">Employee</mat-label>
+                                  <mat-icon class="mb-2" matPrefix [svgIcon]="'mat_outline:info'"></mat-icon>
+                                  <mat-select (ngModelChange)="dropdownempty()" formControlName="employee" [multiple]="true"
+                                    [placeholder]="'Employee'" (infiniteScroll)="getNextBatch()" msInfiniteScroll
+                                    [complete]="complete" (openedChange)="onSelectOpen($event)" [threshold]="'20%'">
+                                    <mat-option class="border-2 first-option">
+                                      <input type="input" class=" pr-4 pl-4 search-field bg-white dark:bg-[#1e293b]"
+                                        (click)="$event.stopPropagation()"
+                                        (keydown.space)="$event.stopPropagation()"
+                                        (keydown.control.a)="$event.stopPropagation(); $event.target.select()"
+                                        [placeholder]="t('Find')  +  'Employee ..'" [formControl]="inputChange">
+                                      </mat-option>
+                                      <!-- Hide Select All when search field is not empty -->
+                                      @if (employee.length > 0 ) {
+                                        <mat-option [value]="0"
+                                          (click)="selectAllHandler(allEmployee,'employee', employee)" #allEmployee>Select
+                                        All</mat-option>
+                                      }
+                                      @for (option of employee; track option) {
+                                        <mat-option [value]="option.dropdownID"
+                                          (click)="selecteddropdown(option.dropdownID,'selectedEmloyees', 'employee')">
+                                          {{option.description}}
+                                        </mat-option>
+                                      }
+                                      @if (true) {
+                                        <mat-select-trigger> {{selDisplayNgModel(tkForm.value.employee,employee)}}
+                                          @if (tkForm.value.employee?.length > 1 && isALL(tkForm.value.employee)) {
+                                            <span
+                                              class="example-additional-selection">
+                                              (+{{(tkForm.value.employee?.length || 0) - 1}} {{tkForm.value.employee?.length === 2
+                                              ? 'other' : 'others'}})
+                                            </span>
+                                          }
+                                        </mat-select-trigger>
+                                      }
+                                    </mat-select>
+                                  </mat-form-field>
+                                  <button [disabled]="disabledgenerate" class="w-full" mat-flat-button color="primary"
+                                    (click)="generate()">
+                                    <mat-icon class="mb-2" [svgIcon]="'heroicons_solid:clock'"></mat-icon><span class="ml-2">Generate</span>
+                                  </button>
+                                  @if (tkForm.value.type == 3) {
+                                    <button class="w-full " mat-flat-button color="primary"
+                                      (click)="search()">
+                                      <mat-icon class="mb-2" [svgIcon]="'heroicons_solid:clock'"></mat-icon><span class="ml-2">Search</span>
+                                    </button>
+                                  }
+                                </div>
+                              }
+                            </form>
+                            @if (generates && tkForm.value.type == 1 || generates && tkForm.value.type == 3 ) {
+                              <div class="example-containers"
+                                >
+                                <app-generate-detailed [closebutton]="showbutton" [data]="object"></app-generate-detailed>
+                              </div>
+                            }
+                            @if (searchgen && tkForm.value.type == 3) {
+                              <mat-card class="scroll-container mat-elevation-z0">
+                                @if (searchgen && tkForm.value.type == 3) {
+                                  <div class="scroll mat-elevation-z0">
+                                    <table mat-table [dataSource]="dataSource" class="scroll mat-elevation-z0">
+                                      <ng-container matColumnDef="employeeCode">
+                                        <th mat-header-cell *matHeaderCellDef> Emp ID </th>
+                                        <td mat-cell *matCellDef="let element"> {{element.employeeCode}} </td>
+                                      </ng-container>
+                                      <ng-container matColumnDef="displayName">
+                                        <th class="pl-10" mat-header-cell *matHeaderCellDef> Emp Name </th>
+                                        <td class="pl-10" mat-cell *matCellDef="let element"> {{element.displayName}} </td>
+                                      </ng-container>
+                                      <ng-container matColumnDef="effectiveDate">
+                                        <th class="pl-10" mat-header-cell *matHeaderCellDef> Effective Date </th>
+                                        <td class="pl-10" mat-cell *matCellDef="let element"> {{element.effectiveDate}} </td>
+                                      </ng-container>
+                                      <ng-container matColumnDef="separationDate">
+                                        <th class="pl-10" mat-header-cell *matHeaderCellDef> Separation Date </th>
+                                        <td class="pl-10" mat-cell *matCellDef="let element"> {{element.separationDate}} </td>
+                                      </ng-container>
+                                      <ng-container matColumnDef="dateFrom">
+                                        <th class="head pl-5" mat-header-cell *matHeaderCellDef> TK End </th>
+                                        <td mat-cell *matCellDef="let element; let i = index">
+                                          <mat-form-field class="text-md h-13 mt-1" appearance="outline">
+                                            <input [(ngModel)]="element.dateFrom"
+                                              (ngModelChange)="dateHandler('dateFrom', $event, i)" matInput
+                                              [matDatepicker]="df1" readonly [placeholder]="'MM/DD/YYYY'"
+                                              (click)="df1.open()">
+                                              <mat-datepicker-toggle matSuffix [for]="df1"></mat-datepicker-toggle>
+                                              <mat-datepicker #df1></mat-datepicker>
+                                            </mat-form-field>
+                                          </td>
+                                        </ng-container>
+                                        <ng-container matColumnDef="dateTo">
+                                          <th class="head pl-5" mat-header-cell *matHeaderCellDef> TK End </th>
+                                          <td mat-cell *matCellDef="let element; let i = index">
+                                            <mat-form-field class="text-md h-13 mt-1" appearance="outline">
+                                              <input [(ngModel)]="element.dateTo"
+                                                (ngModelChange)="dateHandler('dateTo', $event, i)" matInput
+                                                [matDatepicker]="df2" readonly [placeholder]="'MM/DD/YYYY'"
+                                                (click)="df2.open()">
+                                                <mat-datepicker-toggle matSuffix [for]="df2"></mat-datepicker-toggle>
+                                                <mat-datepicker #df2></mat-datepicker>
+                                              </mat-form-field>
+                                            </td>
+                                          </ng-container>
+                                          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                                          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                                        </table>
+                                      </div>
+                                    }
+                                  </mat-card>
+                                }
+
+
+                              </mat-card>
+                            </div>
+                          </div>

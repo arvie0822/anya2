@@ -1,0 +1,52 @@
+
+<mat-card class="p-2 mat-elevation-z0" *transloco="let t">
+  <mat-card-title class="text-lg mat-elevation-z0 border-none">{{title}}</mat-card-title>
+
+  @if (terminate.enable) {
+    <div class="mt-3">
+      <mat-form-field class="w-full h-13 text-lg" appearance="outline">
+        <mat-label class="text-md">{{t('dateEffective')}}</mat-label>
+        <input [(ngModel)]="terminate.dateEffective" matInput [matDatepicker]="de" readonly placeholder="'MM/DD/YYYY'" (click)="de.open()" [min]="min">
+        <mat-datepicker-toggle matSuffix [for]="de"></mat-datepicker-toggle>
+        <mat-datepicker #de></mat-datepicker>
+      </mat-form-field>
+      <mat-form-field class="w-full h-13 text-lg" appearance="outline">
+        <mat-label class="text-md">{{t('dateSeparated')}}</mat-label>
+        <input [(ngModel)]="terminate.dateSeparated" matInput [matDatepicker]="ds" readonly placeholder="'MM/DD/YYYY'" (click)="ds.open()" [min]="min">
+        <mat-datepicker-toggle matSuffix [for]="ds"></mat-datepicker-toggle>
+        <mat-datepicker #ds></mat-datepicker>
+      </mat-form-field>
+      <mat-form-field class="w-full h-13 text-lg" appearance="outline">
+        <mat-label class="text-md">{{t('dateAccessUntil')}}</mat-label>
+        <input [(ngModel)]="terminate.dateAccessUntil" matInput [matDatepicker]="da" readonly placeholder="'MM/DD/YYYY'" (click)="da.open()" [min]="min">
+        <mat-datepicker-toggle matSuffix [for]="da"></mat-datepicker-toggle>
+        <mat-datepicker #da></mat-datepicker>
+      </mat-form-field>
+      <mat-form-field class="w-full text-lg" appearance="outline">
+        <mat-label class="text-md">{{t('remarks')}}</mat-label>
+        <mat-icon class="mb-2" matPrefix svgIcon="mat_outline:info" matTooltip="Remarks"></mat-icon>
+        <input type="text" matInput [(ngModel)]="terminate.remarks" placeholder="'Remarks'">
+      </mat-form-field>
+    </div>
+  }
+
+  @if (extend.enable) {
+    <div class="mt-3">
+      <mat-form-field class="w-full text-md" appearance="outline">
+        <mat-label class="text-md">{{t('daysToReview')}}</mat-label>
+        <mat-icon class="mb-2" matPrefix svgIcon="mat_outline:info" matTooltip="Max days is 80"></mat-icon>
+        <input type="text" matInput [(ngModel)]="extend.daysExtension" [OnlyNumber]="true" [max]="80" [min]="0" [maxLength]="2" [placeholder]="'Days to Review'">
+      </mat-form-field>
+      <mat-form-field class="w-full text-md" appearance="outline">
+        <mat-label class="text-md">{{t('daysToRegularize')}}</mat-label>
+        <mat-icon class="mb-2" matPrefix svgIcon="mat_outline:info" matTooltip="Max days is 90"></mat-icon>
+        <input type="text" matInput [(ngModel)]="extend.daysRegularize" [OnlyNumber]="true" [max]="90" [min]="0" [maxLength]="2" [placeholder]="'Days to Regularize'">
+      </mat-form-field>
+    </div>
+  }
+
+  <mat-card-actions align="right" class="space-x-4">
+    <button mat-flat-button color="warn" (click)="cancel()">Cancel</button>
+    <button mat-flat-button color="primary" (click)="confirmed()">Confirm</button>
+  </mat-card-actions>
+</mat-card>

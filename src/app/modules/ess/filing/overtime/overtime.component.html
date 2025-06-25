@@ -1,0 +1,227 @@
+<!-- Main -->
+<div class="flex-auto p-6 sm:p-6 overflow-y-auto" *transloco="let t">
+    <!-- Main -->
+    <div class="flex-auto sm:p-2  w-full min-w-0 sm:absolute sm:inset-0  sm:overflow-auto text-lg">
+        <table #OTTable mat-table [dataSource]="datasource" class="mat-elevation-z0 border">
+            <ng-container matColumnDef="otaction">
+                <th class="no-wrap" mat-header-cell *matHeaderCellDef></th>
+                <td mat-cell *matCellDef="let element; let i = index">
+                    @for (child of element.otaction; track child; let x = $index) {
+                    <div class="">
+                        <button class="mt-3 mb-2 ml-2" [disabled]="disabledbutton" mat-icon-button
+                            [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+                            <mat-icon class="icon-size-6">more_vert</mat-icon>
+                        </button>
+                        <mat-menu #menu="matMenu">
+                            <button (click)="add(x,i,element,'ottiming')" mat-menu-item>
+                                <mat-icon class="icon-size-6" color="primary">add</mat-icon>
+                                <span>{{t('add')}}</span>
+                            </button>
+                            <button mat-menu-item (click)="handleDeleteBreak(i,x)">
+                                <mat-icon class="icon-size-6" color="warn">delete</mat-icon>
+                                <span>{{t('delete')}}</span>
+                            </button>
+                            <!-- <button mat-menu-item (click)="cancel(element.encryptedId)"
+                *ngIf="element.status[x].id !=''">
+                <mat-icon class="icon-size-6" color="primary">cancel</mat-icon>
+                <span>Cancel</span>
+              </button> -->
+                        </mat-menu>
+                    </div>
+                    }
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="otdate" class="mat-column">
+                <th class="no-wrap" mat-header-cell *matHeaderCellDef>{{t('Date')}}</th>
+                <td class="" mat-cell *matCellDef="let element ; let i = index">
+                    @for (child of element.otdate; track child; let x = $index) {
+                    <div class="">
+                        <mat-form-field class="text-lg w-40 h-12 mt-3" appearance="outline" [disabled]="true">
+                            <mat-icon class="mb-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                            <input [disabled]="true" class="input" [(ngModel)]="child.id" matInput type="text"
+                                [placeholder]="" readonly>
+                        </mat-form-field>
+                    </div>
+                    }
+                </td>
+            </ng-container>
+
+            <ng-container class="" matColumnDef="otshift" class="mat-column">
+                <th class="no-wrap" mat-header-cell *matHeaderCellDef> Shift Code </th>
+                <td class="" mat-cell *matCellDef="let element ; let i = index">
+                    @for (child of element.otshift; track child; let x = $index) {
+                    <div class="">
+                        <mat-form-field class="text-lg w-50 hover:w-60 h-12 mt-3" appearance="outline">
+                            <mat-icon class="mb-2" matPrefix [svgIcon]="'mat_outline:info'"></mat-icon>
+                            <mat-select [disabled]="child.disable || disabledbutton" [(ngModel)]="child.id"
+                                [placeholder]="''" (infiniteScroll)="getNextBatchParent()" msInfiniteScroll
+                                [complete]="complete" threshold="{{systemSettings.infinitScrollThreshold}}">
+                                <mat-option class="text-lg">
+                                    <ngx-mat-select-search [formControl]="inputChangeParent"
+                                        [placeholderLabel]="'Find ' + placeholder + ' ..'"
+                                        [noEntriesFoundLabel]="'No ' + placeholder + ' found'"></ngx-mat-select-search>
+                                </mat-option>
+                                @for (option of returnList(i ,'shiftCodeDef'); track option) {
+                                <mat-option [value]="option.dropdownID">
+                                    {{option.description}}
+                                </mat-option>
+                                }
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    }
+                </td>
+            </ng-container>
+            <!-- overtimeTypeId -->
+            <ng-container matColumnDef="overtime_type">
+                <th class="no-wrap" mat-header-cell *matHeaderCellDef>{{t('Type')}}</th>
+                <td class="" mat-cell *matCellDef="let element ; let i = index">
+                    @for (child of element.overtime_type; track child; let x = $index) {
+                    <div class="">
+                        <mat-form-field class=" text-lg w-50  h-12 mt-3" appearance="outline">
+                            <mat-icon class="mb-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                            <mat-select (selectionChange)="validations(element,i,x,false) ;restdayDate(element,i,x,'ottime')"
+                            [disabled]="child.disable || disabledbutton || disabledottype" [(ngModel)]="child.id"
+                            [placeholder]="">
+                                @for (item of returnList(i ,'overtimeTypeDef'); track item) {
+                                <mat-option [value]="item.dropdownID">{{item.description}}</mat-option>
+                                }
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    }
+                </td>
+            </ng-container>
+
+            <!-- <ng-container matColumnDef="ottiming">
+                <th class="no-wrap" mat-header-cell *matHeaderCellDef>{{t('Filing Type')}}</th>
+                <td class="" mat-cell *matCellDef="let element ; let i = index">
+                    @for (child of element.ottiming; track child; let x = $index) {
+                    <div class="">
+                        <mat-form-field class=" text-lg w-50 hover:w-60 h-12 mt-3" appearance="outline">
+                            <mat-icon class="mb-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                            <mat-select
+                                (selectionChange)="validation(element,i,x,false) ;restdayDate(element,i,x,'ottime')"
+                                [disabled]="child.disable || disabledbutton" [(ngModel)]="child.id" [placeholder]="">
+                                @for (item of returnList(i ,'overtimeTimingDef'); track item) {
+                                <mat-option [value]="item.dropdownID">{{item.description}}</mat-option>
+                                }
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    }
+                </td>
+            </ng-container> -->
+
+            <ng-container matColumnDef="ot_start">
+                <th class="no-wrap" mat-header-cell *matHeaderCellDef>{{t('Start Time')}}</th>
+                <td class="" mat-cell *matCellDef="let element let i = index">
+                    @for (child of element.ot_start; track child; let x = $index) {
+                    <div class="">
+                        <mat-form-field class=" text-lg w-70  h-12 mt-3" appearance="outline">
+                            <input matInput [ngxMatDatetimePicker]="picker" (click)="picker.open()"
+                                placeholder="Choose a date" [min]="date_min_max(element,x,true)"
+                                [max]="date_min_max(element,x,false)" [(ngModel)]="child.id"
+                                [disabled]="child.disable || disabledbutton"
+                                (dateChange)="dateindentify('startdate');otvalidation(element,i,x,'df') ;restdayDate(element,i,x,'dt') ">
+                            <mat-datepicker-toggle matSuffix [for]="picker">
+                            </mat-datepicker-toggle>
+                            <ngx-mat-datetime-picker disabled [disabled]="child.disable || disabledbutton" #picker
+                                [showSpinners]="showSpinners" [showSeconds]="showSeconds" [stepHour]="stepHour"
+                                [stepMinute]="stepMinute" [stepSecond]="false" [touchUi]="touchUi" [color]="color"
+                                [enableMeridian]="true">
+                            </ngx-mat-datetime-picker>
+                        </mat-form-field>
+                    </div>
+                    }
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="ot_end">
+                <th class="no-wrap" mat-header-cell *matHeaderCellDef>{{t('End Time')}}</th>
+                <td class="" mat-cell *matCellDef="let element;let i = index;">
+                    @for (child of element.ot_end; track child; let x = $index) {
+                    <div class="">
+                        <mat-form-field class=" text-lg w-70  h-12 mt-3" appearance="outline">
+                            <input matInput [ngxMatDatetimePicker]="picker1" (click)="picker1.open()"
+                                placeholder="Choose a date" [min]="date_min_max(element,x,true)"
+                                [max]="date_min_max(element,x,false)" [(ngModel)]="child.id"
+                                [disabled]="child.disable || disabledbutton"
+                                (dateChange)="dateindentify('enddate'); otvalidation(element,i,x,'dt')">
+                            <mat-datepicker-toggle matSuffix [for]="picker1">
+                            </mat-datepicker-toggle>
+                            <ngx-mat-datetime-picker [disabled]="child.disable || disabledbutton" #picker1
+                                [showSpinners]="showSpinners" [showSeconds]="showSeconds" [touchUi]="touchUi"
+                                [color]="color" [enableMeridian]="true">
+                            </ngx-mat-datetime-picker>
+                        </mat-form-field>
+                    </div>
+                    }
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="otreason">
+                <th class="no-wrap" class="no-wrap" mat-header-cell *matHeaderCellDef>{{t('Reason')}}</th>
+                <td class="" mat-cell *matCellDef="let element let i = index">
+                    @for (child of element.otreason; track child; let x = $index) {
+                    <div class="w-full">
+                        <div class="dark:hidden flex w-full"
+                            style=" border-style: solid; border-color: rgb(189, 187, 187); border-width: 1px;;  margin-top : 9px ; border-radius: 3px; height: 30px;">
+                            <textarea [disabled]="child.disable" (blur)="reasonmodal($event,i)" class="area mt-2 ml-2 w-full"
+                                matInput [(ngModel)]="child.id"></textarea>
+                        </div>
+                        <div class="hidden dark:flex w-full"
+                            style=" border-style: solid; border-color: rgb(231, 231, 231); border-width: 1px;  margin-top : 9px ;  border-radius: 3px; height: 30px;">
+                            <textarea [disabled]="child.disable" (blur)="reasonmodal($event,i)" class="area mt-2 ml-2 w-full"
+                                matInput [(ngModel)]="child.id"></textarea>
+                        </div>
+                    </div>
+                    }
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="status">
+                <th class="no-wrap" mat-header-cell *matHeaderCellDef>{{t('Status')}}
+                <th>
+                <td class="" mat-cell *matCellDef="let element let i = index">
+                    @for (child of element.status; track child; let x = $index) {
+                    <div class="">
+                        <!-- <p class="mt-2 mb-2">{{child.id}}</p> -->
+                        <mat-form-field class="text-lg w-40  hover:w-60 h-12 mt-3" appearance="outline"
+                            [disabled]="true">
+                            <input [disabled]="true" class="input" [(ngModel)]="child.id" matInput type="text"
+                                [placeholder]="" readonly>
+                        </mat-form-field>
+                    </div>
+                    }
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="uploadFileot">
+                <th class="no-wrap" mat-header-cell *matHeaderCellDef>Upload</th>
+                <td class="" mat-cell *matCellDef="let element; let i = index">
+                    @for (child of element.uploadFileot; track child; let x = $index) {
+                    <div class="">
+                        <mat-form-field class="text-lg w-[30px] h-12 mt-3" appearance="outline">
+                            <input [disabled]="child.disable" type="file" id="imageUpload" #fileInput4
+                                (change)="uploadFile($event ,'displayMe'+i, 'uploadFileot',i,x)"
+                                class="absolute top-1 z-0   cursor-pointer opacity-0"
+                                accept=".jpeg,.jpg,.png,.doc,.docx,.pdf,.xls,.xlsx" />
+                            <input class="sample" readonly matInput [(ngModel)]="child.id" [id]="'displayMe'+i"
+                                cdkFocusInitial />
+                            <mat-icon [disabled]="child.disable" class="mb-2" matPrefix matTooltip={{child.id}}
+                                svgIcon="mat_outline:upload" (click)="fileInput4.click()"></mat-icon>
+                            <button [disabled]="child.disable" class="upb hidden" (click)="fileInput4.click()" matSuffix
+                                mat-button color="primary"></button>
+                        </mat-form-field>
+                    </div>
+                    }
+                </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="otColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: otColumns;"></tr>
+        </table>
+    </div>
+</div>

@@ -1,0 +1,42 @@
+<div class="flex flex-col flex-auto min-w-0">
+  <!-- Main -->
+  <div class="flex-auto sm:p-2 w-full min-w-0 sm:absolute sm:inset-0 sm:overflow-auto text-md" [style]="isView && !this.isWidgets?'margin-top: 100px;':''">
+    @if (route.isBoldReport) {
+      <mat-card class="body-card mat-elevation-z0" >
+        @if (!isView) {
+          <app-card-title title="Reports"></app-card-title>
+        }
+        @if (showReport) {
+          <bold-reportviewer [id]="'reportViewer_Control'+reportId" #reportViewer
+            [reportServiceUrl]="serviceUrl"
+            [reportServerUrl]="reportServerUrl"
+            [serviceAuthorizationToken]="serverServiceAuthorizationToken"
+            [parameters]="parameters"
+            [reportPath]="reportPath"
+            [toolbarSettings]="toolbarSettings"
+            [exportSettings]="exportSettings"
+            [toolbarRenderMode]="toolbarRenderMode"
+            [parameterSettings]="parameterSettings"
+            (exportItemClick)="onExportItemClick($event)"
+            (renderingComplete)="onRenderingComplete($event)">
+          </bold-reportviewer>
+        }
+      </mat-card>
+    }
+
+    @if (route.isHDMF) {
+      <app-hdmf-report></app-hdmf-report>
+    }
+    @if (route.isDownload) {
+      <app-report-details></app-report-details>
+    }
+  </div>
+</div>
+
+<script>
+  window.onbeforeunload = function () {
+  var reportviewerObj = $("#reportViewer_Control"+reportId).data("boldReportViewer");
+  reportviewerObj.clearReportCache();
+  reportviewerObj.destroy();
+  };
+</script>

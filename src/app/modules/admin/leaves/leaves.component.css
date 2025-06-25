@@ -1,0 +1,68 @@
+/* [disabled] {
+    pointer-events: none;
+}
+.label-font-size{
+    font-size: 15px;
+   }
+   .mat-icon{
+       position: relative;
+       bottom: 8px;
+   }
+   input{
+     position: relative;
+     bottom: 10px;
+     font-size: medium;
+   }
+.label-font-size-active{
+    font-size: 110% ;
+}
+.mat-select{
+    position: relative;
+    bottom: 10px;
+    font-size: medium;
+}
+.table1 {
+  width: 55%;
+}
+.table2 {
+    width: 60%;
+  }
+.border{
+border-width: 1px;
+}
+.uploadbutton{
+    position: relative;
+    bottom: 11px;
+    border-radius: 3px !important;
+}
+.hide {
+    display: none;
+  }
+
+  .samp :hover + .hide {
+    display: block;
+    color: red;
+    background: black;
+    width: fit-content;
+  }
+  .scroll-container {
+    display: flex;
+    align-items: center;
+  }
+.mat-header-cell{
+    text-align: center;
+}
+.mat-cell{
+    text-align: center;
+}
+.example-container {
+    height: 50px;
+    overflow: auto;
+  } */
+
+.table2 {
+ width: 60%;
+}
+.table1 {
+    width: 100%;
+}

@@ -1,0 +1,81 @@
+@if (useControl) {
+  <mat-form-field *transloco="let t" class="w-full text-lg" appearance="outline"
+    [class.mat-form-field-invalid]="isRequired && (control.dirty || control.touched) && isInputEmpty ">
+    <mat-label class="label-font-size" matTooltip="{{placeholder}}">{{placeholder}}</mat-label>
+    <mat-icon class="" matPrefix svgIcon="mat_outline:info"></mat-icon>
+    <mat-select class="text-lg" [disabled]="disabled" [formControl]="control" [id]="id" [multiple]="multiple"
+      (selectionChange)="selectedEvent($event)" [placeholder]="placeholder" (infiniteScroll)="getNextBatch()"
+      msInfiniteScroll [complete]="complete" [threshold]="'20%'" (openedChange)="onSelectOpen($event)">
+      <mat-option class="border-1 text-lg first-option">
+        <input type="input" class="border-[1px] pr-4 pl-4 search-field bg-white dark:bg-[#1e293b]"
+          (click)="$event.stopPropagation()" (keydown.space)="$event.stopPropagation()"
+          (keydown.control.a)="$event.stopPropagation(); $event.target.select()"
+          [placeholder]="t('Find') + placeholder + ' ..'" [formControl]="inputChange">
+        </mat-option>
+        @if (all) {
+          <mat-option [value]="0" (click)="selectAll()" #allSelected>All</mat-option>
+        }
+        @if (except) {
+          <mat-option [value]="0">Exception</mat-option>
+        }
+        @for (option of options$ | async; track option) {
+          <mat-option [disabled]="enable" [matTooltip]="option[dropdownLabel]" matTooltipClass="matTip"
+            (mouseenter)="showTooltip = true" (mouseleave)="showTooltip = false" matTooltipPosition="above"
+            [id]="option?.encryptID" [value]="option[dropdownValue]"
+            (click)="selectItem(option[dropdownValue], control.value)">
+            {{option[dropdownLabel]}}
+          </mat-option>
+        }
+        <mat-select-trigger> {{selDisplayNgModel(control.value)}}
+          @if (multiple && control.value?.length > 1 && isALL(control.value)) {
+            <span
+              class="example-additional-selection">
+              (+{{(control.value?.length || 0) - 1}} {{control.value?.length === 2 ? 'other' : 'others'}})
+            </span>
+          }
+        </mat-select-trigger>
+      </mat-select>
+    </mat-form-field>
+  }
+
+
+  @if (!useControl) {
+    <mat-form-field *transloco="let t" class="w-full text-md" appearance="outline">
+      <mat-label class="label-font-size" matTooltip="{{placeholder}}">{{placeholder}}</mat-label>
+      <mat-icon class="mb-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+      <mat-select class="text-lg" [id]="id" [disabled]="disabled" [multiple]="multiple" [(ngModel)]="value"
+        (selectionChange)="selectedEvent($event)" [placeholder]="placeholder" (infiniteScroll)="getNextBatch()"
+        msInfiniteScroll [complete]="complete" [threshold]="'20%'" (openedChange)="onSelectOpen($event)">
+        <mat-option class="border-1 text-lg first-option">
+          <input type="input" class="border-[1px] h-full w-full pr-4 pl-4 search-field bg-white dark:bg-[#1e293b]"
+            (click)="$event.stopPropagation()" (keydown.space)="$event.stopPropagation()"
+            (keydown.control.a)="$event.stopPropagation(); $event.target.select()"
+            [placeholder]="t('Find') + placeholder + ' ..'" [formControl]="inputChange">
+          </mat-option>
+          @if (all) {
+            <mat-option [value]="0" [disabled]="disableOpt(0)" (click)="selectAll()" #allSelected
+            >All</mat-option>
+          }
+          @if (except) {
+            <mat-option [value]="0">Exception</mat-option>
+          }
+          @for (option of options$ | async; track option) {
+            <mat-option [matTooltip]="option[dropdownLabel]" matTooltipClass="matTip" (mouseenter)="showTooltip = true"
+              (mouseleave)="showTooltip = false" matTooltipPosition="above" [disabled]="disableOpt(option.dropdownID)"
+              [id]="option?.encryptID" [value]="option[dropdownValue]"
+              (click)="selectItem(option[dropdownValue], value)">
+              {{option[dropdownLabel]}}
+            </mat-option>
+          }
+          @if (allDisplay) {
+            <mat-select-trigger> {{selDisplayNgModel(value)}}
+              @if (multiple && value?.length > 1 && isALL(value)) {
+                <span class="example-additional-selection">
+                  (+{{(value?.length || 0) - 1}} {{value?.length === 2 ? 'other' : 'others'}})
+                </span>
+              }
+            </mat-select-trigger>
+          }
+        </mat-select>
+      </mat-form-field>
+    }

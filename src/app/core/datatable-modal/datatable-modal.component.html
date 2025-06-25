@@ -1,0 +1,164 @@
+<div class="flex flex-col flex-auto min-w-0" *transloco="let t">
+
+  <div class="flex-auto  sm:p-2  w-full min-w-0 sm:absolute sm:inset-0 sm:overflow-auto text-md">
+    <mat-card class="body-card">
+
+      <div mat-dialog-title class="flex justify-between">
+        <mat-card-title  class="text-[12px] mb-3 mt-3" style="text-transform: capitalize; font-weight: bold;">{{table.title}} List</mat-card-title>
+
+        @if (isSAve) {
+          <div class="flex space-x-4 mt-3">
+            <a (click)="isSAve = false;back()" class="fuse-mat-button-midium text-lg w-[10px]" mat-stroked-button [color]="'primary'" matTooltip="Back">
+              <mat-icon class="mb-2" [svgIcon]="'heroicons_outline:arrow-left'"></mat-icon>
+              <span class="ml-2 text-sm"></span>
+            </a>
+            <button (click)="submit()" class="fuse-mat-button-midium text-lg w-[10px]" mat-flat-button color="primary" matTooltip="Save Changes">
+              <mat-icon class="mb-2" svgIcon="mat_outline:save"></mat-icon>
+            </button>
+          </div>
+        }
+      </div>
+
+      <mat-card-content>
+        <div class="flex flex-wrap ">
+          @for (filter of table.filter; track filter) {
+            <!-- Input dropdown -->
+            @if (filter.type=='input') {
+              <mat-form-field class="w-50 text-lg mr-4" appearance="outline">
+                <mat-label class="label-font-size">{{filter.label}}</mat-label>
+                <mat-icon class="icon-size-5 : mr-2" matSuffix svgIcon="{{filter.icon}}"></mat-icon>
+                <input class="input" [id]="filter.id" matInput [(ngModel)]="filter._value" />
+              </mat-form-field>
+            }
+            <!-- Select dropdown -->
+            @if (filter.type=='select') {
+              <mat-form-field class="w-50 text-lg mr-4" appearance="outline">
+                <mat-label class="label-font-size">{{filter.label}}</mat-label>
+                <mat-select [id]="filter.id" [(ngModel)]="filter._value" [multiple]="filter.multiselect">
+                  @for (item of filter.options; track item) {
+                    <mat-option>{{item.description}}</mat-option>
+                  }
+                </mat-select>
+              </mat-form-field>
+            }
+            <!-- Custom dropdown -->
+            @if (filter.type=='custom') {
+              <div class="mr-4 w-50 text-lg" >
+                <app-dropdown-custom (selected)="filter._value = $event" [id]="filter.id"
+                [multiple]="filter.multiselect" [useControl]="false"  [all]="filter.all" [type]="filter.dropdownType.uri" (manual)="manual=$event"></app-dropdown-custom>
+              </div>
+            }
+            <!-- Dropdown Hierarchy -->
+            @if (filter.type=='d-hierarchy') {
+              <div class="w-50 text-lg mr-4">
+                <app-dropdown-hierarchy  (selected)="filter._value=$event"
+                  [multiple]="filter.multiselect" [value]="filter._value" [useControl]="false" [all]="filter.all" [id]="isNumber(filter.dropdownType.id)"
+                  [icon]="'mat_outline:info'" [type_id]="filter.dropdownType.type_id" [type]="filter.dropdownType.uri" [manual]="manual">
+                </app-dropdown-hierarchy>
+              </div>
+            }
+            <!-- <div *ngIf="column.type=='d-hierarchy'" class="h-13 mt-1">
+            <app-dropdown-hierarchy [useControl]="false" (selected)="element[column.key]=$event"
+              [value]="element[column.key]" [multiple]="column.multiselect"
+              [type]="column.dropdownType.uri" [type_id]="column.dropdownType.type_id" [id]="isNumber(element,column.dropdownType.id)">
+            </app-dropdown-hierarchy>
+          </div> -->
+        }
+
+        <div class="flex space-x-4 flex-wrap ">
+          <button mat-flat-button color="primary" (click)="loadData(false)" class="fuse-mat-button-midium text-lg w-[10px]" matTooltip="Search">
+            <mat-icon class="mb-2" matSuffix svgIcon="mat_outline:search" (click)="loadData(false)"></mat-icon>
+          </button>
+
+          @if (!isSAve) {
+            <button mat-flat-button color="primary" (click)="handleCreateEvent()" class="fuse-mat-button-midium text-lg w-[10px]" matTooltip="Create">
+              <mat-icon class="mb-2" matSuffix svgIcon="mat_outline:playlist_add"></mat-icon>
+            </button>
+          }
+
+          @if (!isSAve) {
+            <button mat-flat-button color="primary" (click)="handleExportEvent()" class="fuse-mat-button-midium text-lg w-[10px]" matTooltip="Export">
+              <mat-icon class="mb-2" matSuffix svgIcon="mat_outline:download"></mat-icon>
+            </button>
+          }
+        </div>
+      </div>
+
+    </mat-card-content>
+    <mat-card-content>
+      <div class="example-table-container">
+        <!-- create fields -->
+        @if (isSAve) {
+          <app-crud-table [isAdd]="isAdd" (pushEvent)="reloadData($event)"
+          (deleteEvent)="removehighlight($event)" [crudtable]="crudtable"></app-crud-table>
+        }
+        <!-- table -->
+        <section class="example-containers mat-elevation-z0 z-10" [ngStyle]="isSAve ? {top: '190px'} : {}">
+          <table mat-table #MatTable matSort class="example-table border" [attr.disabled]="isLoadingResults ? true : null"
+            [dataSource]="dataSource" (matSortChange)="handleSortEvent($event)">
+
+            @for (column of table.rows; track column) {
+              <ng-container [matColumnDef]="column.column">
+                <th mat-header-cell *cdkHeaderCellDef mat-sort-header>{{ column.title }}</th>
+                <td mat-cell *cdkCellDef="let row">
+                  <!-- text -->
+                  @if (column.type=='none') {
+                    <span>{{row[column.column]}}</span>
+                  }
+                  @if (column.type=='check') {
+                    <div>
+                      <mat-slide-toggle color="primary" [(ngModel)]="row[column.column]"></mat-slide-toggle>
+                    </div>
+                  }
+                  <!-- badge -->
+                  @if (column.type=='badge') {
+                    <div>
+                      @if (row[column.column]=='Online') {
+                        <span class="badge-on"> Online</span>
+                      }
+                      @if (row[column.column]=='Offline') {
+                        <span class="badge-off">Offline</span>
+                      }
+                    </div>
+                  }
+                  <!-- menu -->
+                  @if (column.type=='action'&&column.modal) {
+                    <button mat-icon-button [matMenuTriggerFor]="menu"
+                      aria-label="Example icon-button with a menu">
+                      <mat-icon class="icon-size-6">more_vert</mat-icon>
+                    </button>
+                  }
+                  <mat-menu #menu="matMenu">
+                    @for (item of column.menu; track item) {
+                      <button mat-menu-item
+                        (click)="handleOpenEvent(row,column,item._value)">
+                        <span>{{item.name}}</span>
+                      </button>
+                    }
+                  </mat-menu>
+                  <!-- action -->
+                  @if (column.type=='action'&&!column.modal) {
+                    <button mat-button color="primary"
+                      (click)="handleOpenEvent(row,column,0);">
+                      <mat-icon matSuffix svgIcon="open_in_new"></mat-icon>
+                    </button>
+                  }
+                </td>
+              </ng-container>
+            }
+
+            <tr mat-header-row *matHeaderRowDef="columndefs; sticky: true"></tr>
+            <tr mat-row *matRowDef="let row; columns: columndefs"
+            [ngClass]="{'edited': highligthselected(row.encryptId)}"></tr>
+          </table>
+        </section>
+
+        <mat-paginator class="paganation" [attr.disabled]="isLoadingResults ? true : null" (page)="handlePageEvent($event)"
+          [length]="totalRows" [pageSize]="request.Length" [pageIndex]="request.Start"
+        [pageSizeOptions]="[10, 20, 50]" showFirstLastButtons></mat-paginator>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>
+
+</div>

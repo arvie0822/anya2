@@ -1,0 +1,139 @@
+<div class="flex flex-col flex-auto min-w-0">
+  <!-- Main -->
+  <div class="flex-auto sm:p-2 w-full min-w-0 sm:absolute sm:inset-0 sm:overflow-auto text-md">
+    <mat-card class="h-full">
+      <mat-card-title>
+        <app-card-title title="Statutory Setup" [sub]="true" [back]="true" (submitTap)="submit()"></app-card-title>
+      </mat-card-title>
+      <div>
+
+        <form [formGroup]="dynamicForm">
+
+          <div class="w-64 h-16 mt-3">
+            <app-dropdown  [isFix]="true" [control]="dynamicForm.get('statutory')" (selected)="re_new()" [options]="dropdownOptions.statutoryDef" [icon]="'mat_outline:info'" [type]="125" [useControl]="true"> </app-dropdown>
+          </div>
+
+          <div class="flex h-13 gap-3">
+
+            @if (isNotEmpty()) {
+              <mat-form-field class="w-50" appearance="outline">
+                <mat-label class="label-font-size">Types</mat-label>
+                <mat-icon class="mb-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                <mat-select formControlName="frequency" (selectionChange)="hdmiPHICReset('type');dropdownvalue(this.dynamicForm.value)">
+                  @for (item of types; track item) {
+                    <mat-option
+                    [value]="item.id">{{item.description}}</mat-option>
+                  }
+                </mat-select>
+              </mat-form-field>
+            }
+
+            @if (isNotEmpty()) {
+              <mat-form-field class="w-50 text-lg" appearance="outline">
+                <mat-label class="label-font-size">Name</mat-label>
+                <mat-icon class="mb-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                <input class="input" formControlName="name" matInput [placeholder]="'Name'" />
+              </mat-form-field>
+            }
+
+            @if (isNotEmpty()) {
+              <mat-form-field class="w-50 text-lg" appearance="outline">
+                <mat-label class="label-font-size">Description</mat-label>
+                <mat-icon class="mb-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                <input class="input" formControlName="description" matInput [placeholder]="'Description'" />
+              </mat-form-field>
+            }
+
+            @if (showMe(this.getDy.statutory,[30379,30381,30382])) {
+              <div class="w-50"><app-dropdown-custom [control]="dynamicForm.get('attendance')" [value]="this.getDy.attendance" [all]="true" [options]="dropdownOptions.attendanceStatutoryDef" [useControl]="true" [multiple]="true" [type]="1020"> </app-dropdown-custom></div>
+            }
+
+            @if (showMe(this.getDy.statutory,[30379,30381,30382])) {
+              <div class="w-50"><app-dropdown [control]="dynamicForm.get('basic')" [options]="dropdownOptions.sssBasisDef" [all]="true" [icon]="'mat_outline:info'" [type]="127" [multiple]="true" [useControl]="true"> </app-dropdown></div>
+            }
+
+            @if (showMe(this.getDy.statutory,[30379,30381,30382])) {
+              <div class="w-50"><app-dropdown [control]="dynamicForm.get('leave')" [options]="dropdownOptions.leaveStatutoryDef" [all]="true" [isFix]="true" [icon]="'mat_outline:info'" [type]="90" [multiple]="true" [useControl]="true"> </app-dropdown></div>
+            }
+
+            @if (showMe(this.getDy.statutory,[30379,30381,30382])) {
+              <div class="w-50"><app-dropdown-custom [multiple]="true" [all]="true" [control]="dynamicForm.get('earnings')" [type]="1022" [value]="this.getDy.earnings" [options]="dropdownOptions.earningsDef" [useControl]="true"></app-dropdown-custom></div>
+            }
+
+            @if (isNotEmpty()) {
+              <mat-form-field class="w-50 text-lg" appearance="outline">
+                <mat-label class="label-font-size">Status</mat-label>
+                <mat-icon class="mb-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                <mat-select formControlName="active">
+                  <mat-option [value]="true">Active</mat-option>
+                  <mat-option [value]="false">Inactive</mat-option>
+                </mat-select>
+              </mat-form-field>
+            }
+
+          </div>
+
+          <!-- First Cut-off -->
+          @if (showMe(this.getDy.frequency,[0,1,2]) && isNotEmpty()) {
+            <div>
+              <div class="mt-2 pb-3 pt-3">
+                <p class="text-lg">First Cut-off</p>
+              </div>
+              <mat-divider></mat-divider>
+              <div class="grid grid-cols-7 gap-2 h-14 mt-5">
+                @if(shodropfirst){
+                <app-dropdown [isFix]="true" [control]="dynamicForm.get('firstCutOff')" (selected)="hdmiPHICReset('First'); calcFull(this.dynamicForm)" [options]="firstcutofflist"  [icon]="'mat_outline:info'" [type]="126" [useControl]="true"> </app-dropdown>
+                }
+                @if (showMe(this.getDy.statutory,[30379,30381,30382]) && showMe(this.getDy.firstCutOff,[30388])) {
+                  <app-dropdown [isFix]="true" [control]="dynamicForm.get('firstCalc')" [options]="dropdownOptions.hdmfFirstCalcDef" [icon]="'mat_outline:info'" [type]="129" [useControl]="true"> </app-dropdown>
+                }
+                @if (showMe(this.getDy.statutory,[30380]) && showMe(this.getDy.firstCutOff,[30388])) {
+                  <app-dropdown [isFix]="true" [control]="dynamicForm.get('firstCalc')"  [options]="taxRate(true)" [icon]="'mat_outline:info'" [type]="130" [useControl]="true"> </app-dropdown>
+                }
+                @if (dynamicForm.value.frequency == 0 &&  dynamicForm.value.firstCutOff == 30387 || dynamicForm.value.frequency == 1 &&  dynamicForm.value.firstCutOff == 30387) {
+                  <mat-form-field
+                    class="w-full text-lg h-10" appearance="outline">
+                    <mat-label class="label-font-size">Max Amount</mat-label>
+                    <mat-icon class="mb-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                    <input class="input" type="number" formControlName="firstMax" matInput />
+                  </mat-form-field>
+                }
+              </div>
+            </div>
+          }
+
+          <!-- Second Cut-off -->
+          @if (showMe(this.getDy.frequency,[1])) {
+            <div>
+              <div class="mt-2 pb-3 pt-3">
+                <p class="text-lg">Second Cut-off</p>
+              </div>
+              <mat-divider></mat-divider>
+              <div class="grid grid-cols-7 gap-2 h-14 mt-5">
+                  @if(shodropsecond){
+                    <app-dropdown [isFix]="true" [control]="dynamicForm.get('secondCutoff')" (selected)="hdmiPHICReset('Second'); calcFull(this.dynamicForm)" [options]="secondcutofflist" [icon]="'mat_outline:info'" [type]="126" [useControl]="true"> </app-dropdown>
+                  }
+                @if (showMe(this.getDy.statutory,[30379,30381,30382]) && showMe(this.getDy.secondCutoff,[30388])) {
+                  <app-dropdown [isFix]="true" [control]="dynamicForm.get('secondCalc')" [options]="dropdownOptions.hdmfSecondCalcDef" [icon]="'mat_outline:info'" [type]="129" [useControl]="true"> </app-dropdown>
+                }
+                @if (showMe(this.getDy.statutory,[30380]) && showMe(this.getDy.secondCutoff,[30388])) {
+                  <app-dropdown [isFix]="true" [control]="dynamicForm.get('secondCalc')"  [options]="taxRate(false)" [icon]="'mat_outline:info'" [type]="130" [useControl]="true"> </app-dropdown>
+                }
+                @if (dynamicForm.value.secondCutoff == 30387) {
+                  <mat-form-field class="w-full text-lg h-10"
+                    appearance="outline">
+                    <mat-label class="label-font-size">Max Amount</mat-label>
+                    <mat-icon class="mb-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                    <input class="input" type="number" formControlName="secondMax" matInput />
+                  </mat-form-field>
+                }
+              </div>
+            </div>
+          }
+
+        </form>
+
+      </div>
+    </mat-card>
+  </div>
+</div>

@@ -1,0 +1,72 @@
+<div class="flex flex-col flex-auto min-w-0" *transloco="let t">
+  <!-- Main -->
+  <div class="flex-auto  sm:p-2  w-full min-w-0 sm:absolute sm:inset-0 sm:overflow-auto text-md">
+    <!-- Content -->
+    <mat-card class="h-full">
+      <mat-card-title>
+        <app-card-title title="Map Your Own Template" [sub]="true" [back]="true" [switch]="false" (submitTap)="submit()"></app-card-title>
+      </mat-card-title>
+
+      <div class="flex gap-2 mt-2">
+        <mat-form-field appearance="outline">
+          <mat-label class="w-50 label-font-size">Template Type</mat-label>
+          <mat-icon class="mb-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+          <mat-select [disabled]="hasFileUploaded" [(ngModel)]="dynamicHeadersType" (selectionChange)="onTemplateTypeChange($event)">
+            @for (item of dropdownOptions.dynamicHeadersDef; track item) {
+              <mat-option [value]="item.dropdownID">{{item.description}}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+
+        <form [formGroup]="dynamicHeadersForm">
+        <mat-form-field class="w-50 text-md mr-2" appearance="outline">
+          <mat-label class="label-font-size">Code</mat-label>
+          <mat-icon class="mb-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+          <input formControlName="code" class="input" matInput [placeholder]="''">
+        </mat-form-field>
+        <mat-form-field class="w-50 text-md" appearance="outline">
+          <mat-label class="label-font-size">Description</mat-label>
+          <mat-icon class="mb-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+          <input formControlName="description" class="input" type="text" matInput [placeholder]="''">
+        </mat-form-field>
+      </form>
+
+          <mat-form-field class="w-60 text-md" appearance="outline">
+            <mat-icon class="mb-2 mr-2" matSuffix svgIcon="upload" (click)="file.click($event)"></mat-icon>
+            <input type="file" #file (change)="uploadFile($event)" accept=".xls,.xlsx" hidden/>
+            <input class="input" readonly matInput id="fileUpload" placeholder="Upload File" (click)="file.click($event)"/>
+          </mat-form-field>
+      </div>
+
+      <section class="mat-elevation-z0 z-10 overflow-auto w-full" tabindex="0" style="max-height: 60vh;">
+        <div class="min-w-[800px] w-full">
+          <table mat-table [dataSource]="dataSource" class="mat-elevation-z0 border w-full">      
+      
+            <ng-container matColumnDef="headers">
+              <th class="pr-10" mat-header-cell *matHeaderCellDef> Your Headers </th>
+              <td mat-cell *matCellDef="let element">
+                <span>{{ isEdit ? element.matching_keyword : element.column_name }}</span>
+              </td>
+            </ng-container>
+            
+            <ng-container matColumnDef="headerMapping">
+              <th class="pr-10" mat-header-cell *matHeaderCellDef> Map your Headers </th>
+              <td mat-cell *matCellDef="let element">
+                <mat-select [(ngModel)]="element.display_label" class="border w-100 p-2 m-0">
+                  @for (item of headerList; track item) {
+                    <mat-option [value]="item.column_name">{{item.display_label}}</mat-option>
+                  }
+                </mat-select>
+              </td>
+            </ng-container>
+      
+            <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+          </table>
+        </div>
+      </section>
+
+      <mat-paginator class="paganation" [pageSizeOptions]="[25, 100, 200]" showFirstLastButtons></mat-paginator>
+    </mat-card>
+  </div>
+</div>

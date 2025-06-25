@@ -1,0 +1,491 @@
+<div class="flex flex-col flex-auto min-w-0" *transloco="let t">
+  <!-- Main -->
+  <div class="flex-auto  sm:p-2  w-full min-w-0 sm:absolute sm:inset-0 sm:overflow-auto text-md">
+    <!-- Content -->
+    <mat-card class="h-full">
+      <mat-card-title>
+        <app-card-title title="Leaves" [sub]="true" [back]="true" (submitTap)="submit()"></app-card-title>
+      </mat-card-title>
+      <mat-card-content> </mat-card-content><br>
+      <!-- Leave Form -->
+      <form [formGroup]="leaveForm">
+        <div class="grid grid-cols-5 gap-x-2 h-13">
+          <mat-form-field class="w-full text-lg" appearance="outline">
+            <mat-label class="label-font-size">{{ t('name') }}</mat-label>
+            <mat-icon class="mb-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+            <input matInput type="text" formControlName="name" [placeholder]="'Name'"/>
+          </mat-form-field>
+          <mat-form-field class="w-full text-lg" appearance="outline">
+            <mat-label class="label-font-size">{{ t('description') }}</mat-label>
+            <mat-icon class="mb-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+            <input matInput type="text" formControlName="description" [placeholder]="'Description'"/>
+          </mat-form-field>
+          <mat-form-field class="w-full text-lg" appearance="outline">
+            <mat-label class="label-font-size">{{ t('maxLeavePerMonth') }}</mat-label>
+            <mat-icon class="mb-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+            <input matInput type="number" min="0" formControlName="maxLeaves" [placeholder]="'Max leave per month'"/>
+          </mat-form-field>
+          <app-dropdown [isFix]="true" [control]="leaveForm.get('leaveCategoryId')"  [options]="dropdownOptions.Leavecategory" [icon]="'mat_outline:info'" [type]="90"> </app-dropdown>
+          <mat-form-field class="w-full text-lg" appearance="outline">
+            <mat-label class="label-font-size">{{ t('allowFilingIfBalanceReached') }}</mat-label>
+            <mat-icon class="uploadbutton mb-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+            <mat-select formControlName="allowFilingIfZero" [placeholder]="'Status'">
+              @for (item of option; track item) {
+                <mat-option [value]="item.id">{{ item.description }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="grid grid-cols-5 gap-x-2 h-13 mt-2">
+          <mat-form-field class="w-full text-lg" appearance="outline">
+            <mat-label class="label-font-size">{{ t('allowFilingLWOPEvenIfBalanceIsNotYet') }}</mat-label>
+            <mat-icon class="uploadbutton mb-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+            <mat-select formControlName="allowFilingLWOP" [placeholder]="'Status'">
+              @for (item of optionlwop; track item) {
+                <mat-option [value]="item.id">{{ item.description }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+          <app-dropdown [isFix]="true"  [control]="leaveForm.get('leaveGenderId')"  [options]="dropdownOptions.genderDef" [icon]="'mat_outline:info'" [type]="43"> </app-dropdown>
+          <!-- <mat-form-field class="w-full text-lg" appearance="outline">
+          <mat-label class="label-font-size">{{ t('requireAttachment') }}</mat-label>
+          <mat-icon class="uploadbutton mb-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+          <mat-select formControlName="requiredAttachment" [placeholder]="'Require attachment'">
+            <mat-option *ngFor="let item of optionlwop" [value]="item.id">{{ item.description }}</mat-option>
+          </mat-select>
+        </mat-form-field> -->
+        <app-dropdown [isFix]="true"   [control]="leaveForm.get('filedById')" [all]="false" [multiple]="false"  [options]="dropdownOptions.leaveTypeDef" [icon]="'mat_outline:info'" [type]="44"> </app-dropdown>
+        <app-dropdown [isFix]="true"  [control]="leaveForm.get('filingTypeId')" [all]="true" [multiple]="true"  [options]="dropdownOptions.Leavefilingdef" [icon]="'mat_outline:info'" [type]="79"> </app-dropdown>
+      </div>
+      <div class="grid grid-cols-5 gap-x-2 h-13 mt-2">
+        <app-dropdown [isFix]="true" (selected)="clearleavestart($event)" [control]="leaveForm.get('leaveStartId')"  [options]="dropdownOptions.empcatleaveremoveonhold" [icon]="'mat_outline:info'" [type]="36" label="Leave Start"> </app-dropdown>
+        @if (leaveForm.value.leaveStartId==30383) {
+          <div>
+            <mat-form-field class="w-full text-lg" appearance="outline">
+              <mat-label class="label-font-size">{{ t('noBasedOnFrequency') }}</mat-label>
+              <mat-icon class="mb-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+              <input matInput formControlName="leaveStartBasedOnFrequency" type="number" min="0"
+                [placeholder]="'No. Based On Frequency'"/>
+              </mat-form-field>
+            </div>
+          }
+          <app-dropdown [isFix]="true" [hidden]="showhide(leaveForm. value.leaveStartId)"  [control]="leaveForm.get('leaveStartFrequencyId')" [all]="false" [multiple]="false"  [options]="dropdownOptions.tenuredef" [icon]="'mat_outline:info'" [type]="46"> </app-dropdown>
+          <app-dropdown [isFix]="true" [hidden]="showhide(leaveForm. value.leaveStartId)" [control]="leaveForm.get('leaveStartAfterId')" [all]="false" [multiple]="false"  [options]="dropdownOptions.employeeStatusDef" [icon]="'mat_outline:info'" [type]="36" label="After"> </app-dropdown>
+          <mat-form-field class="w-full text-lg" appearance="outline">
+            <mat-label class="label-font-size">{{ t('status') }}</mat-label>
+            <mat-icon class="uploadbutton mb-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+            <mat-select formControlName="active" [placeholder]="'active'">
+              @for (item of status; track item) {
+                <mat-option [value]="item.id">{{ item.description }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+          <!-- <mat-form-field class="w-full text-lg" appearance="outline">
+            <mat-label class="label-font-size">Maximum Leaves to Reflect</mat-label>
+            <mat-icon class="mb-2 : mr-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+            <input matInput type="number" min="0" step="0.001" formControlName="maxLeavesReflect" [placeholder]="'Maximum Leaves to Reflect'" (blur)="formatDecimal('maxLeavesReflect')"/>
+        </mat-form-field> -->
+        </div>
+      </form>
+      <!-- End Leave Form -->
+      <div>
+        <mat-divider class="mb-2"></mat-divider>
+      </div>
+      <mat-card-content></mat-card-content>
+      <!-- Accrual Form -->
+      <mat-tab-group class="mt-4 mb-3">
+
+        <mat-tab label="Accrual">
+          <form [formGroup]="accrualForm">
+            <div class="grid grid-cols-5 gap-x-2 h-13">
+              <app-dropdown [isFix]="true"  [control]="accrualForm.get('accrualStartId')" (selected)="clearaccrualform($event)"  [options]="dropdownOptions.employeeStatusDef" [icon]="'mat_outline:info'" [type]="36" label="Start"> </app-dropdown>
+              @if (accrualForm.value.accrualStartId==30383) {
+                <div>
+                  <mat-form-field class="w-full text-lg" appearance="outline">
+                    <mat-label class="label-font-size">{{ t('noBasedOnFrequency') }}</mat-label>
+                    <mat-icon class="mb-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                    <input matInput formControlName="accrualStartBasedOnFrequency" type="number" min="0"
+                      [placeholder]="'No. based on frequency'"/>
+                    </mat-form-field>
+                  </div>
+                }
+                <app-dropdown [isFix]="true" [hidden]="showhide(accrualForm. value.accrualStartId)"  [control]="accrualForm.get('accrualStartFrequencyId')"  [options]="dropdownOptions.leavestartfreqdef" [icon]="'mat_outline:info'" [type]="46"> </app-dropdown>
+                <app-dropdown [isFix]="true" [hidden]="showhide(accrualForm. value.accrualStartId)" [control]="accrualForm.get('accrualStartAfterId')"  [options]="dropdownOptions.employeeStatusDef" [icon]="'mat_outline:info'" [type]="36" label="After"> </app-dropdown>
+              </div>
+              <div class="grid grid-cols-5 gap-x-2 h-15 mt-2" >
+                <mat-form-field class="w-full text-lg" appearance="outline">
+                  <mat-label class="label-font-size">{{ t('creditNoOfLeaves') }}</mat-label>
+                  <mat-icon class="mb-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                  <input matInput type="number" min="0" formControlName="leaveCount" [placeholder]="'Credit No. of leaves'"/>
+                </mat-form-field>
+                @if (accrualForm.value.leaveCount !==null) {
+                  <app-dropdown [isFix]="true" (selected)="clearcredit($event)" [control]="accrualForm.get('frequencyId')"  [options]="dropdownOptions.leavestartfreqdef" [icon]="'mat_outline:info'" [type]="46"> </app-dropdown>
+                }
+                <app-dropdown [isFix]="true" [hidden]="showhideaccrual(accrualForm.value.frequencyId)" [control]="accrualForm.get('month')"  [options]="dropdownOptions.monthlydef" [icon]="'mat_outline:info'" [type]="54"> </app-dropdown>
+                @if (accrualForm.value.frequencyId==30386) {
+                  <div>
+                    <mat-form-field class="w-full text-lg" appearance="outline">
+                      <mat-label class="label-font-size">{{ t('day') }}</mat-label>
+                      <mat-icon class="uploadbutton mb-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                      <input matInput type="number" max="31" formControlName="day" [placeholder]="''"/>
+                    </mat-form-field>
+                  </div>
+                }
+              </div>
+            </form>
+          </mat-tab>
+
+          <mat-tab label="Increase Accrual">
+            <form [formGroup]="accrualForm">
+              <div class="grid grid-cols-5 gap-2 h-16 mt-3">
+                <mat-form-field class="w-full text-lg" appearance="outline">
+                  <mat-label class="label-font-size">{{ t('increaseLeaveAccrual') }}</mat-label>
+                  <mat-icon class="uploadbutton mb-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                  <mat-select (selectionChange)="clearRowAccrual()" formControlName="isIncreaseAccrual" [placeholder]="'Increase leave accrual'">
+                    @for (item of optionlwop; track item) {
+                      <mat-option [value]="item.id" >{{ item.description }}</mat-option>
+                    }
+                  </mat-select>`
+                </mat-form-field>
+              </div>
+            </form>
+            <form [formGroup]="detailAccrual">
+              @if (accrualForm.value.isIncreaseAccrual == true) {
+                <div class="scroll-container grid grid-cols-8 gap-2 h-11 mt-2" >
+                  <mat-form-field class="w-full h-13 text-lg" appearance="outline">
+                    <mat-label class="label-font-size">{{ t('noOfAdditionalLeave') }}</mat-label>
+                    <mat-icon class="uploadbutton mb-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                    <input [readonly]="accrualForm.value.isIncreaseAccrual == false" matInput type="number" min="0"
+                      formControlName="accruedLeave" [placeholder]="'No. of additional leave'"/>
+                    </mat-form-field>
+                    <app-dropdown [isFix]="true"  [control]="detailAccrual.get('frequencyId')" [options]="dropdownOptions.leavestartfreqdef" [icon]="'mat_outline:info'" [type]="46" label="Frequency"> </app-dropdown>
+                    @if (detailAccrual.value.frequencyId == 30386) {
+                      <app-dropdown [isFix]="true"  [control]="detailAccrual.get('frequncyMonthId')"  [options]="dropdownOptions.monthlydef" [icon]="'mat_outline:info'" [type]="54"> </app-dropdown>
+                    }
+                    @if (detailAccrual.value.frequencyId == 30386) {
+                      <mat-form-field class="full h-13 text-lg" appearance="outline">
+                        <mat-label class="label-font-size">{{ t('day') }}</mat-label>
+                        <mat-icon class="uploadbutton mb-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                        <input matInput type="number" max="31" formControlName="frequencyDays" [placeholder]="''"/>
+                      </mat-form-field>
+                    }
+                    <app-dropdown [isFix]="true"  [control]="detailAccrual.get('tenureId')"  [options]="dropdownOptions.tenuredef" [icon]="'mat_outline:info'" [type]="115"  label="Tenure"> </app-dropdown>
+                    <mat-form-field class="w-full h-13 text-lg" appearance="outline">
+                      <mat-label class="label-font-size">{{ t('after') }}</mat-label>
+                      <mat-icon class="uploadbutton mb-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                      <input [readonly]="accrualForm.value.isIncreaseAccrual == false" matInput type="number" min="0" formControlName="after"
+                        [placeholder]="'After'"/>
+                      </mat-form-field>
+                      <app-dropdown [isFix]="true"  [control]="detailAccrual.get('accrualEmployeeStatusId')"  [options]="dropdownOptions.employeeStatusDef" [icon]="'mat_outline:info'" [type]="36"> </app-dropdown>
+                      <button (click)="addRow()" class="text-lg w-[10px]" mat-flat-button color="primary" aria-label="example icon">
+                        <mat-icon class="mb-2" svgIcon="mat_outline:post_add"></mat-icon>
+                      </button>
+                    </div>
+                  }
+                </form>
+
+                <!--increase table -->
+
+                <div>
+                  @if (accrualForm.value.isIncreaseAccrual == true) {
+                    <div class="table1">
+                      <table #Table mat-table [dataSource]="dataSource" class="table1  mat-elevation-z2 mb-5 h-13">
+                        <ng-container matColumnDef="accruedLeave">
+                          <th mat-header-cell *matHeaderCellDef>Additional Leave</th>
+                          <td mat-cell *matCellDef="let element">
+                            {{element.accruedLeave}}
+                          </td>
+                        </ng-container>
+                        <ng-container matColumnDef="frequencyId">
+                          <th mat-header-cell *matHeaderCellDef>Frequency</th>
+                          <td mat-cell *matCellDef="let element">
+                            {{element.frequencydescrip}}
+                          </td>
+                        </ng-container>
+                        <ng-container matColumnDef="frequncyMonthId">
+                          <th mat-header-cell *matHeaderCellDef>Month</th>
+                          <td mat-cell *matCellDef="let element">
+                            {{element.increasemonth}}
+                          </td>
+                        </ng-container>
+                        <ng-container matColumnDef="frequencyDays">
+                          <th mat-header-cell *matHeaderCellDef>Day</th>
+                          <td mat-cell *matCellDef="let element">
+                            {{element.frequencyDays}}
+                          </td>
+                        </ng-container>
+                        <ng-container matColumnDef="after">
+                          <th mat-header-cell *matHeaderCellDef>After</th>
+                          <td mat-cell *matCellDef="let element">
+                            {{element.after}}
+                          </td>
+                        </ng-container>
+                        <ng-container matColumnDef="tenureId">
+                          <th mat-header-cell *matHeaderCellDef>Tenure</th>
+                          <td mat-cell *matCellDef="let element">
+                            {{element.tenuredescrip}}
+                          </td>
+                        </ng-container>
+                        <ng-container matColumnDef="accrualEmployeeStatusId">
+                          <th mat-header-cell *matHeaderCellDef>Employee Status</th>
+                          <td mat-cell *matCellDef="let element">
+                            {{element.employeestatus}}
+                          </td>
+                        </ng-container>
+                        <!-- Delete Column -->
+                        <ng-container matColumnDef="action">
+                          <th mat-header-cell *matHeaderCellDef>Action</th>
+                          <td mat-cell *matCellDef="let element; let i = index">
+                            <button class="" type="button" mat-icon-button color="warn" (click)="handleDelete(i)">
+                              <mat-icon class="" svgIcon="mat_outline:delete"></mat-icon>
+                            </button>
+                          </td>
+                        </ng-container>
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns ; sticky: true"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                      </table>
+                      <div></div>
+                    </div>
+                  }
+                </div>
+              </mat-tab>
+
+              <mat-tab label="Prorate">
+                <form [formGroup]="accrualForm">
+                  <div class="grid grid-cols-5 gap-x-2 h-13 mt-3">
+                    <mat-form-field class="w-full text-lg" appearance="outline">
+                      <mat-label class="label-font-size">{{ t('prorate') }}</mat-label>
+                      <mat-icon class="uploadbutton mb-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                      <mat-select (selectionChange)="clearRowProrate()" formControlName="isProrate" [placeholder]="'Prorate'">
+                        @for (item of optionlwop; track item) {
+                          <mat-option [value]="item.id">{{ item.description }}</mat-option>
+                        }
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                </form>
+                <form [formGroup]="detailProrateForm">
+                  @if (accrualForm.value.isProrate == true) {
+                    <div class="grid grid-cols-5 gap-x-2 h-13 mt-2">
+                      <mat-form-field class="w-full text-lg" appearance="outline">
+                        <mat-label class="label-font-size">{{ t('dateFrom') }}</mat-label>
+                        <mat-icon class="mb-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                        <input matInput type="number" min="0" formControlName="from" [placeholder]="'Date from'"/>
+                      </mat-form-field>
+                      <mat-form-field class="w-full text-lg" appearance="outline">
+                        <mat-label class="label-font-size">{{ t('dateTo') }}</mat-label>
+                        <mat-icon class="mb-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                        <input matInput type="number" min="0" formControlName="to" [placeholder]="'Date to'"/>
+                      </mat-form-field>
+                      <mat-form-field class="w-full text-lg" appearance="outline">
+                        <mat-label class="label-font-size">{{ t('noOfLeave') }}</mat-label>
+                        <mat-icon class="mb-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                        <input matInput type="number" min="0" formControlName="prorateLeave" [placeholder]="'No. of leave'"/>
+                      </mat-form-field>
+                      @if (accrualForm.value.isProrate == true) {
+                        <div class="button-margin-top">
+                          <mat-label class="">&nbsp;</mat-label>
+                          <button (click)="addRow2()" class="text-lg w-[10px]" mat-flat-button color="primary" aria-label="example icon">
+                            <mat-icon class="mb-2" svgIcon="mat_outline:post_add" ></mat-icon>
+                          </button>
+                        </div>
+                      }
+                    </div>
+                  }
+                </form>
+                <div>
+                  @if (accrualForm.value.isProrate == true) {
+                    <div class="table2">
+                      <table #Table2 mat-table [dataSource]="dataSource2" class="table2 mat-elevation-z2 mb-5">
+                        <!-- Role Column -->
+                        <ng-container matColumnDef="from">
+                          <th mat-header-cell *matHeaderCellDef>
+                            Date From
+                          </th>
+                          <td mat-cell *matCellDef="let element">
+                            {{ element.from }}
+                          </td>
+                        </ng-container>
+                        <!-- Approver Column -->
+                        <ng-container matColumnDef="to">
+                          <th mat-header-cell *matHeaderCellDef>
+                            Date To
+                          </th>
+                          <td mat-cell *matCellDef="let element">
+                            {{ element.to}}
+                          </td>
+                        </ng-container>
+                        <!-- Notification Column -->
+                        <ng-container matColumnDef="prorateLeave">
+                          <th mat-header-cell *matHeaderCellDef>
+                            No. Of Leave
+                          </th>
+                          <td mat-cell *matCellDef="let element">
+                            {{ element.prorateLeave }}
+                          </td>
+                        </ng-container>
+                        <!-- Delete Column -->
+                        <ng-container matColumnDef="action2">
+                          <th mat-header-cell *matHeaderCellDef>
+                            Action
+                          </th>
+                          <td mat-cell *matCellDef="let element; let i = index">
+                            <button class="" type="button" mat-icon-button color="warn" (click)="handleDelete2(i)">
+                              <mat-icon class="mb-2" svgIcon="mat_outline:delete"></mat-icon>
+                            </button>
+                          </td>
+                        </ng-container>
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns2"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns2"></tr>
+                      </table>
+                    </div>
+                  }
+                  <div></div>
+                </div>
+              </mat-tab>
+
+              <mat-tab label="Carry Forward">
+                <form [formGroup]="accrualForm">
+                  <div class="grid grid-cols-6 gap-x-2 h-13 mt-3">
+                    <mat-form-field class="w-full text-lg" appearance="outline">
+                      <mat-label class="label-font-size">{{ t('carryForward') }}</mat-label>
+                      <mat-icon class="uploadbutton mb-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                      <mat-select  formControlName="isCarryForward" [placeholder]="'Carry Forward'" (selectionChange)="reset($event)">
+                        @for (item of optionlwop; track item) {
+                          <mat-option [value]="item.id" >{{ item.description }}</mat-option>
+                        }
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                </form>
+                <form [formGroup]="carryform">
+                  <div class="grid grid-cols-6 gap-x-2 h-13 mt-2">
+                    @if (accrualForm.value.isCarryForward == true) {
+                      <div>
+                        <mat-form-field class="w-full text-lg" appearance="outline">
+                          <mat-label class="label-font-size">{{ t('maxNoOfLeave') }}</mat-label>
+                          <mat-icon class="mb-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                          <input matInput type="number" min="0" formControlName="carryMaxLeave" [placeholder]="'Max no. of leave'"/>
+                        </mat-form-field>
+                      </div>
+                    }
+                    <div [hidden]="carryforward(accrualForm.value.isCarryForward)">
+                      <app-dropdown [isFix]="true"  [control]="carryform.get('carryStartMonthId')"  [options]="dropdownOptions.monthlydef" [icon]="'mat_outline:info'" [type]="54"> </app-dropdown>
+                    </div>
+                    @if (accrualForm.value.isCarryForward == true) {
+                      <div>
+                        <mat-form-field class="w-full text-lg" appearance="outline">
+                          <mat-label class="label-font-size">{{ t('dates') }}</mat-label>
+                          <mat-icon class="uploadbutton mb-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                          <input matInput type="number" max="31" formControlName="carryStartDay" [placeholder]="''"/>
+                        </mat-form-field>
+                      </div>
+                    }
+                    @if (accrualForm.value.isCarryForward == true) {
+                      <div>
+                        <mat-form-field class="w-full text-lg" appearance="outline">
+                          <mat-label class="label-font-size">{{ t('carryForwardExpiry') }}</mat-label>
+                          <mat-icon class="uploadbutton mb-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                          <mat-select formControlName="isCarryExpirable" [placeholder]="'Carry forward expiry'" (selectionChange)="resetexpiry($event)">
+                            @for (item of option; track item) {
+                              <mat-option [value]="item.id">{{ item.description }}</mat-option>
+                            }
+                          </mat-select>
+                        </mat-form-field>
+                      </div>
+                    }
+                    <div [hidden]="carryforward(carryform.value.isCarryExpirable)">
+                      <app-dropdown [isFix]="true"  [control]="carryform.get('carryExpireMonthId')"  [options]="dropdownOptions.monthlydef" [icon]="'mat_outline:info'" [type]="54"> </app-dropdown>
+                    </div>
+                    <div [hidden]="carryforward(carryform.value.isCarryExpirable)">
+                      <mat-form-field class="w-full text-lg" appearance="outline">
+                        <mat-label class="label-font-size">{{ t('dates') }}</mat-label>
+                        <mat-icon class="uploadbutton mb-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                        <input matInput type="number" max="31" formControlName="carryExpireDay" [placeholder]="''"/>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                </form>
+              </mat-tab>
+
+              <mat-tab label="Convert To Cash">
+                <form [formGroup]="accrualForm">
+                  <div class="grid grid-cols-6 gap-x-2 h-13 mt-3">
+                    <mat-form-field class="w-full text-lg" appearance="outline">
+                      <mat-label class="label-font-size">{{ t('convertToCash') }}</mat-label>
+                      <mat-icon class="uploadbutton mb-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                      <mat-select  formControlName="isConvertToCash" [placeholder]="'Convert to Cash'">
+                        @for (item of option; track item) {
+                          <mat-option [value]="item.id">{{ item.description }}</mat-option>
+                        }
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                </form>
+                <form [formGroup]="convertForm">
+                  <div class="grid grid-cols-4 gap-x-2 h-13 mt-2">
+                    @if (accrualForm.value.isConvertToCash == true) {
+                      <div>
+                        <mat-form-field class="w-full text-lg" appearance="outline">
+                          <mat-label class="label-font-size">{{ t('annualConversion') }}</mat-label>
+                          <mat-icon class="uploadbutton mb-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                          <mat-select formControlName="annualConversionType" [placeholder]="'Annual Conversion'">
+                            @for (item of annualUpon; track item) {
+                              <mat-option [value]="item.id">{{ item.description }}</mat-option>
+                            }
+                          </mat-select>
+                        </mat-form-field>
+                      </div>
+                    }
+                    @if (convertForm.value.annualConversionType > 1) {
+                      <div >
+                        <mat-form-field class="w-full text-lg" appearance="outline">
+                          <mat-label class="label-font-size">{{ t('maxNoOfLeave') }}</mat-label>
+                          <mat-icon class="mb-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                          <input matInput type="number" min="0" formControlName="annualConversionCount" [placeholder]="'Max no. of leave'"/>
+                        </mat-form-field>
+                      </div>
+                    }
+                    @if (accrualForm.value.isConvertToCash == true) {
+                      <div>
+                        <mat-form-field class="w-full text-lg" appearance="outline">
+                          <mat-label class="label-font-size">{{ t('noOfNonTaxable') }}</mat-label>
+                          <mat-icon class="mb-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                          <input matInput type="number" min="0" formControlName="annualConversionNonTaxable" [placeholder]="'No. of non taxable'"/>
+                        </mat-form-field>
+                      </div>
+                    }
+                  </div>
+                  @if (accrualForm.value.isConvertToCash == true) {
+                    <div class="grid grid-cols-4 gap-x-2 h-13 mt-2">
+                      <mat-form-field class="w-full text-lg" appearance="outline">
+                        <mat-label class="label-font-size">{{ t('uponResignation') }}</mat-label>
+                        <mat-icon class="uploadbutton mb-2" matPrefix svgIcon="mat_outline:info" ></mat-icon>
+                        <mat-select formControlName="uponResignationType" [placeholder]="'Upon Resignation'">
+                          @for (item of annualUpon; track item) {
+                            <mat-option [value]="item.id">{{ item.description }}</mat-option>
+                          }
+                        </mat-select>
+                      </mat-form-field>
+                      @if (convertForm.value.uponResignationType > 1) {
+                        <div>
+                          <mat-form-field class="w-full text-lg" appearance="outline">
+                            <mat-label class="label-font-size">{{ t('maxNoOfLeave') }}</mat-label>
+                            <mat-icon class="mb-2" matPrefix svgIcon="mat_outline:info" ></mat-icon>
+                            <input matInput type="number" min="0" formControlName="uponResignationCount" [placeholder]="'Max no. of leave'"/>
+                          </mat-form-field>
+                        </div>
+                      }
+                      <mat-form-field class="w-full text-lg" appearance="outline">
+                        <mat-label class="label-font-size">{{ t('noOfNonTaxable') }}</mat-label>
+                        <mat-icon class="mb-2" matPrefix svgIcon="mat_outline:info" ></mat-icon>
+                        <input matInput type="number" min="0" formControlName="uponResignationNonTaxable" [placeholder]="'No. of non taxable'"/>
+                      </mat-form-field>
+                    </div>
+                  }
+                </form>
+              </mat-tab>
+            </mat-tab-group>
+          </mat-card>
+        </div>
+      </div>

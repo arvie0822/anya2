@@ -1,0 +1,141 @@
+<div class="flex flex-col flex-auto min-w-0" *transloco="let t">
+  <!-- Main -->
+  <div class="flex-auto  sm:p-2  w-full min-w-0 sm:absolute sm:inset-0 text-md">
+    <form [formGroup]="deductionForm">
+      <div class="grid grid-cols-5 gap-2 h-13">
+        <mat-form-field class="w-full text-lg" appearance="outline">
+          <mat-label class="label-font-size">{{t('deductionCode')}}</mat-label>
+          <mat-icon class="mb-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+          <input formControlName="code" class="input" type="text" matInput [placeholder]="''">
+        </mat-form-field>
+
+        <mat-form-field class="w-full text-lg" appearance="outline">
+          <mat-label class="label-font-size">{{t('description')}}</mat-label>
+          <mat-icon class="mb-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+          <input formControlName="description" class="input" type="text" matInput [placeholder]="''">
+        </mat-form-field>
+
+        <app-dropdown-custom [multiple]="false" [control]="deductionForm.get('categoryID')" [type]="1042"
+          [value]="df.categoryID" [options]="dropdownOptions.categoryDef"
+        [useControl]="true"></app-dropdown-custom>
+
+        <mat-form-field class="w-full text-lg" appearance="outline">
+          <mat-label class="label-font-size">{{t('deduction')}}</mat-label>
+          <mat-select formControlName="beforeTax" [placeholder]="''">
+            <mat-option [value]="true">Before Tax</mat-option>
+            <mat-option [value]="false">After Tax</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field class="w-full text-lg" appearance="outline">
+          <mat-label class="label-font-size">{{t('deductionType')}}</mat-label>
+          <mat-select formControlName="fixed" [placeholder]="''">
+            <mat-option [value]="true">Fixed</mat-option>
+            <mat-option [value]="false">Variable</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        @if (df.fixed) {
+          <mat-form-field class="w-full text-lg" appearance="outline">
+            <mat-label class="label-font-size">{{t('fixedAmount')}}</mat-label>
+            <mat-icon class="mb-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+            <input formControlName="fixedAmount" class="input" type="number" matInput [placeholder]="''">
+          </mat-form-field>
+        }
+      </div>
+      <div class="flex gap-2 h-13 mt-2">
+        <mat-form-field class=" text-lg" appearance="outline">
+          <mat-label class="label-font-size">{{t('onPayslip')}}</mat-label>
+          <mat-select formControlName="isHidePayslip" [placeholder]="''">
+            <mat-option [value]="true">Yes</mat-option>
+            <mat-option [value]="false">No</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field class="w-50 hover:w-80 text-lg" appearance="outline">
+          <mat-label class="label-font-size">{{t('partOfGross')}}</mat-label>
+          <mat-select formControlName="isAddtoGross" [placeholder]="''">
+            <mat-option [value]="true">Yes</mat-option>
+            <mat-option [value]="false">No</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field class=" text-lg" appearance="outline">
+          <mat-label class="label-font-size">{{t('onPayreg')}}</mat-label>
+          <mat-select formControlName="isHidePayreg" [placeholder]="''">
+            <mat-option [value]="true">Yes</mat-option>
+            <mat-option [value]="false">No</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <div class="w-50">
+          <app-dropdown [isFix]="false" [control]="deductionForm.get('jeAccountCode')"
+            [options]="dropdownOptions.accountCodeDef" [icon]="'mat_outline:info'" [type]="133" [useControl]="true">
+          </app-dropdown>
+        </div>
+        <div class="w-50">
+          <app-dropdown [isFix]="false" [control]="deductionForm.get('jeAccountId')"
+            [options]="dropdownOptions.accountNameDef" [icon]="'mat_outline:info'" [type]="134" [useControl]="true">
+          </app-dropdown>
+        </div>
+
+        <div class="w-50">
+          <app-dropdown  [isFix]="false" [control]="deductionForm.get('jeAccountCode1')"  [options]="dropdownOptions.accountCodeDef" [icon]="'mat_outline:info'" [type]="133" label="Account Code Secondary" [useControl]="true"> </app-dropdown>
+        </div>
+        <div class="w-50">
+          <app-dropdown  [isFix]="false" [control]="deductionForm.get('jeAccountName1')"  [options]="dropdownOptions.accountNameDef" [icon]="'mat_outline:info'" [type]="134" label="Account Name Secondary " [useControl]="true"> </app-dropdown>
+        </div>
+
+        <mat-form-field class=" text-lg" appearance="outline">
+          <mat-label class="label-font-size">{{t('debitCredit')}}</mat-label>
+          <mat-select formControlName="debitOrCredit" [placeholder]="''">
+            <mat-option [value]="1">Debit</mat-option>
+            <mat-option [value]="0">Credit</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field class=" text-lg" appearance="outline">
+          <mat-label class="label-font-size">{{t('costOrHR')}}</mat-label>
+          <mat-select formControlName="costOrHr" [placeholder]="''">
+            <mat-option [value]="0">Cost</mat-option>
+            <mat-option [value]="1">HR</mat-option>
+            <mat-option [value]="2">Custom</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field class=" text-lg" appearance="outline">
+          <mat-label class="label-font-size">{{t('status')}}</mat-label>
+          <mat-select formControlName="active" [placeholder]="''">
+            <mat-option [value]="true">Active</mat-option>
+            <mat-option [value]="false">Inactive</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <!-- <div class="col-span-3">
+      <div class="grid grid-cols-3 gap-2 h-13 ">
+        <mat-form-field class="w-full text-lg" appearance="outline">
+          <mat-select formControlName="debitOrCredit" [placeholder]="''">
+            <mat-option [value]="1">Debit</mat-option>
+            <mat-option [value]="0">Credit</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field class="w-full text-lg" appearance="outline">
+          <mat-select formControlName="costOrHr" [placeholder]="''">
+            <mat-option [value]="0">Cost</mat-option>
+            <mat-option [value]="1">HR</mat-option>
+            <mat-option [value]="2">Custom</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field class="w-full text-lg" appearance="outline">
+          <mat-select formControlName="active" [placeholder]="''">
+            <mat-option [value]="true">Active</mat-option>
+            <mat-option [value]="false">Inactive</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div> -->
+  </form>
+</div>
+</div>

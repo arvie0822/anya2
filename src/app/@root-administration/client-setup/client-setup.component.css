@@ -1,0 +1,15 @@
+.foricon, .mat-mdc-header-row {
+    white-space: nowrap !important;
+    width: 50%;
+}
+
+.foricon, .mat-mdc-cell {
+    white-space: normal !important;
+}
+span.align {
+    position: relative;
+    bottom: 3px;
+}
+.mat-table, .foricon {
+    max-width: 300px !important;
+}

@@ -1,0 +1,153 @@
+<div class="flex flex-col flex-auto min-w-0 p-2">
+
+  <!-- Main -->
+  <div class="flex flex-row flex-auto min-w-0 grid grid-cols-3 gap-2 mt-1 mb-1 sm:absolute sm:inset-0 sm:overflow-auto">
+    <div class="container border-3">
+
+      <div class="div-bg box border-2rounded-md relative hovers"
+        (mouseenter)="onMouseEnter()"
+        (mouseleave)="onMouseLeave()">
+        <div class="header-title">Announcement</div>
+
+        @if (announcements.length>0) {
+          <div class="h-full flex flex-col">
+            <div class="image-container fixed-height" #imageContainer (click)="download(news)" [matTooltip]="'Click to Download '+news.name">
+              @if (!isImage(news.type)) {
+                <img class="img image-fade" [src]="news.image" alt="Slide 1">
+              }
+            </div>
+            @if (isImage(news.type)) {
+              <a
+                class="flex flex-col w-40 h-40 m-2 p-4 shadow drop-shadow-xl rounded-2xl cursor-pointer bg-card border absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" (click)="download(news)">
+                <div class="aspect-[9/6]">
+                  <div class="flex items-center justify-center h-full">=
+                    <div class="relative">
+                      <mat-icon
+                        class="icon-size-14 text-hint opacity-50"
+                      [svgIcon]="'heroicons_solid:document-text'"></mat-icon>
+                      <div
+                        class="absolute left-0 bottom-0 px-1.5 rounded text-sm font-semibold leading-5 text-white"
+                        [class.bg-red-600]="news.type === 'PDF'"
+                        [class.bg-blue-600]="news.type === 'DOC'"
+                        [class.bg-blue-600]="news.type === 'DOCX'"
+                        [class.bg-green-600]="news.type === 'XLS'"
+                        [class.bg-green-600]="news.type === 'XLSX'"
+                        [class.bg-gray-600]="news.type === 'TXT'">
+                        {{news.type.toUpperCase()}}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="flex flex-col flex-auto justify-center text-center text-sm font-medium">
+                  <div class="truncate" [matTooltip]="'Click to Download '+news.name">{{news.name}}</div>
+                </div>
+              </a>
+            }
+            <div class="news-bg">
+              <h2>{{news.title}}</h2>
+              <p>{{news.description}}</p>
+            </div>
+            <button class="prev" (click)="controls('prev')">&#10094;</button>
+            <button class="next" (click)="controls('next')">&#10095;</button>
+          </div>
+        }
+      </div>
+
+      <div class="div-bg box AS border-2 rounded-md p-1 h-[50px]">
+
+        <div class="p-0 flex justify-between">
+          <div class="header-title mb-2">Application Status</div>
+          @if (ASsetup.desc) {
+            <div class="header-text mr-2 mt-1">Total of {{this.ASsetup.desc}}</div>
+          }
+        </div>
+
+        <app-_tables [pageShow]="false" [columns]="ASsetup.columns" [source]="ASsetup.data" [loading]="ASsetup.loading" [request]="ASsetup.request" [totalRows]="ASsetup.totalRows"></app-_tables>
+
+      </div>
+
+      <div class="div-bg box AS border-2 rounded-md p-1 h-[50px]">
+
+      <div class="p-0 flex justify-between">
+        <div class="header-title mt-2">Timekeeping Alerts</div>
+        <div class="flex justify-between w-20 mb-">
+          <mat-icon class="cursor-pointer" (click)="loadEmployeeAlert('left')" [svgIcon]="'heroicons_solid:chevron-left'"  matTooltip="Previous Cut-off"></mat-icon>
+          <mat-icon class="cursor-pointer" (click)="loadEmployeeAlert('right')"  [svgIcon]="'heroicons_solid:chevron-right'" matTooltip="Next Cut-off"></mat-icon>
+        </div>
+      </div>
+
+      <app-_tables [pageShow]="false" [columns]="ESsetup.columns" [source]="ESsetup.data" [loading]="ESsetup.loading" [request]="ESsetup.request" [totalRows]="ESsetup.totalRows"></app-_tables>
+
+    </div>
+
+
+  </div>
+
+  <div class="flex-auto col-span-2 grid grid-rows-6 gap-2">
+    <div class="div-bg flex-auto drop-shadow-lg rounded-md row-span-5 p-2">
+      <!-- Calendar GOES HERE -->
+      <full-calendar #calendar class="dashboard" [options]='calendarOptions'>
+        <ng-template #eventContent let-arg>
+          <b>{{ arg.timeText }}</b>
+          <i>{{ arg.event.title }}</i>
+        </ng-template>
+      </full-calendar>
+    </div>
+
+    <div class="div-bg flex flex-row flex-auto drop-shadow-lg rounded-md p-1">
+      <div class="flex flex-auto justify-evenly items-center border">
+        <button [matMenuTriggerFor]="menu" (click)="activate('CTK')" matSuffix mat-button color="primary" class="mr-2" mat-flat-button>Current TK</button>
+        <button [matMenuTriggerFor]="menu" (click)="activate('ATK')" matSuffix mat-button color="primary" class="mr-2" mat-flat-button>Adjustment TK</button>
+        <button [matMenuTriggerFor]="menu" (click)="activate('PAY')" matSuffix mat-button color="primary" class="mr-2" mat-flat-button>Payslip</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+
+<mat-menu #menu="matMenu" (closed)="activate(class)">
+  <div class="flex text-sm">
+    <div class="border-r-2 w-[5rem]">
+      @for (item of _presets(); track item) {
+        <div>
+          @if (item.key !== 'custom') {
+            <button class="text-sm" mat-menu-item (click)="filter(item.key,class);" [disabled]="isDisabled(item.key,class)">{{item.type}}</button>
+          }
+          @if (item.key === 'custom') {
+            <button class="text-sm aligns" mat-menu-item (click)="filter('custom',class); $event.stopPropagation();" [disabled]="isDisabled('custom',class)">Custom</button>
+          }
+        </div>
+      }
+    </div>
+    @if (showCustom('custom',class)) {
+      <div class="w-[40rem] pr-2 pl-2 pb-2 text-sm" (click)="$event.stopPropagation()">
+        @for (item of _custom(); track item) {
+          <div>
+            @if (item.type=='date-range') {
+              <span class="border-b-2 m-0 p-0">{{selectedDateRange}}</span>
+            }
+            @if (item.type=='date-range') {
+              <date-range-picker (filter)="setDateRange($event,class)"></date-range-picker>
+            }
+            @if (item.type=='select') {
+              <mat-form-field class="w-full text-sm h-select iconalign" appearance="fill">
+                <mat-label>{{item.label}}</mat-label>
+                <mat-select [(value)]="item._value" (selectionChange)="setDropdown(class,item)">
+                  <!-- <mat-option [value]="0">All</mat-option> -->
+                  @for (item of item.option; track item) {
+                    <mat-option [value]="item.dropdownID">{{item.description}}</mat-option>
+                  }
+                </mat-select>
+              </mat-form-field>
+            }
+          </div>
+        }
+        <button mat-flat-button color="primary" (click)="search(class)">
+          <mat-icon svgIcon="feather:check" class="icon-TR" color="secondary"></mat-icon>
+        </button>
+      </div>
+    }
+  </div>
+
+</mat-menu>

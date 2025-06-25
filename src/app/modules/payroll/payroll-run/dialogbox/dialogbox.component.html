@@ -1,0 +1,26 @@
+<div class="mat-elevation-z0" *transloco="let t">
+    <mat-card-title>
+        <app-card-title title="Bank File"></app-card-title>
+    </mat-card-title>
+    <mat-card-content>
+        <div class="grid grid-cols-2 gap-2 mt-3">
+            <mat-form-field class="field" appearance="outline">
+                <mat-label class="label-font-size">{{t('dateOfGeneration')}}</mat-label>
+                <input matInput [matDatepicker]="db" readonly
+                    [placeholder]="'yyyy-MM-dd'" [(ngModel)]="date">
+                <mat-datepicker-toggle matSuffix [for]="db"></mat-datepicker-toggle>
+                <mat-datepicker #db></mat-datepicker>
+            </mat-form-field>
+
+            <mat-form-field class="field" appearance="outline">
+                <mat-label class="label-font-size">{{t('batchNumber')}}</mat-label>
+                <input [(ngModel)]="code" type="number" matInput placeholder="Batch Number">
+            </mat-form-field>
+        </div>
+    </mat-card-content>
+
+    <mat-card-actions align="end" class="gap-2">
+        <button mat-stroked-button (click)="closeModal()">Cancel</button>
+        <button mat-flat-button (click)="submit()" color="primary">Confirm</button>
+    </mat-card-actions>
+</div>

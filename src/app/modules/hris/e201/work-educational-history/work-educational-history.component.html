@@ -1,0 +1,490 @@
+<!-- Main -->
+<mat-stepper [linear]="true" #stepper class="" *transloco="let t">
+    <mat-step class="h-full">
+        <form [formGroup]="workhistoryform">
+            <ng-template matStepLabel>Work History</ng-template>
+            <div class="grid grid-cols-10 gap-2 mt-5 h-full">
+
+                <mat-form-field class="w-full h-10" appearance="outline">
+                    <mat-label class="label-font-size">{{t('Company Name')}}</mat-label>
+                    <input formControlName="companyName" matInput type="text">
+                </mat-form-field>
+
+                <mat-form-field class="w-full h-10" appearance="outline">
+                    <mat-label class="label-font-size">{{t('Address')}}</mat-label>
+                    <input formControlName="address" matInput type="text">
+                </mat-form-field>
+
+                <!-- <mat-form-field class="w-full text-md h-10" appearance="outline">
+                        <mat-label class="label-font-size">Industry</mat-label>
+                        <mat-select formControlName="industryId" [placeholder]="">
+                            <mat-option *ngFor="let option of industry" [value]="option.id"> {{ option.description }}</mat-option>
+                        </mat-select>
+                    </mat-form-field> -->
+
+                <app-dropdown [control]="workhistoryform.get('industryId')" (objects)="industrys = $event" [isFix]="true"
+                    [value]="workhistoryform.get('industryId').value" [options]="dropdownOptions.industryDef"
+                    [icon]="'mat_outline:info'" [type]="1"> </app-dropdown>
+
+                <!-- <mat-form-field class="w-full text-md h-10" appearance="outline">
+                        <mat-label class="label-font-size">Occupation</mat-label>
+                        <mat-select formControlName="occupationId" [placeholder]="">
+                            <mat-option *ngFor="let option of occupation" [value]="option.id"> {{ option.description }}</mat-option>
+                        </mat-select>
+                    </mat-form-field> -->
+
+                <app-dropdown [control]="workhistoryform.get('occupationId')"
+                    [value]="workhistoryform.get('occupationId').value" (objects)="occupationIds = $event"
+                    [options]="dropdownOptions.occupationDef" [icon]="'mat_outline:info'" [type]="37"> </app-dropdown>
+
+                <mat-form-field class="w-full h-10" appearance="outline">
+                    <mat-label class="label-font-size">{{t('Job Description')}}</mat-label>
+                    <input formControlName="jobDecsription" matInput type="text">
+                </mat-form-field>
+
+                <mat-form-field class="w-full text-md h-10" appearance="outline">
+                    <mat-label class="label-font-size">{{t('Date From')}}</mat-label>
+                    <input matInput formControlName="fromDate" [matDatepicker]="df1"
+                        [max]="workhistoryform.value.toDate" readonly [placeholder]="'MM/DD/YYYY'" (click)="df1.open()">
+                    <mat-datepicker-toggle matSuffix [for]="df1"></mat-datepicker-toggle>
+                    <mat-datepicker #df1></mat-datepicker>
+                </mat-form-field>
+
+                <mat-form-field class="w-full text-md h-10" appearance="outline">
+                    <mat-label class="label-font-size">{{t('Date To')}}</mat-label>
+                    <input matInput formControlName="toDate" [matDatepicker]="df2"
+                        [min]="workhistoryform.value.fromDate" readonly [placeholder]="'MM/DD/YYYY'"
+                        (click)="df2.open()">
+                    <mat-datepicker-toggle matSuffix [for]="df2"></mat-datepicker-toggle>
+                    <mat-datepicker #df2></mat-datepicker>
+                </mat-form-field>
+
+                <mat-form-field class="w-full h-10" appearance="outline">
+                    <mat-label class="label-font-size">{{t('Reason For Leaving')}}</mat-label>
+                    <input formControlName="leavingReason" matInput type="text">
+                </mat-form-field>
+
+                <mat-form-field class="w-full text-md h-10" appearance="outline">
+                    <input formControlName="uploadPath" type="file" #fileInput2
+                        (change)="uploadFile($event, 'displayCS','workhistoryform','work')"
+                        class=" absolute top-1 z-0 h-full w-full cursor-pointer opacity-0"
+                        accept=".jpeg,.jpg,.png,.doc,.docx,.pdf,.xls,.xlsx" />
+                    <input class="sample" readonly matInput id="displayCS" cdkFocusInitial />
+                    <mat-icon class="" matPrefix svgIcon="mat_outline:upload"></mat-icon>
+                    <button class="upb" (click)="fileInput2.click($event)" matSuffix mat-button color="primary">Upload</button>
+                </mat-form-field>
+
+                <button (click)="add('workhistoryform','work','displayCS')" class="w-10 text-md" mat-flat-button
+                    color="primary" aria-label="example icon">
+                    <mat-icon class="mb-2" svgIcon="mat_outline:post_add"></mat-icon>
+                </button>
+
+            </div>
+        </form>
+        <section class="example-container overflow-auto max-h-[400px] mat-elevation-z0" tabindex="0">
+            <table mat-table #workhistorytable [dataSource]="dataSourcereturn('work')" class="mat-elevation-z0 border">
+
+                <ng-container matColumnDef="action">
+                    <th mat-header-cell *matHeaderCellDef>Actions</th>
+                    <td mat-cell *matCellDef="let element ; let i = index">
+                        <button class="" mat-icon-button [matMenuTriggerFor]="menu" [disabled]="editing" aria-label="">
+                            <mat-icon class="icon-size-6">{{editing?"edit":"more_vert"}}</mat-icon>
+                        </button>
+                        <mat-menu #menu="matMenu">
+                            <button mat-menu-item  (click)="imageids('displayCS') ; deledit('editworkhistory',element , i )">
+                                <mat-icon class="icon-size-6" color="primary">edit</mat-icon>
+                                <span>Edit</span>
+                            </button>
+                            @if(element.uploadPath !== ""){
+                                <button mat-menu-item (click)="download(element.rowId,element.uploadPath)">
+                                    <mat-icon class="icon-size-6" color="primary">download</mat-icon>
+                                    <span>Download</span>
+                                </button>
+                            }
+                            <button mat-menu-item (click)="deledit('delworkhistory',element,i)">
+                                <mat-icon class="icon-size-6" color="warn">delete</mat-icon>
+                                <span>Delete</span>
+                            </button>
+                        </mat-menu>
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="companyName">
+                    <th mat-header-cell *matHeaderCellDef> Company Name </th>
+                    <td mat-cell *matCellDef="let element"> {{element.companyName}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="address">
+                    <th mat-header-cell *matHeaderCellDef> Address </th>
+                    <td mat-cell *matCellDef="let element"> {{element.address}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="industryId">
+                    <th mat-header-cell *matHeaderCellDef> Industry </th>
+                    <td mat-cell *matCellDef="let element"> {{element.industryDescription}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="occupationId">
+                    <th mat-header-cell *matHeaderCellDef> Occupation </th>
+                    <td mat-cell *matCellDef="let element"> {{element.occupationDescription}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="jobDecsription">
+                    <th mat-header-cell *matHeaderCellDef> Job Description </th>
+                    <td mat-cell *matCellDef="let element"> {{element.jobDecsription}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="fromDate">
+                    <th mat-header-cell *matHeaderCellDef> Date From </th>
+                    <td mat-cell *matCellDef="let element"> {{element.fromDate | date:'YYYY-MM-dd'}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="toDate">
+                    <th mat-header-cell *matHeaderCellDef> Date To </th>
+                    <td mat-cell *matCellDef="let element"> {{element.toDate | date:'YYYY-MM-dd'}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="leavingReason">
+                    <th mat-header-cell *matHeaderCellDef> Reason </th>
+                    <td mat-cell *matCellDef="let element"> {{element.leavingReason}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="uploadPath">
+                    <th mat-header-cell *matHeaderCellDef> Upload </th>
+                    <td mat-cell *matCellDef="let element"> {{element.uploadPath}} </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns ; sticky : true"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+            </table>
+            <!-- <div class="grid grid-cols-2 gap-2">
+                        <mat-paginator [length]="20" #paginator0 [pageSizeOptions]="[5,10, 20]" showFirstLastButtons
+                            aria-label="Select page of periodic elements"> </mat-paginator>
+                        <div class="align-button mt-4">
+                            <button mat-flat-button color="primary" matStepperNext>
+                                <mat-icon class=" mt-5" svgIcon="mat_outline:arrow_back"></mat-icon>
+                            </button>
+                        </div>
+                    </div> -->
+        </section>
+    </mat-step>
+    <mat-step>
+        <ng-template matStepLabel>Educational Attainment</ng-template>
+        <!-- EDUCATIONAL =============================================== -->
+        <form [formGroup]='educationalform'>
+            <div class="grid grid-cols-11 gap-2 mt-5">
+
+                <!-- <mat-form-field class="w-full text-md h-10" appearance="outline">
+                            <mat-label class="label-font-size">Level</mat-label>
+                            <mat-select formControlName="level" [placeholder]="">
+                                <mat-option *ngFor="let option of level" [value]="option.id"> {{ option.description }}</mat-option>
+                            </mat-select>
+                        </mat-form-field> -->
+
+                <app-dropdown [control]="educationalform.get('level')" (objects)="levels = $event"
+                    [value]="educationalform.get('level').value" [options]="dropdownOptions.leveldef"
+                    [icon]="'mat_outline:info'" [type]="151"> </app-dropdown>
+
+                <!-- <mat-form-field class="w-full text-md h-10" appearance="outline">
+                            <mat-label class="label-font-size">Name Of School</mat-label>
+                            <mat-select formControlName="schoolName" [placeholder]="">
+                                <mat-option *ngFor="let option of school" [value]="option.id"> {{ option.description }}</mat-option>
+                            </mat-select>
+                        </mat-form-field> -->
+
+                <app-dropdown [all]="false" [multiple]="false" [value]="educationalform.get('schoolName').value"
+                    (objects)="schoolNames = $event" [control]="educationalform.get('schoolName')"
+                    [options]="dropdownOptions.schooldef" [icon]="'mat_outline:info'" [multiType]="[154,152,153]"
+                    label="School Name"> </app-dropdown>
+
+                <mat-form-field class="w-full h-10" appearance="outline">
+                    <mat-label class="label-font-size">{{t('Branch')}}</mat-label>
+                    <input formControlName="branch" matInput type="text">
+                </mat-form-field>
+
+                <!-- <mat-form-field class="w-full text-md h-10" appearance="outline">
+                            <mat-label class="label-font-size">Degree/Course</mat-label>
+                            <mat-select formControlName="degree" [placeholder]="">
+                                <mat-option *ngFor="let option of degree" [value]="option.id"> {{ option.description }}</mat-option>
+                            </mat-select>
+                        </mat-form-field> -->
+
+                <app-dropdown [control]="educationalform.get('degree')" [value]="educationalform.get('degree').value"
+                    (objects)="degrees = $event" [options]="dropdownOptions.degreedef" [icon]="'mat_outline:info'"
+                    [type]="155" label="Degree/Course"> </app-dropdown>
+
+                <mat-form-field class="w-full h-10" appearance="outline">
+                    <mat-label class="label-font-size">{{t('School Address')}}</mat-label>
+                    <input formControlName="address" matInput type="text">
+                </mat-form-field>
+
+                <mat-form-field class="w-full text-md h-10" appearance="outline">
+                    <mat-label class="label-font-size">{{t('Date From')}}</mat-label>
+                    <input formControlName="fromDate" matInput [matDatepicker]="df3" readonly
+                        [placeholder]="'MM/DD/YYYY'" (click)="df3.open()"
+                        [max]="educationalform.controls['toDate'].value">
+                    <mat-datepicker-toggle matSuffix [for]="df3"></mat-datepicker-toggle>
+                    <mat-datepicker #df3></mat-datepicker>
+                </mat-form-field>
+
+                <mat-form-field class="w-full text-md h-10" appearance="outline">
+                    <mat-label class="label-font-size">{{t('Date To')}}</mat-label>
+                    <input formControlName="toDate" matInput [matDatepicker]="df4" readonly [placeholder]="'MM/DD/YYYY'"
+                        (click)="df4.open()" [min]="educationalform.controls['fromDate'].value">
+                    <mat-datepicker-toggle matSuffix [for]="df4"></mat-datepicker-toggle>
+                    <mat-datepicker #df4></mat-datepicker>
+                </mat-form-field>
+
+                <mat-form-field class="w-full h-10" appearance="outline">
+                    <mat-label class="label-font-size">{{t('Year Graduated')}}</mat-label>
+                    <input formControlName="graduatedYear" placeholder="2004" mask="0000" matInput type="text">
+                </mat-form-field>
+
+                <mat-form-field class="w-full h-10" appearance="outline">
+                    <mat-label class="label-font-size">{{t('Contact No.')}}</mat-label>
+                    <span style="position: relative; top: 17px;" matPrefix class="mr-2 ml-1">+63</span>
+                    <input formControlName="contactNumber" placeholder="xxxxxxxxxx" mask="000 000 0000" matInput
+                        type="text">
+                </mat-form-field>
+
+                <mat-form-field class="w-full h-10" appearance="outline">
+                    <mat-label class="label-font-size">Email Address</mat-label>
+                    <input formControlName="emailAddress" matInput type="text" [placeholder]="'Email Address'"
+                        (blur)="InvalidEmail()">
+                </mat-form-field>
+
+                <button (click)="add('educationalform','education','')" class="w-10 text-md" mat-flat-button
+                    color="primary" aria-label="example icon">
+                    <mat-icon class="mb-2" svgIcon="mat_outline:post_add"></mat-icon>
+                </button>
+
+            </div>
+        </form>
+        <section class="example-container overflow-auto max-h-[400px] mat-elevation-z0" tabindex="0">
+            <table mat-table #educational [dataSource]="dataSourcereturn('education')" class="mat-elevation-z0 border">
+
+                <ng-container matColumnDef="action">
+                    <th mat-header-cell *matHeaderCellDef>Actions</th>
+                    <td mat-cell *matCellDef="let element ; let i = index">
+                        <button class="mt-1" mat-icon-button [matMenuTriggerFor]="menu" [disabled]="editing"
+                            aria-label="">
+                            <mat-icon class="icon-size-6">{{editing?"edit":"more_vert"}}</mat-icon>
+                        </button>
+                        <mat-menu #menu="matMenu">
+                            <button mat-menu-item (click)="deledit('editeducational',element , i )">
+                                <mat-icon class="icon-size-6" color="primary">edit</mat-icon>
+                                <span>Edit</span>
+                            </button>
+                            <button mat-menu-item (click)="deledit('deleducational',element,i)">
+                                <mat-icon class=" icon-size-6" color="warn">delete</mat-icon>
+                                <span>Delete</span>
+                            </button>
+                        </mat-menu>
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="level">
+                    <th mat-header-cell *matHeaderCellDef> Level </th>
+                    <td mat-cell *matCellDef="let element"> {{element.levelDescription}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="schoolName">
+                    <th mat-header-cell *matHeaderCellDef> Name Of School</th>
+                    <td mat-cell *matCellDef="let element"> {{element.schoolNameDescription}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="branch">
+                    <th mat-header-cell *matHeaderCellDef> Branch </th>
+                    <td mat-cell *matCellDef="let element"> {{element.branch}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="degree">
+                    <th mat-header-cell *matHeaderCellDef> Degree </th>
+                    <td mat-cell *matCellDef="let element"> {{element.degreeDescription}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="address">
+                    <th mat-header-cell *matHeaderCellDef> School Address </th>
+                    <td mat-cell *matCellDef="let element"> {{element.address}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="fromDate">
+                    <th mat-header-cell *matHeaderCellDef>Date From </th>
+                    <td mat-cell *matCellDef="let element"> {{element.fromDate | date:'YYYY-MM-dd'}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="toDate">
+                    <th mat-header-cell *matHeaderCellDef> Date To </th>
+                    <td mat-cell *matCellDef="let element"> {{element.toDate | date:'YYYY-MM-dd'}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="graduatedYear">
+                    <th mat-header-cell *matHeaderCellDef> Year Graduated </th>
+                    <td mat-cell *matCellDef="let element"> {{element.graduatedYear}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="contactNumber">
+                    <th mat-header-cell *matHeaderCellDef> Contact No. </th>
+                    <td mat-cell *matCellDef="let element"> {{element.contactNumber}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="emailAddress">
+                    <th mat-header-cell *matHeaderCellDef> Email Address </th>
+                    <td mat-cell *matCellDef="let element"> {{element.emailAddress}} </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns1 ; sticky : true"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns1"></tr>
+            </table>
+            <!-- <div class="grid grid-cols-2 gap-2">
+                        <mat-paginator [length]="20" #paginator1 [pageSizeOptions]="[5,10, 20]" showFirstLastButtons
+                            aria-label="Select page of periodic elements"> </mat-paginator>
+                        <div class="align-button mt-4">
+                            <button mat-flat-button color="primary" matStepperPrevious>
+                                <mat-icon class=" mt-5" svgIcon="mat_outline:arrow_back"></mat-icon>
+                            </button>&nbsp;
+                            <button mat-flat-button color="primary" matStepperNext>
+                                <mat-icon class=" mt-5" svgIcon="mat_outline:arrow_forward"></mat-icon>
+                            </button>
+                        </div>
+                    </div> -->
+        </section>
+    </mat-step>
+    <mat-step>
+        <ng-template matStepLabel>Character Reference</ng-template>
+        <!-- CHARREF ============================================================================ -->
+        <form [formGroup]="characterfrom">
+            <div class="grid grid-cols-8 gap-2 mt-5">
+
+                <mat-form-field class="w-full h-10" appearance="outline">
+                    <mat-label class="label-font-size">Full Name</mat-label>
+                    <input formControlName="fullName" matInput type="text">
+                </mat-form-field>
+
+                <!-- <mat-form-field class="w-full text-md h-10" appearance="outline">
+                            <mat-label class="label-font-size">Relationship</mat-label>
+                            <mat-select formControlName="relationshipId" [placeholder]="">
+                                <mat-option *ngFor="let option of relation" [value]="option.id"> {{ option.description }}</mat-option>
+                            </mat-select>
+                        </mat-form-field> -->
+
+                <app-dropdown [control]="characterfrom.get('relationshipId')"
+                    [value]="characterfrom.get('relationshipId').value" (objects)="relationshipIds = $event"
+                    [options]="dropdownOptions.relationshipDef" [icon]="'mat_outline:info'" [type]="116"
+                    label="Relationship"> </app-dropdown>
+
+                <mat-form-field class="w-full h-10" appearance="outline">
+                    <mat-label class="label-font-size">Company</mat-label>
+                    <input formControlName="company" matInput type="text">
+                </mat-form-field>
+
+                <mat-form-field class="w-full h-10" appearance="outline">
+                    <mat-label class="label-font-size">Address</mat-label>
+                    <input formControlName="address" matInput type="text">
+                </mat-form-field>
+
+                <!-- <mat-form-field class="w-full text-md h-10" appearance="outline">
+                            <mat-label class="label-font-size">Occupation</mat-label>
+                            <mat-select formControlName="occupationId" [placeholder]="">
+                                <mat-option *ngFor="let option of occupation" [value]="option.id"> {{ option.description }}</mat-option>
+                            </mat-select>
+                        </mat-form-field> -->
+
+                <app-dropdown [control]="characterfrom.get('occupationId')"
+                    [value]="characterfrom.get('occupationId').value" (objects)="occupationIds = $event"
+                    [options]="dropdownOptions.occupationDef" [icon]="'mat_outline:info'" [type]="37"
+                    label="Occupation"> </app-dropdown>
+
+                <mat-form-field class="w-full h-10" appearance="outline">
+                    <mat-label class="label-font-size">Contact No.</mat-label>
+                    <span style="position: relative; top: 17px;" matPrefix class="mr-2 ml-1">+63</span>
+                    <input formControlName="contactNumber" placeholder="xxxxxxxxxx" mask="000 000 0000" matInput
+                        type="text">
+                </mat-form-field>
+
+                <mat-form-field class="w-full h-10" appearance="outline">
+                    <mat-label class="label-font-size">Email Address</mat-label>
+                    <input formControlName="emailAddress" matInput type="text" [placeholder]="'Email Address'"
+                        (blur)="InvalidEmail()">
+                </mat-form-field>
+
+                <button (click)="add('characterfrom','charref','')" class="w-10 text-md" mat-flat-button color="primary"
+                    aria-label="example icon">
+                    <mat-icon class="mb-2" svgIcon="mat_outline:post_add"></mat-icon>
+                </button>
+
+            </div>
+        </form>
+        <section class="example-container overflow-auto max-h-[400px] mat-elevation-z0" tabindex="0">
+            <table mat-table #characterref [dataSource]="dataSourcereturn('charref')" class="mat-elevation-z0 border">
+
+                <ng-container matColumnDef="action">
+                    <th mat-header-cell *matHeaderCellDef>Actions</th>
+                    <td mat-cell *matCellDef="let element ; let i = index">
+                        <button class="" mat-icon-button [matMenuTriggerFor]="menu" [disabled]="editing" aria-label="">
+                            <mat-icon class="icon-size-6">{{editing?"edit":"more_vert"}}</mat-icon>
+                        </button>
+                        <mat-menu #menu="matMenu">
+                            <button mat-menu-item (click)="deledit('editcharacterref',element , i )">
+                                <mat-icon class="icon-size-6" color="primary">edit</mat-icon>
+                                <span>Edit</span>
+                            </button>
+                            <button mat-menu-item (click)="deledit('delcharacterref',element,i)">
+                                <mat-icon class=" icon-size-6" color="warn">delete</mat-icon>
+                                <span>Delete</span>
+                            </button>
+                        </mat-menu>
+                    </td>
+                </ng-container>
+
+
+                <ng-container matColumnDef="fullName">
+                    <th mat-header-cell *matHeaderCellDef> Fullname </th>
+                    <td mat-cell *matCellDef="let element"> {{element.fullName}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="relationshipId">
+                    <th mat-header-cell *matHeaderCellDef> Relationship </th>
+                    <td mat-cell *matCellDef="let element"> {{element.relationshipDescription}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="company">
+                    <th mat-header-cell *matHeaderCellDef> Company </th>
+                    <td mat-cell *matCellDef="let element"> {{element.company}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="address">
+                    <th mat-header-cell *matHeaderCellDef> Address </th>
+                    <td mat-cell *matCellDef="let element"> {{element.address}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="occupationId">
+                    <th mat-header-cell *matHeaderCellDef> Occupation </th>
+                    <td mat-cell *matCellDef="let element"> {{element.occupationDescription}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="contactNumber">
+                    <th mat-header-cell *matHeaderCellDef> Contact Number </th>
+                    <td mat-cell *matCellDef="let element"> {{element.contactNumber}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="emailAddress">
+                    <th mat-header-cell *matHeaderCellDef> Email Address </th>
+                    <td mat-cell *matCellDef="let element"> {{element.emailAddress}} </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns2 ; sticky : true"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns2"></tr>
+            </table>
+            <!-- <div class="grid grid-cols-2 gap-2">
+                        <mat-paginator [length]="20" #paginator2 [pageSizeOptions]="[5,10, 20]" showFirstLastButtons
+                            aria-label="Select page of periodic elements"> </mat-paginator>
+                        <div class="align-button mt-4">
+                            <button mat-flat-button color="primary" matStepperPrevious>
+                                <mat-icon class=" mt-5" svgIcon="mat_outline:arrow_back"></mat-icon>
+                            </button>
+                        </div>
+                    </div> -->
+        </section>
+    </mat-step>
+</mat-stepper>

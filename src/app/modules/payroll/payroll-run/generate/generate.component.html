@@ -1,0 +1,200 @@
+<div class="table-container mat-elevation-z8 h-full overflow-auto" tabindex="0">
+
+  <table mat-table [dataSource]="datasource" class="w-full table-auto">
+    <!-- UNSHIFT CHECKBOX -->
+    <ng-container matColumnDef="checkbox">
+      <th class="whitespace-nowrap" mat-header-cell *matHeaderCellDef>
+        <mat-checkbox [color]="'primary'"
+          (change)="selectAllCheckbox($event,0)"
+          [checked]="itemChecked(true,0)">
+          <!-- [(ngModel)]="isAllSelected"
+          [indeterminate]="checkedList.length > 0 && !isAllSelected"
+          (change)="selectAllCheckbox($event)" -->
+        </mat-checkbox>
+      </th>
+      <td mat-cell class="whitespace-nowrap pl-5 w-10 " *matCellDef="let element; let i = index">
+        <div>
+          <mat-checkbox [color]="'primary'"
+            [checked]="itemChecked(false,i)"
+            (change)="selectOneCheckbox($event,i)">
+            <!-- [(ngModel)]="element.checked"
+            (change)="selectOneCheckbox(i,$event)" -->
+          </mat-checkbox>
+        </div>
+      </td>
+    </ng-container>
+
+    @for (column of cols; track column) {
+      <ng-container [matColumnDef]="column?.key">
+        <!-- HEADER -->
+        <th class="whitespace-nowrap pl-8" mat-header-cell *matHeaderCellDef>
+          <div class="flex align-center justify-center">
+            @if (!column.info) {
+              @if (!column.info && !column.inputfield && (column.key !== 'dateFrom' && column.key !== 'dateTo')) {
+                <div class="text-nowrap">
+                  {{column?.label}}
+                </div>
+              }
+              @if (!column.info && column.inputfield && (column.key !== 'dateFrom' && column.key !== 'dateTo')) {
+                <div>
+                  <mat-form-field class="w-40 text-md h-10 pb-1 pl-5" appearance="outline">
+                    <mat-label class="label-font-size">{{column?.label}}</mat-label>
+                    @if (column.type === 'text') {
+                      <input class="input" [(ngModel)]="dataModel[column?.key]"
+                        type="text"
+                        [OnlyNumber]="true" [max]="999" [min]="0" [maxLength]="4"
+                        matInput
+                        (blur)="selectAllHeader(dataModel[column?.key],column.key)">
+                    }
+                    @if (column.type === 'number') {
+                      <input class="input" matInput type="number" [(ngModel)]="dataModel[column?.key]"
+                        (blur)="selectAllHeader(dataModel[column?.key],column.key)">
+                    }
+                  </mat-form-field>
+                  <mat-icon class="mb-2" matPrefix svgIcon="mat_outline:info" [matTooltip]="column.toolDesc"></mat-icon>
+                </div>
+              }
+              @if (column.key === 'dateFrom') {
+                <div >
+                  <mat-form-field class="w-40 xxl:w-96 text-md h-8" appearance="outline">
+                    <mat-label class="label-font-size">{{column?.label}}</mat-label>
+                    <input matInput [matDatepicker]="picker" placeholder="Choose a date"
+                      [(ngModel)]="dataModel[column?.key]" (dateChange)="selectAllHeader(dataModel[column?.key], column.key);headerdate($event.value, 'dateFrom')"
+                      [min]="date_min_max('dateFrom',true)"  [max]="date_min_max('dateFrom', false)">
+                      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                      <mat-datepicker #picker></mat-datepicker>
+                    </mat-form-field>
+                  </div>
+                }
+                @if (column.key === 'dateTo') {
+                  <div>
+                    <mat-form-field class="w-40 xxl:w-96 text-md h-8" appearance="outline">
+                      <mat-label class="label-font-size">{{column?.label}}</mat-label>
+                      <input matInput [matDatepicker]="picker" placeholder="Choose a date"
+                        [(ngModel)]="dataModel[column?.key]" (dateChange)="selectAllHeader(dataModel[column?.key], column.key);headerdate($event.value, 'dateTo')"
+                        [min]="date_min_max('dateTo',true)"  [max]="date_min_max('dateTo',false)">
+                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-datepicker #picker></mat-datepicker>
+                      </mat-form-field>
+                    </div>
+                  }
+                } @else {
+                  <mat-checkbox [color]="'primary'"
+                    [checked]="isHeadeChecked(column.key)"
+                    (change)="selectAllHeader($event,column.key)"
+                    >
+                    <!-- [checked]="column.checked"
+                    (change)="selectAllColumn($event,column.key)" -->
+                  </mat-checkbox>
+                  <span class="mt-4">
+                    {{column?.label}}
+                  </span>
+                  <mat-icon class="mt-1" matPrefix svgIcon="mat_outline:info" [matTooltip]="column.toolDesc"></mat-icon>
+                }
+              </div>
+            </th>
+            <!-- BODY -->
+            <td class="whitespace-nowrap pr-2" mat-cell *matCellDef="let element; let i = index">
+              @if (!column.info) {
+                <div>
+                  @if (!column.decimalPipe) {
+                    @if (column.key === 'dateFrom' || column.key === 'dateTo') {
+                      <div>
+                        <mat-form-field class="w-44 xxl:w-96 text-md h-12 pt-1" appearance="outline">
+                          <input matInput [matDatepicker]="picker" [placeholder]="'Choose a date'"
+                            [(ngModel)]="element[column.key]" (dateChange)="datetime($event.value, i, column.key);selectOne(element[column.key], i, column.key, element.id)"
+                            [min]="date_min_max_items(i,column.key,true)"  [max]="date_min_max_items(i,column.key,false)" >
+                            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                            <mat-datepicker #picker></mat-datepicker>
+                          </mat-form-field>
+                        </div>
+                      }
+                      @if (column.key !== 'dateFrom' && column.key !== 'dateTo') {
+                        <div>
+                          {{ element[column.key] }}
+                        </div>
+                      }
+                    } @else {
+                      @if (!column.inputfield) {
+                        <div>
+                          {{ element[column.key] | number: '1.2-2' }}
+                        </div>
+                      }
+                      @if (column.inputfield) {
+                        <div class="h-13 w-full">
+                          <mat-form-field class="w-30 text-md h-10 pt-1 pr-3" appearance="outline">
+                            @if (column.type === 'text') {
+                              <input class="input" [(ngModel)]="element[column.key]"
+                                (blur)="selectOne(element[column.key],i,column.key,element.id)"
+                                type="text"
+                                [OnlyNumber]="true" [max]="999999" [min]="0" [maxLength]="7"
+                                matInput>
+                            }
+                            @if (column.type === 'number') {
+                              <input class="input" matInput type="number" [(ngModel)]="element[column.key]"
+                                (blur)="selectOne(element[column.key],i,column.key,element.id)">
+                            }
+                          </mat-form-field>
+                        </div>
+                      }
+                    }
+                  </div>
+                }
+                @if (column.info) {
+                  <mat-checkbox [color]="'primary'"
+                    [(ngModel)]="element[column.key]"
+                    (change)="selectOne($event,i,column.key,element.id)"
+                    >
+                    <!-- (change)="inputChange()" -->
+                    <!-- (change)="selectOneColumn(i,$event,column.key)" function to trigger header checkbox -->
+                  </mat-checkbox>
+                }
+              </td>
+            </ng-container>
+          }
+
+
+          @if (details) {
+            <div>
+              <ng-container matColumnDef="header-row">
+                <th class="whitespace-nowrap" mat-header-cell *matHeaderCellDef [attr.colspan]="12">
+                  <div class="flex items-center justify-center">
+                    <mat-icon class="mb-2"
+                      [ngClass]="{ 'green-icon': empStatus, 'red-icon': !empStatus }" matPrefix
+                    svgIcon="{{empStatus? 'heroicons_outline:exclamation-triangle':'heroicons_outline:check-circle'}}"></mat-icon>
+                    <span>{{ empStatus ? "NOTE: The following users are On-Hold for the selected cutoff" : "No users are on Hold" }}</span>
+                  </div>
+                </th>
+              </ng-container>
+            </div>
+          }
+
+          @if (details) {
+            <div>
+              <tr mat-header-row *matHeaderRowDef="['header-row'];sticky: true"></tr>
+              <tr mat-header-row *matHeaderRowDef="displayedColumns;sticky: true"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </div>
+          }
+
+          @if (hideCols) {
+            <div>
+              <tr mat-header-row *matHeaderRowDef="displayedColumns;sticky: true"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </div>
+          }
+
+
+
+        </table>
+
+
+
+
+
+      </div>
+
+      <mat-paginator class="mat-paginator-sticky" [attr.disabled]="isLoadingResults ? true : null" (page)="handlePageEvent($event)"
+        [length]="totalRows" [pageSize]="request.Length" [pageIndex]="request.Start"
+      [pageSizeOptions]="[10, 20, 50]" showFirstLastButtons></mat-paginator>
+

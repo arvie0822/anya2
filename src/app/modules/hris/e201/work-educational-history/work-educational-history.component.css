@@ -1,0 +1,63 @@
+/* .label-font-size{
+    font-size: 15px;
+}
+input {
+    position: relative;
+    bottom: 10px;
+    font-size: medium;
+}
+.mat-select {
+    position: relative;
+    bottom: 9px;
+    font-size: medium;
+}
+.mat-datepicker-toggle {
+    position: relative;
+    bottom: 5px;
+    font-size: medium;
+}
+.sample {
+    position: relative;
+    bottom: 10px;
+    font-size: medium;
+}
+.upb{
+    position: relative;
+    bottom: 15px;
+    right: -5px;
+    border-radius: 3px !important;
+}
+.mat-icon{
+    position: relative;
+    bottom: 11px;
+}
+table{
+    width: 100%;
+}
+.mat-card{
+    height: 100%;
+}
+.mat-horizontal-stepper-header {
+    display: flex;
+    height: 100px;
+    overflow: hidden;
+    align-items: center;
+    padding: 0 24px;
+}
+.align-button{
+    text-align: end;
+}
+.example-container {
+    overflow: auto;
+    position: relative;
+}
+
+.mat-header-cell,
+.mat-cell {
+    z-index: 2 !important;
+}
+::ng-deep .mat-tab-body.mat-tab-body-active {
+    overflow-x: hidden !important;
+    overflow-y: hidden !important;
+} */
+

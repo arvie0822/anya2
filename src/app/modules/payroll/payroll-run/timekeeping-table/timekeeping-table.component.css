@@ -1,0 +1,72 @@
+/* table {
+    width: 100%;
+}
+
+.mat-datepicker-toggle {
+    position: relative;
+    bottom: 5px;
+    font-size: medium;
+}
+
+input {
+    position: relative;
+    bottom: 10px;
+    font-size: medium;
+}
+
+.mat-icon {
+    position: relative;
+    bottom: 8px;
+}
+
+.mat-select {
+    position: relative;
+    bottom: 9px;
+    font-size: medium;
+}
+
+.mat-datepicker-toggle {
+    display: none;
+}
+
+.sticky-header {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+
+.mat-card-content {
+    height: 300px;
+    overflow-y: auto;
+  }
+
+table th, table td{
+    white-space: nowrap;
+    text-align: center;
+}
+
+.edited {
+    background-color: rgb(207, 85, 85) !important;
+}
+
+.txt{
+    color: white !important ;
+}
+.scroll{
+    overflow-x: scroll;
+    overflow-y: scroll;
+
+}
+
+.mat-header-row {
+    position: sticky;
+    top: 0;
+    background-color: white;
+    z-index: 10;
+}
+
+.mat-paginator-sticky {
+    bottom: 0px;
+    position: sticky;
+    z-index: 10;
+} */

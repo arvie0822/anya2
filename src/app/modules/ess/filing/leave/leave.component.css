@@ -1,0 +1,188 @@
+/* .label-font-size {
+    font-size: 15px;
+}
+
+.iconbutton {
+    position: relative;
+    bottom: 8px;
+}
+
+.mat-select {
+    position: relative;
+    bottom: 11px;
+    font-size: medium;
+}
+
+.input {
+    position: relative;
+    bottom: 10px;
+    font-size: medium;
+}
+
+
+.button-margin-top {
+    padding-top: 1%;
+}
+
+::ng-deep .tab-hide .mat-tab-list .mat-tab-labels {
+    display: none;
+}
+
+.mat-datepicker-toggle {
+    position: relative;
+    bottom: 7px;
+    font-size: medium;
+}
+
+.scroll-container {
+    display: flex;
+    align-items: center;
+    overflow: auto;
+}
+
+
+.body {
+    text-align: center;
+}
+
+.area {
+    height: 15px;
+    resize: none;
+    font-size: 16px;
+    overflow-y: scroll;
+    border-width: 2px;
+    border-radius: 3px;
+    margin-left: 4px;
+
+}
+
+table {
+    width: 100%;
+}
+
+.button-margin-top {
+    padding-top: 1%;
+}
+
+
+.label-font-size {
+    font-size: 15px;
+}
+
+input {
+    position: relative;
+    bottom: 10px;
+    font-size: medium;
+}
+
+.mat-datepicker-toggle {
+    position: relative;
+    bottom: 7px;
+    font-size: medium;
+}
+
+
+.text {
+    border-style: solid;
+    border-width: 2px;
+    margin-bottom: 33px;
+    border-radius: 3px;
+    height: 33px;
+    min-width: 100px;
+    max-width: 150px;
+}
+
+.reasoncss {
+    margin-bottom: 30px;
+}
+
+textarea:valid {
+    border-color: #C9C0C0;
+}
+
+textarea:invalid {
+    border-color: #DC2626;
+}
+
+.upload:valid {
+    border-color: aliceblue;
+}
+
+.upload:invalid {
+    border-color: #DC2626;
+}
+
+.upb {
+    position: relative;
+    bottom: 15px;
+    right: -5px;
+    border-radius: 3px !important;
+}
+
+.upbo {
+    position: relative;
+    bottom: 15px;
+    right: -2px;
+    border-radius: 3px !important;
+}
+
+.mat-divider {
+    border-top-color: rgb(172, 172, 172) !important;
+}
+
+
+
+td.mat-cell,
+td.mat-footer-cell {
+    border-bottom-width: 0px
+}
+
+.mat-cell,
+.mat-footer-cell {
+    font-size: 14px;
+}
+
+.mat-header-cell {
+    font-size: 15px;
+}
+
+tr.mat-header-row {
+    height: 35px;
+}
+
+tr.mat-row {
+    height: 30px;
+}
+
+.no-wrap {
+    white-space: nowrap;
+    padding: 10px;
+    padding-left: 10px;
+}
+
+
+.example-container2 {
+    max-height: 380px;
+    overflow: auto;
+}
+
+.mat-header-cell, .mat-cell {
+    z-index: 2 !important;
+} */
+
+.example-container {
+
+    max-height: 220px;
+    overflow: auto;
+    position: relative;
+}
+
+.mat-mdc-header-cell, .mat-mdc-cell  {
+    z-index: 2 !important;
+}
+
+
+.wrap{
+    text-overflow: unset !important;
+    white-space: nowrap !important;
+}

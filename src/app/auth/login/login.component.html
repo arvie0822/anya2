@@ -1,0 +1,137 @@
+<div class="flex flex-col sm:flex-row items-center md:items-start sm:justify-center md:justify-start flex-auto min-w-0">
+  <div class="relative hidden md:flex flex-auto items-center justify-center h-full p-2 lg:px-2 overflow-hidden bg-gray-800 dark:border-r">
+    <div class="grid grid-cols-3 gap-5">
+      @for (item of images; track item) {
+        <div class="xl:h-100 xl:w-100 md:h-[280px] md:w-[280px] rounded-lg overflow-hidden bg-white parent" (click)="openLink(item.link)">
+          <img [src]="item.src" style="height: 100%; width: 100%;" (click)="openLink(item.link)">
+          <span align="center" class="float-span md:text-sm xl:text-md" (click)="openLink(item.link)">
+            <span style="font-weight:bold">{{item.title}}</span>
+            <br>
+              <span>{{item.description}}</span>
+            </span>
+          </div>
+        }
+      </div>
+    </div>
+    <div class="md:flex md:justify-end w-full sm:w-auto md:h-full py-8 px-4 sm:p-12 md:p-2 xl:p-12 md:pt-14 sm:rounded-2xl md:rounded-none sm:shadow md:shadow-none sm:bg-card">
+      <div class="max-w-[250px] sm:max-w-[300px] mx-auto sm:mx-0 md:p-10 xl:p-2">
+        <!-- Logo -->
+        <div class="w-full">
+          <img src="images/logo/logo.png">
+        </div>
+
+        <!-- Title -->
+        <!-- <div class="mt-8 text-4xl font-extrabold tracking-tight leading-tight">Sign in</div> -->
+        <div class="flex items-baseline mt-0.5 font-medium">
+          <div>Log in to your account.</div>
+        </div>
+
+        <!-- Alert -->
+        @if (showAlert) {
+          <fuse-alert
+            class="mt-8"
+            [appearance]="'outline'"
+            [showIcon]="false"
+            [type]="alert.type"
+            [@shake]="alert.type === 'error'">
+            {{alert.message}}
+          </fuse-alert>
+        }
+
+        <!-- Sign in form -->
+        <form autocomplete="off"
+          class="mt-8"
+          [formGroup]="loginForm"
+          #signInNgForm="ngForm">
+
+          <!-- Username field -->
+          <mat-form-field class="w-full h-18 mb-3 text-lg" appearance="outline">
+            <mat-label>Client</mat-label>
+            <input class="inputs" autocomplete="off"
+              id="companyCode"
+              matInput
+              [formControlName]="'companyCode'">
+              @if (loginForm.get('companyCode').hasError('required')) {
+                <mat-error>
+                  Company Code is required
+                </mat-error>
+              }
+            </mat-form-field>
+
+
+            <!-- Username field -->
+            <mat-form-field class="w-full h-18 mb-3 text-lg" appearance="outline">
+              <mat-label>Username</mat-label>
+              <input class="inputs"
+                autocomplete="off"
+                id="username"
+                matInput
+                [formControlName]="'username'">
+                @if (loginForm.get('username').hasError('required')) {
+                  <mat-error>
+                    Username is required
+                  </mat-error>
+                }
+              </mat-form-field>
+
+              <!-- Password field -->
+              <mat-form-field class="w-full h-18 text-lg" appearance="outline">
+                <mat-label>Password</mat-label>
+                <input class="inputs"
+                  autocomplete="off"
+                  id="password"
+                  matInput
+                  type="password"
+                  [formControlName]="'password'"
+                  #passwordField>
+                  @if (passwordField.type === 'password') {
+                    <mat-icon (click)="passwordField.type === 'password' ? passwordField.type = 'text' : passwordField.type = 'password'" matSuffix
+                      class="mr-2 mt-[1px]"
+                    [svgIcon]="'heroicons_solid:eye'"></mat-icon>
+                  }
+                  @if (passwordField.type === 'text') {
+                    <mat-icon (click)="passwordField.type === 'password' ? passwordField.type = 'text' : passwordField.type = 'password'" matSuffix
+                      class="mr-2 mt-[1px]"
+                    [svgIcon]="'heroicons_solid:eye-slash'"></mat-icon>
+                  }
+                  <mat-error>
+                    Password is required
+                  </mat-error>
+                </mat-form-field>
+
+                <!-- Actions -->
+                <div class="inline-flex items-center justify-between w-full mt-1.5">
+                  <mat-checkbox
+                    [color]="'primary'"
+                    [formControlName]="'remember'">
+                    Remember me
+                  </mat-checkbox>
+                  <a
+                    class="text-md font-medium text-primary-500 hover:underline"
+                    [routerLink]="['/forgot-password']" >Forgot password?
+                  </a>
+                </div>
+
+                <!-- Submit button -->
+                <button
+                  class="fuse-mat-button-large w-full h-18 mt-6 text-md"
+                  mat-flat-button
+                  [color]="'primary'"
+                  [disabled]="loginForm.disabled"
+                  (click)="signIn()">
+                  @if (!loginForm.disabled) {
+                    <span>
+                      Sign in
+                    </span>
+                  }
+                  @if (loginForm.disabled) {
+                    <mat-progress-spinner
+                      [diameter]="24"
+                    [mode]="'indeterminate'"></mat-progress-spinner>
+                  }
+                </button>
+
+              </form>
+            </div>
+          </div>
+        </div>

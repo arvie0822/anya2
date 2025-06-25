@@ -1,0 +1,134 @@
+<div class="flex flex-col flex-auto min-w-0">
+    <!-- Main -->
+    <div class="flex-auto  sm:p-2  w-full min-w-0 sm:absolute sm:inset-0 sm:overflow-auto text-md">
+
+        <mat-card class="body-card">
+            <mat-card-title>
+                <app-card-title title="Leave Balance" [sub]="true" [back]="false" (submitTap)="submit()"></app-card-title>
+            </mat-card-title><br>
+                <div class="flex flex-wrap">
+                    <div class="h-13 mr-3">
+                        <app-employee-hierarchy [multiple]="true" [all]="true" [notincludetag]="[37]" [resultHierarchy]="resultHierarchy"></app-employee-hierarchy>
+                    </div>
+                    <form class="h-13 mr-3" [formGroup]="leavebalanceform" >
+                        <app-dropdown-custom [useControl]="true" [all]="true" (selected)="sample($event)" [multiple]="true" [control]="leavebalanceform.get('leaveTypeId')" [options]="dropdownOptions.Leavecategory" [type]="1017"></app-dropdown-custom>
+                    </form>
+
+                    <div class="flex space-x-2">
+                        <button mat-flat-button color="primary"  (click)="Search(false)" class="w-[10px]" matTooltip="Search">
+                            <mat-icon class="mb-2" matSuffix svgIcon="mat_outline:search"></mat-icon>
+                        </button>
+                        <button mat-flat-button color="primary"  (click)="handleUploadEvent()" class="w-[10px]" matTooltip="Upload">
+                            <mat-icon class="mb-2" matSuffix svgIcon="mat_outline:upload"></mat-icon>
+                        </button>
+                        <button type="button" (click)="Search(true)"  class="w-[10px]" mat-flat-button color="primary"  matTooltip="Export">
+                            <mat-icon class="mb-2" svgIcon="mat_outline:download"></mat-icon>
+                        </button>
+                    </div>
+                </div>
+
+            <div class="mt-5 mb-5">
+                <mat-divider></mat-divider>
+            </div>
+            <section class="example-container mat-elevation-z0 z-10" tabindex="0">
+                <table mat-table [dataSource]="dataSource" class="border" >
+                    <ng-container matColumnDef="action">
+                        <th class="pl-10" mat-header-cell *matHeaderCellDef> Action </th>
+                        <td class="" mat-cell *matCellDef="let element ; let i = index">
+                            <button color="primary" mat-button (click)="enable(element)">
+                            <mat-icon class="mb-2" svgIcon="heroicons_outline:pencil-square"></mat-icon></button>
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="amount">
+                        <th class="pl-8" mat-header-cell *matHeaderCellDef>Amount</th>
+                        <td class="" mat-cell *matCellDef="let element">
+                            <div class="h-13 mt-1">
+                                <mat-form-field class="w-20" appearance="outline">
+                                    <input class="amount-label" matInput type="number" [(ngModel)]="element.amount" [placeholder]="''" [disabled]="!element.isAmount">
+                                </mat-form-field>
+                            </div>
+
+                    </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="type">
+                        <th class="pl-15" mat-header-cell *matHeaderCellDef>New Balance</th>
+                        <td class="" mat-cell  *matCellDef="let element">
+                            <div class="h-13 mt-1 w-50">
+                                <app-dropdown [isFix]="true" [disabled]="!element.isType" [useControl]="false" [multiple]="false" [all]="false" [value]="element.type" (selected)="element.type = $event"  [options]="[]" label="New Balance" [type]="82"> </app-dropdown>
+                            </div>
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="remarks">
+                        <th class="pl-[20px]" mat-header-cell *matHeaderCellDef> Remarks </th>
+                        <td class="" mat-cell *matCellDef="let element">
+                            <div class="h-13 mt-1">
+                                <mat-form-field class="w-50 " appearance="outline">
+                                    <input class="remarks-label" matInput type="text" [(ngModel)]="element.remarks" [placeholder]="''" [disabled]="!element.isRemarks">
+                                </mat-form-field>
+                            </div>
+                    </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="employeeId">
+                        <th class="" mat-header-cell *matHeaderCellDef> Employee </th>
+                        <td mat-cell class="h-10" *matCellDef="let element"> {{element.employee}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="leaveTypeId">
+                        <th class="" mat-header-cell *matHeaderCellDef> Leave Type </th>
+                        <td mat-cell class="h-10" *matCellDef="let element"> {{element.leaveType}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="earned">
+                        <th class="" mat-header-cell *matHeaderCellDef> Earned </th>
+                        <td mat-cell class="h-10" *matCellDef="let element"> {{element.earned}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="carried">
+                        <th class="" mat-header-cell *matHeaderCellDef> Carry Forward </th>
+                        <td class="h-10" mat-cell *matCellDef="let element"> {{element.carried}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="carryExpiration">
+                        <th class="" mat-header-cell *matHeaderCellDef> Carry Forward <br> Expiration Date </th>
+                        <td class="h-10" mat-cell *matCellDef="let element"> {{element.carryExpiration}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="expired">
+                        <th class="" mat-header-cell *matHeaderCellDef> Expired <br> Carry Forward </th>
+                        <td class="h-10" mat-cell *matCellDef="let element"> {{element.expired}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="used">
+                        <th class="" mat-header-cell *matHeaderCellDef>Leave Used </th>
+                        <td mat-cell class="h-10" *matCellDef="let element"> {{element.used}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="pendingApproval">
+                        <th class="" mat-header-cell *matHeaderCellDef> Pending Approval </th>
+                        <td mat-cell class="h-10" *matCellDef="let element"> {{element.pendingApproval}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="pendingSchedule">
+                        <th class="" mat-header-cell *matHeaderCellDef> Pending Schedule </th>
+                        <td mat-cell class="h-10" *matCellDef="let element"> {{element.pendingSchedule}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="available">
+                        <th class="" mat-header-cell *matHeaderCellDef> Available Balance </th>
+                        <td class="h-10" mat-cell *matCellDef="let element"> {{element.available}} </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                </table>
+            </section>
+            <mat-paginator class="paganation" [attr.disabled]="isLoadingResults ? true : null" (page)="handlePageEvent($event)"
+            [length]="totalRows" [pageSize]="request.Length" [pageIndex]="request.Start"
+            [pageSizeOptions]="[10, 20, 50]" showFirstLastButtons></mat-paginator>
+        </mat-card>
+    </div>
+</div>

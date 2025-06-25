@@ -1,0 +1,321 @@
+<!-- Main -->
+<div class="flex-auto p-6 sm:p-6 overflow-y-auto" *transloco="let t">
+  <!-- Main -->
+  <div class="flex-auto sm:p-2  w-full min-w-0 sm:absolute sm:inset-0 text-lg">
+    <section class="example-container mat-elevation-z0" tabindex="0">
+      <table #LMTable mat-table [dataSource]="LMSource">
+        <ng-container matColumnDef="leave_type">
+          <th class="no-wrap" mat-header-cell *matHeaderCellDef>{{t('Leave Type')}}</th>
+          <td mat-cell *matCellDef="let element">{{element.leave_type}}</td>
+        </ng-container>
+        <ng-container matColumnDef="total_leave">
+          <th class="no-wrap " mat-header-cell *matHeaderCellDef>{{t('Earned')}}</th>
+          <td mat-cell *matCellDef="let element">{{element.total_leave}}</td>
+        </ng-container>
+        <ng-container matColumnDef="carry_forward" style="z-index: 10 !important;">
+          <th style="z-index: 10 !important;" mat-header-cell *matHeaderCellDef> Carry Forward </th>
+          <td mat-cell class="pl-2" *matCellDef="let element">{{element.carry_forward}}</td>
+        </ng-container>
+      <ng-container matColumnDef="carry_expiration" style="z-index: 10 !important;">
+          <th style="z-index: 10 !important;" mat-header-cell *matHeaderCellDef> Carry Forward <br> Expiration Date </th>
+          <td mat-cell class="pl-2" *matCellDef="let element">{{element.carry_expiration}}</td>
+      </ng-container>
+      <ng-container matColumnDef="expired" style="z-index: 10 !important;">
+          <th style="z-index: 10 !important;" mat-header-cell *matHeaderCellDef> Expired <br> Carry Forward </th>
+          <td mat-cell class="pl-2" *matCellDef="let element">{{element.expired}}</td>
+      </ng-container>
+        <ng-container matColumnDef="used_leave">
+          <th class="no-wrap " mat-header-cell *matHeaderCellDef>{{t('Used Leave')}}</th>
+          <td mat-cell *matCellDef="let element">{{element.used_leave}}</td>
+        </ng-container>
+        <ng-container matColumnDef="pending_approval">
+          <th class="no-wrap " mat-header-cell *matHeaderCellDef>{{t('Pending Approval')}}</th>
+          <td mat-cell *matCellDef="let element">{{element.pending_approval}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="pending_schedule">
+          <th class="no-wrap " mat-header-cell *matHeaderCellDef>{{t('Pending Schedule')}}</th>
+          <td mat-cell *matCellDef="let element">{{element.pending_schedule}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="available_leave" style="z-index: 10 !important;">
+          <th style="z-index: 10 !important;" mat-header-cell *matHeaderCellDef>{{t('Available Leave')}}</th>
+          <td mat-cell *matCellDef="let element">{{element.available_leave}}</td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="lmColumns ; sticky: true"></tr>
+        <tr mat-row *matRowDef="let row; columns: lmColumns;"></tr>
+      </table>
+    </section>
+    <div class="m-2">
+
+    </div>
+    <form [formGroup]="leaveForm">
+      <div class="grid grid-cols-10 gap-2 h-13 mt-5">
+        <app-dropdown-custom (selected)="validation('')  ; cleardate()" [useControl]="true" [multiple]="false"
+          [control]="leaveForm.get('leaveTypeId')" [options]="dropdownOptions.Leavecategory" [IsencyptIds]="tid" (objects)="leaveids = $event"
+        [type]="1034"></app-dropdown-custom>
+
+        @if (isMultiShift) {
+          <mat-form-field class="w-full text-lg" appearance="outline">
+            <mat-label class="label-font-size">{{ t('date') }}</mat-label>
+            <input [min]="min" formControlName="dateFrom" (dateChange)="validation('Date')" matInput [matDatepicker]="dd" readonly
+              [placeholder]="'MM/DD/YYYY'" (click)="dd.open()">
+              <mat-datepicker-toggle matSuffix [for]="dd"></mat-datepicker-toggle>
+              <mat-datepicker #dd></mat-datepicker>
+            </mat-form-field>
+          }
+
+          @if (isMultiShift) {
+            <mat-form-field class="w-full text-lg" appearance="outline">
+              <mat-label>{{ t('shiftType') }}</mat-label>
+              <mat-select [disabled]="!leaveForm.value.dateFrom" formControlName="shiftId">
+                @for (item of dropdownOptions.shiftCodeDef; track item) {
+                  <mat-option [value]="item.dropdownID">{{item.description}}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+          }
+
+          @if (!isMultiShift || foredit) {
+            <mat-form-field class="w-full text-lg" appearance="outline">
+              <mat-label class="label-font-size">{{ t('dateFrom') }}</mat-label>
+              <input [min]="min" formControlName="dateFrom" matInput [matDatepicker]="df" 
+                [placeholder]="'MM/DD/YYYY'" (click)="df.open()">
+                <mat-datepicker-toggle matSuffix [for]="df"></mat-datepicker-toggle>
+                <mat-datepicker #df></mat-datepicker>
+              </mat-form-field>
+            }
+
+            @if (!isMultiShift || foredit) {
+              <mat-form-field class="w-full text-lg" appearance="outline">
+                <mat-label class="label-font-size">{{ t('dateTo') }}</mat-label>
+                <input formControlName="dateTo" [min]="min == null ? leaveForm.value.dateFrom : min"  matInput [matDatepicker]="dt" 
+                  [placeholder]="'MM/DD/YYYY'" (click)="dt.open()">
+                  <mat-datepicker-toggle matSuffix [for]="dt"></mat-datepicker-toggle>
+                  <mat-datepicker #dt></mat-datepicker>
+                </mat-form-field>
+              }
+              <!-- <mat-form-field class="w-full text-lg" appearance="outline">
+              <mat-label class="label-font-size">{{ t('leaveType') }}</mat-label>
+              <mat-icon class="uploadbutton mb-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+              <mat-select formControlName="leaveTypeId">
+                <mat-option *ngFor="let item of leave" [value]="item.id">{{item.description}}</mat-option>
+              </mat-select>
+            </mat-form-field> -->
+            <!-- <app-dropdown [useControl]="true"  [control]="leaveForm.get('leaveTypeId')"  [options]="dropdownOptions.Leavecategory" [icon]="'mat_outline:info'" [type]="90"> </app-dropdown> -->
+            <app-dropdown [isFix]="true" [useControl]="true" (selected)="validation(''); hourly()"
+              [control]="leaveForm.get('leaveFileTypeId')" [disabled]="pwd_df_dt()" [options]="dropdownOptions.Leavefilingdef"
+            [icon]="'mat_outline:info'" [type]="79"> </app-dropdown>
+
+            <!-- <mat-form-field class="w-full text-lg" appearance="outline">
+            <mat-label class="label-font-size">{{ t('fillingType') }}</mat-label>
+            <mat-icon class="uploadbutton mb-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+            <mat-select formControlName="leaveFileTypeId">
+              <mat-option *ngFor="let item of hour" [value]="item.id">{{item.description}}</mat-option>
+            </mat-select>
+          </mat-form-field> -->
+          <!-- <mat-form-field *ngIf="leaveForm.leaveFileTypeId == 2"  class="w-full text-lg" appearance="outline">
+          <mat-label class="label-font-size">{{ t('startTm') }}</mat-label>
+          <mat-icon class="mb-2" matPrefix svgIcon="mat_outline:access_time"></mat-icon>
+          <input formControlName="leaveStartlv" readonly [strict]="false" mode="12h" type="text" matTimepicker #t="matTimepicker">
+        </mat-form-field> -->
+
+        @if (leaveForm.value.leaveFileTypeId == 12760) {
+          <mat-form-field class="w-full text-lg"
+            appearance="outline">
+            <mat-label class="label-font-size">{{ t('dateAndTimeFrom') }}</mat-label>
+            <input matInput [ngxMatDatetimePicker]="dtf" (click)="dtf.open()" (dateChange)="validation('')"
+              placeholder="Choose a date" formControlName="dateTimeFrom"
+              [max]="leaveForm.controls['dateTimeTo'].value" [disabled]="false">
+              <mat-datepicker-toggle matSuffix [for]="dtf">
+              </mat-datepicker-toggle>
+              <ngx-mat-datetime-picker #dtf [showSpinners]="showSpinners" [showSeconds]="showSeconds"
+                [touchUi]="touchUi" [color]="color" [enableMeridian]="true">
+              </ngx-mat-datetime-picker>
+            </mat-form-field>
+          }
+
+          <!-- <mat-form-field *ngIf="leaveForm.value.leaveFileTypeId == 12760" class="w-full text-lg" appearance="outline" >
+          <mat-label class="label-font-size">{{ t('endTm') }}</mat-label>
+          <mat-icon class="mb-2" matPrefix svgIcon="mat_outline:access_time"></mat-icon>
+          <input (timeChange)="timevalidators()"  formControlName="leaveEndlv" [strict]="false" mode="12h" type="text" matTimepicker #t="matTimepicker">
+          (timeChange)="timevalidators()"
+        </mat-form-field> -->
+
+        @if (leaveForm.value.leaveFileTypeId == 12760) {
+          <mat-form-field class="w-full text-lg"
+            appearance="outline">
+            <mat-label class="label-font-size">{{ t('dateAndTimeTo') }}</mat-label>
+            <input matInput [ngxMatDatetimePicker]="dtt" (click)="dtt.open()" (dateChange)="validation('')"
+              placeholder="Choose a date" formControlName="dateTimeTo"
+              [min]="leaveForm.controls['dateTimeFrom'].value" [disabled]="false">
+              <mat-datepicker-toggle matSuffix [for]="dtt">
+              </mat-datepicker-toggle>
+              <ngx-mat-datetime-picker #dtt [showSpinners]="showSpinners" [showSeconds]="showSeconds"
+                [touchUi]="touchUi" [color]="color" [enableMeridian]="true">
+              </ngx-mat-datetime-picker>
+            </mat-form-field>
+          }
+
+          @if (leaveForm.value.leaveFileTypeId == 12758) {
+            <mat-form-field class="w-full text-lg"
+              appearance="outline">
+              <mat-label class="label-font-size">{{ t('Options') }}</mat-label>
+              <mat-icon class="iconbutton mb-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+              <mat-select (selectionChange)="validation('')" formControlName="halfdayOption">
+                @for (item of half; track item) {
+                  <mat-option [value]="item.id">{{item.description}}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+          }
+
+          @if (showpaid) {
+            <mat-form-field class="w-full text-lg" appearance="outline">
+              <mat-label class="label-font-size">{{ t('paid') }}</mat-label>
+              <mat-icon class="iconbutton mb-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+              <mat-select formControlName="isPaid">
+                @for (item of paid; track item) {
+                  <mat-option [value]="item.id">{{item.description}}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+          }
+
+          <!-- <mat-form-field class="w-full text-lg" appearance="outline">
+          <mat-label class="label-font-size">{{ t('paid') }}</mat-label>
+          <mat-icon class="uploadbutton mb-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+          <mat-select formControlName="withPaylv">
+            <mat-option *ngFor="let item of application" [value]="item.id">{{item.description}}</mat-option>
+          </mat-select>
+        </mat-form-field> -->
+        <!-- <div class="">
+        <textarea (invalid)="false" class="area mb-2 mt-1 pl-1 text"  matInput formControlName="reasonlv" placeholder="Reason"></textarea>
+      </div> -->
+
+      <div class="dark:hidden"
+        style=" border-style: solid; border-color: rgb(189, 187, 187); border-width: 1px; margin-bottom: 1px; border-radius: 3px; height: 29px; width:100%;">
+        <textarea class="area w-full mt-2 ml-1 h-7" formControlName="reason" placeholder="{{t('Reason')}}" matInput></textarea>
+      </div>
+      <div class="hidden dark:flex"
+        style=" border-style: solid; border-color: rgb(231, 231, 231); border-width: 1px; margin-bottom: 1px; border-radius: 3px; height: 29px; width:100%;">
+        <textarea class="area w-full mt-2 ml-1 h-7" formControlName="reason" placeholder="{{t('Reason')}}" matInput></textarea>
+      </div>
+      <!-- <mat-form-field class="w-60 text-lg" appearance="outline">
+      <mat-label class="label-font-size">{{ t('reason') }}</mat-label>
+      <mat-icon class="mb-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+      <input class="input" formControlName="reasonlv" matInput [placeholder]="'Reason'"/>
+    </mat-form-field> -->
+    <mat-form-field class="w-full text-lg upload" appearance="outline">
+      <input (invalid)="true" type="file" formControlName="uploadPath" #fileInput2
+        (change)="uploadFile($event ,'displayLeave', 'uploadFile')"
+        class=" absolute top-1 z-0 h-full w-full cursor-pointer opacity-0 upload"
+        accept=".jpeg,.jpg,.png,.doc,.docx,.pdf,.xls,.xlsx" />
+        <input class="sample upload" readonly matInput id="displayLeave" cdkFocusInitial />
+        <mat-icon class="iconbutton mb-2" matPrefix svgIcon="mat_outline:upload"></mat-icon>
+        <button [disabled]="disabledbutton" (invalid)="true" class="upb" (click)="fileInput2.click($event)"
+        matSuffix mat-button color="primary">Upload</button>
+      </mat-form-field>
+      <!-- <mat-form-field class="w-36 text-lg" appearance="outline">
+      <mat-label class="label-font-size">{{ t('uploadFile') }}</mat-label>
+      <mat-icon  class="mb-2" matSuffix  svgIcon="mat_outline:upload"></mat-icon>
+      <input (click)="leaveFileUpload()" formControlName="upload_filelv" matInput type="text" [placeholder]="'Upload File'" readonly>
+    </mat-form-field> -->
+    <!-- <div class="button-margin-top"> -->
+    <button class="w-[40px]" [disabled]="isMulti || foradd" (click)="validation('') ; addLV()" class="text-md mb-1"
+      mat-flat-button color="primary" aria-label="example icon">
+      <mat-icon class="iconbutton mb-3" svgIcon="mat_outline:post_add"></mat-icon><span class="ml-1">{{editing? t('Edit') :
+    t('Add')}}</span>
+  </button>
+<!-- </div> -->
+
+</div>
+<!-- <div *ngIf="filingForm.value.filingTypes == 2" class="grid grid-cols-6 gap-2 ">
+
+</div> -->
+<section class="example-container2 mat-elevation-z0 z-10" tabindex="0">
+  <table #LVTable mat-table [dataSource]="LVSource" class="mat-elevation-z0 border w-full">
+
+    <!-- <ng-container matColumnDef="lvAction" >
+    <th class="head text-center" mat-header-cell *matHeaderCellDef> Action </th>
+    <td mat-cell class="leavecell text-center w-9" *matCellDef="let element; ; let i = index">
+      <button type="button" class="" (click)="lvDelete(i)" mat-icon-button color="warn">
+        <mat-icon matSuffix svgIcon="mat_outline:delete"></mat-icon>
+      </button>
+    </td>
+  </ng-container> -->
+
+  <ng-container matColumnDef="lvAction">
+    <th class="pl-6" mat-header-cell *matHeaderCellDef>{{t('Actions')}}</th>
+    <td class="pl-2" mat-cell *matCellDef="let element; let i = index">
+      <button mat-icon-button [matMenuTriggerFor]="menu" [disabled]="editing || disabledbutton "aria-label="">
+        <mat-icon class="icon-size-6">{{editing?"edit":"more_vert"}}</mat-icon>
+      </button>
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item (click)="lvDelete(i)">
+          <mat-icon class="icon-size-6 " color="warn">delete</mat-icon>
+          <span>{{t('delete')}}</span>
+        </button>
+        <button mat-menu-item (click)="edit(element , i ,'isedit')">
+          <mat-icon class="icon-size-6" color="primary">edit</mat-icon>
+          <span>{{t('edit')}}</span>
+        </button>
+      </mat-menu>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="lvDateFrom">
+    <th class="no-wrap" mat-header-cell *matHeaderCellDef>{{t('Date From')}}</th>
+    <td mat-cell *matCellDef="let element">{{element.dateFrom | date: 'yyyy/MM/dd'}}</td>
+  </ng-container>
+  <ng-container matColumnDef="lvDateTo">
+    <th class="no-wrap" mat-header-cell *matHeaderCellDef>{{t('Date To')}}</th>
+    <td mat-cell class="" *matCellDef="let element">{{element.dateTo | date: 'yyyy/MM/dd'}}</td>
+  </ng-container>
+  <ng-container matColumnDef="lvShiftCode">
+    <th class="no-wrap" mat-header-cell *matHeaderCellDef> Shift Code </th>
+    <td mat-cell *matCellDef="let element">{{element.shiftCode}}</td>
+  </ng-container>
+  <ng-container matColumnDef="lvType">
+    <th class="no-wrap" class="" mat-header-cell *matHeaderCellDef>{{t('Leave Type')}}</th>
+    <td mat-cell class="wrap" *matCellDef="let element">{{element.leaveTypeIddescrip}}</td>
+  </ng-container>
+  <ng-container matColumnDef="lvhourly">
+    <th class="no-wrap" mat-header-cell *matHeaderCellDef>{{t('Filing Type')}}</th>
+    <td mat-cell class=" " *matCellDef="let element">{{element.leaveFileTypeIddesecrip}}</td>
+  </ng-container>
+  <ng-container matColumnDef="lvoptions">
+    <th class="no-wrap" mat-header-cell *matHeaderCellDef>{{t('Options')}}</th>
+    <td mat-cell class=" " *matCellDef="let element">{{element.halfdayOptiondescrip}}</td>
+  </ng-container>
+  <ng-container matColumnDef="lvstart">
+    <th class="no-wrap" mat-header-cell *matHeaderCellDef>{{t('Start Time')}}</th>
+    <td mat-cell class=" " *matCellDef="let element">{{element.dateTimeFrom | date: 'yyyy/MM/dd HH:mm a'}}</td>
+  </ng-container>
+  <ng-container matColumnDef="lvend">
+    <th class="no-wrap" mat-header-cell *matHeaderCellDef>{{t('End Time')}}</th>
+    <td mat-cell class=" " *matCellDef="let element">{{element.dateTimeTo | date: 'yyyy/MM/dd HH:mm a'}}
+    </td>
+  </ng-container>
+  <!-- <ng-container matColumnDef="lvpay" >
+  <th class="no-wrap" mat-header-cell *matHeaderCellDef> Paid </th>
+  <td mat-cell class=" " *matCellDef="let element">{{element.lvpay}}</td>
+</ng-container> -->
+<ng-container matColumnDef="lvreason">
+  <th class="no-wrap" mat-header-cell *matHeaderCellDef>{{t('Reason')}}</th>
+  <td mat-cell class="" *matCellDef="let element">{{element.reason}}</td>
+</ng-container>
+
+<ng-container matColumnDef="lvUpload_File">
+  <th class="no-wrap" mat-header-cell *matHeaderCellDef> Uploaded File </th>
+  <td mat-cell class="" *matCellDef="let element">{{element.uploadPath}}</td>
+</ng-container>
+
+<tr mat-header-row *matHeaderRowDef="lvColumns ; sticky : true"></tr>
+<tr mat-row *matRowDef="let row; columns: lvColumns;"></tr>
+</table>
+</section>
+</form>
+</div>
+</div>

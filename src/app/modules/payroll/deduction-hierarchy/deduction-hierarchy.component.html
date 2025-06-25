@@ -1,0 +1,209 @@
+<div class="flex flex-col flex-auto min-w-0" *transloco="let t">
+  <!-- Main -->
+  <div class="flex-auto sm:p-2 w-full min-w-0 sm:absolute sm:inset-0 text-md">
+    <mat-card class="h-full">
+      <mat-card-title>
+        <app-card-title title="Deduction Hierarchy" (submitTap)="submit()" [sub]="true" [back]="true"></app-card-title>
+      </mat-card-title>
+      <mat-card-content>
+        <form [formGroup]="deductionHierarchyForm" >
+          <div class="grid grid-cols-7 gap-2 h-14 mt-5">
+
+            <mat-form-field class="w-full text-lg" appearance="outline">
+              <mat-label class="label-font-size">{{t('name')}}</mat-label>
+              <mat-icon class="mb-3" matPrefix svgIcon="mat_outline:info"></mat-icon>
+              <input class="input" formControlName="name" matInput [placeholder]="'Name'"/>
+            </mat-form-field>
+
+            <mat-form-field class="w-full text-lg" appearance="outline">
+              <mat-label class="label-font-size">{{t('description')}}</mat-label>
+              <mat-icon class="mb-3" matPrefix svgIcon="mat_outline:info"></mat-icon>
+              <input class="input" formControlName="description" matInput [placeholder]="'Name'"/>
+            </mat-form-field>
+
+            <mat-form-field class="w-full text-lg" appearance="outline">
+              <mat-label class="label-font-size">{{t('minNetPay')}}</mat-label>
+              <mat-icon class="mb-3" matPrefix svgIcon="mat_outline:info"></mat-icon>
+              <mat-select formControlName="allowMinNetPay">
+                @for (item of payOpt; track item) {
+                  <mat-option [value]="item.id">{{item.description}}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+
+            @if (deductionHierarchyForm.value.allowMinNetPay) {
+              <mat-form-field class="w-full text-lg" appearance="outline">
+                <mat-label class="label-font-size">{{t('minNetPayType')}}</mat-label>
+                <mat-icon class="mb-3" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                <mat-select formControlName="minNetPayType">
+                  @for (item of amountfixed; track item) {
+                    <mat-option [value]="item.id">{{item.description}}</mat-option>
+                  }
+                </mat-select>
+              </mat-form-field>
+            }
+
+            @if (deductionHierarchyForm.value.allowMinNetPay == true && deductionHierarchyForm.value.minNetPayType == 0) {
+              <mat-form-field class="w-full text-lg" appearance="outline">
+                <mat-label class="label-font-size">{{t('minNetAmount')}}</mat-label>
+                <mat-icon class="mb-3" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                <input class="input" type="number" (blur)="format($event,'amount')" formControlName="amount" matInput [placeholder]="'Min Net Amount'"/>
+              </mat-form-field>
+            }
+
+            @if (deductionHierarchyForm.value.minNetPayType == 1 || deductionHierarchyForm.value.minNetPayType == 2) {
+              <div>
+                <mat-form-field class="w-full text-lg" appearance="outline">
+                  <mat-label class="label-font-size">{{t('minNetAmount')}}</mat-label>
+                  <mat-icon class="mb-3" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                  <input class="input" type="number" formControlName="amount" matInput [placeholder]="'Min Net Amount'" min="1"
+                    max="100" />
+                    @if (deductionHierarchyForm.get('amount').value > 100) {
+                      <mat-error class="textsize pb-5">
+                        Please enter a number between 1 and 100.
+                      </mat-error>
+
+                    }
+                  </mat-form-field>
+                </div>
+              }
+
+
+              @if (deductionHierarchyForm.value.allowMinNetPay == false) {
+                <mat-form-field class="w-full text-lg" appearance="outline">
+                  <mat-label class="label-font-size" [mattooltip]="t('allowCompanyAdv')" >{{t('allowCompanyAdv')}}</mat-label>
+                  <mat-icon class="mb-3" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                  <mat-select (selectionChange)="resetAllow()" formControlName="allowCompAdv">
+                    @for (item of payOpt; track item) {
+                      <mat-option [value]="item.id">{{item.description}}</mat-option>
+                    }
+                  </mat-select>
+                </mat-form-field>
+              }
+
+              @if (deductionHierarchyForm.value.allowCompAdv ==  true && deductionHierarchyForm.value.allowMinNetPay == false) {
+                <mat-form-field class="w-full text-lg" appearance="outline">
+                  <mat-label class="label-font-size">{{t('companyAdvType')}}</mat-label>
+                  <mat-icon class="mb-3" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                  <mat-select (selectionChange)="resetValue()" formControlName="compAdvType">
+                    @for (item of amountfixedD; track item) {
+                      <mat-option [value]="item.id">{{item.description}}</mat-option>
+                    }
+                  </mat-select>
+                </mat-form-field>
+              }
+
+              @if (deductionHierarchyForm.value.allowMinNetPay == false && deductionHierarchyForm.value.compAdvType == 2) {
+                <mat-form-field class="w-full text-lg" appearance="outline">
+                  <mat-label class="label-font-size">{{t('maxLoanAmount')}}</mat-label>
+                  <mat-icon class="mb-3" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                  <input class="input" type="number" (blur)="format($event,'amount')" formControlName="amount" matInput [placeholder]="'Max Loan Amount'"/>
+                </mat-form-field>
+              }
+
+              @if (deductionHierarchyForm.value.allowMinNetPay == false && deductionHierarchyForm.value.compAdvType == 3 || deductionHierarchyForm.value.compAdvType == 4) {
+                <mat-form-field class="w-full text-lg" appearance="outline">
+                  <!-- <mat-label class="label-font-size">{{t('maxLoanAmount')}}</mat-label> -->
+                  <mat-label class="label-font-size">maxsss</mat-label>
+                  <mat-icon class="mb-3" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                  <input class="input" type="number" formControlName="amount" matInput [placeholder]="'Max Loan Amount'" min="1"
+                  max="100"/>
+                  @if (deductionHierarchyForm.get('amount').value > 100) {
+                    <mat-error>
+                      Please enter a number between 1 and 100.
+                    </mat-error>
+                  }
+                </mat-form-field>
+              }
+
+              <mat-form-field class="w-full text-lg" appearance="outline">
+                <mat-label class="label-font-size">{{t('status')}}</mat-label>
+                <mat-icon class="mb-3" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                <mat-select formControlName="active">
+                  @for (item of statusOpt; track item) {
+                    <mat-option [value]="item.id">{{item.description}}</mat-option>
+                  }
+                </mat-select>
+              </mat-form-field>
+
+            </div>
+
+          <section class="mat-elevation-z0 w-[850px] mt-7 example-container">
+            <table mat-table #table [dataSource]="dataSource" class="mat-elevation-z0 w-full">
+                <!-- Position Column -->
+                <ng-container matColumnDef="Level">
+                  <th mat-header-cell *matHeaderCellDef>Level</th>
+                  <td mat-cell *matCellDef="let element">
+                    {{element.order}}
+                  </td>
+                </ng-container>
+
+                <!-- Name Column -->
+                <ng-container matColumnDef="Deduction">
+                  <th mat-header-cell *matHeaderCellDef>Deduction</th>
+                  <td mat-cell *matCellDef="let element">
+                    <div class="h-12 mt-2 w-full">
+                        <app-dropdown-custom [value]="element.hierarchyDeductionId" [options]="deductionoption" [all]="false" label="Deduction" [multiple]="false" [type]="1060"
+                            [useControl]="false" [disableOptions]="disableOptions" [customRequest]="customRequest" (selected)="element.hierarchyDeductionId=$event ; disabledop()"></app-dropdown-custom>
+                    </div>
+                </td>
+               </ng-container>
+
+                <ng-container matColumnDef="Action">
+                    <th mat-header-cell *matHeaderCellDef>
+                    </th>
+                    <td mat-cell *matCellDef="let element ; let i = index">
+                        @if(i > 0){
+                            <mat-icon class="icon-size-6 mt-2 mr-3"  (click)="removeData(element,i)" color="warn">delete</mat-icon>
+
+                        }
+                        @if(i == 0){
+                            <mat-icon (click)="addData(element,i)" color="primary" class="mt-2 icon-size-6">add</mat-icon>
+                        }
+                </td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="displayedColumns ; sticky: true"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+              </table>
+          </section>
+
+          <!-- <div class="grid grid-cols-12 mt-5">
+            <div class="col-span-2">
+              <div class="border-2 p-3 ">
+                <h2>Level</h2>
+              </div>
+              <div>
+                @for (item of doneCount; track item) {
+                  <div class="p-5 border-2">{{item}}</div>
+                }
+              </div>
+            </div>
+            <div class="col-span-3">
+              <div class="border-2 p-3">
+                <h2>Loan/Deduction</h2>
+              </div>
+              <div
+                cdkDropList
+                [cdkDropListData]="done"
+                (cdkDropListDropped)="drop($event)">
+                @for (item of done ; track item; let i = $index) {
+                  <div class="p-5 border-2" cdkDrag >{{item}}</div>
+                }
+              </div>
+            </div>
+          </div> -->
+
+        </form>
+
+        <!-- <div cdkDropList class="example-list" (cdkDropListDropped)="drop($event)">
+        <div
+          class="example-box"
+          *ngFor="let item of items"
+          cdkDrag
+        [cdkDragDisabled]="item.disabled">{{item.value}}</div>
+      </div> -->
+
+    </mat-card-content>
+  </mat-card>
+</div>
+</div>

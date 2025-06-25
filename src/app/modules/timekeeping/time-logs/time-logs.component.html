@@ -1,0 +1,96 @@
+<div class="flex flex-col flex-auto min-w-0" *transloco="let t">
+    <!-- Main -->
+    <div class="flex-auto  sm:p-2  w-full min-w-0 sm:absolute sm:inset-0 sm:overflow-auto text-md">
+
+        <mat-card>
+            <mat-card-title>
+                <app-card-title title="Time Logs"></app-card-title>
+            </mat-card-title><br>
+                <div class="flex flex-wrap space-x-3">
+                    <mat-form-field class="w-60 text-lg" appearance="outline">
+                        <mat-label class="label-font-size">{{t('Date From')}}</mat-label>
+                        <input [(ngModel)]="dateFrom" matInput [matDatepicker]="df" readonly [placeholder]="'MM/DD/YYYY'" [max]="dateTo"
+                            (click)="df.open()">
+                        <mat-datepicker-toggle class="dateui" matSuffix [for]="df"></mat-datepicker-toggle>
+                        <mat-datepicker #df></mat-datepicker>
+                    </mat-form-field>
+
+                    <mat-form-field class="w-60 text-lg" appearance="outline">
+                        <mat-label class="label-font-size">{{t('Date To')}}</mat-label>
+                        <input [(ngModel)]="dateTo"  matInput [matDatepicker]="df2" readonly [placeholder]="'MM/DD/YYYY'" [min]="dateFrom"
+                            (click)="df2.open()">
+                        <mat-datepicker-toggle class="dateui" matSuffix [for]="df2"></mat-datepicker-toggle>
+                        <mat-datepicker #df2></mat-datepicker>
+                    </mat-form-field>
+
+                    <!-- <div class="h-13 mr-3"><app-dropdown  [isFix]="true" [useControl]="true" (selected)="inactive()" [control]="timelogsform.get('employeeStatus')" [all]="true" [multiple]="true" [options]="dropdownOptions.employeeStatusDef" [icon]="'mat_outline:info'" [type]="36"> </app-dropdown></div> -->
+
+                    <app-employee-hierarchy [multiple]="true" [all]="true" (selected)="field_count = $event" [notincludetag]="[37,38,132]" [resultHierarchy]="resultHierarchy"></app-employee-hierarchy>
+
+                    <div class="flex space-x-3 mb-3">
+                        <button type="button" class="w-[10px]" (click)="search(false)" mat-flat-button color="primary" matTooltip="Search">
+                            <mat-icon class="mb-2" svgIcon="mat_outline:search"></mat-icon></button>
+                        <button type="button" class="w-[10px]" (click)="search(true)" mat-flat-button color="primary" matTooltip="Export">
+                            <mat-icon  class="mb-2" svgIcon="mat_outline:download"></mat-icon></button>
+                        <button class="w-[10px]" mat-flat-button color="primary" (click)="upload()" matTooltip="Upload">
+                            <mat-icon  class="mb-2" matSuffix svgIcon="mat_outline:upload"></mat-icon>
+                        </button>
+                    </div>
+                </div>
+
+
+            <div>
+                <mat-divider></mat-divider>
+            </div>
+
+            <table mat-table [dataSource]="dataSource" class="mat-elevation-z0" matSort (matSortChange)="handleSortEvent($event)">
+
+                <ng-container matColumnDef="employeeCode">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Employee Code </th>
+                    <td mat-cell *matCellDef="let element"> {{element.employeeCode}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="displayName">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Employee Name </th>
+                    <td class="pr-10" mat-cell *matCellDef="let element"> {{element.displayName}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="dateDisplay">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Date </th>
+                    <td mat-cell *matCellDef="let element" mat-sort-header> {{element.dateDisplay}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="day">
+                    <th class="" mat-header-cell *matHeaderCellDef mat-sort-header> Time </th>
+                    <td mat-cell class="pr-15" *matCellDef="let element"> {{element.day}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="logTypeDisplay">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> In/Out </th>
+                    <td mat-cell  *matCellDef="let element"> {{element.logTypeDisplay}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="bundyTypeDisplay">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Source </th>
+                    <td mat-cell *matCellDef="let element"> {{element.bundyTypeDisplay}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="location">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Location </th>
+                    <td mat-cell *matCellDef="let element"> {{element.location}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="lateFiling">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Late Filing </th>
+                    <td mat-cell *matCellDef="let element"> {{element.lateFiling}} </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+            <mat-paginator [attr.disabled]="isLoadingResults ? true : null" (page)="handlePageEvent($event)"
+            [length]="totalRows" [pageSize]="request.Length" [pageIndex]="request.Start"
+            [pageSizeOptions]="[10, 20, 50]" showFirstLastButtons></mat-paginator>
+        </mat-card>
+    </div>
+</div>

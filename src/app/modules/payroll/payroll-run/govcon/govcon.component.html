@@ -1,0 +1,85 @@
+<div class="flex-auto p-6 sm:p-6 overflow-y-auto">
+  <!-- Main -->
+  <div class="flex-auto  sm:p-2  w-full min-w-0 sm:absolute sm:inset-0 sm:overflow-auto text-md">
+    <table #earnT mat-table [dataSource]="dt" class="mat-elevation-z0 border">
+
+      @if (error) {
+        <ng-container matColumnDef="errorLogs">
+          <th class="pl-2 pr-2" mat-header-cell *matHeaderCellDef> Error Logs </th>
+          <td class="pl-2 pr-2 pb-2" [ngClass]="{'txt':highligthError(element)}" mat-cell *matCellDef="let element">{{element.errorLogs}}
+          </td>
+        </ng-container>
+      }
+
+      <ng-container matColumnDef="employeeId">
+        <th mat-header-cell *matHeaderCellDef> Employee ID </th>
+        <td mat-cell *matCellDef="let element" [ngClass]="{'txt':highligthError(element)}">{{element.employeeId}}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="govTypeCode">
+        <th mat-header-cell *matHeaderCellDef> Gov Type Code </th>
+        <td mat-cell *matCellDef="let element; let i = index" [ngClass]="{'txt':highligthError(element)}">
+          {{element.govTypeCode}}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="amount">
+        <th mat-header-cell *matHeaderCellDef> Amount </th>
+        <td mat-cell *matCellDef="let element" [ngClass]="{'txt':highligthError(element)}">{{element.amount}}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="recurStartDate">
+        <th mat-header-cell *matHeaderCellDef> Recur Start Date </th>
+        <td mat-cell *matCellDef="let element; let i = index" [ngClass]="{'txt':highligthError(element)}">
+          {{element.recurStartDate}}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="recurEndDate">
+        <th mat-header-cell *matHeaderCellDef> Recur End Date </th>
+        <td mat-cell *matCellDef="let element; let i = index" [ngClass]="{'txt':highligthError(element)}">
+          {{element.recurEndDate}}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="frequency">
+        <th mat-header-cell *matHeaderCellDef> Frequency </th>
+        <td mat-cell *matCellDef="let element" [ngClass]="{'txt':highligthError(element)}">{{element.frequency}}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="payoutType">
+        <th mat-header-cell *matHeaderCellDef> Pay Out Type </th>
+        <td mat-cell *matCellDef="let element" [ngClass]="{'txt':highligthError(element)}">{{element.payoutType}}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="action">
+        <th mat-header-cell *matHeaderCellDef> Action </th>
+        <td mat-cell *matCellDef="let element" [ngClass]="{'txt':highligthError(element)}">{{element.action}}
+        </td>
+      </ng-container>
+
+      @if (error) {
+        <div>
+          <tr mat-header-row *matHeaderRowDef="govconColumns; sticky: true"></tr>
+          <tr mat-row *matRowDef="let row; columns: govconColumns;" [ngClass]="{'edited': highligthError(row)}"></tr>
+        </div>
+      }
+      @if (!error) {
+        <div>
+          <tr  mat-header-row *matHeaderRowDef="govconDColumns; sticky: true"></tr>
+          <tr  mat-row *matRowDef="let row; columns: govconDColumns;" ></tr>
+        </div>
+      }
+
+    </table>
+  <!-- </div> -->
+
+  <mat-paginator [attr.disabled]="isLoadingResults ? true : null" (page)="handlePageEvent($event)"
+    [length]="totalRows" [pageSize]="request.Length" [pageIndex]="request.Start"
+  [pageSizeOptions]="[10, 20, 50]" showFirstLastButtons></mat-paginator>
+</div>
+</div>

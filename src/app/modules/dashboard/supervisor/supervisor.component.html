@@ -1,0 +1,106 @@
+<div class="flex flex-col flex-auto min-w-0 p-2">
+
+  <!-- Main -->
+  <div class="flex flex-row flex-auto min-w-0 gap-2 mt-1 mb-1 sm:absolute sm:inset-0 sm:overflow-auto h-full w-full">
+
+    <!-- <ktd-grid *ngIf="show" [cols]="cols" [gap]="10" [rowHeight]="rowHeight" [layout]="layout" [compactType]="compactType" (layoutUpdated)="onLayoutUpdated($event)"> -->
+    @if (show) {
+      <ktd-grid
+        [cols]="cols"
+        [gap]="10"
+        [rowHeight]="rowHeight"
+        [layout]="layout"
+        [compactType]="compactType"
+        [preventCollision]="preventCollision"
+        [scrollableParent]="autoScroll ? document : null"
+        scrollSpeed="4"
+        (dragStarted)="onDragStarted($event)"
+        (resizeStarted)="onResizeStarted($event)"
+        (dragEnded)="onDragEnded($event)"
+        (resizeEnded)="onResizeEnded($event)"
+        (layoutUpdated)="onLayoutUpdated($event)">
+        <ktd-grid-item id="0">
+          <!-- Your grid item content goes here -->
+          <div class="bg-white dark:bg-transparent dark:border-2 h-full">
+            <div class="p-1 flex justify-between">
+              <div class="header-title">Timekeeping Alerts</div>
+              <!-- <div class="header-text" *ngIf="SAsetup.totalRows">Total of {{SAsetup.totalRows}} Employees</div> -->
+              <div class="flex justify-between w-20">
+                <mat-icon class="cursor-pointer" (click)="tkPageEvent(SAsetup.request,-1,'left')" [svgIcon]="'heroicons_solid:chevron-left'"  matTooltip="Previous Cut-off"></mat-icon>
+                <mat-icon class="cursor-pointer" (click)="tkPageEvent(SAsetup.request, 1,'right')" [svgIcon]="'heroicons_solid:chevron-right'" matTooltip="Next Cut-off"></mat-icon>
+              </div>
+            </div>
+            <app-_tables [pageSize]="[50, 100]" [columns]="SAcolumns" [source]="SAdata" [loading]="SAsetup.loading" [request]="SAsetup.request" [totalRows]="SAsetup.totalRows" (pageEvent)="fetchFunction($event, 'tenantService','getSupervisorAlertTable', 'SAdata', 'SAsetup', 'payload.data', 'alert')"></app-_tables>
+          </div>
+          <!-- Optional Custom placeholder template -->
+          <ng-template ktdGridItemPlaceholder></ng-template>
+        </ktd-grid-item>
+        <ktd-grid-item id="1">
+          <!-- Your grid item content goes here -->
+          <div class="bg-white dark:bg-transparent dark:border-2 h-full">
+            <div class="p-1 flex justify-between">
+              <div class="header-title">Pending for Approval</div>
+              @if (PAsetup.totalRows) {
+                <div class="header-text mr-2">Total of {{PAsetup.totalRows}} Pendings</div>
+              }
+            </div>
+            <app-_tables [columns]="PAcolumns" [source]="PAdata" [loading]="PAsetup.loading" [request]="PAsetup.request" [totalRows]="PAsetup.totalRows" (pageEvent)="fetchFunction(PAsetup.request, 'filingService',  'getSupervisorViewApproval', 'PAdata', 'PAsetup', 'payload.data')"></app-_tables>
+          </div>
+          <!-- Optional Custom placeholder template -->
+          <ng-template ktdGridItemPlaceholder></ng-template>
+        </ktd-grid-item>
+        <ktd-grid-item id="2">
+          <!-- Your grid item content goes here -->
+          <div class="bg-white dark:bg-transparent dark:border-2 h-full">
+            <div class="p-1 flex justify-between">
+              <div class="header-title">Today's Employee Status</div>
+              @if (TEsetup.clockIn) {
+                <div class="header-text mr-2">Total of {{TEsetup.clockIn}} employees on this page have no logs.</div>
+              }
+              <!-- <div class="header-text mr-2" *ngIf="TEsetup.desc">Total of {{TEsetup.desc}}</div> -->
+              <div class="flex justify-between mr-2">
+                <mat-icon class="icon-size-5 cursor-pointer" matPrefix svgIcon="mat_outline:refresh" matTooltip="Refresh" (click)="fetchFunction(TEsetup.request, 'tenantService', 'getEmployeeStatusTable', 'TEdata', 'TEsetup', 'payload.data','status')"></mat-icon>
+              </div>
+            </div>
+            <app-_tables [columns]="TEcolumns" [source]="TEdata" [loading]="TEsetup.loading" [request]="TEsetup.request" [totalRows]="TEsetup.totalRows" (pageEvent)="fetchFunction(TEsetup.request, 'tenantService', 'getEmployeeStatusTable', 'TEdata', 'TEsetup', 'payload.data','status')"></app-_tables>
+          </div>
+          <!-- Optional Custom placeholder template -->
+          <ng-template ktdGridItemPlaceholder></ng-template>
+        </ktd-grid-item>
+        <ktd-grid-item id="3">
+          <!-- Your grid item content goes here -->
+          <div class="bg-white dark:bg-transparent dark:border-2 h-full">
+            <div class="p-1 flex justify-between">
+              <div class="header-title">Leave Calendar</div>
+              @if (LCsetup.leaved) {
+                <div class="header-text mr-2">Total of {{LCsetup.leaved}} employee for this week</div>
+              }
+              <div class="flex justify-between w-20">
+                <!-- <mat-icon class="icon-size-5 cursor-pointer" (click)="lcPageEvent(LCsetup.request,3)" [svgIcon]="'heroicons_solid:chevron-left'"  matTooltip="Previous"></mat-icon>
+                <mat-icon class="icon-size-5 cursor-pointer" (click)="lcPageEvent(LCsetup.request,2)" [svgIcon]="'heroicons_solid:chevron-right'" matTooltip="Next"></mat-icon> -->
+              </div>
+            </div>
+            <app-_tables [columns]="LCcolumns" [source]="LCdata" [loading]="LCsetup.loading" [request]="LCsetup.request" [totalRows]="LCsetup.totalRows" (pageEvent)="fetchFunction(LCsetup.request, 'leaveService', 'getSupervisorViewEmployeeFilesLeave','LCdata', 'LCsetup', 'payload.data')"></app-_tables>
+          </div>
+          <!-- Optional Custom placeholder template -->
+          <ng-template ktdGridItemPlaceholder></ng-template>
+        </ktd-grid-item>
+        <ktd-grid-item id="4">
+          <!-- Your grid item content goes here -->
+          <div class="bg-white dark:bg-transparent dark:border-2 h-full">
+            <div class="p-1 flex justify-between">
+              <div class="header-title">Employee's Birthday</div>
+              @if (EBsetup.bday) {
+                <div class="header-text mr-2">We have {{EBsetup.bday}} celebrants this week! Wish them a Happy Birthday!</div>
+              }
+            </div>
+            <app-_tables [columns]="EBcolumns" [source]="EBdata" [loading]="EBsetup.loading" [request]="EBsetup.request" [totalRows]="EBsetup.totalRows" (pageEvent)="fetchFunction(EBsetup.request, 'tenantService', 'getSupervisorViewBirthday','EBdata', 'EBsetup', 'payload.data')"></app-_tables>
+          </div>
+          <!-- Optional Custom placeholder template -->
+          <ng-template ktdGridItemPlaceholder></ng-template>
+        </ktd-grid-item>
+      </ktd-grid>
+    }
+
+  </div>
+</div>

@@ -1,0 +1,173 @@
+<!-- Main -->
+<div class="flex-auto p-6 sm:p-6 overflow-y-auto" *transloco="let t">
+  <div class="flex-auto sm:p-2  w-full min-w-0 sm:absolute sm:inset-0 sm:overflow-auto text-md">
+    <!-- Content -->
+    <mat-card class="h-full pt-3">
+      <mat-card-title>
+        <app-card-title title="Employee Data Change" [sub]="!isView && !isApproved" [back]="true" (submitTap)="submit()"></app-card-title>
+      </mat-card-title>
+      <div class="flex gap-2 mt-3" [style]="isView || isApproved ? 'pointer-events: none; opacity: 0.8;' : ''">
+
+        @if (currentModule) {
+          <div>
+            <app-employee-hierarchy (objects)="tagtypeoption=$event" dropdownValue="dropdownID"
+              [showTag]="false"
+              [defaultTag]="[{ id: [0], type: -2 }, { id: [], type: -3 }, { id: [], type: -4 }] "
+              [multiple]="true" [all]="true" (selected)="field_count = $event" [notincludetag]="[37,38]"
+            [resultHierarchy]="resultHierarchy"></app-employee-hierarchy>
+          </div>
+        }
+
+        <form [formGroup]="dataCForm">
+          <app-dropdown-custom [control]="dataCForm.get('dropdown')" [icon]="'mat_outline:info'" [type]="1056"
+            [label]="'Field'" [all]="false" [multiple]="true" [options]="dropdownOptions.userDef"
+            [useControl]="true" dropdownValue="encryptID">
+          </app-dropdown-custom>
+        </form>
+
+        <button class="ml-1 sm:px-4 min-w-10" mat-flat-button [color]="'primary'" (click)="search()"
+          matTooltip="Add">
+          <mat-icon class="mb-2" svgIcon="heroicons_outline:document-plus"></mat-icon>
+        </button>
+
+        <button class="ml-1 sm:px-4 min-w-10" mat-flat-button [color]="'primary'" (click)="reset()"
+          matTooltip="Reset">
+          <mat-icon class="mb-2" svgIcon="heroicons_outline:arrow-path"></mat-icon>
+        </button>
+
+      </div>
+
+      @for (item of datasource ; track item; let i = $index) {
+        <div class="flex gap-2" [style]="item.approved || isView ? 'pointer-events: none; opacity: 0.8;' : ''">
+          <!-- Employee Code -->
+          @if (currentModule) {
+            <mat-form-field class="min-w-40 w-full max-w-50 text-lg h-12" appearance="outline">
+              <mat-label class="label-font-size">{{ t('employeeCode') }}</mat-label>
+              <mat-icon class="mb-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+              <input [disabled]="true" class="input" [(ngModel)]="item.employeeCode" matInput
+                [type]='item.dataType' [placeholder]="item.description">
+              </mat-form-field>
+            }
+            <!-- Employee Name -->
+            @if (currentModule) {
+              <mat-form-field class="min-w-40 w-full max-w-50 text-lg h-12" appearance="outline">
+                <mat-label class="label-font-size">{{ t('employeeName') }}</mat-label>
+                <mat-icon class="mb-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                <input [disabled]="true" class="input" [(ngModel)]="item.employeeName" matInput
+                  [type]='item.dataType' [placeholder]="item.description">
+                </mat-form-field>
+              }
+              <!-- Field for Description-->
+              <mat-form-field class="min-w-40 w-full max-w-50 text-lg h-12" appearance="outline">
+                <mat-label class="label-font-size">{{ t('field')}}</mat-label>
+                <mat-icon class="mb-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                <input [disabled]="true" class="input" [(ngModel)]="item.fieldName" matInput
+                  [type]='item.dataType' [placeholder]="item.description">
+                </mat-form-field>
+                <!-- current data -->
+                <mat-form-field class="min-w-40 w-full max-w-50 text-lg h-12" appearance="outline">
+                  <mat-label>{{ t('currentData')}}</mat-label>
+                  <mat-icon class="mb-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                  <input [disabled]="true" class="input"
+                    [ngModel]="item.oldValueDescription"
+                    matInput [type]="item.dataType" [mask]="item.mask" placeholder="item.description">
+                  </mat-form-field>
+                  <!-- For select only  -->
+                  @if (item.fieldType =='Select') {
+                    <div>
+                      <!-- dropdown-custom -->
+                      @if (item.dataType=='Custom') {
+                        <div class="h-12 min-w-40 w-full max-w-50">
+                          <app-dropdown-custom [icon]="'mat_outline:info'" dropdownValue="dropdownID"
+                            (selected)="item.newValue=$event" [value]="item.newValue" [label]="item.description"
+                            [type]="item.dropDownTypeId" [all]="item.all" [multiple]="item.multiple" [options]="[]"
+                            [useControl]="false">
+                          </app-dropdown-custom>
+                        </div>
+                      }
+                      <!-- dropdown-fix -->
+                      @if (item.dataType=='Fix') {
+                        <div class="h-12 min-w-40 w-full max-w-50">
+                          <app-dropdown [isFix]="true" [value]="item.newValue" [icon]="'mat_outline:info'"
+                            (selected)="item.newValue=$event" [all]="item.all" [multiple]="item.multiple" [useControl]="false"
+                            dropdownValue="dropdownID" [label]="item.fieldName" [options]="item.dropDownList"
+                            [type]="item.dropDownTypeId">
+                          </app-dropdown>
+                        </div>
+                      }
+                      <!-- dropdown-tenant -->
+                      @if (item.dataType=='Tenant') {
+                        <div class="h-12 min-w-40 w-full max-w-50">
+                          <app-dropdown [isFix]="false" [value]="item.newValue" [icon]="'mat_outline:info'"
+                            (selected)="item.newValue=$event" [all]="item.all" [multiple]="item.multiple" [useControl]="false"
+                            dropdownValue="dropdownID" [label]="item.fieldName" [options]="dropdownOptions.optionsdeftenant"
+                            [type]="item.dropDownTypeId">
+                          </app-dropdown>
+                        </div>
+                      }
+                    </div>
+                  }
+                  <!-- for Input only  -->
+                  @if (item.fieldType == 'Input') {
+                    <div>
+                      <!-- new Data -->
+                      @if (item.dataType == 'Text') {
+                        <mat-form-field class="min-w-40 w-full max-w-50 text-lg h-12" appearance="outline">
+                          <mat-label class="label-font-size">{{item.fieldName}}</mat-label>
+                          <mat-icon class="mb-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                          <input class="input" [(ngModel)]="item.newValue" matInput [type]='item.dataType'
+                            [mask]="item.mask" [placeholder]="item.description">
+                          </mat-form-field>
+                        }
+                        @if (item.dataType == 'Number') {
+                          <mat-form-field class="min-w-40 w-full max-w-50 text-lg h-12"
+                            appearance="outline">
+                            <mat-label class="label-font-size">{{item.fieldName}}</mat-label>
+                            <mat-icon class="mb-2" matPrefix svgIcon="mat_outline:info"></mat-icon>
+                            <input class="input" [(ngModel)]="item.newValue" matInput type=number [mask]="item.mask"
+                              [placeholder]="item.description">
+                            </mat-form-field>
+                          }
+                          <!-- datepicker  -->
+                          @if (item.dataType == 'Date') {
+                            <mat-form-field class="min-w-40 w-full max-w-50 text-lg h-12" appearance="outline">
+                              <mat-label class="label-font-size">{{item.fieldName}}</mat-label>
+                              <input [(ngModel)]="item.newValue" [max]="maxDate(item.fieldKey)" matInput [matDatepicker]="df" readonly
+                                [placeholder]="'MM/DD/YYYY'" (click)="df.open()">
+                                <mat-datepicker-toggle matSuffix [for]="df"></mat-datepicker-toggle>
+                                <mat-datepicker #df></mat-datepicker>
+                              </mat-form-field>
+                            }
+                          </div>
+                        }
+                        <mat-form-field class="min-w-50 w-full max-w-60 text-lg h-12" appearance="outline">
+                          <mat-label class="label-font-size">{{ t('effectivityDate') }}</mat-label>
+                          <input [(ngModel)]="item.effectiveDate" [min]="minEffectiveDate(item.fieldKey)" matInput [matDatepicker]="df" readonly
+                            [placeholder]="'MM/DD/YYYY'" (click)="df.open()">
+                            <mat-datepicker-toggle matSuffix [for]="df"></mat-datepicker-toggle>
+                            <mat-datepicker #df></mat-datepicker>
+                          </mat-form-field>
+                          <!-- Reason Field  -->
+                          <div class="dark:flex min-w-40 w-full h-10"
+                            style="border-style: solid; border-color: rgb(189, 187, 187); border-width: 1px; border-radius: 3px;">
+                            <textarea class="area w-full text-lg ml-2 mt-2 h-8" placeholder="Remarks" matInput [(ngModel)]="item.reason"></textarea>
+                          </div>
+                          <!-- attachement Field  -->
+                          <mat-form-field class="min-w-10 max-w-40 text-lg h-12" appearance="outline" [ngClass]="wid.is100 ? 'w-10' : 'w-full'">
+                            <input type="file" [(ngModel)]="item.attach" #fileInput2 (change)="uploadFile($event,'displayCS_' + i,i,item)" class="absolute top-1 z-0 h-full w-full cursor-pointer opacity-0" accept=".jpeg,.jpg,.png,.doc,.docx,.pdf,.xls,.xlsx" />
+                            <input class="sample" readonly matInput [id]="'displayCS_' + i" cdkFocusInitial />
+                            <mat-icon class="mb-2" matPrefix svgIcon="mat_outline:upload" (click)="fileInput2.click($event)"></mat-icon>
+                            @if (!wid.is100) {
+                              <button class="upb" matTooltip={{item.attach}} (click)="fileInput2.click($event)" matSuffix mat-button color="primary">Upload</button>
+                            }
+                            <button class="upb hidden" (click)="fileInput2.click($event)" matSuffix mat-button color="primary"> </button>
+                          </mat-form-field>
+                          <button mat-flat-button class="mb-7" [color]="'warn'" (click)="remove(i)" matTooltip="Delete">
+                            <mat-icon class="mb-2"  svgIcon="heroicons_outline:trash"></mat-icon>
+                          </button>
+                        </div>
+                      }
+
+                    </mat-card>
+                  </div>
+                </div>

@@ -1,0 +1,191 @@
+/* .label-font-size {
+    font-size: 15px;
+}
+
+.mat-icon {
+    position: relative;
+    bottom: 8px;
+}
+
+.mat-select {
+    position: relative;
+    bottom: 11px;
+    font-size: medium;
+}
+
+.input {
+    position: relative;
+    bottom: 10px;
+    font-size: medium;
+}
+
+
+.button-margin-top {
+    padding-top: 1%;
+}
+
+::ng-deep .tab-hide .mat-tab-list .mat-tab-labels {
+    display: none;
+}
+
+.mat-datepicker-toggle {
+    position: relative;
+    bottom: 7px;
+    font-size: medium;
+}
+
+.scroll-container {
+    display: flex;
+    align-items: center;
+    overflow: auto;
+}
+
+.body {
+    text-align: center;
+}
+
+.area {
+    height: 20px;
+    width: 100%;
+    resize: none;
+    font-size: 16px;
+    overflow-y: scroll;
+    border-width: 2px;
+    border-radius: 3px;
+    margin-left: 4%;
+
+}
+
+table {
+    width: 100%;
+}
+
+.button-margin-top {
+    padding-top: 1%;
+}
+
+
+.label-font-size {
+    font-size: 15px;
+}
+
+.mat-icon {
+    position: relative;
+    bottom: 11px;
+}
+
+input {
+    position: relative;
+    bottom: 10px;
+    font-size: medium;
+}
+
+.mat-datepicker-toggle {
+    position: relative;
+    bottom: 7px;
+    font-size: medium;
+}
+
+.mat-cell {
+    align-items: center;
+    vertical-align: top;
+    padding-top: 10px;
+}
+
+.text {
+    border-style: solid;
+    border-width: 2px;
+    margin-bottom: 33px;
+    border-radius: 3px;
+    height: 33px;
+    min-width: 100px;
+    max-width: 150px;
+}
+
+.reasoncss {
+    margin-bottom: 30px;
+}
+
+textarea:valid {
+    border-color: #C9C0C0;
+    width: 100%;
+}
+
+textarea:invalid {
+    border-color: #DC2626;
+}
+
+.upload:valid {
+    border-color: aliceblue;
+}
+
+.upload:invalid {
+    border-color: #DC2626;
+}
+
+.sample {
+    position: relative;
+    bottom: 10px;
+    font-size: medium;
+}
+
+.upb {
+    position: relative;
+    bottom: 15px;
+    right: -5px;
+    border-radius: 3px !important;
+}
+
+.upbo {
+    position: relative;
+    bottom: 15px;
+    right: -2px;
+    border-radius: 3px !important;
+}
+
+.mat-divider {
+    border-top-color: rgb(172, 172, 172) !important;
+}
+
+.mat-header-cell {
+    font-size: 15px;
+}
+
+tr.mat-header-row {
+    height: 40px;
+}
+
+tr.mat-row {
+    height: 22px;
+}
+
+.no-wrap {
+    white-space: nowrap;
+    padding: 10px;
+    padding-left: 10px;
+  }
+.matTooltip{
+    align-items: center;
+    font-size: 12%;
+}
+
+ */
+
+ .mdc-data-table__cell, .mdc-data-table__header-cell {
+    padding: 0 12px 0 0px !important;
+}
+
+
+.test, .mat-select-search-input{
+    margin-top: 6px !important;
+    /* border-width: 1px; */
+}
+
+.test, .mat-select-search-input, .mat-select-search-clear{
+    top: 5px !important;
+}
+
+.mat-mdc-cell {
+    align-items: center !important;
+    vertical-align: top !important;
+}

@@ -1,0 +1,182 @@
+table {
+    width: 100%;
+    border-collapse: unset !important;
+}
+
+.loader {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 50%;
+    right: 0;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+[disabled] {
+    pointer-events: none;
+}
+
+.mat-cell,
+.mat-footer-cell {
+    word-break: normal;
+    font-size: 14px;
+    padding-left: 1px;
+    padding-right: 1px;
+    margin-right: 1%;
+}
+
+.mat-header-cell {
+    word-break: normal;
+    font-size: 15px;
+    padding-left: 1px;
+    padding-right: 1px;
+}
+
+.body-card {
+    position: relative;
+    height: 100%;
+    padding-top: 1px;
+}
+
+.example-container {
+    position: absolute;
+    top: 100px;
+    left: 15px;
+    right: 15px;
+    bottom: 80px;
+    max-height: 100%;
+    overflow: auto;
+}
+
+.paganation {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+.table-header {
+    /* z-index: 1; */
+    /* Set the desired z-index value */
+}
+
+tr.mat-header-row {
+    height: 35px;
+}
+
+tr.mat-row {
+    height: 22px;
+    font-size: small;
+}
+
+/* end -- edit table style 8-1-22 */
+
+/* .label-font-size {
+    font-size: 15px;
+} */
+
+/* input {
+    position: relative;
+    bottom: 7px;
+    font-size: small;
+} */
+
+/* .uploadbutton {
+    position: relative;
+    bottom: 11px;
+    right: 1px;
+    border-radius: 3px !important;
+} */
+
+.mat-select {
+    position: relative;
+    bottom: 9px;
+    font-size: medium;
+}
+
+.scroll-container {
+    display: block;
+    align-items: center;
+    overflow: auto;
+    white-space: nowrap;
+}
+
+.mat-row {
+    white-space: normal;
+    word-wrap: break-all;
+    max-width: 50% !important;
+}
+
+.no-wrap {
+    white-space: nowrap;
+    padding: 10px;
+}
+
+/* long cell value transition */
+.truncate-cell {
+    position: relative;
+    max-width: 200px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    transition: max-width 60s;
+}
+
+.hover-effect:hover .truncate-cell {
+    /* max-width: none; */
+    /* animation: moveLeftAnimation 50s forwards; */
+}
+
+@keyframes moveLeftAnimation {
+    from {
+        transform: translateX(0);
+    }
+
+    to {
+        transform: translateX(-100%);
+    }
+}
+
+.mat-mdc-card-content {
+    display: block;
+    padding: 0 0px !important;
+}
+
+.icons{
+    height: 14px;
+    width: 14px;
+    margin-right: 5px;
+    margin-top: -3px;
+}
+.mat-mdc-header-cell{
+    z-index: 2 !important;
+}
+.tableindex{
+    z-index: 2 !important;
+    background-color: var(--fuse-bg-card) !important;
+}
+
+.dateui .mat-mdc-icon-button svg { /* For button icon like datepicker */
+    width: 21px !important;
+}
+
+.csvbox-container csvbox-button {
+    position: relative;
+    display: block;
+    width: 100%;
+}
+
+.csvbox-container:hover,
+.csvbox-container button:hover::after  {
+    position: relative;
+    display: block;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+.csvbox-container:not(:has(button[mat-menu-item])) {
+    display: none;
+}

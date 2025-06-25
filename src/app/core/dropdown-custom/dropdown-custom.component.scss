@@ -1,0 +1,39 @@
+// .label-font-size {
+//   font-size: 15px;
+// }
+
+// .mat-icon {
+//   position: relative;
+//   bottom: 9px;
+// }
+
+// .mat-select {
+//   position: relative;
+//   bottom: 9px;
+//   font-size: medium;
+
+// }
+
+.search-field {
+  background-color: rgb(224, 9, 9);
+  position: absolute;
+  top: -1px !important;
+  left: 0;
+  right: 0;
+  height: 100%;
+}
+
+.first-option {
+  position: sticky !important;
+  top: 0;
+  z-index: 1;
+  background: #fff; /* Optional: Set the background color to match the dropdown */
+}
+
+::ng-deep .matTip {
+    font-size: medium;
+}
+
+// .cdk-overlay-pane #cdk-overlay-1{
+//     width: 250px !important;
+// }

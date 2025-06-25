@@ -1,0 +1,26 @@
+table {
+    table-layout: auto !important; /* Allow column widths to adjust based on content */
+    width: auto !important; /* Let the table width adjust dynamically */
+    border-collapse: collapse; /* Ensure proper table rendering */
+}
+
+.mat-mdc-header-cell { /* header table */
+    white-space: nowrap !important;
+    min-width: 50px !important; /* Minimum width to ensure proper display */
+    max-width: none !important; /* Remove any maximum width constraint */
+    width: fit-content !important; /* Dynamically adjust width to content */
+    text-align: left; /* Align text to the left for better readability */
+}
+
+.mat-mdc-cell { /* table cell */
+    white-space: nowrap !important;
+    width: auto !important; /* Adjust width dynamically */
+}
+
+.example-container {
+    max-height: 320px;
+    overflow: auto;
+    position: relative;
+    z-index: none;
+    top: 7px;
+}
